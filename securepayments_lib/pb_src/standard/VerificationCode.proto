@@ -1,0 +1,44 @@
+syntax = "proto2";
+import "BaseHeaderOut.proto";
+import "Product.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message VerificationCodeRequest{
+
+    required BaseHeaderOut header = 1;
+
+    required string VerificationCode = 2; // 验证码
+    optional string partnerOrder = 3; // 商户订单号
+    optional string partnerId = 4; // 商户Id
+    optional string payType = 5; // 支付方式
+    optional string channel = 6; // 支付渠道
+    optional string payAmount = 7; // 支付金额
+    optional string currency = 8; // 币种
+    optional Product product = 9; // 商品信息
+    optional string returnUrl = 10; // 支付完成同步跳转URL
+    optional string notifyUrl = 11; // 支付完成同步跳转URL
+    optional string partnerParams = 12; // 商户自定义参数，后台通知时原样回传
+    optional string extendParams = 13; // 某些条件下需要的扩展参数
+    optional string businessType = 14; // 业务类型，某些情况下结算使用，比如游戏是单机还是网游
+    optional string businessChannelId = 15; // 业务方渠道id
+    optional string phoneNumber = 16; // 用户手机号
+    optional string payReqId = 17; // 支付订单号
+
+}
+
+message VerificationCodeResponse{
+
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 返回码
+    optional string msg = 3; // 描述
+
+    message VerificationCodeResponseData {
+        optional string payRequestId = 1; // 支付流水号
+        optional string payUrl = 2; // 跳转支付Url
+        optional string parameters = 3; // 跳转支付时所需要的参数
+        optional string channelReturnUrl = 4; // 请求需要拦截的url
+    }
+
+    optional VerificationCodeResponseData data = 4; // 不成功时此字段为空
+}

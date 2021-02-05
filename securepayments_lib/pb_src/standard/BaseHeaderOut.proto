@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+option java_package = "com.oppo.pay.bean";
+
+message BaseHeaderOut {
+    required string version = 1; // 接口版本号
+    optional string token = 2; // 用户token,校验用户登陆状态
+    optional string imei = 3; // mobile imei
+    optional string model = 4; // 手机型号
+    optional string apntype = 5; // 网络类型，3G 4G Wifi
+    optional string package = 6; // 调用此接口的app package名称
+    required string r_v = 7; // random verify code,check the request is legal or not
+    required string sign = 8; // 签名
+    optional string sdkVer = 9; //sdk的版本号
+    optional string appVerison = 10; // 客户端app的版本号
+    optional string ip = 11; // 前端ip
+    optional string openId = 12; // 手机openid
+    optional string brandType = 13; // 品牌类型
+    optional string osVersion = 14; // OS版本号
+    optional string mobileos = 15; // colorOs版本号
+    optional string androidVersion = 16; // 安卓版本号
+    optional string platform = 17; //安全支付传ATLAS，msp传MSP
+}

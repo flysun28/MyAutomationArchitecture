@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message SpeakerInfoRequest {
+    required BaseHeaderOut header = 1;
+    required string country = 2; // 国家代码
+
+    optional string osVersion = 3; // 操作系统版本号
+    optional int32 speakerVersion = 4; // 历史小喇叭版本号
+    optional string bizId=5;           //小喇叭id
+    optional string partnerCode=6;       //业务线ID
+}
+
+message SpeakerInfoResult {
+
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+    optional int32 speakerVersion = 7; //当前最新的speaker版本号
+
+    message SpeakerData {
+        required string page = 1;
+        required string content = 5; // 小喇叭内容
+        required string fromTime = 6;
+        required string toTime = 7;
+        optional int32 speakerVersion = 8; // 小喇叭版本号
+    }
+
+    repeated SpeakerData data = 4; // 不成功时此字段为空
+}

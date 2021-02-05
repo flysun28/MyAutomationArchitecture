@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+option java_package = "com.oppo.pay.bean";
+
+message Product{
+    required string name = 1;// 商品名称
+    required string desc = 2;// 商品描述
+    optional string count = 3;// 商品数量
+    optional string priceUSD = 4; // 商品美元定价
+    required string priceLocal = 5; // 商品当地币定价
+    optional string country = 6; // 国家代码
+}

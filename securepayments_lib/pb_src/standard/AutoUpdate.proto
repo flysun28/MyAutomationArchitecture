@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message AutoUpdateRequest {
+    required BaseHeaderOut header = 1;
+    required string country = 2; // 国家代码
+}
+
+message AutoUpdateResult {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message AutoUpdateData{
+        required bool needUpdate = 1; // 是否需要自更新
+        optional string fromAppVersion = 2; // 当前客户端版本
+        optional string toAppVersion = 3; // 更新到什么版本
+        optional bool forceUpdate = 4; // 是否强制升级
+        optional string prompt = 5; // 更新提示
+    }
+    optional AutoUpdateData data = 4;
+}

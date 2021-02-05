@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message ActivityActiveRequest {
+    required BaseHeaderOut header = 1;
+
+    message ActivityActiveRequestData {
+        required string activityId = 1; // 活动的ID
+    }
+    repeated ActivityActiveRequestData data = 2;
+}
+
+message ActivityActiveResult {
+
+    required bool isSuccess = 1;    // 请求是否成功处理
+    optional string code = 2;       // 不成功时有返回码
+    optional string msg = 3;        // 不成功时有描述
+
+    message ActivityActiveResultData {
+        required string activityId = 1;     // 活动的ID
+        required string activityType = 2;   // 活动的类型
+        required string activityStatus = 3; // EXPIRED过期,NOT EXPIRED未过期
+        optional string promtMessage = 4;   // 活动过期提示的信息
+        optional string userId = 5;         //用户id
+    }
+    repeated ActivityActiveResultData data = 4; // 不成功时此字段为空
+}

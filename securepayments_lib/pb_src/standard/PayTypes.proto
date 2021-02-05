@@ -1,0 +1,160 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message PayTypesRequest {
+    required BaseHeaderOut header = 1;
+
+    required string country = 3; // 国家和地区
+    optional string payAmount = 6; // 支付金额
+    required string currency = 7; // 币种
+    optional string renewal = 8; //是否支持自动续费,Y支持,N不支持
+    optional string partnerId = 9; // 业务线id，以后扩展使用
+    // 银行卡信息列表
+    optional string agreementNo = 10; // 协议号
+    optional string id = 11; // 主键
+    //    optional string country = 4; // 国家
+    //    optional string currency = 5; // 货币
+
+    // 汇率信息
+    //    required string country = 1; // 所属国家和地区
+    //    required string srcCurrency = 2; // 当前币种
+
+    // 优惠券列表
+    optional string factor = 12; // 券定向因素
+
+    // 是否需要聚合标示
+    optional string isNeedAggregate = 13; // 是否需要聚合,默认不聚合
+
+    optional string noApp = 14; // 未安装app的渠道，有多个渠道在后面拼接用“，”分隔
+
+    optional int32 callFrom = 15; // 调用来源 0-收银台 1-可币充值
+}
+
+message PayTypesResult {
+
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message BankInfo{
+        required string frontName = 1; // 显示名称
+        required string icon = 2; // 图标url
+        required string index = 3; // 显示顺序
+        required string bankId = 4; // 传给渠道方的
+    }
+
+    message PayTypesResultData {
+        required string frontName = 1; // 显示名称
+        required string payType = 2; // 支付方式
+        required string channel = 3; // 支付渠道
+        required string renewal = 4;  // 是否支持自动续费
+        required string limit = 5;  //  渠道限额
+        required string icon = 6; // 图标名称
+        required string login = 7; // 是否要求登陆 Y-登陆，N-不登陆，P-部分登陆
+        required string additionalFees = 8; // 是否存在附加费用
+        required string lastPayType = 9; // 是否最后使用的支付方式
+        required string index = 10; // 显示顺序
+        required string customPage = 11; // 是否需要自定义支付页面
+        required string prompt = 12; // 提示语
+        optional string cciFlag = 13;   // 是否走可币充值并消费
+
+        optional string customPageType = 14; // 207版本添加，自定义页面类型
+        repeated BankInfo bankInfoList = 15; // 网银支付银行卡列表
+
+        optional string limitInterval = 16;  //  208版本 渠道限额:范围
+        optional string limitDenomination = 17;  //  208版本 渠道限额：固定面额
+        optional string foldFlag = 18;           //是否折叠标记 Y-折叠，N-不折叠
+        repeated subPayTypesData subData = 19; // 不成功时此字段为空
+        optional ChannelActivityData activityData = 20;
+    }
+
+    message subPayTypesData {
+        required string frontName = 1; // 显示名称
+        required string payType = 2; // 支付方式
+        required string channel = 3; // 支付渠道
+        required string renewal = 4;  // 是否支持自动续费
+        required string limit = 5;  //  渠道限额
+        required string icon = 6; // 图标名称
+        required string login = 7; // 是否要求登陆 Y-登陆，N-不登陆，P-部分登陆
+        required string additionalFees = 8; // 是否存在附加费用
+        required string lastPayType = 9; // 是否最后使用的支付方式
+        required string index = 10; // 显示顺序
+        required string customPage = 11; // 是否需要自定义支付页面
+        required string prompt = 12; // 提示语
+        optional string cciFlag = 13;   // 是否走可币充值并消费
+
+        optional string customPageType = 14; // 207版本添加，自定义页面类型
+        repeated BankInfo bankInfoList = 15; // 网银支付银行卡列表
+
+        optional string limitInterval = 16;  //  208版本 渠道限额:范围
+        optional string limitDenomination = 17;  //  208版本 渠道限额：固定面额
+    }
+
+    // 渠道优惠活动
+    message ChannelActivityData {
+        optional string activityId = 1;      // 活动ID
+        optional string activityName = 2;    // 活动名称
+        optional string activityType = 3;    // 活动类型 YOUHUI(支付渠道活动) COCOIN(可币活动) ZENGSONG(赠送活动)
+        optional string discountType = 4;    // YOUHUI DAZHE MANJIAN
+        optional string rate = 5;			 // 折扣
+        optional string minConsAmount = 6;   // 打折类活动,最低消费金额
+        optional string maxCutAmount = 7;    // 打折类活动,最高优惠金额
+        optional string cutAmount = 8;		 // 满减活动,减免金额
+        optional string fullAmount = 9;		 // 满减活动,满足多少金额开始
+    }
+
+    repeated PayTypesResultData data = 4; // 不成功时此字段为空
+
+    // 203版本增加
+    optional bool needExchange = 5; //是否需要拉取汇率转换货币
+    optional string currency = 6; // 转换后的币种
+    optional string orderAmount = 7;
+
+    // 银行卡信息列表
+    message BankCardInfoResponseData {
+        optional string id = 1; // 主键
+        optional string agreementNo = 2; // 协议号
+        optional string pictureUrl = 3; // 图标银行卡
+
+        optional string payType = 4; // 支付类型
+        optional string bankName = 5; // 组织名称
+        optional string cardNo = 6; // 卡号
+        optional string backColour = 7; // 背景颜色
+    }
+    repeated BankCardInfoResponseData binkInfoData = 8; // 不成功时此字段为空
+
+    // 汇率信息
+    message ExchangeResultData {
+        optional string country = 1; // 所属国家和地区
+        optional string srcCurrency = 2; // 当前币种
+        optional string dstCurrency = 3; // 目标币种
+        optional string srcAmount = 4; // 当前币种兑换单位，正常是1
+        optional string dstAmount = 5; // 目标价
+    }
+    repeated ExchangeResultData exchangeData = 9; // 不成功时此字段为空
+
+    // 优惠券信息
+    message CouponInfoResponseData {
+        optional string couponId = 1; // 优惠券ID
+        optional string couponType = 2; // 优惠券类型
+        optional string couponValue = 3; // 优惠券面板
+
+        optional string minCousume = 4; // 最低消费金额
+        optional string couponRatio = 5; // 折扣率
+        optional string maxDiscount = 6; // 最大优惠金额
+        optional string usableAmt = 7; // 剩余优惠额度
+
+        optional string status = 8; // 优惠券状态
+
+        optional string useableEndTime = 9; //优惠券失效时间 当地时间yyyy-MM-dd HH:mm:ss
+
+        optional int32 usable = 10; // 1可以展示，0不可以展示
+    }
+
+    repeated CouponInfoResponseData couponInfoDta = 10; // 不成功时此字段为空
+
+
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message MobileModelReportRequest {
+    required BaseHeaderOut header = 1;
+    optional string country = 2; // 国家代码
+}
+
+message  MobileModelReportResult {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+}

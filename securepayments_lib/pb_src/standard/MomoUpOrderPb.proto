@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message MomoUpOrderRequest{
+    required BaseHeaderOut header = 1;
+    required string orderId = 2;     // 订单ID
+    optional string customerNumber = 3;
+    optional string appData = 4;
+    optional string amount = 5;
+    optional string description = 6;
+    optional string payType = 7; // 支付方式
+    optional string telkomselToken = 8; // telkomsel的CP TOKEN
+    optional string telkomselTrxid = 9; // telkomsel的trx id
+}
+
+message MomoUpOrderResponse{
+    required bool isSuccess = 1; // 请求是否成功处理
+
+    optional string code = 2; // 不成功时有返回码
+
+    optional string msg = 3; // 不成功时有描述
+
+}

@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+import "Product.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message RechargeAndSpendRequest {
+    required BaseHeaderOut header = 1;
+
+    required string partnerOrder = 2; // 商户订单号
+    required string partnerId = 3; // 商户Id
+    required string country = 4; // 国家和地区
+    required string payType = 5; // 支付方式
+    required string channel = 6; // 支付渠道
+    required string payAmount = 7; // 支付金额
+    required string currency = 8; // 币种
+    optional string cocoinRechargeAmount = 9; // 可币充值金额
+    optional string cocoinPayAmount = 10; // 可币消费金额
+    required Product product = 11; // 商品信息
+    optional string returnUrl = 12; // 支付完成同步跳转URL
+    optional string notifyUrl = 13; // 支付完成同步跳转URL
+    optional string partnerParams = 14; // 商户自定义参数，后台通知时原样回传
+
+    optional string businessType = 16; // 业务类型，某些情况下结算使用，比如游戏是单机还是网游
+    optional string businessChannelId = 17; // 业务方渠道id
+
+    optional string couponId = 21; // 优惠券id
+    optional string discountAmount = 22; // 优惠券抵扣金额
+    optional string bankCardAgreementNo = 23;     // worldpay签约标示
+
+    optional bool hasAdditionalFees = 27; // 207版本添加，渠道是否有附加费用
+    optional string factor = 28; // 券定向因素
+    optional string payActivityId = 29; //支付活动编号
+    optional string additionalAmount = 30; //渠道服务费金额
+    optional string activityAmount = 34; //活动优惠金额
+    optional string phoneNumber = 35; // 用户手机号
+}
+
+message RechargeAndSpendResponse {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message RechargeAndSpendResponseData {
+        required string payRequestId = 1; // 支付流水号
+        required string payUrl = 2; // 跳转支付Url
+        optional string parameters = 3; // 跳转支付时所需要的参数
+
+        optional string channelReturnUrl = 4; // 请求需要拦截的url
+        optional int64 otpTime = 5; // 一次性密码剩余时间
+    }
+
+    optional RechargeAndSpendResponseData data = 4; // 不成功时此字段为空
+}

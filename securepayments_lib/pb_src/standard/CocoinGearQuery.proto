@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+import "Exchange.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message CocoinGearRequest{
+    required BaseHeaderOut header = 1;
+
+    required string country = 2;//国家
+    required string currency = 3;//货币
+    required string partnerId = 4;//业务线
+}
+
+message CocoinGearResult{
+
+
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+
+    message CocoinGearInfo {
+        required string cocoinGear = 1; // 可币的档位
+        optional string cocoinPresent = 2; // 达到档位赠送的可币
+        optional string amount = 3; // 当前档位所需要的金钱
+    }
+
+    message CocoinGearResultData {
+        repeated CocoinGearInfo cocoinGearInfoList = 1;  //可币档位的列表
+    }
+
+    optional CocoinGearResultData data = 4;
+
+    repeated ExchangeResult.ExchangeResultData exchangeResultData = 5; //汇率
+    optional string activityId = 6;
+
+
+}

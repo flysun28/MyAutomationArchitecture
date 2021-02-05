@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message AdditionalFeesRequest {
+    required BaseHeaderOut header = 1;
+
+    required string country = 3; // 国家和地区
+    required string payType = 4; // 支付方式
+    required string channel = 5; // 支付渠道
+    required string payAmount = 6; // 支付金额
+    required string currency = 7; // 币种
+    optional string calculateType = 8; // 计算类型，FORWARD从商品价格计算最终支付金额（加税费），BACK从最终支付金额计算可用于商品消费的金额（减税费）
+}
+
+message AdditionalFeesResult {
+
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message AdditionalFeesResultData {
+        required string payAmount = 1; // 支付金额
+        required string currency = 2; // 币种
+
+        message Fee {
+            required string name = 1; // 费用名称
+            required string amount = 2; // 金额
+            required string currency = 3; // 币种
+        }
+        repeated Fee addtionalFees = 3;
+    }
+    optional AdditionalFeesResultData data = 4; // 不成功时此字段为空
+}

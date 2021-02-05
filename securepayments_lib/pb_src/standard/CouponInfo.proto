@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message CouponInfoRequest {
+    required BaseHeaderOut header = 1;
+
+    required string partnerId = 2; // 商户Id
+    required string country = 3; // 国家和地区
+    required string currency = 4; // 币种
+    optional string factor = 5; // 券定向因素
+}
+
+message CouponInfoResponse {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message CouponInfoResponseData {
+        required string couponId = 1; // 优惠券ID
+        required string couponType = 2; // 优惠券类型
+        required string couponValue = 3; // 优惠券面板
+
+        required string minCousume = 4; // 最低消费金额
+        required string couponRatio = 5; // 折扣率
+        required string maxDiscount = 6; // 最大优惠金额
+        required string usableAmt = 7; // 剩余优惠额度
+
+        required string status = 8; // 优惠券状态
+
+        required string useableEndTime = 9; //优惠券失效时间 当地时间yyyy-MM-dd HH:mm:ss
+    }
+
+    repeated CouponInfoResponseData data = 4; // 不成功时此字段为空
+    optional string currency = 5; // 币种
+}

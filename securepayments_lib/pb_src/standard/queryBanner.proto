@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message QueryBannerRequest {
+    required BaseHeaderOut header = 1;
+    required string position = 2;  //展示未知
+    optional string country = 3; // 国家代码
+    optional string partnerId=4; //业务线
+    optional string payType=5; //渠道
+    optional string bizId=6;   //banner的业务ID
+}
+
+
+message QueryBannerResult {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message BannerResultData {
+        required string bannerIconUrl = 1;      //   banner 图片地址
+        required string bannerSkipUrl = 2;       //跳转的地址
+        required string showPosition = 3;       //展示位置
+    }
+
+    repeated BannerResultData data = 4;         //banner配置
+}

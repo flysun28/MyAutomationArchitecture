@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+import "BaseHeaderOut.proto";
+import "Product.proto";
+
+option java_package = "com.oppo.pay.bean";
+
+message DirectPayRequest {
+    required BaseHeaderOut header = 1;
+
+    required string partnerOrder = 2; // 商户订单号
+    required string partnerId = 3; // 商户Id
+    required string country = 4; // 国家和地区
+    required string payType = 5; // 支付方式
+    required string channel = 6; // 支付渠道
+    required string payAmount = 7; // 支付金额
+    required string currency = 8; // 币种
+    required bool isCocoinRechargeAndSpend = 9; // 是否走可币充值并消费
+
+    required Product product = 11; // 商品信息
+
+    optional string notifyUrl = 13; // 支付完成同步跳转URL
+    optional string partnerParams = 14; // 商户自定义参数，后台通知时原样回传
+    optional string extendParams = 15; // 某些条件下需要的扩展参数
+
+    optional string couponId = 21; // 优惠券id
+    optional string discountAmount = 22; // 优惠券抵扣金额
+
+    optional string pointCardNo = 25; // 点卡卡号，加密的
+    optional string pointCardPassword = 26; // 点卡密码，加密的
+    optional bool hasAdditionalFees = 27; // 渠道是否有附加费用
+    optional string factor = 28; // 券定向因素
+    optional string payActivityId = 29;
+    optional string additionalAmount = 33; //渠道服务费金额
+    optional string activityAmount = 34; //活动优惠金额
+}
+
+message DirectPayResult {
+    required bool isSuccess = 1; // 请求是否成功处理
+    optional string code = 2; // 不成功时有返回码
+    optional string msg = 3; // 不成功时有描述
+
+    message SpendData {
+        required string payRequestId = 1; // 支付流水号
+        required string settleDate = 2; // 交易账期
+    }
+    optional SpendData data = 4; // 不成功时此字段为空
+}
