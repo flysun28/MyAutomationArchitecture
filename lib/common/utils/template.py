@@ -1,19 +1,28 @@
 # coding=utf-8
 
+import sys
 from itertools import product
-from lib.common.utils import *
+from lib.common.logger.logging import Logger
+from lib.common.utils.descriptors import StatisDescriptor
+from lib.common.utils.globals import GlobarVar
+from lib.common.utils.meta import WithLogger
+from lib.common.utils.misc_utils import to_iterable_nested, extend_to_longgest
 from lib.common.exception.intf_exception import ArgumentException
 
 logger = Logger('接口参数遍历模板').get_logger()
 
 
 class InterfaceExecStatistics():
+    PASS_NUM = StatisDescriptor(0)
+    FAIL_NUM = StatisDescriptor(0)
+    TOTAL = StatisDescriptor(0)
+    PASS_RATE = StatisDescriptor(0)
     
-    def __init__(self):
-        self.PASS_NUM = 0
-        self.FAIL_NUM = 0
-        self.TOTAL = 0
-        self.PASS_RATE = 0
+#     def __init__(self):
+#         self.PASS_NUM = 0
+#         self.FAIL_NUM = 0
+#         self.TOTAL = 0
+#         self.PASS_RATE = 0
     
     def __str__(self):
         return 'URL: %s\n' \

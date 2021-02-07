@@ -6,12 +6,17 @@
 
 from openpyxl import load_workbook
 from lib.common.concurrent.threading import ResultTakenThread
-import asyncio
 
 
 class Excel():
     
     def __init__(self, path):
-        self.path = path        
-        self.wb = load_workbook(self.path, read_only=True)
+        self.path = path
+        self.wb = None
+        loading_thr = ResultTakenThread(load_workbook,
+                                        self.path,
+                                        read_only=True,
+                                        daemon=True,
+                                        name='LoadingCaseExcelThread')
+        if 
     

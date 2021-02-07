@@ -1,8 +1,4 @@
-#!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
-# author:xy
-# datetime:2021/1/19 23:32
-# comment:
 
 from threading import Thread, ThreadError
 from six import with_metaclass
@@ -23,7 +19,7 @@ class ResultTakenThread(with_metaclass(WithLogger, Thread)):
         try:
             self.result = self._target(*self._args, **self._kwargs)
         except ThreadError as e:
-            if is_error_raised:
+            if self.is_error_raised:
                 raise ThreadError('%s exception: %s' %(self.name, e))
             else:
                 self.logger.info(e)
