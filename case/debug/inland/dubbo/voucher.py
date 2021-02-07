@@ -19,6 +19,18 @@ class VoucherInland:
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, ratio=0,
                      maxCutAmount='0'):
+        """
+        优惠券申请
+        :param bizNo:
+        :param couponType:
+        :param couponDiscountType:
+        :param conditionAmount:
+        :param cutAmount:
+        :param ssoid:
+        :param ratio:
+        :param maxCutAmount:
+        :return:
+        """
         data = {
             "couponName": "anto_grant" + str(int(round(time.time() * 1000))),
             "useableFromTime": "2020-01-01 00:00:00",
@@ -54,6 +66,7 @@ class VoucherInland:
 
     def checkVoucher(self, couponBatchId):
         """
+        优惠券审核
         :return:
         """
         data = {"couponBatchId": couponBatchId, "batchOperateType": "PASS"}
