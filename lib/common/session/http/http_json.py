@@ -11,13 +11,13 @@ from lib.common.exception import HttpJsonException
 
 
 class HttpJsonSession(metaclass=WithLogger):
-    header = {'Content-Type': 'application/json;charset=utf-8', 
-              'Connection': 'keep-alive', 
+    header = {'Content-Type': 'application/json;charset=utf-8',
+              'Connection': 'keep-alive',
               'Accept-Encoding': 'gzip, deflate',
               'Accept': '*/*',
               'User-Agent': 'HttpJson/1.0'
-    }
-    
+              }
+
     def __init__(self, url_prefix=None, data=None, **kwargs):
         """
         :param url: 请求地址
@@ -40,7 +40,7 @@ class HttpJsonSession(metaclass=WithLogger):
         except RequestException as e:
             raise HttpJsonException(e) from None
         except AssertionError:
-            raise AssertionError('%s POST response:\n%s' %(url, response)) from None
+            raise AssertionError('%s POST response:\n%s' % (url, response)) from None
 
     def get(self, data=None):
         data = data or self.data
@@ -50,19 +50,8 @@ class HttpJsonSession(metaclass=WithLogger):
         except RequestException as e:
             raise HttpJsonException(e) from None
 
-
     def close(self):
         self.session.close()
-
-    def run_main(self, method="POST"):
-        res = None
-        if method.upper() == 'GET':
-            res = self.get()
-        elif method.upper() == 'POST':
-            res = self.post()
-        else:
-            self.logger.info('错误的http请求：{}'.format(method))
-        return res
 
 
 HttpJson = HttpJsonSession

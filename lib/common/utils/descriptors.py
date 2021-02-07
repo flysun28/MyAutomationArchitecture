@@ -12,4 +12,4 @@ class GlobalVarDescriptor():
         
     def __get__(self, instance, owner):
         return self.vars.get(instance, self.default)
-    
+

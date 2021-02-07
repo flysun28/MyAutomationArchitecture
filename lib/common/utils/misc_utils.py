@@ -57,4 +57,3 @@ def extend_to_longgest(seq):
             subseq += (max_len-cur_len)*[last_ele]
             seq[idx] = subseq
     return seq
-    

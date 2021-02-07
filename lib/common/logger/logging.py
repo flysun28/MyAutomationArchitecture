@@ -46,4 +46,4 @@ class Logger():
         self.logger_names.setdefault(self.logger.name, self.logger)
 
     
-    
+

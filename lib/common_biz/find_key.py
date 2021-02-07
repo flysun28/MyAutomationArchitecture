@@ -3,14 +3,13 @@
 # author:xy
 # datetime:2021/1/19 22:53
 # comment: 查询秘钥相关
-from lib.common.db_operation.mysql_operation import connect_mysql
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
 from pymysql.err import DataError
 from lib.common.utils.globals import GlobarVar
 
-
+common_sql_path
 class GetKey(metaclass=WithLogger):
     __SECRET_KEYS = {}
     
