@@ -10,7 +10,7 @@ class WithLogger(type):
     def __call__(cls, *args, **kwargs):
         module = sys.modules[cls.__module__]
         if cls.__module__ == '__main__':
-            module_name = re.search('securepayments(_|)lib(\S+).py', module.__file__, re.I).group(2)
+            module_name = re.search('(_|)lib(\S+).py', module.__file__, re.I).group(2)
             module_name = module_name.strip('\\').replace('\\', '.')
         else:
             module_name = module.__name__
