@@ -6,7 +6,6 @@
 
 import configparser
 import json
-
 from lib.common.utils.meta import WithLogger
 
 
