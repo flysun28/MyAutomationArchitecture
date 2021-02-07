@@ -8,7 +8,7 @@ import rsa
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
-from common_biz.file_path import public_key_path
+from lib.common_biz.file_path import public_key_path
 
 
 class Cipher:

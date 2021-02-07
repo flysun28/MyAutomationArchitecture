@@ -6,7 +6,7 @@
 import time
 import random
 import string
-from common_biz.find_database_table import get_route_ssoid
+from lib.common_biz.find_database_table import get_route_ssoid
 
 
 class RandomOrder:

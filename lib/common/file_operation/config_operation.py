@@ -7,7 +7,7 @@
 import configparser
 import json
 
-from common.utils.meta import WithLogger
+from lib.common.utils.meta import WithLogger
 
 
 class Config(metaclass=WithLogger):
@@ -81,6 +81,6 @@ class Config(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    from common_biz.file_path import join_sign_path
+    from lib.common_biz.file_path import join_sign_path
     a = Config(join_sign_path).sections()
     print(a)

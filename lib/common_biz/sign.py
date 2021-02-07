@@ -3,10 +3,10 @@
 # author:xy
 # datetime:2021/1/19 22:53
 # comment: 常见接口的签名拼接
-from common.file_operation.config_operation import Config
-from common.utils.meta import WithLogger
-from common_biz.file_path import join_sign_path
-from common.algorithm.md5 import md5
+from lib.common.file_operation.config_operation import Config
+from lib.common.utils.meta import WithLogger
+from lib.common_biz.file_path import join_sign_path
+from lib.common.algorithm.md5 import md5
 
 
 class Sign(metaclass=WithLogger):

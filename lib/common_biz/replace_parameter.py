@@ -3,16 +3,16 @@
 # author:xy
 # datetime:2021/1/19 22:55
 # comment: 接口参数替换
-from common.algorithm.cipher import Cipher
-from common.algorithm.rsa import rsa
-from common.algorithm.md5 import md5
-from common.file_operation.config_operation import Config
-from common_biz.pay_pass import Pass
-from common.utils.meta import WithLogger
-from common_biz.file_path import do_case_path, account_path, key_path
-from common_biz.order_random import RandomOrder
-from common_biz.sign import expend_pay_sign_string, oversea_header_sign_string
-from common_biz.sign import Sign
+from lib.common.algorithm.cipher import Cipher
+from lib.common.algorithm.rsa import rsa
+from lib.common.algorithm.md5 import md5
+from lib.common.file_operation.config_operation import Config
+from lib.interface_biz.http.pay_pass import Pass
+from lib.common.utils.meta import WithLogger
+from lib.common_biz.file_path import do_case_path, account_path, key_path
+from lib.common_biz.order_random import RandomOrder
+from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string
+from lib.common_biz.sign import Sign
 
 
 def get_tp_rv(pay_method):

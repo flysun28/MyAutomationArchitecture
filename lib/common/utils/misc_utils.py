@@ -1,5 +1,4 @@
 # coding=utf-8
-from _collections_abc import Iterable
 
 
 def is_string(item)-> bool:

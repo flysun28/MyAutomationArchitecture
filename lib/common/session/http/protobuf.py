@@ -4,9 +4,9 @@
 # datetime:2021/1/22 18:57
 # comment:
 import requests
-from common.algorithm.other import trans_byte
-from common.utils.meta import WithLogger
-from common_biz import pbjson
+from lib.common.algorithm.other import trans_byte
+from lib.common.utils.meta import WithLogger
+from lib.common_biz import pbjson
 
 
 class ProtoBuf(metaclass=WithLogger):

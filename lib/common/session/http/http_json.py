@@ -6,8 +6,8 @@
 import requests
 import json
 from requests.exceptions import RequestException
-from common.utils.meta import WithLogger
-from common.exception import HttpJsonException
+from lib.common.utils.meta import WithLogger
+from lib.common.exception import HttpJsonException
 
 
 class HttpJsonSession(metaclass=WithLogger):

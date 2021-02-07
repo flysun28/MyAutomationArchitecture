@@ -3,8 +3,8 @@
 # author:xy
 # datetime:2021/1/19 22:54
 # comment: 业务分库分表查询
-from common.algorithm.hash_code import GetHashCode
-from common.utils.meta import WithLogger
+from lib.common.algorithm.hash_code import GetHashCode
+from lib.common.utils.meta import WithLogger
 
 
 def get_route_ssoid(ssoid):

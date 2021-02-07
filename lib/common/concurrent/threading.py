@@ -6,7 +6,7 @@
 
 from threading import Thread, ThreadError
 from six import with_metaclass
-from common.utils.meta import WithLogger
+from lib.common.utils.meta import WithLogger
 
 
 class ResultTakenThread(with_metaclass(WithLogger, Thread)):

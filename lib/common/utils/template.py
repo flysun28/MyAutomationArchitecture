@@ -1,36 +1,37 @@
 # coding=utf-8
 
 from itertools import product
-from common.utils import *
-from common.exception.intf_exception import ArgumentException
+from lib.common.utils import *
+from lib.common.exception.intf_exception import ArgumentException
 
 logger = Logger('接口参数遍历模板').get_logger()
 
 
 class InterfaceExecStatistics():
-    PASS_NUM = StatisDescriptor(0)
-    FAIL_NUM = StatisDescriptor(0)
-    TOTAL = StatisDescriptor(0)
-    PASS_RATE = StatisDescriptor(0)
+    
+    def __init__(self):
+        self.PASS_NUM = 0
+        self.FAIL_NUM = 0
+        self.TOTAL = 0
+        self.PASS_RATE = 0
     
     def __str__(self):
-        print(self.PASS_NUM, self.FAIL_NUM, self.PASS_NUM, self.TOTAL)
         return 'URL: %s\n' \
                'PASSED: %d\n' \
                'FAILED: %d\n' \
-               'PASSED_RATE: %.2f' %(GlobarVar.HTTPJSON_IN.url, type(self).PASS_NUM, type(self).FAIL_NUM, type(self).PASS_NUM/type(self).TOTAL)
+               'PASSED_RATE: %.2f%%' %(GlobarVar.HTTPJSON_IN.url, self.PASS_NUM, self.FAIL_NUM, self.PASS_NUM/self.TOTAL*100)
         
 
 class InterfaceTestTemplate(metaclass=WithLogger):
-    statis = InterfaceExecStatistics()
     
     def __init__(self, callback):
         self.callback = callback
+        self.statis = InterfaceExecStatistics()
     
     def positive_test(self, *varargs, stop_on_failure=False):
         varargs = to_iterable_nested(varargs, ele_type=tuple)
         print(50*'#' + '正向测试开始' + 50*'#')
-        for param_values in self._make_positive_test_values(varargs):
+        for idx, param_values in self._make_positive_test_values(varargs):
             self.logger.debug(param_values)
             self.statis.TOTAL += 1
             try:
@@ -41,7 +42,7 @@ class InterfaceTestTemplate(metaclass=WithLogger):
                 self.logger.error('No.%d %s\n%s --- FAIL', idx, param_values, sys.exc_info()[1])
                 self.statis.FAIL_NUM += 1
                 if stop_on_failure:
-                    raise ArgumentException(param_values)
+                    raise ArgumentException(param_values)            
         self.logger.info(self.statis)
         print(50*'#' + '正向测试结束' + 50*'#')
     
@@ -53,19 +54,22 @@ class InterfaceTestTemplate(metaclass=WithLogger):
                 '第一列全为合法值，不参与异常参数遍历，仅作参照用'
                 continue
             self.logger.debug(param_values)
+            self.statis.TOTAL += 1
             try:
                 self.callback(*param_values)
+                self.statis.FAIL_NUM += 1
                 self.logger.error('No.%d %s\n%s --- FAIL(期望失败，实际成功)', idx, param_values, sys.exc_info()[1])
                 if stop_on_failure:
                     raise ArgumentException(param_values)
             except:
+                self.statis.PASS_NUM += 1   
                 self.logger.info('No.%d %s\n%s --- PASS(期望失败)', idx, param_values, sys.exc_info()[1])
         self.logger.info(self.statis)
         print(50*'#' + '负向测试结束' + 50*'#')
         
     def _make_positive_test_values(self, varargs):
         '创建嵌套列表'
-        varargs = to_list_nested(varargs, ele_type=tuple)
+        varargs = to_iterable_nested(varargs, ele_type=tuple)
         ext_varargs = extend_to_longgest(varargs)
         pos_values = list(zip(*varargs))
         self.logger.info(pos_values)

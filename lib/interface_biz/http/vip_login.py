@@ -8,11 +8,11 @@ import requests
 import hmac
 import hashlib
 import json
-from common.file_operation.config_operation import Config
-from common.utils.meta import WithLogger
-from common_biz.file_path import account_path
-from common.session.http.json.http_json import HttpJsonSession
-from common.utils.globals import HTTPJSON_IN
+from lib.common.file_operation.config_operation import Config
+from lib.common.utils.meta import WithLogger
+from lib.common_biz.file_path import account_path
+from lib.common.session.http.http_json import HttpJsonSession
+from lib.common.utils.globals import HTTPJSON_IN
 url = "http://i.auth.ucnewtest.wanyol.com/loging"
 appKey = "myKey"
 

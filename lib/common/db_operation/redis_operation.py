@@ -4,7 +4,7 @@
 # datetime:2021/1/19 22:58
 # comment: redis操作
 import sys
-from common.utils.meta import WithLogger
+from lib.common.utils.meta import WithLogger
 try:
     from rediscluster import StrictRedisCluster
 except ImportError:
@@ -13,7 +13,7 @@ finally:
     this_mod = sys.modules.get(__name__, None)
     RedisClusterCls = getattr(this_mod, 'StrictRedisCluster', None) or getattr(this_mod, 'RedisCluster', None)
 #     print(sys.modules[RedisClusterCls.__module__].__file__)
-from common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config
 
 
 class RedisCluster(metaclass=WithLogger):

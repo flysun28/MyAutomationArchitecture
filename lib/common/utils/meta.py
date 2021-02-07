@@ -2,7 +2,7 @@
 
 import sys
 import re
-from common.logger.logging import Logger
+from lib.common.logger.logging import Logger
 
 
 class WithLogger(type):

@@ -3,18 +3,18 @@
 # author:xy
 # datetime:2021/1/19 22:56
 # comment: 鉴权接口
-from common.algorithm.other import get_RV
-# from common.db_operation.redis_operation import connect_redis
-from common.file_operation.config_operation import Config
-from common.logger.logging import Logger
-from common.session.http.protobuf.protobuf import ProtoBuf
-from common.utils.env import get_env_config
-from common.utils.meta import WithLogger
-from common_biz.vip_login import Vip
-from common_biz.file_path import account_path
-from common_biz.order_random import RandomOrder
-from pb_src.python_native import PassPb_pb2
-from common.utils.globals import redis
+from lib.common.algorithm.other import get_RV
+# from lib.common.db_operation.redis_operation import connect_redis
+from lib.common.file_operation.config_operation import Config
+from lib.common.logger.logging import Logger
+from lib.common.session.http.protobuf import ProtoBuf
+from lib.common.utils.env import get_env_config
+from lib.common.utils.meta import WithLogger
+from lib.interface_biz.http.vip_login import Vip
+from lib.common_biz.file_path import account_path
+from lib.common_biz.order_random import RandomOrder
+from lib.pb_src.python_native import PassPb_pb2
+from lib.common.utils.globals import redis
 
 logger = Logger('鉴权').get_logger()
 

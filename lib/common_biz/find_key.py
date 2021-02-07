@@ -3,12 +3,12 @@
 # author:xy
 # datetime:2021/1/19 22:53
 # comment: 查询秘钥相关
-from common.db_operation.mysql_operation import connect_mysql
-from common.file_operation.config_operation import Config
-from common.utils.meta import WithLogger
-from config.path import common_sql_path
+from lib.common.db_operation.mysql_operation import connect_mysql
+from lib.common.file_operation.config_operation import Config
+from lib.common.utils.meta import WithLogger
+from lib.config.path import common_sql_path
 from pymysql.err import DataError
-from common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobarVar
 
 
 class GetKey(metaclass=WithLogger):
@@ -20,7 +20,7 @@ class GetKey(metaclass=WithLogger):
         """
         self.partner_id = partner_id
         if getattr(self, 'mysql', None) is None:
-            self.mysql = GlobarVar.MYSQL_IN if in_out == 'inland' else GlobarVar.MYSQL_OS
+            self.mysql = GlobarVar.MYSQL_IN if in_out == 'inland' else GlobarVar.MYSQL_OUT
 #         self.mysql = connect_mysql(in_out)
 
     def get_key_from_merchant(self):

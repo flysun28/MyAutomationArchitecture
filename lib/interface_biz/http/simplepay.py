@@ -1,13 +1,13 @@
 # coding=utf-8
 
-from common.utils.globals import HTTPJSON_IN, GlobarVar
-from pb_src.python_native import SimplePayPb_pb2
-from common_biz.pay_pass import Pass
-from common_biz.order_random import RandomOrder
-from common_biz.sign import expend_pay_sign_string, simple_pay_sign_string
-from common.algorithm.rsa import rsa
-from common.session.http.protobuf.protobuf import ProtoBuf
-from common.algorithm.cipher import Cipher
+from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.pb_src.python_native import SimplePayPb_pb2
+from lib.interface_biz.http.pay_pass import Pass
+from lib.common_biz.order_random import RandomOrder
+from lib.common_biz.sign import expend_pay_sign_string, simple_pay_sign_string
+from lib.common.algorithm.rsa import rsa
+from lib.common.session.http.protobuf import ProtoBuf
+from lib.common.algorithm.cipher import Cipher
 
 
 

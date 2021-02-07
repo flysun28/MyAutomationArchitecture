@@ -7,7 +7,7 @@ import logging
 import sys
 import os
 from datetime import date
-from config.path import log_dir
+from lib.config.path import log_dir
 
 
 class Logger():

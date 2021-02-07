@@ -5,7 +5,7 @@
 
 import telnetlib
 import socket
-from common.utils.meta import WithLogger
+from lib.common.utils.meta import WithLogger
 
 
 class DubRunner(metaclass=WithLogger, telnetlib.Telnet):

@@ -1,9 +1,9 @@
 # coding=utf-8
-from common.session.http.json.http_json import HttpJsonSession
-from common.utils.env import get_env_config
-from common.db_operation.mysql_operation import connect_mysql
-from common.db_operation.redis_operation import connect_redis
-from common.utils.descriptors import GlobalVarDescriptor
+from lib.common.session.http.http_json import HttpJsonSession
+from lib.common.utils.env import get_env_config
+from lib.common.db_operation.mysql_operation import connect_mysql
+from lib.common.db_operation.redis_operation import connect_redis
+from lib.common.utils.descriptors import GlobalVarDescriptor
 
 
 class GlobarVar():

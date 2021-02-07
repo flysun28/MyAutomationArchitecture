@@ -5,7 +5,7 @@
 # comment: excel操作
 
 from openpyxl import load_workbook
-from common.concurrent.threading import ResultTakenThread
+from lib.common.concurrent.threading import ResultTakenThread
 import asyncio
 
 

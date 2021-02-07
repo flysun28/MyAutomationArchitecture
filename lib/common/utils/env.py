@@ -2,8 +2,8 @@
 
 import os
 import re
-from config.path import global_env_path, config_dir
-from common.file_operation.config_operation import Config
+from lib.config.path import global_env_path, config_dir
+from lib.common.file_operation.config_operation import Config
 
 
 glob_env_cfg = Config(global_env_path)

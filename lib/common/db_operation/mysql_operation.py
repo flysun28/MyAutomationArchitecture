@@ -5,9 +5,9 @@
 # comment:
 
 import pymysql
-from common.utils.meta import WithLogger
-from common.utils.env import get_env_config, get_env_id
-from common.logger.logging import Logger
+from lib.common.utils.meta import WithLogger
+from lib.common.utils.env import get_env_config, get_env_id
+from lib.common.logger.logging import Logger
 
 
 class MySQLClient(metaclass=WithLogger):
