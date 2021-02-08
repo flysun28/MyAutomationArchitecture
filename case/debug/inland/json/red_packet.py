@@ -48,8 +48,32 @@ class RedPacket:
         GlobarVar.HTTPJSON_GW_IN.post("/gateway/activity-repacket-grant", data=case_dict)
 
     def red_packet_overseas(self):
-        pass
+        case_dict = {'charset': 'UTF8', 'format': 'JSON',
+                     'bizContent': {
+                         'ssoid': '2076075925',
+                         'packetId': 'e119018e388a4720a12ea0e34667b402',
+                         'appPackage': 'com.skymoons.hqg.nearme.gamecenter',
+                         'beneficiaryAccountNo': '918008484891',
+                         'userClientIp': '192.168.1.1',
+                         'amount': '1.02',
+                         'loginId': '13590362606',
+                         'callBackUrl': 'http://10.13.33.120:18842/sdklocal/withdraw/order/v1/redPackCallBack',
+                         # 吉喆账号
+                         'beneficiaryPhoneNo': '8448197836',
+                         'userId': 'oCg6Xt7DCpBt6arZxjvVtFSlBPW0',
+                         'beneficiaryIFSC': 'PYTM0123456',
+                         'bizActivityId': '6',
+                         'beneficiaryEmail': '',
+                         'requestId': RandomOrder(32).random_num(),
+                         'imei': '869541029924076',
+                         'partnerId': '2031'
+                     }, 'version': '1.0', 'sign_type': 'MD5', 'app_id': '100001',
+                     'timestamp': time.strftime("%Y-%m-%d %H:%M:%S"), 'sign': ''}
+        case_dict['bizContent'] = str(case_dict['bizContent'])
+        temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
+        case_dict['sign'] = md5(temp_string)
+        GlobarVar.HTTPJSON_GW_OUT.post("/gateway/activity-repacket-grant", data=case_dict)
 
 
 if __name__ == '__main__':
-    RedPacket().red_packet_inland()
+    RedPacket().red_packet_overseas()

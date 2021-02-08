@@ -4,7 +4,6 @@
 # datetime:2021/2/8 16:41
 # comment:
 import time
-
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.sha_256 import sha_256
 from lib.common.utils.globals import GlobarVar
@@ -20,7 +19,6 @@ class Msp:
     def pay_trade(self):
         case_dict = {
             "accessType": "NATIVE",
-            # appKey: `platform_opay`.`t_key`
             "appKey": "2031",
             # "contractInfo": str({'contractNotifyUrl': 'http://pay.pay-test.wanyol.com/notify/receiver','contractPartnerOrder': partner_order("SN"),
             #                      'renewProductCode': '20320004'}),
