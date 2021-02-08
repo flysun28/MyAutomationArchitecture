@@ -92,7 +92,7 @@ class GetKey(metaclass=WithLogger):
         :return:
         """
         try:
-            sql_key = str(Config(common_sql_path).read_config('key', 'sql_key')).format(self.partner_id)
+            sql_key = str(Config(common_sql_path).read_config('db_platform_gateway', 'sql_key')).format(self.partner_id)
             KEY = self.mysql.select_one(sql_key)["app_key"]
             self.logger.info("查询到秘钥信息：{}".format(KEY))
             return KEY
@@ -116,4 +116,4 @@ class GetKey(metaclass=WithLogger):
 
 if __name__ == '__main__':
     # A = GetKey("2031").get_key_from_partner_key()
-    GetKey("5456925").get_key_from_voucher()
+    GetKey("2031").get_key_from_t_key()

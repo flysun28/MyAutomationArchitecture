@@ -36,7 +36,7 @@ class Sign(metaclass=WithLogger):
     def join_asc_have_key(self, salt="", *args):
         """
         1. 按照ASCII码排序 2.格式为：参数名称=参数值，并用&连接 3.需要删除空的字段
-        salt标识是否需要加 &key=, 默认为空
+        salt标识是否需要加 , 默认为空
         e.g : 解约接口
         注意：
             动态参数适用场景较少，支付宝的支付回调中，除了删除sign字段，还需要额外删除sign_type字段

@@ -8,11 +8,8 @@ from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
 from lib.common_biz.find_database_table import SeparateDbTable
-from lib.common_biz.order_random import RandomOrder
 from lib.config.path import common_sql_path
 from lib.common.utils.globals import GlobarVar
-
-
 
 
 class Refund:
