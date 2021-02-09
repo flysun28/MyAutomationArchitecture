@@ -4,7 +4,7 @@
 # datetime:2021/2/8 18:05
 # comment:
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.common.utils.globals import HTTPJSON_IN
 from lib.common_biz.file_path import account_path, key_path
 from lib.pb_src.python_native import SimplePayPb_pb2
 from lib.interface_biz.http.pay_pass import Pass
@@ -108,7 +108,6 @@ class SimplePay:
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-
 
 
 if __name__ == '__main__':
