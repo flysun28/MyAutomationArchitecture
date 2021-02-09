@@ -20,8 +20,9 @@ class GlobarVar():
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
-    REDIS = GlobalVarDescriptor(connect_redis())
+    # REDIS = GlobalVarDescriptor(connect_redis())
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
-redis = REDIS = GlobarVar.REDIS
+# redis = REDIS = GlobarVar.REDIS
+HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET

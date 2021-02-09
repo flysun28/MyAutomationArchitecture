@@ -16,7 +16,7 @@ class AutoRenew:
 
     def auto_renew_out(self):
         """
-        像渠道发起扣费接口
+        向渠道发起扣费接口
         :return:
         """
         case_dict = {

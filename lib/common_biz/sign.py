@@ -208,6 +208,18 @@ def partner_key_sign_string(bizNo, developerId, appId, appName, appPublicKey, ti
     return signString
 
 
+def hee_pay_sign_string(scarlett_string):
+    """
+    骏网卡支付签名原始串
+    :return:
+    """
+    md5_string = \
+        "ret_code=" + scarlett_string["ret_code"] + "&" + "agent_id=" + scarlett_string['agent_id'] + "&" + "bill_id=" \
+        + scarlett_string['bill_id'] + "&" + "jnet_bill_no=" + scarlett_string['jnet_bill_no'] + "&" + "bill_status=" +\
+        scarlett_string["bill_status"] + "&" + "card_real_amt=" + scarlett_string['card_real_amt'] + "&" + \
+        "card_settle_amt=" + scarlett_string["card_settle_amt"] + "&" + "card_detail_data=|||" + "574A4702E0644DA29E827E05"
+    return md5_string
+
 if __name__ == '__main__':
     a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '', 'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1', 'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}
     print(Sign(a).join_fixed_param("hee_pay_scarlett", "&"))
