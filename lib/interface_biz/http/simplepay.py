@@ -220,7 +220,7 @@ class SimplePay:
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
 
-    def recharge_spend_kb_voucher_buy_place(self, price, vou_id, vou_count, vou_type=8):
+    def recharge_spend_kb_voucher_buy_place(self, price, vou_id, vou_count, by_id, add_amount, vou_type=8):
         """
         加购位，使用红包券
         加购位优惠券信息：`pay_baseshop`.`virtual_voucher_info`
@@ -251,7 +251,8 @@ class SimplePay:
                                  "attach": "", "sign": "", "appKey": "1234", "voucherId": vou_id,
                                  "voucherType": vou_type, "voucherCount": vou_count, "factor": "",
                                  "useVirCoupon": "Y"},
-               "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
+               "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
+               "buyPlaceId": by_id, "chooseBuyPlace": "Y", "attachGoodsAmount": add_amount}
         string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
                                                    req['expendRequest']['partnerOrder'],
                                                    req['expendRequest']['productname'],
