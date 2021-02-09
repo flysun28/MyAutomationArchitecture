@@ -1,8 +1,4 @@
-#!/usr/bin/env Python3
-# -*- encoding:utf-8 *-*
-# author:xy
-# datetime:2021/2/8 18:05
-# comment:
+# coding=utf-8
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import HTTPJSON_IN
 from lib.common_biz.file_path import account_path, key_path
@@ -93,7 +89,7 @@ class SimplePay:
                # isNeedExpend:0, 充值与直扣场景；isNeedExpend:1，充值消费，纯消费
                # "payTypeRMBType": "0"，非MSP；"payTypeRMBType": "1"，MSP？？？
                # "tradeType": "common" 普通支付, "tradeType": "single" 单机
-               "isNeedExpend": "0", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
+               "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
                # 会员加购信息，attachGoodsAmount服务端做了校验
                "buyPlaceId": "10001", "chooseBuyPlace": "Y", "attachGoodsAmount": "1"}
         string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
