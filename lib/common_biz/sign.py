@@ -36,7 +36,7 @@ class Sign(metaclass=WithLogger):
     def join_asc_have_key(self, salt="", *args):
         """
         1. 按照ASCII码排序 2.格式为：参数名称=参数值，并用&连接 3.需要删除空的字段
-        salt标识是否需要加 &key=, 默认为空
+        salt标识是否需要加 , 默认为空
         e.g : 解约接口
         注意：
             动态参数适用场景较少，支付宝的支付回调中，除了删除sign字段，还需要额外删除sign_type字段
@@ -207,6 +207,18 @@ def partner_key_sign_string(bizNo, developerId, appId, appName, appPublicKey, ti
     signString = signString + 'timestamp' + timestamp
     return signString
 
+
+def hee_pay_sign_string(scarlett_string):
+    """
+    骏网卡支付签名原始串
+    :return:
+    """
+    md5_string = \
+        "ret_code=" + scarlett_string["ret_code"] + "&" + "agent_id=" + scarlett_string['agent_id'] + "&" + "bill_id=" \
+        + scarlett_string['bill_id'] + "&" + "jnet_bill_no=" + scarlett_string['jnet_bill_no'] + "&" + "bill_status=" +\
+        scarlett_string["bill_status"] + "&" + "card_real_amt=" + scarlett_string['card_real_amt'] + "&" + \
+        "card_settle_amt=" + scarlett_string["card_settle_amt"] + "&" + "card_detail_data=|||" + "574A4702E0644DA29E827E05"
+    return md5_string
 
 if __name__ == '__main__':
     a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '', 'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1', 'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}

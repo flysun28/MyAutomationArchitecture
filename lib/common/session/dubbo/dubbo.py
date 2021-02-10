@@ -2,14 +2,22 @@
 # author:xy
 # datetime:2021/1/22 17:51
 # comment:
-
+import json
 import telnetlib
 import socket
+<<<<<<< HEAD
 from lib.common.utils.meta import WithLogger
 from six import with_metaclass
 
 
 class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
+=======
+from lib.common.logger.logging import Logger
+logger = Logger("DubRunner").get_logger()
+
+
+class DubRunner(telnetlib.Telnet):
+>>>>>>> 4e34fc7b73277790c2a238e3f3e548ca076d215e
     prompt = 'dubbo>'
     coding = 'utf-8'
 
@@ -40,10 +48,17 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
         elif flag == "STRING":
             command_str = "invoke {0}.{1}{2}".format(
                 service_name, method_name, arg)
+        elif flag == "FIX":
+            # 混合类型，直接传入字符串处理
+            command_str = "invoke {0}.{1}({2})".format(
+                service_name, method_name, arg)
         self.command(DubRunner.prompt, command_str)
-        self.logger.info("dubbo传参：{}".format(command_str))
+        logger.info("dubbo传参：{}".format(command_str))
         data = self.command(DubRunner.prompt, "")
-        data = data.decode(DubRunner.coding, errors='ignore').split('\n')[0].strip()
+        # data = data.decode(DubRunner.coding, errors='ignore').split('\n')[0].strip()
+        temp = str(data, encoding="gbk").split("elapsed")[0]
+        data = json.loads(temp)
+        logger.info("dubbo回参：{}".format(data))
         return data
 
 

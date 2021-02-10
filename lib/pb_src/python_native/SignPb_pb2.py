@@ -13,10 +13,17 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
+<<<<<<< HEAD
 from lib.pb_src.python_native import BaseResult_pb2
 from lib.pb_src.python_native import BaseHeader_pb2
 from lib.pb_src.python_native import BasePayPb_pb2
 from lib.pb_src.python_native import ExpendPayPb_pb2
+=======
+from . import BaseResult_pb2
+from . import BaseHeader_pb2
+from . import BasePayPb_pb2
+from . import ExpendPayPb_pb2
+>>>>>>> 4e34fc7b73277790c2a238e3f3e548ca076d215e
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

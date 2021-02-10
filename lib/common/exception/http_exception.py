@@ -14,4 +14,4 @@ class HttpJsonException(Exception):
                 arg = str(arg)
         args = ('<HttpJson> exception:', ) + args
         return ' '.join(args)
-    
+

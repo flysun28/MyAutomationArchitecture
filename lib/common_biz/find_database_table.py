@@ -31,7 +31,7 @@ class SeparateDbTable(metaclass=WithLogger):
             :param ssoid:
             :return:
             """
-            hash_code = GetHashCode.getHashCode(self.ssoid)
+            hash_code = abs(GetHashCode.getHashCode(self.ssoid))
             db = int(hash_code / 128 % 8)
             table = hash_code % 128
             # logger.info("`db_order_{}`.`order_info_{}`".format(db, table))
@@ -65,4 +65,4 @@ class SeparateDbTable(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    print(SeparateDbTable("2076075925").get_coin_db_table())
+    print(SeparateDbTable("2076075925").get_order_db_table())

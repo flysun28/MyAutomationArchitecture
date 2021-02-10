@@ -8,7 +8,7 @@ from lib.common.algorithm.other import get_RV
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common.utils.meta import WithLogger
 from lib.interface_biz.http.vip_login import Vip
 from lib.common_biz.file_path import account_path

@@ -7,6 +7,7 @@ class ArgumentException(Exception):
     
     def __str__(self, *args):
         return f'Arguments {args} error!'
+<<<<<<< HEAD
 
 
 class ExcelException(Exception):
@@ -27,3 +28,5 @@ class CLIError(Exception):
         
     def __str__(self):
         return self.msg
+=======
+>>>>>>> 4e34fc7b73277790c2a238e3f3e548ca076d215e

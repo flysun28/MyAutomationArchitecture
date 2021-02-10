@@ -29,3 +29,4 @@ class GlobarVar():
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
 redis = REDIS = GlobarVar.REDIS
+HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET

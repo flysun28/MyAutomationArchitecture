@@ -30,3 +30,17 @@ def get_env_config() -> dict:
     for section in env_config.sections():
         result[section] = env_config.as_dict(section)
     return result
+
+
+def get_dubbo_info(dubbo_config):
+    """
+    根据配置文件，返回dubbo接口的ip：port
+    :param dubbo_config: test_env_config_x.ini文件中dubbo对应的服务
+    :return:
+    """
+    ip_port = get_env_config()['dubbo'][dubbo_config].split(":")
+    return ip_port
+
+
+if __name__ == '__main__':
+    pass

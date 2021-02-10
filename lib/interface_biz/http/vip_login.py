@@ -12,8 +12,10 @@ from lib.common.file_operation.config_operation import Config
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import account_path
 from lib.common.session.http.http_json import HttpJsonSession
-from lib.common.utils.globals import HTTPJSON_IN
+from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+
 url = "http://i.auth.ucnewtest.wanyol.com/loging"
+header = {"content-type": "application/json"}
 appKey = "myKey"
 
 
@@ -33,8 +35,7 @@ class Vip(metaclass=WithLogger):
         value = "{}{}{}".format(appKey, self.account_args['username'], passWord_md5).encode()
         sign = hmac.new(b"mySecret", value, hashlib.md5).hexdigest()
         body = "{{'appKey':'{}','loginName':'{}','passWord':'{}','sign':'{}'}}".format(appKey, self.account_args['username'], passWord_md5, sign)
-        response = HTTPJSON_IN.post(url, body)
-#         response = requests.post(url, data=body, headers=header)
+        response = requests.post(url, data=body, headers=header)
         self.logger.info('返回的登录信息：{}'.format(response.json()))
         if response.json()['resultCode'] == '1700':
             self.logger.info('返回的异常登录信息：{}'.format(response.text))

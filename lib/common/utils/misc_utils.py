@@ -60,6 +60,7 @@ def extend_to_longgest(seq):
             subseq += (max_len-cur_len)*[last_ele]
             seq[idx] = subseq
     return seq
+<<<<<<< HEAD
 
 
 def ascii_to_chr_repr(str_with_ascii:str)-> str:
@@ -90,3 +91,5 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     if diffs:
         raise AssertionError(diff_value_msg)
 
+=======
+>>>>>>> 4e34fc7b73277790c2a238e3f3e548ca076d215e
