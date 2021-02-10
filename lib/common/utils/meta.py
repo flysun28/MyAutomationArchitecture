@@ -3,9 +3,10 @@
 import sys
 import re
 from lib.common.logger.logging import Logger
+from abc import ABCMeta
 
 
-class WithLogger(type):
+class WithLogger(ABCMeta):
     
     def __call__(cls, *args, **kwargs):
         module = sys.modules[cls.__module__]

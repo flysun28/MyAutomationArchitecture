@@ -100,20 +100,22 @@ req = {"header": {"version": "12.0",
        "attachGoodsAmount": "2"
 }
 
-token = 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTIyNzMxNTE5NDAsImlkIjoiMjA4NjEwMDkwMCIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiemZCcGxpQVV2VEZhWEpOb2ZCL05jMDVKTG45Z3lLK2RPTVh6RnJVZys1ekdNNGdCQ0JzMlpBVmxldE0yUmd2K1E0bXNxNklGd3VNa1I2M3ppbUhWTER1RkFQVVcrNXVaRkRKM1BnS1lDMzQ9In0.MEUCIQCVs6zL5ye3y7AD5yolOXLqQuPo65H6c-yf4yEWgpP4JQIgVFM352Jbog6vlCj3x3ukmSKUJjMT27qbx6msqVyLjKw'
 
-string_expend_pay = expend_pay_sign_string(
-    token, req['header']['package'],
-    req['expendRequest']['partnerid'],
-    req['expendRequest']['partnerOrder'],
-    req['expendRequest']['productname'],
-    req['expendRequest']['productdesc'],
-    req['expendRequest']['price'],
-    req['expendRequest']['count'])
-print(string_expend_pay)
-string_ = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                 req['basepay']['partnerorder'], req['amount'], req['type'])
-req['sign'] = Cipher(string_).cipher()
-req['expendRequest']['sign'] = rsa(string_expend_pay, "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIxWEg3nFA9F2ajV+abQcE6VGTZecmy4qA4GLpvUgUBRa1E6mbqVGfDjkzzdr9eIcRm/kU6n6uywaWDBxZ4u57EjqQIXmEVPqCwRjL1dF+lIE5QDZTBxqM9GwygQpGYQib42mbCcYB55krZjtfCveKYd0snzpWAnnMx52p3gh9dZAgMBAAECgYAYGB75bBcxmBiKuFIopdjiZQ7zGrwiloGkBsOx1YZreI8oXxtNwZO2nBwHczhhlPd2KEHWc1YOVSuChUJcqkj1C6tionQdOcU02wWXEkxTuGJIArw6ntqYn2ZZZMLBejjRETJZfH/YEPkzUd0FuD0cIfrJUIZOyH3qOWJlEafqQQJBAMkRcGOP4TO/aOasOszDLZe2b15tLjKQe363hV34IgUi4hWQLSdvFG76gpcloi5JXU8IpXeF1q8/bTa4U7RDYw0CQQCyrRXNXGWc/dDnehShi3kOayYrGzKAIvykquDIyLMkAyIobAMSzoj56V+A1sE8C/cyMVwDo8jWcvhCZE3nK+J9AkBd/QvnTnt8AA6ePYYi712hnIMExc6hjk5cFpd+LJ5ifkLmx4WD+HW5xtpCozHjpyG57xXCAEsxklmQCav/CL0FAkApYsYGBzzSHEhjFXfp4zBrEo6ItYgA/hme2qWuXC6CTOeAjWQ42vYHTPL+GMAxdGQRkDVL8of2hDLUzf7taNDRAkBLT1q2MLR1WSJg/EqzJ1enOvxp4L+Pma91IYi0Yr2rA0R06elC3Eut+IMjH3I8ck49TaVbSSClTou11CkSJCyJ")
-response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix+'/plugin/post/simplepay', 'Request', req, flag=0)
-result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+def http_pb_simplepay(req:dict, token=''):
+    token = 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTIyNzMxNTE5NDAsImlkIjoiMjA4NjEwMDkwMCIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiemZCcGxpQVV2VEZhWEpOb2ZCL05jMDVKTG45Z3lLK2RPTVh6RnJVZys1ekdNNGdCQ0JzMlpBVmxldE0yUmd2K1E0bXNxNklGd3VNa1I2M3ppbUhWTER1RkFQVVcrNXVaRkRKM1BnS1lDMzQ9In0.MEUCIQCVs6zL5ye3y7AD5yolOXLqQuPo65H6c-yf4yEWgpP4JQIgVFM352Jbog6vlCj3x3ukmSKUJjMT27qbx6msqVyLjKw'
+
+    string_expend_pay = expend_pay_sign_string(
+        token, req['header']['package'],
+        req['expendRequest']['partnerid'],
+        req['expendRequest']['partnerOrder'],
+        req['expendRequest']['productname'],
+        req['expendRequest']['productdesc'],
+        req['expendRequest']['price'],
+        req['expendRequest']['count'])
+    string_ = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
+                                     req['basepay']['partnerorder'], req['amount'], req['type'])
+    req['sign'] = Cipher(string_).cipher()
+    req['expendRequest']['sign'] = rsa(string_expend_pay, "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIxWEg3nFA9F2ajV+abQcE6VGTZecmy4qA4GLpvUgUBRa1E6mbqVGfDjkzzdr9eIcRm/kU6n6uywaWDBxZ4u57EjqQIXmEVPqCwRjL1dF+lIE5QDZTBxqM9GwygQpGYQib42mbCcYB55krZjtfCveKYd0snzpWAnnMx52p3gh9dZAgMBAAECgYAYGB75bBcxmBiKuFIopdjiZQ7zGrwiloGkBsOx1YZreI8oXxtNwZO2nBwHczhhlPd2KEHWc1YOVSuChUJcqkj1C6tionQdOcU02wWXEkxTuGJIArw6ntqYn2ZZZMLBejjRETJZfH/YEPkzUd0FuD0cIfrJUIZOyH3qOWJlEafqQQJBAMkRcGOP4TO/aOasOszDLZe2b15tLjKQe363hV34IgUi4hWQLSdvFG76gpcloi5JXU8IpXeF1q8/bTa4U7RDYw0CQQCyrRXNXGWc/dDnehShi3kOayYrGzKAIvykquDIyLMkAyIobAMSzoj56V+A1sE8C/cyMVwDo8jWcvhCZE3nK+J9AkBd/QvnTnt8AA6ePYYi712hnIMExc6hjk5cFpd+LJ5ifkLmx4WD+HW5xtpCozHjpyG57xXCAEsxklmQCav/CL0FAkApYsYGBzzSHEhjFXfp4zBrEo6ItYgA/hme2qWuXC6CTOeAjWQ42vYHTPL+GMAxdGQRkDVL8of2hDLUzf7taNDRAkBLT1q2MLR1WSJg/EqzJ1enOvxp4L+Pma91IYi0Yr2rA0R06elC3Eut+IMjH3I8ck49TaVbSSClTou11CkSJCyJ")
+    response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix+'/plugin/post/simplepay', 'Request', req, flag=0)
+    result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+    return result
