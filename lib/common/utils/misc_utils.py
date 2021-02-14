@@ -27,7 +27,7 @@ def to_iterable(item, type_: (list, tuple, set)):
         return type_(item)
     else:
         raise ValueError(f'Argument {item} is not a sequence or a string.')
-
+    
 
 def to_iterable_nested(seq, ele_type:(list, tuple, set)=list):
     '''

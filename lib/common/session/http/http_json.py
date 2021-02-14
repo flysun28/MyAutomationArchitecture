@@ -6,18 +6,19 @@
 import requests
 import json
 from requests.exceptions import RequestException
+from simplejson.errors import JSONDecodeError
 from lib.common.utils.meta import WithLogger
 from lib.common.exception import HttpJsonException
 
 
 class HttpJsonSession(metaclass=WithLogger):
-    header = {'Content-Type': 'application/json;charset=utf-8', 
-              'Connection': 'keep-alive', 
+    header = {'Content-Type': 'application/json;charset=utf-8',
+              'Connection': 'keep-alive',
               'Accept-Encoding': 'gzip, deflate',
               'Accept': '*/*',
               'User-Agent': 'HttpJson/1.0'
-    }
-    
+              }
+
     def __init__(self, url_prefix=None, data=None, **kwargs):
         """
         :param url: 请求地址
@@ -39,7 +40,7 @@ class HttpJsonSession(metaclass=WithLogger):
             self.logger.info("返回结果：{}".format(response))
             return response
         except RequestException as e:
-            raise HttpJsonException(e) from None
+            raise HttpJsonException(e) from None        
         except AssertionError:
             raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
         except:
@@ -50,22 +51,12 @@ class HttpJsonSession(metaclass=WithLogger):
         try:
             response = self.session.get(url=self.url, params=json.dumps(data)).json()
             self.logger.info(response)
+            return response
         except RequestException as e:
             raise HttpJsonException(e) from None
 
-
     def close(self):
         self.session.close()
-
-    def run_main(self, method="POST"):
-        res = None
-        if method.upper() == 'GET':
-            res = self.get()
-        elif method.upper() == 'POST':
-            res = self.post()
-        else:
-            self.logger.info('错误的http请求：{}'.format(method))
-        return res
 
 
 HttpJson = HttpJsonSession

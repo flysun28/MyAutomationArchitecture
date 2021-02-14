@@ -34,14 +34,12 @@ def case_teardown(self):
 class TestInlandPositive():
     pytestmark = pytest.mark.smoke, pytest.mark.functional, pytest.mark.regress, pytest.mark.positive
     
-    @pytest.fixture(scope='class', autouse=True)
-    def class_setup(self):
+    def __init__(self):
         self.actual_resp = None
-        yield
 
     @pytest.mark.parametrize('case', case_file_obj.positive_cases)
     def test_inland_positive(self, case):
-        self.actual_resp = http_pb_simplepay(case.req_params)
+        self.actual_resp = http_pb_simplepay(case.req_params)        
         dictionary_should_contain_sub_dictionary(self.actual_resp, case.expected)
 
 

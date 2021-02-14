@@ -1,6 +1,11 @@
-# coding=utf-8
-
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+#!/usr/bin/env Python3
+# -*- encoding:utf-8 *-*
+# author:xy
+# datetime:2021/2/8 18:05
+# comment:
+from lib.common.file_operation.config_operation import Config
+from lib.common.utils.globals import HTTPJSON_IN
+from lib.common_biz.file_path import account_path, key_path
 from lib.pb_src.python_native import SimplePayPb_pb2
 from lib.interface_biz.http.pay_pass import Pass
 from lib.common_biz.order_random import RandomOrder
@@ -402,4 +407,3 @@ if __name__ == '__main__':
     #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
     SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
-

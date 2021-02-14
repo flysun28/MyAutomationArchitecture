@@ -1,5 +1,7 @@
 # coding=utf-8
 
+NO_FILE_PARSER = -1
+
 
 class ArgumentException(Exception):
     

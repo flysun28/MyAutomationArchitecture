@@ -19,7 +19,6 @@ from . import BasePayPb_pb2
 from . import ExpendPayPb_pb2
 
 
-
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='OldUserPayPb.proto',
   package='OldUserPay',
