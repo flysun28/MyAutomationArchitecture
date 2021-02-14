@@ -1,5 +1,7 @@
 # coding=utf-8
 
+import re
+
 
 def is_string(item)-> bool:
     return isinstance(item, str)
@@ -57,4 +59,33 @@ def extend_to_longgest(seq):
             subseq += (max_len-cur_len)*[last_ele]
             seq[idx] = subseq
     return seq
-    
+
+
+def ascii_to_chr_repr(str_with_ascii:str)-> str:
+    str_with_chr = str_with_ascii
+    imatches = re.finditer('%\w{2}', str_with_ascii)
+    for m in imatches:
+        raw = m.group()
+        to_decimal = int(raw[1:], 16)
+        str_with_chr = re.sub(raw, chr(to_decimal), str_with_chr)
+    return str_with_chr
+
+
+def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
+    """
+    Fails unless all items in `dict2` are found from `dict1`.
+    """
+    diffs = [k for k in dict1 if k not in dict1]
+    missing_key_msg = "Following keys missing from first dictionary: %s" %', '.join(diffs)
+    if diffs:
+        raise AssertionError(missing_key_msg)
+    diffs = ()
+    for k2, v2 in dict2.items():
+        v1 = dict1[k2]
+        if k2 == 'payrequestid' and not v1.startswith(v2) or \
+            v1 != v2:
+            diffs += 'Key %s: %s != %s' %(k2, v2, v1)
+    diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
+    if diffs:
+        raise AssertionError(diff_value_msg)
+

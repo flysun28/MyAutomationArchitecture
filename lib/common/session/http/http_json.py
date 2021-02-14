@@ -34,13 +34,16 @@ class HttpJsonSession(metaclass=WithLogger):
         self.url = self.prefix + url
         data = data or self.data
         try:
-            response = self.session.post(url=url, data=json.dumps(data)).json()
-            assert response['resCode'] == '0000' or response['resMsg'] in ('成功', 'success')
-            self.logger.info(response)
+            self.logger.info("传入的参数：{}".format(data))
+            response = self.session.post(url=self.url, data=json.dumps(data)).json()
+            self.logger.info("返回结果：{}".format(response))
+            return response
         except RequestException as e:
             raise HttpJsonException(e) from None
         except AssertionError:
-            raise AssertionError('%s POST response:\n%s' %(url, response)) from None
+            raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
+        except:
+            raise
 
     def get(self, data=None):
         data = data or self.data

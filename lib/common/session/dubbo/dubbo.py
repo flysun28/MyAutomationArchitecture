@@ -6,9 +6,10 @@
 import telnetlib
 import socket
 from lib.common.utils.meta import WithLogger
+from six import with_metaclass
 
 
-class DubRunner(metaclass=WithLogger, telnetlib.Telnet):
+class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
     prompt = 'dubbo>'
     coding = 'utf-8'
 
