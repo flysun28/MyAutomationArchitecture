@@ -16,6 +16,7 @@ _sym_db = _symbol_database.Default()
 from . import BaseHeaderOut_pb2
 from . import Product_pb2
 
+
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='SpeakerInfo.proto',
   package='',

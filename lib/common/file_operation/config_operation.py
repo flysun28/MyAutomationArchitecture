@@ -7,6 +7,7 @@
 import configparser
 import json
 from lib.common.utils.meta import WithLogger
+from _functools import partial
 
 
 class Config(metaclass=WithLogger):
@@ -17,6 +18,7 @@ class Config(metaclass=WithLogger):
         """
         self.path = path
         self.parser = configparser.ConfigParser()
+        self._data = {}
 
     def write_config(self, section, option, value):
         """
@@ -43,7 +45,7 @@ class Config(metaclass=WithLogger):
             return option_value
         except Exception as e:
             self.logger.info('配置文件%s未配置执行用例或配置错误' %self.path)
-
+    
     def sections(self)-> list:
         """
         获取所有的sections
@@ -68,6 +70,15 @@ class Config(metaclass=WithLogger):
         for option in options:
             result.setdefault(option, self.read_config(section, option))
         return result
+    
+    def parse(self, to_iter=False):
+        for section in self.sections():
+            if to_iter:
+                yield self.as_dict(section)
+            else:
+                self._data.update(self.as_dict(section))
+    
+    generate = partial(parse, to_iter=True)
 
     def value_as_list(self, section, option):
         """

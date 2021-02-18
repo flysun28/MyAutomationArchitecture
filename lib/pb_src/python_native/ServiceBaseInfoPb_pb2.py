@@ -15,6 +15,7 @@ _sym_db = _symbol_database.Default()
 
 from  .  import BaseHeader_pb2
 
+
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='ServiceBaseInfoPb.proto',
   package='ServiceBaseInfo',

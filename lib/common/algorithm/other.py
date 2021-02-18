@@ -20,7 +20,7 @@ def trans_byte(src_bytes):
     """
     srcBytes = bytearray(src_bytes)
     randomInt = []
-    for i in range(0, 6):
+    for _ in range(0, 6):
         randomInt.append(random_int().to_bytes(1, 'little'))
     randomBytes1 = randomInt[0] + randomInt[1] + randomInt[2] + randomInt[3]
     randomBytes2 = randomInt[4] + randomInt[5]

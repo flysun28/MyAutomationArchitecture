@@ -6,6 +6,7 @@
 import requests
 import json
 from requests.exceptions import RequestException
+from simplejson.errors import JSONDecodeError
 from lib.common.utils.meta import WithLogger
 from lib.common.exception import HttpJsonException
 
@@ -39,9 +40,11 @@ class HttpJsonSession(metaclass=WithLogger):
             self.logger.info("返回结果：{}".format(response))
             return response
         except RequestException as e:
-            raise HttpJsonException(e) from None
+            raise HttpJsonException(e) from None        
         except AssertionError:
-            raise AssertionError('%s POST response:\n%s' % (url, response)) from None
+            raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
+        except:
+            raise
 
     def get(self, data=None):
         data = data or self.data

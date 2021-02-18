@@ -5,11 +5,11 @@
 import json
 import telnetlib
 import socket
-from lib.common.logger.logging import Logger
-logger = Logger("DubRunner").get_logger()
+from lib.common.utils.meta import WithLogger
+from six import with_metaclass
 
 
-class DubRunner(telnetlib.Telnet):
+class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
     prompt = 'dubbo>'
     coding = 'utf-8'
 

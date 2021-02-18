@@ -63,7 +63,7 @@ class ProtoBuf(metaclass=WithLogger):
 
 if __name__ == '__main__':
     pass
-    # from pb_src.python_native import ExpendPayPb_pb2
+    # from lib.pb_src.python_native import ExpendPayPb_pb2
     # url = "http://pay.pay-test.wanyol.com/plugin/post/expendpay"
     # data_dict = {'header': {'version': '6.0', 't_p': 'd78380e5aa2145d3a9c72f5f4bba542f', 'imei': '', 'model': 'PCRM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': b'mJZ4zmGL', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'openId': '', 'brandType': 'OPPO', 'mobileos': '17', 'androidVersion': '29', 'appVerison': '3.1.5'}, 'price': 1, 'count': 1, 'productname': 'test', 'productdesc': 'test', 'partnerid': '2031', 'callBackUrl': 'http://secure.pay-test2.wanyol.com/notify/receiver', 'partnerOrder': 'wKWjBGZJ3DhMXt82IFCkYdiOAq14aeQl', 'channelId': 'demo', 'ver': '3.1.5', 'source': 'test', 'attach': '', 'sign': b'UkxoI5JAzUimMdAQ8A6HcoohWfeEi4/QxbTL9xkzHu1gFVxxZjclj/5HYMRM2LaAkbMYPEC1d/MdJcSGUbpbC5eKZBpluRgWwfxZ7aFBq2/UrJL90L2+8MuxCz+zIR6scncCSUGla5lLS1JFA06gAJlEuQmFWtIa/PhKCPd+0Qg=', 'order': '2021012219571', 'ip': '120.197.148.147', 'factor': ''}
     # response = ProtoBuf(ExpendPayPb_pb2).runner(url, 'request', data_dict, flag=0)
