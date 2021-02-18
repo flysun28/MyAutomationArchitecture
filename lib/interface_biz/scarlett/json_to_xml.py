@@ -28,7 +28,7 @@ def wx_sign_to_xml(scarlet_wx_sign, md5_key):
     微信签约xml格式转换
     :return:
     """
-    scarlet_wx_sign['sign'] =  md5(Sign(scarlet_wx_sign).join_asc_have_key("&key=") + md5_key)
+    scarlet_wx_sign['sign'] = md5(Sign(scarlet_wx_sign).join_asc_have_key("&key=") + md5_key)
     str_xml = '<xml>'
     for item in scarlet_wx_sign:
         str_xml += "<" + str(item) + ">" + str(scarlet_wx_sign[item]) + "</" + str(item) + ">" + "\n"

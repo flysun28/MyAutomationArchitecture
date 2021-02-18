@@ -5,25 +5,15 @@
 # comment:
 import datetime
 import time
-
 import requests
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
-from lib.common_biz.find_key import GetKey
-from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml
 logger = Logger('wxpay-scarlet').get_logger()
 
 
-merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
-md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
-
-merchant_info_sign = FindMerchant("2031").find_app_id_merchant_sign("wxpay")
-md5_key_sign = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
-
-
-def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, trade_type, attach, result_code="SUCCESS", return_code="SUCCESS"):
+def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, md5_key, trade_type="APP", attach="TEST", result_code="SUCCESS", return_code="SUCCESS"):
     """
     微信普通app支付回调报文构造
     :param mch_id: 商户号 1259634601
@@ -66,7 +56,7 @@ def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, trade_type, at
         logger.info("回调解析成功")
 
 
-def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
+def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key,result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
     """
     微信签约回调报文
     :param change_type: ?
@@ -111,6 +101,6 @@ def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, result_cod="SUC
         logger.info("回调解析成功")
 
 
+
 if __name__ == '__main__':
-    wx_normal_pay_scarlet(merchant_info["merchant_no"], "RM202101281527402076075925182842", merchant_info["app_id"], 2000, "APP", "TEST")
-    wx_sign_scarlet("SN202101141029404461201213258480", "202101135861021321", merchant_info_sign["merchant_no"], merchant_info_sign["plan_id"])
+   pass
