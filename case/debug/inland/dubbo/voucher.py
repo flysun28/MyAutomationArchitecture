@@ -78,6 +78,6 @@ class VoucherInland:
 
 
 if __name__ == '__main__':
-    batchId = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "6.66", "2086653073")
+    batchId = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
     VoucherInland().checkVoucher(batchId)
 

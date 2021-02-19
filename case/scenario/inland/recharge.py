@@ -33,7 +33,7 @@ def recharge(amount=random.randint(100, 100000)):
     """
         【2】. 调用可币充值接口，构造渠道回调报文
     """
-    pay_req_id = SimplePay("wxpay", str(amount/100)).recharge()
+    pay_req_id = SimplePay("wxpay", str(amount/100)).recharge
     wx_normal_pay_scarlet(merchant_info["merchant_no"], pay_req_id, merchant_info["app_id"], amount, md5_key)
     time.sleep(1)
     """

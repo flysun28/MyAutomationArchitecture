@@ -52,4 +52,4 @@ def hee_pay_notify(bill_id, card_real_amt):
 
 
 if __name__ == '__main__':
-    hee_pay_notify("KB202102021751512076075925681412", "5")
+    hee_pay_notify("KB202102191001252076075925133872", "5")

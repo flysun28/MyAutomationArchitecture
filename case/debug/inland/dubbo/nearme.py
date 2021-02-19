@@ -19,7 +19,7 @@ class Nearme:
     def nearme_add_subtract(self, amount, ssoid, operate_type):
         """
         可币发放扣除
-        :param amount:
+        :param amount: 元
         :param ssoid:
         :param operate_type: PRESENT 发放  DEDUCT  扣除
         :return:
@@ -58,5 +58,5 @@ class Nearme:
 
 
 if __name__ == '__main__':
-    Nearme().nearme_add_subtract("1000", "2076075925", "PRESENT")
-    Nearme().consume_page_query()
+    Nearme().nearme_add_subtract("10", "2076075925", "PRESENT")
+    # Nearme().consume_page_query()

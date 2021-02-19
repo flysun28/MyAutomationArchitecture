@@ -7,6 +7,7 @@ from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import account_path, key_path, do_case_path
+from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_native import SimplePayPb_pb2
 from lib.interface_biz.http.pay_pass import Pass
 from lib.common_biz.order_random import RandomOrder
@@ -152,11 +153,8 @@ class SimplePay(metaclass=WithLogger):
         可币充值
         :return:
         """
-        tp_rv = Pass().pass_recharge()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PCRM00",
-                          "apntype": "1", "package": "com.example.pay_demo", "r_v": r_v, "ext": "",
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PCRM00",
+                          "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
                           "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO",
                           "mobileos": "17", "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -166,9 +164,7 @@ class SimplePay(metaclass=WithLogger):
                            "appversion": "1.1.0", "currencyName": "可币", "rate": 1.0, "partnerorder": "null"},
                "sign": "", "ip": "58.252.5.75", "isNeedExpend": "0", "appId": "", "payTypeRMBType": "0",
                "tradeType": "common", "screenInfo": "FULL"}
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
+        ReplaceParams(req).replace_native("recharge")
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -177,17 +173,13 @@ class SimplePay(metaclass=WithLogger):
         else:
             self.logger.info("接口返回异常")
 
-
     def direct_pay(self):
         """
         直扣
         :return:
         """
-        tp_rv = Pass().pass_direct_pay()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PCRM00", "apntype": "1",
-                          "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": self.sdk_ver,
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PCRM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17",
                           "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -196,27 +188,20 @@ class SimplePay(metaclass=WithLogger):
                            "currencyName": "人民币", "rate": 1.0, "partnerorder": RandomOrder(32).random_string()},
                "sign": "", "ip": "58.252.5.75", "isNeedExpend": "0", "appId": "", "payTypeRMBType": "0",
                "tradeType": "common", "screenInfo": "FULL"}
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
+        ReplaceParams(req).replace_native("direct")
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result
+        return result.payrequestid
 
     def recharge_spend_amount_is_price(self, price):
         """
         充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
         :return:
         """
-        tp_rv = Pass().pass_recharge_spend()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        key = Config(key_path).read_config("expend_pay", "key_2031")
-        token = Config(account_path).read_config("account", "token")
         partner_order = RandomOrder(32).random_string()
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PDCM00", "apntype": "1",
-                          "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": self.sdk_ver,
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
                           "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -224,8 +209,8 @@ class SimplePay(metaclass=WithLogger):
                            "productDesc": "RECHARGE_SPEND ", "partnercode": self.partner_code, "appversion": "208006",
                            "currencyName": "CNY", "rate": 1.0, "partnerorder": partner_order},
                "sign": "", "ip": "183.238.170.71",
-               "expendRequest": {"header": {"version": self.version_exp, "t_p": t_p, "imei": "", "model": "PDCM00",
-                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": r_v, "ext": "",
+               "expendRequest": {"header": {"version": self.version_exp, "t_p": "", "imei": "", "model": "PDCM00",
+                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
                                             "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "",
                                             "brandType": "OPPO", "mobileos": "16", "androidVersion": "29"},
                                  "price": price, "count": 1, "productname": "RECHARGE_SPEND_PRICE=AMOUNT",
@@ -233,15 +218,7 @@ class SimplePay(metaclass=WithLogger):
                                  "callBackUrl": self.notify_url, "partnerOrder": partner_order, "channelId": "",
                                  "ver": "208006", "source": "auto_test", "attach": "", "sign": "", "factor": ""},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
-        string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
-                                                   req['expendRequest']['partnerOrder'],
-                                                   req['expendRequest']['productname'],
-                                                   req['expendRequest']['productdesc'], req['expendRequest']['price'],
-                                                   req['expendRequest']['count'])
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
-        req['expendRequest']['sign'] = rsa(string_expend_pay, key)
+        ReplaceParams(req).replace_native("expend")
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -257,14 +234,9 @@ class SimplePay(metaclass=WithLogger):
         :param factor: 优惠券影响因子，用于主题定向优惠券
         :return:
         """
-        tp_rv = Pass().pass_recharge_spend()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        key = Config(key_path).read_config("expend_pay", "key_2031")
-        token = Config(account_path).read_config("account", "token")
         partner_order = RandomOrder(32).random_string()
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PDCM00", "apntype": "1",
-                          "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": self.sdk_ver,
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
                           "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -272,8 +244,8 @@ class SimplePay(metaclass=WithLogger):
                            "productDesc": "RECHARGE_SPEND ", "partnercode": self.partner_code, "appversion": "208006",
                            "currencyName": "CNY", "rate": 1.0, "partnerorder": partner_order},
                "sign": "", "ip": "183.238.170.71",
-               "expendRequest": {"header": {"version": self.version_exp, "t_p": t_p, "imei": "", "model": "PDCM00",
-                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": r_v, "ext": "",
+               "expendRequest": {"header": {"version": self.version_exp, "t_p": "", "imei": "", "model": "PDCM00",
+                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
                                             "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "",
                                             "brandType": "OPPO", "mobileos": "16", "androidVersion": "29"},
                                  "price": price, "count": 1, "productname": "RECHARGE_SPEND!=AMOUNT",
@@ -282,15 +254,7 @@ class SimplePay(metaclass=WithLogger):
                                  "ver": "208006", "source": "auto_test", "attach": "", "sign": "", "appKey": "1234",
                                  "voucherId": vou_id, "voucherType": vou_type, "voucherCount": vou_count, "factor": factor},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
-        string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
-                                                   req['expendRequest']['partnerOrder'],
-                                                   req['expendRequest']['productname'],
-                                                   req['expendRequest']['productdesc'], req['expendRequest']['price'],
-                                                   req['expendRequest']['count'])
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
-        req['expendRequest']['sign'] = rsa(string_expend_pay, key)
+        ReplaceParams(req).replace_native("expend", voucher_info={"id": vou_id, "type": vou_type, "count": vou_count})
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -302,14 +266,9 @@ class SimplePay(metaclass=WithLogger):
         注意：amount为实际支付金额，即原商品+加购商品
         :return:
         """
-        tp_rv = Pass().pass_recharge_spend()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        key = Config(key_path).read_config("expend_pay", "key_2031")
-        token = Config(account_path).read_config("account", "token")
         partner_order = RandomOrder(32).random_string()
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PDCM00", "apntype": "1",
-                          "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": self.sdk_ver,
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
                           "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -317,8 +276,8 @@ class SimplePay(metaclass=WithLogger):
                            "productDesc": "BY_PLACE", "partnercode": self.partner_code, "appversion": "208006",
                            "currencyName": "CNY", "rate": 1.0, "partnerorder": partner_order},
                "sign": "", "ip": "183.238.170.71",
-               "expendRequest": {"header": {"version": self.version_exp, "t_p": t_p, "imei": "", "model": "PDCM00",
-                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": r_v, "ext": "",
+               "expendRequest": {"header": {"version": self.version_exp, "t_p": "", "imei": "", "model": "PDCM00",
+                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
                                             "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "",
                                             "brandType": "OPPO", "mobileos": "16", "androidVersion": "29"},
                                  "price": price, "count": 1, "productname": "BY_PLACE", "productdesc": "BY_PLACE",
@@ -327,15 +286,7 @@ class SimplePay(metaclass=WithLogger):
                                  "attach": "", "sign": "", "factor": ""},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
                "buyPlaceId": by_id, "chooseBuyPlace": "Y", "attachGoodsAmount": add_amount}
-        string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
-                                                   req['expendRequest']['partnerOrder'],
-                                                   req['expendRequest']['productname'],
-                                                   req['expendRequest']['productdesc'], req['expendRequest']['price'],
-                                                   req['expendRequest']['count'])
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
-        req['expendRequest']['sign'] = rsa(string_expend_pay, key)
+        ReplaceParams(req).replace_native("expend")
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -347,14 +298,9 @@ class SimplePay(metaclass=WithLogger):
         加购位优惠券信息：`pay_baseshop`.`virtual_voucher_info`
         :return:
         """
-        tp_rv = Pass().pass_recharge_spend()
-        r_v = tp_rv[0]
-        t_p = tp_rv[1]
-        key = Config(key_path).read_config("expend_pay", "key_2031")
-        token = Config(account_path).read_config("account", "token")
         partner_order = RandomOrder(32).random_string()
-        req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PDCM00", "apntype": "1",
-                          "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": self.sdk_ver,
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
                           "androidVersion": "29"},
                "type": self.chanel, "amount": self.amount, "cardno": "", "cardpwd": "", "ext": "",
@@ -362,8 +308,8 @@ class SimplePay(metaclass=WithLogger):
                            "productDesc": "BY_PLACE_VOU", "partnercode": self.partner_code, "appversion": "208006",
                            "currencyName": "CNY", "rate": 1.0, "partnerorder": partner_order},
                "sign": "", "ip": "183.238.170.71",
-               "expendRequest": {"header": {"version": self.version_exp, "t_p": t_p, "imei": "", "model": "PDCM00",
-                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": r_v, "ext": "",
+               "expendRequest": {"header": {"version": self.version_exp, "t_p": "", "imei": "", "model": "PDCM00",
+                                            "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
                                             "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "",
                                             "brandType": "OPPO", "mobileos": "16", "androidVersion": "29"},
                                  "price": price, "count": 1, "productname": "BY_PLACE_VOU",
@@ -374,15 +320,7 @@ class SimplePay(metaclass=WithLogger):
                                  "useVirCoupon": "Y"},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
                "buyPlaceId": by_id, "chooseBuyPlace": "Y", "attachGoodsAmount": add_amount}
-        string_expend_pay = expend_pay_sign_string(token, req['header']['package'], req['expendRequest']['partnerid'],
-                                                   req['expendRequest']['partnerOrder'],
-                                                   req['expendRequest']['productname'],
-                                                   req['expendRequest']['productdesc'], req['expendRequest']['price'],
-                                                   req['expendRequest']['count'])
-        sign_string = simple_pay_sign_string(req['header']['package'], req['basepay']['partnercode'],
-                                             req['basepay']['partnerorder'], req['amount'], req['type'])
-        req['sign'] = Cipher(sign_string).cipher()
-        req['expendRequest']['sign'] = rsa(string_expend_pay, key)
+        ReplaceParams(req).replace_native("expend", voucher_info={"id": vou_id, "type": vou_type, "count": vou_count})
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -410,7 +348,7 @@ def http_pb_simplepay(req:dict):
 
 
 if __name__ == '__main__':
-    SimplePay("wxpay", "1").recharge()
+    #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
-    # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
+    SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)

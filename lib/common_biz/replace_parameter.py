@@ -11,7 +11,7 @@ from lib.interface_biz.http.pay_pass import Pass
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path, account_path, key_path
 from lib.common_biz.order_random import RandomOrder
-from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string
+from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string, simple_pay_sign_string
 from lib.common_biz.sign import Sign
 
 
@@ -24,8 +24,8 @@ def get_tp_rv(pay_method):
     m_p = ""
     if pay_method == "recharge":
         pass_params = Pass().pass_recharge()
-        t_p = pass_params[0]
-        r_v = pass_params[1]
+        r_v = pass_params[0]
+        t_p = pass_params[1]
         m_p = pass_params[2]
     elif pay_method == "expend":
         pass_params = Pass().pass_recharge_spend()
@@ -100,8 +100,11 @@ class ReplaceParams(metaclass=WithLogger):
                 self.case['header']['r_v'] = r_v
         # 最外层sign 疑似未校验
         if 'sign' in self.case:
-            common_sign_string = Sign(self.case).pb_common_sign_string(m_p)
-            self.case['sign'] = md5(common_sign_string)
+            # common_sign_string = Sign(self.case).pb_common_sign_string(m_p)
+            # self.case['sign'] = md5(common_sign_string)
+            sign_string = simple_pay_sign_string(self.case['header']['package'], self.case['basepay']['partnercode'],
+                                                 self.case['basepay']['partnerorder'], self.case['amount'], self.case['type'])
+            self.case['sign'] = Cipher(sign_string).cipher()
         return self.case
 
     def replace_standard(self, pay_method):
