@@ -3,6 +3,8 @@
 # author:xy
 # datetime:2021/2/9 15:04
 # comment:
+import _thread
+
 import requests
 from lib.common.algorithm.md5 import md5
 from lib.common.logger.logging import Logger
@@ -52,4 +54,6 @@ def hee_pay_notify(bill_id, card_real_amt):
 
 
 if __name__ == '__main__':
-    hee_pay_notify("KB202102191001252076075925133872", "5")
+    hee_pay_notify('KB202102191602452076075925013522', '5')
+    hee_pay_notify('KB202102191602452076075925013522', '5')
+    # hee_pay_notify('KB202102191424402076075925814832', '20')

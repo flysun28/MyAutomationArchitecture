@@ -17,7 +17,7 @@ class FizAssert(metaclass=WithLogger):
     def __init__(self):
         self.mysql = GlobarVar.MYSQL_IN
 
-    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount):
+    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0, vou_amount=0, vou_id=None):
         db_order_info = SeparateDbTable(ssoid).get_order_db_table()
         order_info = self.mysql.select_one(
             str(Config(common_sql_path).read_config("order", "order")).format(db_order_info[0], db_order_info[1], ssoid,
@@ -28,23 +28,28 @@ class FizAssert(metaclass=WithLogger):
             assert order_info['amount'] == amount
             assert order_info['original_amount'] == original_amount
             assert order_info['status'] == "OK"
+            assert order_info['kebi_spent'] == kb_spent
+            assert order_info['voucher_amount'] == vou_amount
+            assert order_info['voucher_id'] == vou_id
             self.logger.info("订单表信息记录正确")
         except AssertionError as e:
             self.logger.info("订单表信息记录异常")
             raise e
 
-    def assert_trade_order(self, ssoid, pay_req_id, amount, original_amount):
+    def assert_trade_order(self, ssoid, pay_req_id, amount, original_amount, kb_amount=0, vou_amount=0):
         db_trade_order_info = SeparateDbTable(ssoid).get_order_db_table()
         trade_order_info = self.mysql.select_one(
-            str(Config(common_sql_path).read_config("order", "order")).format(db_trade_order_info[0],
+            str(Config(common_sql_path).read_config("trade_order", "order")).format(db_trade_order_info[0],
                                                                               db_trade_order_info[1], ssoid,
                                                                               pay_req_id))
         self.logger.info("trade订单详情：{}".format(trade_order_info))
         try:
             assert trade_order_info is not None
             assert trade_order_info['amount'] == amount
-            assert trade_order_info['original_amount'] == original_amount
+            assert trade_order_info['origin_amount'] == original_amount
             assert trade_order_info['status'] == "OK"
+            assert trade_order_info['kb_amount'] == kb_amount
+            assert trade_order_info['voucher_amount'] == vou_amount
             self.logger.info("trade订单表信息记录正确")
         except AssertionError as e:
             self.logger.info("trade订单表信息记录异常")
@@ -94,6 +99,7 @@ class FizAssert(metaclass=WithLogger):
         try:
             assert notify_info is not None
             assert notify_info['notify_response'] == "OK"
+            assert notify_info['notify_count'] == 1
             self.logger.info("通知成功")
         except AssertionError as e:
             self.logger.info("通知异常")
@@ -115,3 +121,15 @@ def get_balance(ssoid):
                                                                                  ssoid))['balance']
     logger.info("可币余额：{}".format(balance))
     return balance
+
+
+def get_pay_req_by_partner(ssoid, partnerOrder):
+    """
+    根据商户订单号查询支付订单号
+    :return:
+    """
+    db_order_info = SeparateDbTable(ssoid).get_order_db_table()
+    pay_req_id = mysql.select_one(str(Config(common_sql_path).read_config("order", "partner_to_pay")).
+                                          format(db_order_info[0], db_order_info[1], ssoid, partnerOrder))
+    logger.info("查询到partnerOrder：{}， 对应支付订单号：{}".format(partnerOrder, pay_req_id))
+    return pay_req_id['pay_req_id']

@@ -1,15 +1,11 @@
 #!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
 # author:xy
-# datetime:2021/2/7 16:18
+# datetime:2021/2/19 17:08
 # comment:
-import json
-import time
-from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
-
-logger = Logger("voucher").get_logger()
+import time
 
 
 class VoucherInland:
@@ -62,7 +58,7 @@ class VoucherInland:
             "batchGrant",
             data
         )
-        return {"batchId": result['data']['batchId'], "vouId": result['data']['batchVouCreateResList'][0]['vouId']}
+        return {"batchId": result['data']['batchId'], "vouId": int(result['data']['batchVouCreateResList'][0]['vouId'])}
 
     def checkVoucher(self, couponBatchId):
         """
@@ -80,4 +76,3 @@ class VoucherInland:
 if __name__ == '__main__':
     vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
     VoucherInland().checkVoucher(vou_info['batchId'])
-

@@ -85,9 +85,9 @@ class ExpendPay(metaclass=WithLogger):
         支持场景：
             1. 纯优惠券支付，仅限消费券或红包券
             2. 优惠券+可币支付 price = 可币扣除+vouCount
-        :param vouId:
-        :param vouType:
-        :param vouCount:
+        :param vouId: int
+        :param vouType: int
+        :param vouCount: int 分
         :return:
         """
         tp_rv = Pass().pass_recharge_spend()
@@ -140,8 +140,9 @@ class ExpendPay(metaclass=WithLogger):
         response = ProtoBuf(ExpendPayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/expendpay', 'request', req,
                                                     flag=0)
         result = ProtoBuf(ExpendPayPb_pb2).parser('Result', response)
+        return {"code": result.baseresult.code, "partnerOrder": req['partnerOrder']}
 
 
 if __name__ == '__main__':
     ExpendPay(1).only_kb_spend()
-    ExpendPay(2).kb_voucher_spend(0, 1, 1)
+    # ExpendPay(2).kb_voucher_spend(0, 1, 1)

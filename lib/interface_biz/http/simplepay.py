@@ -168,7 +168,8 @@ class SimplePay(metaclass=WithLogger):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        if result.baseresult.code == "0000":
+        # 点卡支付，无正确卡密返回code:5555，会返回payrequestid
+        if result.payrequestid:
             return result.payrequestid
         else:
             self.logger.info("接口返回异常")
@@ -192,7 +193,10 @@ class SimplePay(metaclass=WithLogger):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result.payrequestid
+        if result.payrequestid:
+            return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
+        else:
+            self.logger.info("接口返回异常")
 
     def recharge_spend_amount_is_price(self, price):
         """
@@ -348,7 +352,8 @@ def http_pb_simplepay(req:dict):
 
 
 if __name__ == '__main__':
-    #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
+    for item in range(1000):
+        SimplePay("wxpay", "1").recharge()
     #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
-    SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
+    # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
