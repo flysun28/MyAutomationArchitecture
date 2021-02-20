@@ -15,7 +15,7 @@ ssoid = GlobarVar.SSOID
 
 def spend(amount=random.randint(100, 1000), ssoid=ssoid, partner_id="2031"):
     """
-
+    不做复杂逻辑，发放优惠券与可币刚好本次消费接口调用。优惠券信息写死满10减9.99、
     :param amount: 分
     :param ssoid:
     :param partner_id:

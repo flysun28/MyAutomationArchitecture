@@ -352,8 +352,7 @@ def http_pb_simplepay(req:dict):
 
 
 if __name__ == '__main__':
-    for item in range(1000):
-        SimplePay("wxpay", "1").recharge()
+    SimplePay("wxpay", "1").recharge()
     #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
     # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
