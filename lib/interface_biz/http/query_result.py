@@ -39,4 +39,4 @@ def queryResult(request_id, query_type="PAY"):
 
 
 if __name__ == '__main__':
-    queryResult("RM202102191114082076075925581472", "PAY")
+    queryResult("SN202102221055012720753438743721", "SIGN")

@@ -105,31 +105,34 @@ class FizAssert(metaclass=WithLogger):
             self.logger.info("通知异常")
             raise e
 
+    def assert_auto_renew_sign_info(self, ssoid, pay_type, partner_code="2031", renew_product_code="20310001"):
+        """
 
-mysql = GlobarVar.MYSQL_IN
+        :param ssoid:
+        :param pay_type:
+        :param partner_code:
+        :param renew_product_code:
+        :return:
+        """
+        sign_status = self.mysql.select_one(str(Config(common_sql_path).read_config("order", "sign_status")). format(ssoid, partner_code, renew_product_code, pay_type))
+        try:
+            assert sign_status is not None
+            assert sign_status['status'] == "SIGN"
+            self.logger.info("签约信息表记录正确")
+        except AssertionError as e:
+            self.logger.info("签约信息表记录异常")
+            raise e
 
+    def assert_auto_renew_sign_record(self, pay_req_id):
+        """
 
-def get_balance(ssoid):
-    """
-    查询可币余额
-    :param ssoid:
-    :return:
-    """
-    db_balance_info = SeparateDbTable(ssoid).get_coin_db_table()
-    balance = mysql.select_one(
-        str(Config(common_sql_path).read_config("nearme", "sql_balance")).format(db_balance_info[0], db_balance_info[1],
-                                                                                 ssoid))['balance']
-    logger.info("可币余额：{}".format(balance))
-    return balance
-
-
-def get_pay_req_by_partner(ssoid, partnerOrder):
-    """
-    根据商户订单号查询支付订单号
-    :return:
-    """
-    db_order_info = SeparateDbTable(ssoid).get_order_db_table()
-    pay_req_id = mysql.select_one(str(Config(common_sql_path).read_config("order", "partner_to_pay")).
-                                          format(db_order_info[0], db_order_info[1], ssoid, partnerOrder))
-    logger.info("查询到partnerOrder：{}， 对应支付订单号：{}".format(partnerOrder, pay_req_id))
-    return pay_req_id['pay_req_id']
+        :return:
+        """
+        sign_record_status = self.mysql.select_one(str(Config(common_sql_path).read_config("order", "sign_record_status")). format(pay_req_id))
+        try:
+            assert sign_record_status is not None
+            assert sign_record_status['status'] == "SUCC"
+            self.logger.info("签约记录表记录正确")
+        except Exception as e:
+            self.logger.info("签约记录表记录异常")
+            raise e

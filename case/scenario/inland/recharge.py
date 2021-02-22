@@ -6,9 +6,10 @@
 import random
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
+from lib.common_biz.biz_db_operate import get_balance
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
-from lib.common_biz.fiz_assert import FizAssert, get_balance
+from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
 from lib.interface_biz.scarlett.heepay import hee_pay_notify

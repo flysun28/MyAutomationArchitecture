@@ -57,6 +57,7 @@ def skip_pay(payAmount, payType="wxpay", partnerId="72724313", app_version=(Conf
     ReplaceParams(req).replace_standard(pay_method="no_login")
     response = ProtoBuf(SkipPay_pb2).runner(HTTPJSON_IN.prefix + '/plugin/skippay', 'SkipPayRequest', req)
     result = ProtoBuf(SkipPay_pb2).parser('SkipPayResponse', response)
+    return {"pay_req_id": result.data.payRequestId, "partner_order": req['partnerOrder']}
 
 
 if __name__ == '__main__':

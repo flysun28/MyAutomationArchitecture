@@ -9,7 +9,8 @@ import requests
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
 from lib.common_biz.order_random import RandomOrder
-from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml
+from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml
+
 logger = Logger('wxpay-scarlet').get_logger()
 
 
@@ -56,7 +57,7 @@ def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, md5_key, trade
         logger.info("回调解析成功")
 
 
-def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key,result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
+def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key, result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
     """
     微信签约回调报文
     :param change_type: ?
@@ -91,7 +92,7 @@ def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key,result_
         "return_msg": return_msg,
         "sign": ""
     }
-    wx_scarlet_dict = wx_normal_pay_to_xml(wx_scarlet, md5_key)
+    wx_scarlet_dict = wx_sign_to_xml(wx_scarlet, md5_key)
     logger.info("回调参数：{}".format(wx_scarlet_dict))
     response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/wxpaysignnotify",
                              data=wx_scarlet_dict.encode("utf-8"))
@@ -101,6 +102,5 @@ def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key,result_
         logger.info("回调解析成功")
 
 
-
 if __name__ == '__main__':
-   pass
+    pass

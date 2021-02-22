@@ -23,23 +23,24 @@ class AutoRenew:
         self.type = pay_type
         self.notify_url = notify_url
 
-    def auto_renew(self, amount):
+    def auto_renew(self, amount="0.01"):
         tp_rv = Pass().pass_direct_pay()
         r_v = tp_rv[0]
         t_p = tp_rv[1]
+        partner_order = RandomOrder(32).random_string()
         req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PCRM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": 260, "country": "CN",
                           "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17", "androidVersion": "29"
                           },
                "transType": "SIGNANDPAY", "renewProductCode": self.renewProductCode,
-               "signPartnerOrder": RandomOrder(32).random_string(), "type": self.type, "amount": amount,
+               "signPartnerOrder": partner_order, "type": self.type, "amount": amount,
                "oriAmount": amount, "ip": "58.252.5.75", "sign": "",
                "signAgreementNotifyUrl": self.notify_url, "appId": "",
                "isNeedExpend": "0",
                "basepay": {"channelId": "", "notifyurl": self.notify_url,
                            "productName": "SIGN_PAY", "productDesc": "SIGN_PAY", "partnercode": self.partner_code,
                            "appversion": self.app_version, "currencyName": "人民币", "rate": 1.0,
-                           "partnerorder": RandomOrder(32).random_string()},
+                           "partnerorder": partner_order},
                "screenInfo": "FULL"}
         sign_string = auto_renew_sign_string(
                 req['header']['package'], req['basepay']['partnercode'],
@@ -49,24 +50,26 @@ class AutoRenew:
         response = ProtoBuf(AutoRenewPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/autorenew', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(AutoRenewPb_pb2).parser('Result', response)
+        return {"pay_req_id": result.payrequestid, "partner_code": req['basepay']['partnerorder']}
 
     def only_sign(self):
         tp_rv = Pass().pass_direct_pay()
         r_v = tp_rv[0]
         t_p = tp_rv[1]
+        partner_order = RandomOrder(32).random_string()
         req = {"header": {"version": self.version, "t_p": t_p, "imei": "", "model": "PCRM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": r_v, "ext": "", "sdkVer": 260, "country": "CN",
                           "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17", "androidVersion": "29"
                           },
                "transType": "SIGN", "renewProductCode": self.renewProductCode,
-               "signPartnerOrder": RandomOrder(32).random_string(), "type": self.type, "amount": "0.0",
+               "signPartnerOrder": partner_order, "type": self.type, "amount": "0.0",
                "oriAmount": "0.0", "ip": "58.252.5.75", "sign": "",
                "signAgreementNotifyUrl": self.notify_url, "appId": "",
                "isNeedExpend": "0",
                "basepay": {"channelId": "", "notifyurl": self.notify_url,
                            "productName": "ONLY_SIGN", "productDesc": "ONLY_SIGN", "partnercode": self.partner_code,
                            "appversion": self.app_version, "currencyName": "人民币", "rate": 1.0,
-                           "partnerorder": RandomOrder(32).random_string()},
+                           "partnerorder": partner_order},
                "screenInfo": "FULL"}
         sign_string = auto_renew_sign_string(
             req['header']['package'], req['basepay']['partnercode'],
@@ -76,6 +79,7 @@ class AutoRenew:
         response = ProtoBuf(AutoRenewPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/autorenew', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(AutoRenewPb_pb2).parser('Result', response)
+        return {"pay_req_id": result.payrequestid, "partner_code": req['basepay']['partnerorder']}
 
 
 if __name__ == '__main__':

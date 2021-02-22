@@ -6,7 +6,8 @@
 import random
 
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.fiz_assert import FizAssert, get_pay_req_by_partner
+from lib.common_biz.biz_db_operate import get_pay_req_by_partner
+from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import VoucherInland
 from lib.interface_biz.http.expend_pay import ExpendPay
