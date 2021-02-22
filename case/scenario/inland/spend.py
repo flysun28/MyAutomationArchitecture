@@ -4,7 +4,6 @@
 # datetime:2021/1/19 23:03
 # comment:
 import random
-
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import get_pay_req_by_partner
 from lib.common_biz.fiz_assert import FizAssert

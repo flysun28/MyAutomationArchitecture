@@ -200,7 +200,8 @@ class SimplePay(metaclass=WithLogger):
 
     def recharge_spend_amount_is_price(self, price):
         """
-        充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
+        1. 充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
+        2. amount>price, 针对点卡渠道，剩余的金额充值为可币
         :return:
         """
         partner_order = RandomOrder(32).random_string()
@@ -226,7 +227,7 @@ class SimplePay(metaclass=WithLogger):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result
+        return {"pay_req_id": result.payrequestid, "partner_order": partner_order}
 
     def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor=""):
         """
@@ -352,8 +353,7 @@ def http_pb_simplepay(req:dict):
 
 
 if __name__ == '__main__':
-    for item in range(10):
-        SimplePay("wxpay", "1").recharge()
-    #SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
+    #SimplePay("wxpay", "1").recharge()
+    SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
     # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)

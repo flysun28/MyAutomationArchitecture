@@ -55,22 +55,33 @@ class FizAssert(metaclass=WithLogger):
             self.logger.info("trade订单表信息记录异常")
             raise e
 
-    def assert_tb_recharge(self, ssoid, pay_req_id, amount):
+    def assert_tb_recharge(self, ssoid, pay_req_id, amount, flag=True):
+        """
+        :param flag: 当为true, 表记录不能为空 assert trade_order_info is not None
+        :param ssoid:
+        :param pay_req_id:
+        :param amount:
+        :return:
+        """
         recharge_info = self.mysql.select_one(
             str(Config(common_sql_path).read_config("virtual", "recharge")).format(datetime.now().strftime("%Y%m"),
                                                                                    ssoid, pay_req_id))
         self.logger.info("tb_recharge订单详情：{}".format(recharge_info))
         try:
-            assert recharge_info is not None
-            assert recharge_info['amount'] == amount
-            assert recharge_info['status'] == "OK"
+            if flag:
+                assert recharge_info is not None
+                assert recharge_info['amount'] == amount
+                assert recharge_info['status'] == "OK"
+            else:
+                assert recharge_info is None
             self.logger.info("tb_recharge订单表信息记录正确")
         except AssertionError as e:
             self.logger.info("tb_recharge订单表信息记录异常")
             raise e
 
-    def assert_tb_payment(self, ssoid, partnerOrder, amount):
+    def assert_tb_payment(self, ssoid, partnerOrder, amount, flag=True):
         """
+        :param flag: 当为true, 表记录不能为空 assert trade_order_info is not None
         :param ssoid:
         :param partnerOrder: 商户订单号
         :param amount:
@@ -80,9 +91,12 @@ class FizAssert(metaclass=WithLogger):
                                               format(datetime.now().strftime("%Y%m"), ssoid, partnerOrder))
         self.logger.info("tb_payment订单详情：{}".format(payments_info))
         try:
-            assert payments_info is not None
-            assert payments_info['price'] == amount
-            assert payments_info['status'] == "OK"
+            if flag:
+                assert payments_info is not None
+                assert payments_info['price'] == amount
+                assert payments_info['status'] == "OK"
+            else:
+                assert payments_info is None
             self.logger.info("tb_payment订单表信息记录正确")
         except AssertionError as e:
             self.logger.info("tb_payment订单表信息记录正确")

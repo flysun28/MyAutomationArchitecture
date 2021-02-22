@@ -4,7 +4,6 @@
 # datetime:2021/1/19 23:04
 # comment:
 import random
-
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import update_sign_status, get_contract_code
 from lib.common_biz.find_key import GetKey
@@ -63,7 +62,7 @@ def sign_pay(pay_type, amount=random.randint(1, 1000)):
     """
     FizAssert().assert_auto_renew_sign_record(sign_request_id)
     """
-        【8】.检查表notify_info信息
+        【8】.检查表notify_info信息(签约与支付， 漏了一个通知， 待补齐)
     """
     FizAssert().assert_notify(order_info["partner_code"])
 
