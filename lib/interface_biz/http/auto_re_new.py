@@ -23,7 +23,7 @@ class AutoRenew:
         self.type = pay_type
         self.notify_url = notify_url
 
-    def auto_renew(self, amount="0.01"):
+    def auto_renew(self, amount):
         tp_rv = Pass().pass_direct_pay()
         r_v = tp_rv[0]
         t_p = tp_rv[1]
