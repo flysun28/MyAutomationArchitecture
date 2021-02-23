@@ -62,5 +62,5 @@ class Nearme:
 
 
 if __name__ == '__main__':
-    Nearme().nearme_add_subtract("10", "2076075925", "PRESENT")
+    Nearme().nearme_add_subtract("1000.00", "2076067541", 0)
     # Nearme().consume_page_query()

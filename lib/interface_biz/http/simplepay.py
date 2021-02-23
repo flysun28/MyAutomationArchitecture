@@ -232,7 +232,7 @@ class SimplePay(metaclass=WithLogger):
     def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor=""):
         """
         充值并消费，带优惠券，可币金额体现不出来。若账户有可币余额，会扣除。
-        :param price: int 单位：分
+        :param price: int 单位：分 原始金额（商品金额）
         :param vou_id: int
         :param vou_type: int
         :param vou_count: int
@@ -263,7 +263,7 @@ class SimplePay(metaclass=WithLogger):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result
+        return {"pay_req_id": result.payrequestid, "partner_order": partner_order}
 
     def recharge_spend_kb_buy_place(self, price, by_id="10001", add_amount="1"):
         """
