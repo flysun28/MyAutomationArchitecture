@@ -1,4 +1,6 @@
 # coding=utf-8
+
+
 '''
 Created on 2021年2月9日
 @author: 80319739
@@ -9,6 +11,8 @@ from lib.common.utils.env import get_env_config
 from lib.common.db_operation.mysql_operation import connect_mysql
 from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
+from lib.config.path import test_account_path
+from lib.common.file_operation.config_operation import Config
 
 
 class GlobarVar():
@@ -26,6 +30,7 @@ class GlobarVar():
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
     REDIS = GlobalVarDescriptor(connect_redis())
+    SSOID = Config(test_account_path).read_config("account", "ssoid")
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN

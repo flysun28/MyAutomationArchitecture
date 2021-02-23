@@ -40,7 +40,6 @@ class SeparateDbTable(metaclass=WithLogger):
         def get_coin_db_table(self):
             """
             可币用户信息分库分表
-            :param ssoid:
             :return:
             """
             hash_code = abs(GetHashCode.getHashCode(self.ssoid))
@@ -65,4 +64,4 @@ class SeparateDbTable(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    print(SeparateDbTable("2076075925").get_order_db_table())
+    print(SeparateDbTable("2076075925").get_coin_db_table())

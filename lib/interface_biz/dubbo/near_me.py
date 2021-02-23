@@ -1,14 +1,12 @@
 #!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
 # author:xy
-# datetime:2021/2/7 15:47
+# datetime:2021/2/19 17:01
 # comment:
 import time
-from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
 from lib.common_biz.order_random import RandomOrder
-logger = Logger("nearme").get_logger()
 
 
 class Nearme:
@@ -19,7 +17,7 @@ class Nearme:
     def nearme_add_subtract(self, amount, ssoid, operate_type):
         """
         可币发放扣除
-        :param amount: 元
+        :param amount: 元 string
         :param ssoid:
         :param operate_type: PRESENT 发放  DEDUCT  扣除
         :return:
@@ -44,23 +42,6 @@ class Nearme:
             data
         )
 
-    def consume_page_query(self):
-        """
-        可币消费订单分页查询
-        :return:
-        """
-        data = {
-            "page": 1,
-            "partnerOrder": "b46d134d6fe44119ad044564eb96d752",
-            "size": 10
-        }
-        result = self.conn.invoke(
-            "NearmeOrderQuery",
-            "consumePageQuery",
-            data
-        )
-
 
 if __name__ == '__main__':
-    Nearme().nearme_add_subtract("1000.00", "2076067541", 0)
-    # Nearme().consume_page_query()
+    Nearme().nearme_add_subtract("1", "2076075925", 0)

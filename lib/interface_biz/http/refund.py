@@ -42,7 +42,8 @@ def httpjson_refund(partner_order, partner_code, amount, pay_req_id=None):
                 continue
             else:
                 raise 
-    
+
+
 if __name__ == '__main__':
     httpjson_refund("86c81fd88c2e4a31bdb19ddc023bb559", "2031", "1")
 # def httpjson_refund_negative():

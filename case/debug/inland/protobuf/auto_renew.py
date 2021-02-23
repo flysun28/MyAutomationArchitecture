@@ -56,7 +56,7 @@ class AutoRenew:
                "isNeedExpend": "0",
                "basepay": {"channelId": "", "notifyurl": "http://secure.pay-test2.wanyol.com/notify/receiver",
                            "productName": "签约测试", "productDesc": "签约测试", "partnercode": "2031",
-                           "appversion": "260", "currencyName": "人民币" ,"rate": 1.0,
+                           "appversion": "260", "currencyName": "人民币", "rate": 1.0,
                            "partnerorder": RandomOrder(32).random_string()},
                "screenInfo": "FULL"}
         sign_string = auto_renew_sign_string(

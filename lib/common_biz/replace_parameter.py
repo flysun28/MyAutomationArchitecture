@@ -4,15 +4,14 @@
 # datetime:2021/1/19 22:55
 # comment: 接口参数替换
 from lib.common.algorithm.cipher import Cipher
-from lib.common.algorithm.rsa import rsa
 from lib.common.algorithm.md5 import md5
+from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
-from lib.interface_biz.http.pay_pass import Pass
+from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path, account_path, key_path
 from lib.common_biz.order_random import RandomOrder
-from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string
-from lib.common_biz.sign import Sign
+from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string, simple_pay_sign_string
 
 
 def get_tp_rv(pay_method):
@@ -24,8 +23,8 @@ def get_tp_rv(pay_method):
     m_p = ""
     if pay_method == "recharge":
         pass_params = Pass().pass_recharge()
-        t_p = pass_params[0]
-        r_v = pass_params[1]
+        r_v = pass_params[0]
+        t_p = pass_params[1]
         m_p = pass_params[2]
     elif pay_method in ("expend", 'recharge_spend'):
         pass_params = Pass().pass_recharge_spend()
@@ -38,7 +37,7 @@ def get_tp_rv(pay_method):
         t_p = pass_params[1]
         m_p = pass_params[2]
     elif pay_method == "no_login":
-        pass_params = Pass().pass_no_login_in()
+        pass_params = pass_no_login_in()
         r_v = pass_params[0]
         t_p = pass_params[1]
         m_p = pass_params[2]
@@ -100,8 +99,11 @@ class ReplaceParams(metaclass=WithLogger):
                 self.case['header']['r_v'] = r_v
         # 最外层sign 疑似未校验
         if 'sign' in self.case:
-            common_sign_string = Sign(self.case).pb_common_sign_string(m_p)
-            self.case['sign'] = md5(common_sign_string)
+            # common_sign_string = Sign(self.case).pb_common_sign_string(m_p)
+            # self.case['sign'] = md5(common_sign_string)
+            sign_string = simple_pay_sign_string(self.case['header']['package'], self.case['basepay']['partnercode'],
+                                                 self.case['basepay']['partnerorder'], self.case['amount'], self.case['type'])
+            self.case['sign'] = Cipher(sign_string).cipher()
         return self.case
 
     def replace_standard(self, pay_method):
@@ -111,23 +113,23 @@ class ReplaceParams(metaclass=WithLogger):
             :return:
             """
         r_v = get_tp_rv(pay_method)[0]
-        self.case['header']['version'] = Config(do_case_path).read_config("sdk_ver", "version")
+        # self.case['header']['version'] = Config(do_case_path).read_config("sdk_ver", "version")
         if self.case['header']['token'] == '':
             self.case['header']['token'] = Config(account_path).read_config("account", "token")
-        if self.case['header']['token'] == 'nologin':
+        if self.case['header']['token'] == 'no_login':
             self.case['header']['token'] = ''
         if self.case['header']['r_v'] == '':
             self.case['header']['r_v'] = r_v
         if 'partnerOrder' in self.case:
             self.case['partnerOrder'] = RandomOrder(32).random_string()
         if self.case['header']['sign'] == '':
-            self.case['header']['sign'] = oversea_header_sign_string(
+            self.case['header']['sign'] = md5(oversea_header_sign_string(
                                                         self.case['header']['version'],
                                                         self.case['header']['token'],
                                                         self.case['header']['model'], self.case['header']['apntype'],
                                                         self.case['header']['package'], self.case['header']['r_v'],
                                                         self.case['header']['sdkVer'],
-                                                        self.case['header']['appVerison'])
+                                                        self.case['header']['appVerison']))
 
 
 

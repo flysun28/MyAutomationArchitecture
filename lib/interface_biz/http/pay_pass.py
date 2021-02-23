@@ -4,7 +4,6 @@
 # datetime:2021/1/19 22:56
 # comment: 鉴权接口
 from lib.common.algorithm.other import get_RV
-# from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common.session.http.protobuf import ProtoBuf
@@ -46,6 +45,17 @@ def get_check_t_p(param):
         redis.set("token", token_new, ex=1000000)
         logger.info('成功将token:{} 并写入redis'.format(token_new))
         return get_t_p(param)
+
+
+def pass_no_login_in():
+    """
+    国内返回传固定tp,rv
+    :return:
+    """
+    t_p = "notokendefaulttp0123456789abcdef"
+    r_v = "RvDf0ABC"
+    m_p = ""
+    return r_v, t_p, m_p
 
 
 class Pass(metaclass=WithLogger):
@@ -137,15 +147,6 @@ class Pass(metaclass=WithLogger):
             "country": "CN"
         }
         return get_check_t_p(param)
-
-    def pass_no_login_in(self):
-        """
-        国内返回传固定tp,rv
-        :return:
-        """
-        t_p = "notokendefaulttp0123456789abcdef"
-        r_v = "RvDf0ABC"
-        return r_v, t_p
 
     """
     def pass_demo(self, version="11.0", pay_type="0"):
