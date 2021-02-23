@@ -140,7 +140,7 @@ class ExpendPay(metaclass=WithLogger):
         response = ProtoBuf(ExpendPayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/expendpay', 'request', req,
                                                     flag=0)
         result = ProtoBuf(ExpendPayPb_pb2).parser('Result', response)
-        return {"code": result.baseresult.code, "partnerOrder": req['partnerOrder']}
+        return {"code": result.baseresult.code, "partner_order": req['partnerOrder']}
 
 
 if __name__ == '__main__':

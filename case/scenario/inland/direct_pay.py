@@ -16,21 +16,21 @@ from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet
 
 
 ssoid = GlobarVar.SSOID
-
 merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
 md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
 logger = Logger('direct_pay').get_logger()
 
 
-def direct_pay(amount=random.randint(1, 1000)):
+def direct_pay(amount=random.randint(1, 1000), pay_type="wxpay"):
     """
+    :param pay_type:
     :param amount: 分
     :return:
     """
     """
         【1】. 调用直扣接口，构造渠道回调报文
     """
-    order = SimplePay("wxpay", amount/100).direct_pay()
+    order = SimplePay(pay_type, amount/100).direct_pay()
     sleep(1)
     wx_normal_pay_scarlet(merchant_info["merchant_no"], order["pay_req_id"], merchant_info["app_id"], amount, md5_key)
     """

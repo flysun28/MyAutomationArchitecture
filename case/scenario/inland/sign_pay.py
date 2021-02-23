@@ -14,12 +14,13 @@ from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.scarlett.wxpay import wx_sign_scarlet, wx_normal_pay_scarlet
 
+
 merchant_info = FindMerchant("2031").find_app_id_merchant_sign("wxpay")
 md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
 SSOID = GlobarVar.SSOID
 
 
-def sign_pay(pay_type, amount=random.randint(1, 1000)):
+def sign_pay(pay_type="wxpay", amount=random.randint(1, 1000)):
     """
     签约支付
     :param pay_type:

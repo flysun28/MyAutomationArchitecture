@@ -13,7 +13,7 @@ from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import SkipPay_pb2
 
 
-def skip_pay(payAmount=round(random.uniform(0.01, 10), 2), payType="wxpay", partnerId="72724313", app_version=(Config(do_case_path).read_config("sdk_ver", "version")),
+def skip_pay(payType, payAmount=round(random.uniform(0.01, 10), 2), partnerId="72724313", app_version=(Config(do_case_path).read_config("sdk_ver", "version")),
              notifyUrl=str(GlobarVar.URL_PAY_IN)+"/notify/receiver"):
     req = {
         "header": {

@@ -17,7 +17,7 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 SSOID = GlobarVar.SSOID
 
 
-def only_sign(pay_type):
+def only_sign(pay_type="wxpay"):
     """
     :return:
     """

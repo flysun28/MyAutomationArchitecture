@@ -20,16 +20,17 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 logger = Logger('on_login_pay').get_logger()
 
 
-def on_login(amount=random.randint(1, 1000)):
+def on_login(pay_type="wxpay", amount=random.randint(1, 1000)):
     """
         疑似有的走simplepay，此处针对skippay
+    :param pay_type:
     :param amount: 分
     :return:
     """
     """
     【1】. 调用下单接口，渠道回调构造
     """
-    order = skip_pay(amount/100)
+    order = skip_pay(pay_type, amount/100)
     wx_normal_pay_scarlet(merchant_info["merchant_no"], order['pay_req_id'], merchant_info["app_id"], amount, md5_key)
     """
         【2】. 调用查询结果接口

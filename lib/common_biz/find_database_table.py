@@ -62,6 +62,16 @@ class SeparateDbTable(metaclass=WithLogger):
             # logger.info("`pay_cocoin_{}`.`pay_cocoin_order_{}`".format(data_base, table))
             return data_base, table
 
+        def get_vou_table(self):
+            """
+            优惠券分库分表
+            :return:
+            """
+            count = 20
+            table = int(abs(GetHashCode.getHashCode(self.ssoid))) % count + 1
+            return table
+
 
 if __name__ == '__main__':
     print(SeparateDbTable("2076075925").get_coin_db_table())
+    print(SeparateDbTable("2076075925").get_vou_table())
