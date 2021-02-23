@@ -27,7 +27,7 @@ def get_tp_rv(pay_method):
         t_p = pass_params[0]
         r_v = pass_params[1]
         m_p = pass_params[2]
-    elif pay_method == "expend":
+    elif pay_method in ("expend", 'recharge_spend'):
         pass_params = Pass().pass_recharge_spend()
         r_v = pass_params[0]
         t_p = pass_params[1]

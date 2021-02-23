@@ -3,6 +3,7 @@
 Created on 2021年2月9日
 @author: 80319739
 '''
+import os
 from lib.common.session.http.http_json import HttpJsonSession
 from lib.common.utils.env import get_env_config
 from lib.common.db_operation.mysql_operation import connect_mysql
@@ -30,3 +31,4 @@ class GlobarVar():
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
 redis = REDIS = GlobarVar.REDIS
 HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET
+CASE_SRCFILE_ROOTDIR = os.path.join(os.getcwd(), 'src')

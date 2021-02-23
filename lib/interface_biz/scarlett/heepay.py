@@ -6,7 +6,7 @@
 import requests
 from lib.common.algorithm.md5 import md5
 from lib.common.logger.logging import Logger
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import hee_pay_sign_string
 logger = Logger('heepay-scarlet').get_logger()
@@ -52,4 +52,5 @@ def hee_pay_notify(bill_id, card_real_amt):
 
 
 if __name__ == '__main__':
-    hee_pay_notify("KB202102021751512076075925681412", "5")
+    set_global_env_id(3)
+    hee_pay_notify("KB202102231756292086100900385452", "5")

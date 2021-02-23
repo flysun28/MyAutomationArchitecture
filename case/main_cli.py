@@ -54,7 +54,8 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
     try:
         # Setup argument parser
         parser = ArgumentParser(description=program_license, formatter_class=RawDescriptionHelpFormatter)
-        parser.add_argument("-i", "--include", dest="include", help="only include tags to run, comma separated.")
+        parser.add_argument("-i", "--include", dest="include", choices=['smoke', 'functional', '', 'positive', 'negative'], 
+                            help="only include tags to run, comma separated.")
         parser.add_argument("-e", "--exclude", dest="exclude", help="exclude tags not to run, comma separated.") #, metavar="RE" 
         parser.add_argument('-V', '--version', action='version', version=program_version_message)
         parser.add_argument('-T', '--case-type', dest='case_type', choices=['interface', 'scenario'])        
@@ -63,6 +64,7 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         parser.add_argument('-I', '--interface', dest='interface', help="the interface name, usually it's the last section of a URL")
         parser.add_argument('-f', '--instantfail', dest='instantfail', action='store_true', 
                             help='show failures and errors instantly as they occur, [default: %(default)s]')
+        parser.add_argument('-x', '--exitonfail', action='store_true', help='exit instantly on first error or failed test.')
         # Process arguments
         args = parser.parse_args()
         inpat = args.include
@@ -72,6 +74,7 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         intf_name = args.interface
         schema = args.schema
         instantfail = args.instantfail
+        exitonfail = args.exitonfail
         if inpat and expat and inpat == expat:
             raise CLIError("include and exclude pattern are equal! Nothing will be processed.")
     except KeyboardInterrupt:
@@ -86,9 +89,12 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         return 2
     else:
         pytest_opts = ['-vs', '--ff', '--cov='+os.getcwd(), '--cov-report=html', 
-                       r'--html=%s\report\report_%s.html' %(os.getcwd(), __updated__)] #'--lf'
+                       r'--html=%s\report\report_%s.html' %(os.getcwd(), __updated__),
+                       '--timeout=300'] #'--lf'
         if instantfail:
-            pytest_opts.append('--instafail')
+            pytest_opts.append('-f')
+        if exitonfail:
+            pytest_opts.append('-x')
         markers = ''
         if inpat:
             markers += ' and '.join(inpat.split(','))
@@ -122,7 +128,7 @@ if __name__ == "__main__":
         import pstats
         profile_filename = 'case.main_cli_profile.txt'
         cProfile.run('main()', profile_filename)
-        statsfile = open("profile_stats.txt", "wb")
+        statsfile = open("profile_stats.txt", "w")
         p = pstats.Stats(profile_filename, stream=statsfile)
         stats = p.strip_dirs().sort_stats('cumulative')
         stats.print_stats()

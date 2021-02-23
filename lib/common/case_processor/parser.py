@@ -52,7 +52,7 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
                 continue
             if self._is_case_started:
                 _case = ExcelTestCase(self.fields)
-                _case.fill(row)
+                _case.fill(cell.value for cell in row)
                 if to_iter:
                     yield _case
                 else:

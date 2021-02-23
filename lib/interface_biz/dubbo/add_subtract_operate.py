@@ -41,7 +41,7 @@ def nearme_add_subtract(host, amount, ssoid, operate_type):
 
 
 if __name__ == '__main__':
-    nearme_add_subtract('10.177.159.14', "0.019", "2086100900", "PRESENT")    #test3
+    nearme_add_subtract('10.177.159.14', "0.0199999", "2086100900", "PRESENT")    #test3
 #     nearme_add_subtract('10.177.159.14', "0.03", "2086100900", "DEDUCT")    #test3
 #     nearme_add_subtract('10.177.110.171', "1", "2086100900", "PRESENT")     #test1
 #     nearme_add_subtract('10.177.110.171', "6", "2086100900", "DEDUCT")
