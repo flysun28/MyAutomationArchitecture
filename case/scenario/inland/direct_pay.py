@@ -4,7 +4,6 @@
 # datetime:2021/1/19 23:03
 # comment:
 import random
-
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.find_key import GetKey
@@ -31,13 +30,13 @@ def direct_pay(amount=random.randint(1, 1000)):
     """
         【1】. 调用直扣接口，构造渠道回调报文
     """
-    order = SimplePay("wxpay", str(amount/100)).direct_pay()
+    order = SimplePay("wxpay", amount/100).direct_pay()
     sleep(1)
     wx_normal_pay_scarlet(merchant_info["merchant_no"], order["pay_req_id"], merchant_info["app_id"], amount, md5_key)
     """
         【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"])) == "2002"
+    assert str(queryResult(order["pay_req_id"], "direct")) == "2002"
     """
         【3】. 检查order_info表信息是否正确
     """

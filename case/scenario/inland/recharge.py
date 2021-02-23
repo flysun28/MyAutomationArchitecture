@@ -17,7 +17,6 @@ import decimal
 import time
 
 ssoid = GlobarVar.SSOID
-
 merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
 md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
 logger = Logger('recharge').get_logger()
@@ -35,10 +34,10 @@ def recharge(amount=random.randint(20, 100)*500):
     """
         【2】. 调用可币充值接口，构造渠道回调报文
     """
-    pay_req_id = SimplePay("heepay_10", str(amount/100)).recharge()
+    pay_req_id = SimplePay("heepay_10", amount/100).recharge()
     time.sleep(1)
     # wx_normal_pay_scarlet(merchant_info["merchant_no"], pay_req_id, merchant_info["app_id"], amount, md5_key)
-    hee_pay_notify(pay_req_id, str(amount/100))
+    hee_pay_notify(pay_req_id, amount/100)
     """
         【3】.调用查询结果接口
     """

@@ -33,7 +33,7 @@ def sign_pay(pay_type, amount=random.randint(1, 1000)):
     """
         【2】. 调用签约支付下单接口，构造支付与签约回调报文
     """
-    order_info = AutoRenew().auto_renew(amount=str(amount/100))
+    order_info = AutoRenew().auto_renew(amount=amount/100)
     sign_request_id = order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
     # 签约回调

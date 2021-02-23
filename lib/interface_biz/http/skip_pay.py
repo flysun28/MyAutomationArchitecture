@@ -3,6 +3,7 @@
 # author:xy
 # datetime:2021/2/20 16:42
 # comment:
+import random
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import GlobarVar, HTTPJSON_IN
@@ -12,7 +13,7 @@ from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import SkipPay_pb2
 
 
-def skip_pay(payAmount, payType="wxpay", partnerId="72724313", app_version=(Config(do_case_path).read_config("sdk_ver", "version")),
+def skip_pay(payAmount=round(random.uniform(0.01, 10), 2), payType="wxpay", partnerId="72724313", app_version=(Config(do_case_path).read_config("sdk_ver", "version")),
              notifyUrl=str(GlobarVar.URL_PAY_IN)+"/notify/receiver"):
     req = {
         "header": {
@@ -37,13 +38,13 @@ def skip_pay(payAmount, payType="wxpay", partnerId="72724313", app_version=(Conf
         "payType": payType,
         "channel": payType,
         # 元
-        "payAmount": payAmount,
+        "payAmount": str(payAmount),
         "currency": "CNY",
         "product": {
             "name": "NO_LOGIN_PAY",
             "desc": "话费充值",
             "count": "1",
-            "priceLocal": payAmount
+            "priceLocal": str(payAmount)
         },
         "returnUrl": "finzpay://nearme.atlas.com",
         "notifyUrl": notifyUrl,
@@ -61,4 +62,4 @@ def skip_pay(payAmount, payType="wxpay", partnerId="72724313", app_version=(Conf
 
 
 if __name__ == '__main__':
-    skip_pay("0.01")
+    skip_pay()

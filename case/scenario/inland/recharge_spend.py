@@ -37,7 +37,7 @@ def rs_only_rmb(amount=random.randint(1, 1000)):
     """
         【2】. 调用下单接口，构造渠道回调报文
     """
-    order_info = SimplePay("wxpay", str(amount/100)).recharge_spend_amount_is_price(amount)
+    order_info = SimplePay("wxpay", amount/100).recharge_spend_amount_is_price(amount)
     wx_normal_pay_scarlet(merchant_info["merchant_no"], order_info["pay_req_id"], merchant_info["app_id"], amount, md5_key)
 
     """
@@ -106,12 +106,11 @@ def rs_with_kb_rmb(amount=random.randint(1, 1000), kb_amount=round(random.unifor
     """
         【4】. 检查可币余额是否正确
     """
-    time.sleep(1)
+    time.sleep(2)
     assert get_balance(ssoid) == round(decimal.Decimal(0), 4)
     """
         【5】.检查订单表记录是否正确
     """
-    print(amount, kb_amount, vou_amount, price, vou_info["vouId"])
     FizAssert().assert_order_info(ssoid, order_info['pay_req_id'], amount, price, kb_spent=int(kb_amount*100), vou_amount=int(vou_amount*100), vou_id=str(vou_info["vouId"]))
     """
         【6】. 检查trade order表记录是否正确
@@ -125,7 +124,12 @@ def rs_with_kb_rmb(amount=random.randint(1, 1000), kb_amount=round(random.unifor
         【8】. 检查tb_payments表记录是否正确
     """
     FizAssert().assert_tb_payment(ssoid, order_info['partner_order'], int(kb_amount*100))
+    return order_info['pay_req_id']
 
 
 if __name__ == '__main__':
-    rs_with_kb_rmb()
+    list = []
+    for item in range(10):
+        a = rs_with_kb_rmb()
+        list.append(a)
+    print(list)
