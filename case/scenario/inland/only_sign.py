@@ -5,19 +5,15 @@
 # comment:
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import get_contract_code, update_sign_status
-from lib.common_biz.find_key import GetKey
-from lib.common_biz.find_merchant_info import FindMerchant
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
-from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
-from lib.interface_biz.scarlett.wxpay import wx_sign_scarlet
-merchant_info = FindMerchant("2031").find_app_id_merchant_sign("wxpay")
-md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
+
 SSOID = GlobarVar.SSOID
 
 
-def only_sign(pay_type):
+def only_sign(pay_type="wxpay"):
     """
     :return:
     """
@@ -31,7 +27,7 @@ def only_sign(pay_type):
     sign_order_info = AutoRenew().only_sign()
     sign_request_id = sign_order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
-    wx_sign_scarlet(contract_code, RandomOrder(10).random_num(), merchant_info['merchant_no'], merchant_info["plan_id"], md5_key)
+    choose_scarlett(1, pay_type, "", "SIGN", contract_code)
     """
     【3】. 查询支付结果
     """

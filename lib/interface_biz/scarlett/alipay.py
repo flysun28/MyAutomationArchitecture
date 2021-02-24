@@ -10,7 +10,6 @@ from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
-from lib.common.utils.globals import HTTPJSON_SCARLET
 from lib.common_biz.file_path import key_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign

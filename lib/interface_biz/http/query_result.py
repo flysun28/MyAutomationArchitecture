@@ -9,7 +9,7 @@ from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_native import QueryResultPb_pb2
 
 
-def queryResult(request_id, query_type="PAY"):
+def queryResult(request_id, query_type="PAY", pass_type="expend"):
     req = {
         "header": {
             "version": "5.0",
@@ -32,7 +32,7 @@ def queryResult(request_id, query_type="PAY"):
         # "queryType": "SIGN"
         "queryType": query_type
     }
-    ReplaceParams(req).replace_native("expend")
+    ReplaceParams(req).replace_native(pass_type)
     response = ProtoBuf(QueryResultPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/queryresult', 'Request', req, flag=0)
     result = ProtoBuf(QueryResultPb_pb2).parser('Result', response)
     return result.baseresult.code

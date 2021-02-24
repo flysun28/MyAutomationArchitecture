@@ -3,8 +3,10 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
+import random
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.fiz_assert import FizAssert
@@ -19,21 +21,23 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 logger = Logger('on_login_pay').get_logger()
 
 
-def on_login(amount):
+def on_login(amount, notify_amount, pay_type="wxpay"):
     """
         疑似有的走simplepay，此处针对skippay
-    :param amount: 元 string
+    :param notify_amount:
+    :param pay_type:
+    :param amount: 分
     :return:
     """
     """
     【1】. 调用下单接口，渠道回调构造
     """
-    order = skip_pay(amount)
-    wx_normal_pay_scarlet(merchant_info["merchant_no"], order['pay_req_id'], merchant_info["app_id"], int(float(amount)*100), md5_key)
+    order = skip_pay(pay_type, amount/100)
+    choose_scarlett(notify_amount, pay_type, order['pay_req_id'])
     """
         【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"])) == "2002"
+    assert str(queryResult(order["pay_req_id"], "no_login")) == "2002"
     """
         【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理
     """
@@ -49,4 +53,4 @@ def on_login(amount):
 
 
 if __name__ == '__main__':
-    on_login("0.01")
+    on_login(1, 1)

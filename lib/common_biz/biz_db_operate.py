@@ -59,4 +59,4 @@ def update_sign_status(ssoid, pay_type, partner_code="2031", renew_product_code=
 
 
 if __name__ == '__main__':
-    update_sign_status("", "wxpay")
+    update_sign_status("2076075925", "wxpay")

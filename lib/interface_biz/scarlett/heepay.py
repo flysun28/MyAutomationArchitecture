@@ -30,7 +30,7 @@ def hee_pay_notify(bill_id, card_real_amt):
         "card_settle_amt": "0.00",
         "ret_code": "0",
         "bill_status": "1",
-        "card_real_amt": card_real_amt,
+        "card_real_amt": str(card_real_amt),
         "jnet_bill_no": jnet_bill_no
     }
     sign_string = hee_pay_sign_string(scarlet_data)

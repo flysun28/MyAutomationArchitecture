@@ -10,6 +10,7 @@ from lib.common.utils.globals import GlobarVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
+
 logger = Logger('FizAssert').get_logger()
 
 
@@ -40,8 +41,8 @@ class FizAssert(metaclass=WithLogger):
         db_trade_order_info = SeparateDbTable(ssoid).get_order_db_table()
         trade_order_info = self.mysql.select_one(
             str(Config(common_sql_path).read_config("trade_order", "order")).format(db_trade_order_info[0],
-                                                                              db_trade_order_info[1], ssoid,
-                                                                              pay_req_id))
+                                                                                    db_trade_order_info[1], ssoid,
+                                                                                    pay_req_id))
         self.logger.info("trade订单详情：{}".format(trade_order_info))
         try:
             assert trade_order_info is not None
@@ -107,13 +108,14 @@ class FizAssert(metaclass=WithLogger):
         :param request_id: 商户订单号
         :return:
         """
-        notify_info = self.mysql.select_one(str(Config(common_sql_path).read_config("notify", "notify_info")). format(
-                                                                                                            request_id))
+        notify_info = self.mysql.select_one(str(Config(common_sql_path).read_config("notify", "notify_info")).format(
+            request_id))
         self.logger.info("通知表信息详情：{}".format(notify_info))
         try:
             assert notify_info is not None
-            assert notify_info['notify_response'] == "OK"
-            assert notify_info['notify_count'] == 1
+            assert notify_info['notify_response'] == "OK" or "ABANDON"
+            if notify_info['notify_response'] == "OK":
+                assert notify_info['notify_count'] == 1
             self.logger.info("通知成功")
         except AssertionError as e:
             self.logger.info("通知异常")
@@ -128,7 +130,9 @@ class FizAssert(metaclass=WithLogger):
         :param renew_product_code:
         :return:
         """
-        sign_status = self.mysql.select_one(str(Config(common_sql_path).read_config("order", "sign_status")). format(ssoid, partner_code, renew_product_code, pay_type))
+        sign_status = self.mysql.select_one(
+            str(Config(common_sql_path).read_config("order", "sign_status")).format(ssoid, partner_code,
+                                                                                    renew_product_code, pay_type))
         try:
             assert sign_status is not None
             assert sign_status['status'] == "SIGN"
@@ -142,11 +146,29 @@ class FizAssert(metaclass=WithLogger):
 
         :return:
         """
-        sign_record_status = self.mysql.select_one(str(Config(common_sql_path).read_config("order", "sign_record_status")). format(pay_req_id))
+        sign_record_status = self.mysql.select_one(
+            str(Config(common_sql_path).read_config("order", "sign_record_status")).format(pay_req_id))
         try:
             assert sign_record_status is not None
             assert sign_record_status['status'] == "SUCC"
             self.logger.info("签约记录表记录正确")
         except Exception as e:
             self.logger.info("签约记录表记录异常")
+            raise e
+
+    def assert_voucher(self, vou_id, status="6"):
+        """
+        检查优惠券状态
+        :return:
+        """
+        table = SeparateDbTable("2076075925").get_vou_table()
+        vou_info = self.mysql.select_one(
+            str(Config(common_sql_path).read_config("voucher", "voucher_info")).format(table, vou_id))
+        self.logger.info("优惠券详情：{}".format(vou_info))
+        try:
+            assert vou_info is not None
+            assert vou_info['status'] == status
+            self.logger.info("优惠券表记录正确")
+        except Exception as e:
+            self.logger.info("优惠券表记录异常")
             raise e

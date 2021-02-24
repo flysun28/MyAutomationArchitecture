@@ -33,8 +33,8 @@ class AutoRenew:
                           "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17", "androidVersion": "29"
                           },
                "transType": "SIGNANDPAY", "renewProductCode": self.renewProductCode,
-               "signPartnerOrder": partner_order, "type": self.type, "amount": amount,
-               "oriAmount": amount, "ip": "58.252.5.75", "sign": "",
+               "signPartnerOrder": partner_order, "type": self.type, "amount": str(amount),
+               "oriAmount": str(amount), "ip": "58.252.5.75", "sign": "",
                "signAgreementNotifyUrl": self.notify_url, "appId": "",
                "isNeedExpend": "0",
                "basepay": {"channelId": "", "notifyurl": self.notify_url,

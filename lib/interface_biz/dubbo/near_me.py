@@ -27,7 +27,7 @@ class Nearme:
         if operate_type in ("D", "DEDUCT", "d", "1", 1):
             operate_type = "DEDUCT"
         data = {
-            "amountMoney": amount,
+            "amountMoney": str(amount),
             "batchId": RandomOrder(32).random_num(),
             "bizNo": RandomOrder(32).random_string(),
             "operateType": operate_type,
