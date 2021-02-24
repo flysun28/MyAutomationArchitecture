@@ -81,3 +81,4 @@ if __name__ == '__main__':
     vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
     VoucherInland().checkVoucher(vou_info['batchId'])
 
+

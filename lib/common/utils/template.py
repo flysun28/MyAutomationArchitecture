@@ -6,7 +6,7 @@ from lib.common.logger.logging import Logger
 from lib.common.utils.descriptors import StatisDescriptor
 from lib.common.utils.globals import GlobarVar
 from lib.common.utils.meta import WithLogger
-from lib.common.utils.misc_utils import to_iterable_nested, extend_to_longgest
+from lib.common.utils.misc_utils import to_iterable_nested, extend_to_longest
 from lib.common.exception.intf_exception import ArgumentException
 
 logger = Logger('接口参数遍历模板').get_logger()
@@ -40,15 +40,15 @@ class InterfaceTestTemplate(metaclass=WithLogger):
     def positive_test(self, *varargs, stop_on_failure=False):
         varargs = to_iterable_nested(varargs, ele_type=tuple)
         print(50*'#' + '正向测试开始' + 50*'#')
-        for idx, param_values in self._make_positive_test_values(varargs):
+        for idx, param_values in enumerate(self._make_positive_test_values(varargs), 1):
             self.logger.debug(param_values)
             self.statis.TOTAL += 1
             try:
                 self.callback(*param_values)
-                self.logger.info('No.%d %s\n%s --- PASS', idx, param_values, sys.exc_info()[1])
-                self.statis.PASS_NUM += 1                
+                self.logger.info('\nNo.%d %s\n%s --- PASS', idx, param_values, sys.exc_info()[1])
+                self.statis.PASS_NUM += 1
             except:
-                self.logger.error('No.%d %s\n%s --- FAIL', idx, param_values, sys.exc_info()[1])
+                self.logger.error('\nNo.%d %s\n%s --- FAIL', idx, param_values, sys.exc_info()[1])
                 self.statis.FAIL_NUM += 1
                 if stop_on_failure:
                     raise ArgumentException(param_values)            
@@ -79,8 +79,8 @@ class InterfaceTestTemplate(metaclass=WithLogger):
     def _make_positive_test_values(self, varargs):
         '创建嵌套列表'
         varargs = to_iterable_nested(varargs, ele_type=tuple)
-        ext_varargs = extend_to_longgest(varargs)
-        pos_values = list(zip(*varargs))
+        ext_varargs = extend_to_longest(varargs)
+        pos_values = list(zip(*ext_varargs))
         self.logger.info(pos_values)
         return pos_values
 

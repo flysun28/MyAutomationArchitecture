@@ -17,7 +17,7 @@ class ExcelProxy():
         :param path: Excel file absolute path
         :param interface: the interface name, usually it's the last section of a URL
         '''
-        self._fileobj = Excel(path)
+        self._fileobj = Excel(path, read_only=False)
         assert interface, f"Invalid interface name: {interface}, should be one of the worksheet names"
         ws = self._fileobj.open_worksheet(interface)
         self._parser = ExcelParser(ws)

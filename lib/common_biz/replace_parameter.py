@@ -26,7 +26,7 @@ def get_tp_rv(pay_method):
         r_v = pass_params[0]
         t_p = pass_params[1]
         m_p = pass_params[2]
-    elif pay_method == "expend":
+    elif pay_method in ("expend", 'recharge_spend'):
         pass_params = Pass().pass_recharge_spend()
         r_v = pass_params[0]
         t_p = pass_params[1]
@@ -46,7 +46,7 @@ def get_tp_rv(pay_method):
 
 class ReplaceParams(metaclass=WithLogger):
     def __init__(self, case):
-        self.case = case
+        self.case = self.req = case
 
     def replace_native(self, pay_method, voucher_info=None):
         partner_order = RandomOrder(32).random_string()

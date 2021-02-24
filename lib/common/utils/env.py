@@ -32,13 +32,14 @@ def get_env_config() -> dict:
     return result
 
 
-def get_dubbo_info(dubbo_config):
+def get_dubbo_info(dubbo_config)->list:
     """
     根据配置文件，返回dubbo接口的ip：port
     :param dubbo_config: test_env_config_x.ini文件中dubbo对应的服务
-    :return:
+    :return: [ip, port]
     """
     ip_port = get_env_config()['dubbo'][dubbo_config].split(":")
+    print(ip_port)
     return ip_port
 
 
