@@ -12,6 +12,7 @@ from lib.config.path import common_sql_path
 
 
 class Order:
+    
     def __init__(self):
         dubbo_info = get_dubbo_info("order")
         self.conn = DubRunner(dubbo_info[0], dubbo_info[1])

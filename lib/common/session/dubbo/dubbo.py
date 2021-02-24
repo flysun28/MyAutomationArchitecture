@@ -13,7 +13,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
     prompt = 'dubbo>'
     coding = 'utf-8'
 
-    def __init__(self, host=None, port=0, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+    def __init__(self, host=None, port=0):
         super().__init__(host, port)
         self.write(b'\n')
 
