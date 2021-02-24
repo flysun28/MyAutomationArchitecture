@@ -35,5 +35,6 @@ class GlobarVar():
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
+HTTPJSON_OUT = GlobarVar.HTTPJSON_OUT
 redis = REDIS = GlobarVar.REDIS
 HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET

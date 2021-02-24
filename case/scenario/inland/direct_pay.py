@@ -50,3 +50,4 @@ def direct_pay(amount, notify_amount, pay_type="wxpay"):
 
 if __name__ == '__main__':
     direct_pay(1, 1)
+    # direct_pay(2, 1)

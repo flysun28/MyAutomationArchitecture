@@ -74,5 +74,6 @@ class SeparateDbTable(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
+    print(SeparateDbTable("249LELE7NJ").get_order_db_table())
     print(SeparateDbTable("2076075925").get_coin_db_table())
     print(SeparateDbTable("2076075925").get_vou_table())
