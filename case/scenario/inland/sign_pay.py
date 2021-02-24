@@ -6,6 +6,7 @@
 import random
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import update_sign_status, get_contract_code
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.fiz_assert import FizAssert
@@ -20,9 +21,10 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 SSOID = GlobarVar.SSOID
 
 
-def sign_pay(pay_type="wxpay", amount=random.randint(1, 1000)):
+def sign_pay(amount, notify_amount, pay_type="wxpay"):
     """
     签约支付
+    :param notify_amount:
     :param pay_type:
     :param amount:  分
     :return:
@@ -38,11 +40,14 @@ def sign_pay(pay_type="wxpay", amount=random.randint(1, 1000)):
     sign_request_id = order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
     # 签约回调
-    wx_sign_scarlet(contract_code, RandomOrder(10).random_num(), merchant_info['merchant_no'], merchant_info["plan_id"],
-                    md5_key)
+    # wx_sign_scarlet(contract_code, merchant_info['merchant_no'], merchant_info["plan_id"],
+     #               md5_key)
+    choose_scarlett(1, "wxpay", "", "SIGN", contract_code)
     # 支付回调
-    wx_normal_pay_scarlet(merchant_info["merchant_no"], order_info["pay_req_id"], merchant_info["app_id"], amount, md5_key)
+    #wx_normal_pay_scarlet(merchant_info["merchant_no"], order_info["pay_req_id"], merchant_info["app_id"], amount, md5_key)
+    choose_scarlett(notify_amount, pay_type, order_info['pay_req_id'])
     """
+    
         【3】. 查询支付结果
     """
     assert str(queryResult(order_info["pay_req_id"])) == "2002"
@@ -69,4 +74,4 @@ def sign_pay(pay_type="wxpay", amount=random.randint(1, 1000)):
 
 
 if __name__ == '__main__':
-    sign_pay("wxpay", 1)
+    sign_pay(1, 1)

@@ -14,7 +14,7 @@ from lib.interface_biz.http.expend_pay import ExpendPay
 ssoid = GlobarVar.SSOID
 
 
-def spend(amount=random.randint(100, 1000), ssoid=ssoid, partner_id="2031",
+def spend(amount, ssoid=ssoid, partner_id="2031",
           vou_amount=round(random.uniform(0.02, 10), 2)):
     """
     满vou_amount+0.01，减vou_amount优惠券
@@ -65,4 +65,7 @@ def spend(amount=random.randint(100, 1000), ssoid=ssoid, partner_id="2031",
 
 
 if __name__ == '__main__':
-    spend()
+    a = spend(1)
+
+
+

@@ -6,6 +6,7 @@
 import random
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.fiz_assert import FizAssert
@@ -20,9 +21,10 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 logger = Logger('on_login_pay').get_logger()
 
 
-def on_login(pay_type="wxpay", amount=random.randint(1, 1000)):
+def on_login(amount, notify_amount, pay_type="wxpay"):
     """
         疑似有的走simplepay，此处针对skippay
+    :param notify_amount:
     :param pay_type:
     :param amount: 分
     :return:
@@ -31,7 +33,7 @@ def on_login(pay_type="wxpay", amount=random.randint(1, 1000)):
     【1】. 调用下单接口，渠道回调构造
     """
     order = skip_pay(pay_type, amount/100)
-    wx_normal_pay_scarlet(merchant_info["merchant_no"], order['pay_req_id'], merchant_info["app_id"], amount, md5_key)
+    choose_scarlett(notify_amount, pay_type, order['pay_req_id'])
     """
         【2】. 调用查询结果接口
     """
@@ -51,4 +53,4 @@ def on_login(pay_type="wxpay", amount=random.randint(1, 1000)):
 
 
 if __name__ == '__main__':
-    on_login()
+    on_login(1, 1)

@@ -59,7 +59,7 @@ class SeparateDbTable(metaclass=WithLogger):
             temp = int(abs(GetHashCode.getHashCode(self.ssoid)) / table_count)
             data_base = temp % db_count
             table = int(abs(GetHashCode.getHashCode(self.ssoid)) % table_count)
-            # logger.info("`pay_cocoin_{}`.`pay_cocoin_order_{}`".format(data_base, table))
+            # self.logger.info("`pay_cocoin_{}`.`pay_cocoin_order_{}`".format(data_base, table))
             return data_base, table
 
         def get_vou_table(self):
@@ -69,6 +69,7 @@ class SeparateDbTable(metaclass=WithLogger):
             """
             count = 20
             table = int(abs(GetHashCode.getHashCode(self.ssoid))) % count + 1
+            # self.logger.info("`oppopay_voucher`.`vou_info_{}`".format(table))
             return table
 
 

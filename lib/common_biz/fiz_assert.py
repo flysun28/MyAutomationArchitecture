@@ -113,8 +113,9 @@ class FizAssert(metaclass=WithLogger):
         self.logger.info("通知表信息详情：{}".format(notify_info))
         try:
             assert notify_info is not None
-            assert notify_info['notify_response'] == "OK"
-            assert notify_info['notify_count'] == 1
+            assert notify_info['notify_response'] == "OK" or "ABANDON"
+            if notify_info['notify_response'] == "OK":
+                assert notify_info['notify_count'] == 1
             self.logger.info("通知成功")
         except AssertionError as e:
             self.logger.info("通知异常")

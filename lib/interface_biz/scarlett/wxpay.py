@@ -57,7 +57,7 @@ def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, md5_key, trade
         logger.info("回调解析成功")
 
 
-def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key, result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
+def wx_sign_scarlet(contract_code, mch_id, plan_id, md5_key, result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
     """
     微信签约回调报文
     :param change_type: ?
@@ -80,7 +80,7 @@ def wx_sign_scarlet(contract_code, contract_id, mch_id, plan_id, md5_key, result
         "contract_code": contract_code,
         # 未来时间 续费时间？
         "contract_expired_time": end_time,
-        "contract_id": contract_id,
+        "contract_id": RandomOrder(10).random_num(),
         "mch_id": mch_id,
         # 微信用户表示
         "openid": "oCg6Xt8NvRi7jGuap_5B6XdY4oYk",

@@ -7,23 +7,21 @@ import random
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import get_balance
-from lib.common_biz.find_key import GetKey
-from lib.common_biz.find_merchant_info import FindMerchant
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
-from lib.interface_biz.scarlett.heepay import hee_pay_notify
 import decimal
 import time
 
 ssoid = GlobarVar.SSOID
-merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
-md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
 logger = Logger('recharge').get_logger()
 
 
-def recharge(amount=random.randint(20, 100)*500):
+def recharge(amount, notify_amount, pay_type="heepay"):
     """
+    :param pay_type:
+    :param notify_amount:
     :param amount: 分
     :return:
     """
@@ -36,8 +34,7 @@ def recharge(amount=random.randint(20, 100)*500):
     """
     pay_req_id = SimplePay("heepay_10", amount/100).recharge()
     time.sleep(1)
-    # wx_normal_pay_scarlet(merchant_info["merchant_no"], pay_req_id, merchant_info["app_id"], amount, md5_key)
-    hee_pay_notify(pay_req_id, amount/100)
+    choose_scarlett(notify_amount, pay_type, pay_req_id)
     """
         【3】.调用查询结果接口
     """
@@ -68,6 +65,7 @@ def recharge(amount=random.randint(20, 100)*500):
 
 
 if __name__ == '__main__':
-    recharge()
+    a = recharge(5, 5)
+
 
 
