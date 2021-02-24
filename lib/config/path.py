@@ -1,7 +1,7 @@
 # coding=utf-8
 import os
 pardir = os.path.dirname
-project_dir = pardir(pardir(__file__))
+lib_dir = project_dir = pardir(pardir(__file__))
 config_dir = pardir(__file__)
 
 log_dir = os.path.join(project_dir, 'log')

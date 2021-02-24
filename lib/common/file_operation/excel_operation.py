@@ -9,13 +9,13 @@ from lib.common.utils.meta import WithLogger
 
 class Excel(metaclass=WithLogger):
     
-    def __init__(self, path):
+    def __init__(self, path, read_only=False):
         self.path = path
         self.wb = None
 #         self.wb = load_workbook(self.path, read_only=True)
         self.loading_thr = ResultTakenThread(load_workbook,
                                              self.path,
-                                             read_only=True,
+                                             read_only=read_only,
                                              daemon=True,
                                              name='LoadingExcelWorkbookThread')
         self.wb = self.loading_thr.result
@@ -34,4 +34,6 @@ class Excel(metaclass=WithLogger):
     def close(self):
         self.wb.close()
 
+    def sheetnames(self):
+        return self.wb.sheetnames
     

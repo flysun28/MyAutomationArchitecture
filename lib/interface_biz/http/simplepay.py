@@ -332,8 +332,6 @@ class SimplePay(metaclass=WithLogger):
         return result
 
 
-def http_pb_simplepay(req:dict, procedure):
-    pass
 
 
 if __name__ == '__main__':

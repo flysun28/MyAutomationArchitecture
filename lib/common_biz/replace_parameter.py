@@ -46,7 +46,7 @@ def get_tp_rv(pay_method):
 
 class ReplaceParams(metaclass=WithLogger):
     def __init__(self, case):
-        self.case = case
+        self.case = self.req = case
 
     def replace_native(self, pay_method, voucher_info=None):
         partner_order = RandomOrder(32).random_string()

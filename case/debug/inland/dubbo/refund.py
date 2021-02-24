@@ -6,10 +6,11 @@
 from case.debug.inland.dubbo.order import Order
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
-from lib.common.utils.env import get_dubbo_info
+from lib.common.utils.env import get_dubbo_info, set_global_env_id
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
 from lib.common.utils.globals import GlobarVar
+from lib.common_biz.order_random import RandomOrder
 
 
 class Refund:
@@ -47,17 +48,58 @@ class Refund:
         :return:
         """
         db_info = SeparateDbTable(ssoid).get_order_db_table()
-        sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(db_info[0], db_info[1],
-                                                                                             ssoid)
+        sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(db_info[0], db_info[1], ssoid)
         mysql = GlobarVar.MYSQL_IN
         refund_list = mysql.select(sql_refund)
         # pay_req_id, amount, partner_order, partner_code, pay_type
         for item in refund_list:
-            Order().refund_approval(item['partner_code'], item['partner_order'], str(item['amount']/100), item['pay_type'],
-                                    item["pay_req_id"])
+            self.refund_approval(item['partner_code'], item['partner_order'], str(item['amount']/100), item['pay_type'], item["pay_req_id"])
             self.refund_single(item['partner_order'], item['partner_code'], str(item['amount']/100))
-
+    
+    def refund_approval(self, partnerId, partnerOrder, refundAmount, payType, payReqId=""):
+        """
+        退款审批
+        :return:
+        """
+        data_temp_1 = {"fileUrl": "",
+                       "applyAccount": "80264408",
+                       "batchNo": RandomOrder(32).random_num(),
+                       "partnerId": partnerId,
+                       "approveType": "CASH",
+                       "class": "com.oppo.pay.order.facade.dto.BatchRefundCommonInfo"}
+        data_temp_2 = [{"partnerOrder": partnerOrder,
+                        "notifyUrl": "wwww.baidu.com",
+                        "payReqId": payReqId,
+                        "refundAmount": refundAmount,
+                        "refundReason": "AUTO_TEST",
+                        "payType": payType,
+                        "class": "com.oppo.pay.order.facade.dto.BatchRefundRecord"}]
+        data = str(data_temp_1) + "," + str(data_temp_2)
+        result = self.conn.invoke(
+            "RefundLogic",
+            "approvalRefund",
+            data,
+            "FIX"
+        )
+        mysql = GlobarVar.MYSQL_IN
+        mysql.execute(str(Config(common_sql_path).read_config("refund", "refund_update")).format(payReqId))
+    
+    def refund_by_partner_order(self, ssoid, partner_order_id):
+        sep_dbtbl = SeparateDbTable(ssoid)
+        order_db_info = sep_dbtbl.get_order_db_table()
+        del sep_dbtbl
+        sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM db_order_{}.order_info_{} WHERE '\
+              'STATUS="OK" AND refund=0 AND amount!="0" AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
+                  order_db_info[0], order_db_info[1], partner_order_id)
+        print(sql)
+        res = GlobarVar.MYSQL_IN.select_one(sql)
+        print(res)
+        self.refund_approval(res['partner_code'], res['partner_order'], res['amount']/100, res['pay_type'], res["pay_req_id"])
+        self.refund_single(res['partner_order'], res['partner_code'], res['amount']/100)
+        
 
 if __name__ == '__main__':
-    Refund().refund_by_ssoid("2086100900")
+    set_global_env_id(1)
+#     Refund().refund_by_ssoid("2086100900")
+    Refund().refund_by_partner_order("2086100900", 'fa2ddc9c4c334f1ba58c9e544ac74f5e')
     # Refund().refund_single("GC202101241407088040100320000", "5456925", "0.01")

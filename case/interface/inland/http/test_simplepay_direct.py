@@ -3,7 +3,8 @@
 '''
 import os
 if __name__ == '__main__':
-    os.getcwd = lambda: r'E:\SecurePaymentsAutomation\case'    
+    from lib import pardir
+    os.getcwd = lambda: pardir(pardir(pardir(pardir(__file__)))) 
 import sys
 import re
 import time
@@ -11,8 +12,7 @@ import pytest
 from lib.common.case_processor.entry import CaseFile
 from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 from lib.common.utils.misc_utils import dictionary_should_contain_sub_dictionary
-from lib.interface_biz.http.simplepay import http_pb_simplepay
-from importlib import reload
+from lib.common_biz.pb_request import http_pb_request
 
 pytestmark = pytest.mark.simplepay
 
@@ -38,26 +38,32 @@ class TestInlandPositive():
     
     @pytest.fixture(scope='class', autouse=True)
     def class_setup(self):
+        print('\ninto class setup..........')
         self.actual_resp = None
         yield
+        print('\ninto class teardown..........')
     
     @pytest.fixture(scope='function', autouse=True)
     def case_teardown(self, module_setup_and_teardown):
         yield
+        print('\ninto case teardown..........')
         module_setup_and_teardown.update_actual(self.actual_resp)
 
     def test_inland_positive(self, module_setup_and_teardown):
         for case in module_setup_and_teardown.positive_cases:
-            self.actual_resp = http_pb_simplepay(case.req_params)
+            # case: ExcelTestCase obj
+            self.actual_resp = http_pb_request(case.req_params)
             dictionary_should_contain_sub_dictionary(self.actual_resp, case.expected)
 
 
+@pytest.mark.full
+@pytest.mark.positive
 class TestInlandNegative():
 #     pytestmark = pytest.mark.full, pytest.mark.negative
     
     def test_inland_negative(self, module_setup_and_teardown):
         for case in module_setup_and_teardown.positive_cases:
-            self.actual_resp = http_pb_simplepay(case.req_params)
+            self.actual_resp = http_pb_request(case.req_params)
             dictionary_should_contain_sub_dictionary(self.actual_resp, case.expected)
 
 

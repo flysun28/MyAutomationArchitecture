@@ -9,12 +9,12 @@ from collections import OrderedDict
 class ExcelTestCase():
     CN_FDs = '用例名称', '用例标签', '用例类型', '请求报文体', '实际结果', '响应状态码', '期望结果', '用例执行结果', '备注'
     EN_FDs = 'name', 'tag', 'type', 'req_params', 'actual', 'status_code', 'expected', 'is_passed', 'comments'
-#     FD_MAPPING = OrderedDict(zip(CN_FDs, EN_FDs))
     
     def __new__(cls, fields:tuple):
         cls.__slots__ = fields
         cls._validate_fields(fields)
-        cls.__slots__ += 'id',
+        # set id and worksheet object as attr
+        cls.__slots__ += ('id', 'ws')
         self = object.__new__(cls)
         self._data = OrderedDict()
         return self

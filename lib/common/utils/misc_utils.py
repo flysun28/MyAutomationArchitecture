@@ -1,6 +1,9 @@
 # coding=utf-8
 
+import os
 import re
+from lib import pardir
+from lib.config.path import lib_dir
 
 
 def is_string(item)-> bool:
@@ -43,13 +46,15 @@ def to_iterable_nested(seq, ele_type:(list, tuple, set)=list):
     return seq
 
 
-def extend_to_longgest(seq):
+def extend_to_longest(seq):
     '''
     :param seq: 必须为嵌套序列
     1. 获取元素的最大长度max_len
     2. 将每个子列表扩展到max_len，策略：复制最后一个元素，直到补齐长度
     e.g. [(1,2), (3,4,5)] ---> [(1,2,2), (3,4,5)]
     '''
+    # 子元素不为序列，则强制转换为列表
+    seq = [subseq if is_sequence(subseq) else [subseq] for subseq in seq]
     max_len = max([len(subseq) for subseq in seq])
     for idx, subseq in enumerate(seq):
         subseq = to_iterable(subseq, list)
@@ -88,4 +93,13 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
     if diffs:
         raise AssertionError(diff_value_msg)
+    
 
+def make_pbsrc_to_interface_map(region:str='inland'):
+    '''
+    Extract the interface name from PB src file name 
+    :param region:
+    '''
+    region = 'native' if region == 'inland' else region
+    pbsrc_path = os.path.join(lib_dir, 'pb_src', 'python_'+region)    
+#     for file in 

@@ -49,6 +49,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
         data = self.command(DubRunner.prompt, "")
         # data = data.decode(DubRunner.coding, errors='ignore').split('\n')[0].strip()
         temp = str(data, encoding="gbk").split("elapsed")[0]
+        print(temp)
         data = json.loads(temp)
         self.logger.info("dubbo回参：{}".format(data))
         return data
