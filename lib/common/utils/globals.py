@@ -29,12 +29,13 @@ class GlobarVar():
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
-    REDIS = GlobalVarDescriptor(connect_redis())
+    REDIS_IN = GlobalVarDescriptor(connect_redis())
+    REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
     SSOID = Config(test_account_path).read_config("account", "ssoid")
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
 HTTPJSON_OUT = GlobarVar.HTTPJSON_OUT
-redis = REDIS = GlobarVar.REDIS
+redis = REDIS = GlobarVar.REDIS_IN
 HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET
 CASE_SRCFILE_ROOTDIR = os.path.join(os.getcwd(), 'src')

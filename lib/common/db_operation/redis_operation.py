@@ -53,12 +53,12 @@ class RedisCluster(metaclass=WithLogger):
                 self.logger.info("节点状态, ip: %s\tvalue: %s" %(ip, dic[i].get('cluster_state')))
 
 
-def connect_redis():
+def connect_redis(in_out="inland"):
     """
     redis连接
     :return:
     """
-    redis_args = get_env_config()['redis']
+    redis_args = get_env_config()['redis_' + in_out]
     # 存放集群信息
     conn_list = []
     hosts = redis_args['host'].replace(' ', '').split(',')
