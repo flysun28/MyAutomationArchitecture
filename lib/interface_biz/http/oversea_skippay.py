@@ -45,7 +45,7 @@ class Skippay:
                 "androidVersion": "29"
             },
             "partnerOrder": "",
-            "partnerId": self.partner_id ,
+            "partnerId": self.partner_id,
             "country": self.country,
             "payType": self.payType,
             "channel": self.payType,
@@ -73,3 +73,4 @@ class Skippay:
 
 if __name__ == '__main__':
     Skippay(500, 500).skip_pay("no_login")
+    #Skippay(500, 500).skip_pay("no_login")

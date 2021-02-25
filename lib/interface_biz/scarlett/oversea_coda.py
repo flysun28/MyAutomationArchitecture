@@ -6,6 +6,7 @@
 import requests
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.env import get_env_config
+from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import coda_pay_sign_string
 
 
@@ -32,7 +33,8 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
     """
 
     scarlett_data = {
-        "TxnId": "6142429221971401254",
+        # 类似回调id
+        "TxnId": RandomOrder(19).random_num(),
         "TotalPrice": TotalPrice,
         "PaymentType": PaymentType,
         "MnoId": MnoId,
@@ -47,17 +49,17 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
     # "764_codapay_dtac":"d07e95af7695870be6ffccd6f1e979b63","764_codapay_ais":"4cf10001f642acef41697461f6b95b663",
     # "608_codapay_globe":"82a48c16fd04f4221363d07a15c3c19b2","608_codapay_smart":"b8d30842761de43d501052ce4a797e3d2"}
     scarlett_data['Checksum'] = md5(coda_pay_sign_string(scarlett_data, "1c3d4a652f744f340e7ad9471dbdcb5d"), False)
-    req = 'TxnId=6142429221971401254&' \
+    req = 'TxnId={}&' \
           'Checksum={}' \
           '&TotalPrice={}&' \
           'PaymentType={}&' \
           'MnoId={}&' \
           'OrderId={}&' \
-          'ResultCode=0'.format(scarlett_data['Checksum'],TotalPrice, PaymentType, MnoId, OrderId)
+          'ResultCode=0'.format(scarlett_data['TxnId'], scarlett_data['Checksum'],TotalPrice, PaymentType, MnoId, OrderId)
     response = requests.get(get_env_config()['url']['pay_scarlet_out'] + "/opaycenter/codapaynotify?" + req)
     result = response.content
     print(result)
 
 
 if __name__ == '__main__':
-    coda_pay("1000.00", "390", "24", "PH202102251408112076075925774033")
+    coda_pay("1000.00", "390", "24", "PH20210225150418730J3EDAJH124703")
