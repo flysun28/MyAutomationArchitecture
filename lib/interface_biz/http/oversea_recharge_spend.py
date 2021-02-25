@@ -12,14 +12,14 @@ from lib.pb_src.python_standard import RechargeAndSpend_pb2
 
 
 class RechargeSpend(metaclass=WithLogger):
-    def __init__(self, pay_amount, pay_type="upay_gamecard", country="VN", currency="VND", partner_id="2031",
-                 app_version="250", version="15.0"):
+    def __init__(self, pay_amount, priceLocal, pay_type="upay_gamecard", country="VN", currency="VND",
+                 partner_id="2031", version="15.0"):
         self.version = version
-        self.app_version = app_version
         self.partner_id = partner_id
         self.country = country
         # 元
-        self.pay_amount = pay_amount
+        self.pay_amount = str(pay_amount)
+        self.priceLocal = str(priceLocal)
         self.currency = currency
         self.pay_type = pay_type
 
@@ -39,7 +39,55 @@ class RechargeSpend(metaclass=WithLogger):
                 "r_v": "",
                 "sign": "",
                 "sdkVer": "12.0",
-                "appVerison": self.app_version,
+                "appVerison": "",
+                "ip": "0.0.0.0",
+                "openId": "FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836",
+                "brandType": "OPPO",
+                "mobileos": "17",
+                "androidVersion": "29"
+            },
+            "partnerOrder": "",
+            "partnerId": self.partner_id,
+            "country": self.country,
+            "payType": self.pay_type,
+            "channel": self.pay_type,
+            "payAmount": self.pay_amount,
+            "currency": self.currency,
+            "cocoinRechargeAmount": "",
+            "cocoinPayAmount": "0.0",
+            "product": {
+                "name": "RECHARGE_SPEND",
+                "desc": "RECHARGE_SPEND",
+                "priceLocal": self.priceLocal
+            },
+            "notifyUrl": str(GlobarVar.URL_PAY_IN)+"/notify/receiver",
+            "partnerParams": "",
+            "businessChannelId": "",
+            "factor": ""
+        }
+        ReplaceParams(req).replace_standard("expend")
+        response = ProtoBuf(RechargeAndSpend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/cocoin/recharge/spend',
+                                                         'RechargeAndSpendRequest', req, flag=1)
+        result = ProtoBuf(RechargeAndSpend_pb2).parser('RechargeAndSpendResponse', response)
+
+    def recharge_spend_with_voucher(self, coupon_id, discountAmount):
+        """
+        :param coupon_id: 优惠券id
+        :param discountAmount: 优惠金额
+        :return:
+        """
+        req = {
+            "header": {
+                "version": self.version,
+                "token": "",
+                "imei": "",
+                "model": "A001OP",
+                "apntype": "1",
+                "package": "com.example.pay_demo",
+                "r_v": "",
+                "sign": "",
+                "sdkVer": "12.0",
+                "appVerison": "",
                 "ip": "0.0.0.0",
                 "openId": "FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836",
                 "brandType": "OPPO",
@@ -60,17 +108,19 @@ class RechargeSpend(metaclass=WithLogger):
                 "desc": "RECHARGE_SPEND",
                 "priceLocal": self.pay_amount
             },
-            "notifyUrl": str(GlobarVar.URL_PAY_IN)+"/notify/receiver",
+            "notifyUrl": str(GlobarVar.URL_PAY_IN) + "/notify/receiver",
             "partnerParams": "",
             "businessChannelId": "",
+            "couponId": coupon_id,
+            "discountAmount": discountAmount,
             "factor": ""
         }
         ReplaceParams(req).replace_standard("expend")
         response = ProtoBuf(RechargeAndSpend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/cocoin/recharge/spend',
                                                          'RechargeAndSpendRequest', req, flag=1)
         result = ProtoBuf(RechargeAndSpend_pb2).parser('RechargeAndSpendResponse', response)
-        # upay_pay_scarlet(10000, result.data.payRequestId)
 
 
 if __name__ == '__main__':
-    RechargeSpend("100").recharge_spend_price_is_amount()
+    #RechargeSpend("100").recharge_spend_price_is_amount()
+    RechargeSpend("1000", "1000").recharge_spend_with_voucher("102504345", "999.0")

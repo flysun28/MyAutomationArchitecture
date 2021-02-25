@@ -11,7 +11,7 @@ from lib.common.utils.env import get_env_config
 from lib.common.db_operation.mysql_operation import connect_mysql
 from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
-from lib.config.path import test_account_path
+from lib.config.path import test_account_path, do_case_path
 from lib.common.file_operation.config_operation import Config
 
 
@@ -31,7 +31,11 @@ class GlobarVar():
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
     REDIS_IN = GlobalVarDescriptor(connect_redis())
     REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
+
     SSOID = Config(test_account_path).read_config("account", "ssoid")
+
+    SDK_VER_IN = Config(do_case_path).read_config("sdk_ver", "version")
+    SDK_VER_OUT = Config(do_case_path).read_config("apk_ver_oversea", "version")
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN

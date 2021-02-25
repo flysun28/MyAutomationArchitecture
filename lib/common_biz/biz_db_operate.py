@@ -10,6 +10,7 @@ from lib.common.utils.globals import GlobarVar
 from lib.config.path import common_sql_path
 
 mysql = GlobarVar.MYSQL_IN
+mysql_out = GlobarVar.MYSQL_OUT
 logger = Logger('fiz_db_operate').get_logger()
 
 
@@ -58,5 +59,16 @@ def update_sign_status(ssoid, pay_type, partner_code="2031", renew_product_code=
     mysql.execute(str(Config(common_sql_path).read_config("order", "sign_to_un")).format(ssoid, partner_code, renew_product_code, pay_type))
 
 
+def oversea_get_coin_rate(currency):
+    """
+    :param currency:
+    :return:
+    """
+    rate = mysql_out.select_one(str(Config(common_sql_path).read_config("platform_opay", "coin_rate")).
+                                          format(currency))['rate']
+    return rate
+
+
 if __name__ == '__main__':
-    update_sign_status("2076075925", "wxpay")
+    oversea_get_coin_rate("VND")
+    #update_sign_status("2076075925", "wxpay")
