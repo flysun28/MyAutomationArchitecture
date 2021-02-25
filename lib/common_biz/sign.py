@@ -221,6 +221,17 @@ def hee_pay_sign_string(scarlett_string):
     return md5_string
 
 
+def coda_pay_sign_string(scarlett_string, api_key):
+    """
+    coda渠道签名原始串
+    :param api_key: 配置中心配置key
+    :param scarlett_string: 回调远串
+    :return:
+    """
+    md5_string = scarlett_string['TxnId'] + api_key + scarlett_string['OrderId'] + scarlett_string['ResultCode']
+    return md5_string
+
+
 if __name__ == '__main__':
     a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '', 'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1', 'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}
     print(Sign(a).join_fixed_param("hee_pay_scarlett", "&"))
