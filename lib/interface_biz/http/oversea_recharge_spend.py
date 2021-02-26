@@ -7,7 +7,6 @@ from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import HTTPJSON_OUT, GlobarVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.replace_parameter import ReplaceParams
-from lib.interface_biz.scarlett.upay import upay_pay_scarlet
 from lib.pb_src.python_standard import RechargeAndSpend_pb2
 
 

@@ -5,6 +5,7 @@
 # comment:
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import HTTPJSON_OUT, GlobarVar
+from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import SkipPay_pb2
 
@@ -44,7 +45,7 @@ class Skippay:
                 "mobileos": "18",
                 "androidVersion": "29"
             },
-            "partnerOrder": "",
+            "partnerOrder": RandomOrder(32).random_string(),
             "partnerId": self.partner_id,
             "country": self.country,
             "payType": self.payType,
@@ -69,8 +70,9 @@ class Skippay:
         response = ProtoBuf(SkipPay_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/skippay', 'SkipPayRequest'
                                                  , req)
         result = ProtoBuf(SkipPay_pb2).parser('SkipPayResponse', response)
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
 
 if __name__ == '__main__':
-    Skippay(500, 500).skip_pay("no_login")
-    #Skippay(500, 500).skip_pay("no_login")
+    Skippay(500, 500, payType="codapay_store").skip_pay("no_login")
+    Skippay(500, 500).skip_pay()

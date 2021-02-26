@@ -8,6 +8,7 @@ import random
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import HTTPJSON_OUT
 from lib.common_biz.biz_db_operate import oversea_get_coin_rate
+from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import Recharge_pb2
 
@@ -45,7 +46,7 @@ class Recharge:
                 "mobileos": "17",
                 "androidVersion": "29"
             },
-            "partnerOrder": "",
+            "partnerOrder": RandomOrder(32).random_string(),
             "partnerId": self.partner_id,
             "country": self.country,
             "payType": "upay_gamecard",

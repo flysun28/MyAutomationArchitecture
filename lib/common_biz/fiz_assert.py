@@ -15,14 +15,20 @@ logger = Logger('FizAssert').get_logger()
 
 
 class FizAssert(metaclass=WithLogger):
-    def __init__(self):
+    def __init__(self, in_out="inland"):
+        self.in_out = in_out
         self.mysql = GlobarVar.MYSQL_IN
+        self.mysql_out = GlobarVar.MYSQL_OUT
 
     def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0, vou_amount=0, vou_id=None):
         db_order_info = SeparateDbTable(ssoid).get_order_db_table()
-        order_info = self.mysql.select_one(
-            str(Config(common_sql_path).read_config("order", "order")).format(db_order_info[0], db_order_info[1], ssoid,
-                                                                              pay_req_id))
+        order_info = {}
+        sql_oder = str(Config(common_sql_path).read_config("order", "order")).format(
+            db_order_info[0], db_order_info[1], ssoid, pay_req_id)
+        if self.in_out == "inland":
+            order_info = self.mysql.select_one(sql_oder)
+        if self.in_out == "oversea":
+            order_info = self.mysql_out.select_one(sql_oder)
         self.logger.info("订单详情：{}".format(order_info))
         try:
             assert order_info is not None
@@ -40,9 +46,8 @@ class FizAssert(metaclass=WithLogger):
     def assert_trade_order(self, ssoid, pay_req_id, amount, original_amount, kb_amount=0, vou_amount=0):
         db_trade_order_info = SeparateDbTable(ssoid).get_order_db_table()
         trade_order_info = self.mysql.select_one(
-            str(Config(common_sql_path).read_config("trade_order", "order")).format(db_trade_order_info[0],
-                                                                                    db_trade_order_info[1], ssoid,
-                                                                                    pay_req_id))
+            str(Config(common_sql_path).read_config("trade_order", "order")).format(
+                db_trade_order_info[0], db_trade_order_info[1], ssoid, pay_req_id))
         self.logger.info("trade订单详情：{}".format(trade_order_info))
         try:
             assert trade_order_info is not None
@@ -64,9 +69,13 @@ class FizAssert(metaclass=WithLogger):
         :param amount:
         :return:
         """
-        recharge_info = self.mysql.select_one(
-            str(Config(common_sql_path).read_config("virtual", "recharge")).format(datetime.now().strftime("%Y%m"),
-                                                                                   ssoid, pay_req_id))
+        recharge_info = {}
+        sql_recharge = str(Config(common_sql_path).read_config("virtual", "recharge")).format(
+                datetime.now().strftime("%Y%m"), ssoid, pay_req_id)
+        if self.in_out == "inland":
+            recharge_info = self.mysql.select_one(sql_recharge)
+        if self.in_out == "oversea":
+            recharge_info = self.mysql_out.select_one(sql_recharge)
         self.logger.info("tb_recharge订单详情：{}".format(recharge_info))
         try:
             if flag:
@@ -88,8 +97,13 @@ class FizAssert(metaclass=WithLogger):
         :param amount:
         :return:
         """
-        payments_info = self.mysql.select_one(str(Config(common_sql_path).read_config("virtual", "payment")).
-                                              format(datetime.now().strftime("%Y%m"), ssoid, partnerOrder))
+        payments_info = {}
+        sql_payment = str(Config(common_sql_path).read_config("virtual", "payment")).format(
+            datetime.now().strftime("%Y%m"), ssoid, partnerOrder)
+        if self.in_out == "inland":
+            payments_info = self.mysql.select_one(sql_payment)
+        if self.in_out == "oversea":
+            payments_info = self.mysql_out.select_one(sql_payment)
         self.logger.info("tb_payment订单详情：{}".format(payments_info))
         try:
             if flag:
@@ -108,8 +122,12 @@ class FizAssert(metaclass=WithLogger):
         :param request_id: 商户订单号
         :return:
         """
-        notify_info = self.mysql.select_one(str(Config(common_sql_path).read_config("notify", "notify_info")).format(
-            request_id))
+        notify_info = {}
+        sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)
+        if self.in_out == "inland":
+            notify_info = self.mysql.select_one(sql_notify)
+        if self.in_out == "oversea":
+            notify_info = self.mysql_out.select_one(sql_notify)
         self.logger.info("通知表信息详情：{}".format(notify_info))
         try:
             assert notify_info is not None
@@ -156,14 +174,18 @@ class FizAssert(metaclass=WithLogger):
             self.logger.info("签约记录表记录异常")
             raise e
 
-    def assert_voucher(self, vou_id, status="6"):
+    def assert_voucher(self, ssoid, vou_id, status="6"):
         """
         检查优惠券状态
         :return:
         """
-        table = SeparateDbTable("2076075925").get_vou_table()
-        vou_info = self.mysql.select_one(
-            str(Config(common_sql_path).read_config("voucher", "voucher_info")).format(table, vou_id))
+        table = SeparateDbTable(ssoid).get_vou_table()
+        vou_info = {}
+        sql_vou = str(Config(common_sql_path).read_config("voucher", "voucher_info")).format(table, vou_id)
+        if self.in_out == "inland":
+            vou_info = self.mysql.select_one(sql_vou)
+        if self.in_out == "oversea":
+            vou_info = self.mysql_out.select_one(sql_vou)
         self.logger.info("优惠券详情：{}".format(vou_info))
         try:
             assert vou_info is not None

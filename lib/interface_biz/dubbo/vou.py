@@ -12,7 +12,7 @@ import time
 from lib.config.path import common_sql_path
 
 
-class VoucherInland:
+class Voucher:
     def __init__(self, in_out="inland"):
         self.in_out = in_out
         dubbo_info = get_dubbo_info("voucher", self.in_out)
@@ -100,11 +100,11 @@ class VoucherInland:
 
 if __name__ == '__main__':
     # 抵扣券
-    # vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
-    # VoucherInland().checkVoucher(vou_info['batchId'])
+    # vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
+    # Voucher().checkVoucher(vou_info['batchId'])
 
-    vou_info = VoucherInland("oversea").grantVoucher("2031", "KB_COUPON", "DIKOU", "1000", "999", "2076075925", "VN", "VND")
-    VoucherInland("oversea").checkVoucher(vou_info['batchId'])
+    vou_info = Voucher("oversea").grantVoucher("2031", "KB_COUPON", "DIKOU", "1000", "999", "2076075925", "VN", "VND")
+    Voucher("oversea").checkVoucher(vou_info['batchId'])
     # 红包券
-    # vou_info = VoucherInland().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
-    # VoucherInland().checkVoucher(vou_info['batchId'])
+    # vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
+    # Voucher().checkVoucher(vou_info['batchId'])

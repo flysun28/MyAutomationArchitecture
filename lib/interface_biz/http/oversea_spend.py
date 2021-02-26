@@ -5,6 +5,7 @@
 # comment:
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import GlobarVar, HTTPJSON_OUT
+from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import Spend_pb2
 
@@ -38,7 +39,7 @@ class Spend:
                 "mobileos": "17",
                 "androidVersion": "29"
             },
-            "partnerOrder": "",
+            "partnerOrder": RandomOrder(32).random_string(),
             "partnerId": "2031",
             "country": self.country,
             "payType": "cocoin",
@@ -112,5 +113,5 @@ class Spend:
 
 
 if __name__ == '__main__':
-    #Spend(1000, 1000).kb_spend()
+    Spend(1000, 1000).kb_spend()
     Spend(1001, 2000).kb_vou_spend(1213222, 999)

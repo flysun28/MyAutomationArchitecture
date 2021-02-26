@@ -5,9 +5,11 @@
 # comment:
 import requests
 from lib.common.algorithm.md5 import md5
+from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import coda_pay_sign_string
+logger = Logger('coda-scarlet').get_logger()
 
 
 def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
@@ -42,12 +44,15 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
         "ResultCode": ResultCode,
         "Checksum": ""
     }
-    # {"360":"1c3d4a652f744f340e7ad9471dbdcb5d","356":"95ec946be39a03944086430076bfef5d","608":"5657527817e99925747cbda5e53248a8",
-    # "458":"bd781d681e3235f93ff1d7340f7a422b","764":"1c1566c01bf1538ee602cba31c70ec51","360_codapay_xl":"de47a25525e59c00ed8d6bddbd602c251",
-    # "360_codapay_telkomsel":"b22585f8e2faa9cdee46a0afee02a12e1","360_codapay_tri":"7a792fe69b5333eecc7223475ce786791",
-    # "360_codapay_smartfren":"5094dfe6b2f66d9874fdc4f1dc0f00261","360_codapay_indosat":"681fc7914e364a0ca21514921a9616291",
-    # "764_codapay_dtac":"d07e95af7695870be6ffccd6f1e979b63","764_codapay_ais":"4cf10001f642acef41697461f6b95b663",
-    # "608_codapay_globe":"82a48c16fd04f4221363d07a15c3c19b2","608_codapay_smart":"b8d30842761de43d501052ce4a797e3d2"}
+    """
+    配置中心api_key
+    {"360":"1c3d4a652f744f340e7ad9471dbdcb5d","356":"95ec946be39a03944086430076bfef5d","608":"5657527817e99925747cbda5e53248a8",
+    "458":"bd781d681e3235f93ff1d7340f7a422b","764":"1c1566c01bf1538ee602cba31c70ec51","360_codapay_xl":"de47a25525e59c00ed8d6bddbd602c251",
+    "360_codapay_telkomsel":"b22585f8e2faa9cdee46a0afee02a12e1","360_codapay_tri":"7a792fe69b5333eecc7223475ce786791",
+    "360_codapay_smartfren":"5094dfe6b2f66d9874fdc4f1dc0f00261","360_codapay_indosat":"681fc7914e364a0ca21514921a9616291",
+    "764_codapay_dtac":"d07e95af7695870be6ffccd6f1e979b63","764_codapay_ais":"4cf10001f642acef41697461f6b95b663",
+    "608_codapay_globe":"82a48c16fd04f4221363d07a15c3c19b2","608_codapay_smart":"b8d30842761de43d501052ce4a797e3d2"}
+    """
     scarlett_data['Checksum'] = md5(coda_pay_sign_string(scarlett_data, "1c3d4a652f744f340e7ad9471dbdcb5d"), False)
     req = 'TxnId={}&' \
           'Checksum={}' \
@@ -55,10 +60,11 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
           'PaymentType={}&' \
           'MnoId={}&' \
           'OrderId={}&' \
-          'ResultCode=0'.format(scarlett_data['TxnId'], scarlett_data['Checksum'],TotalPrice, PaymentType, MnoId, OrderId)
+          'ResultCode={}'.format(scarlett_data['TxnId'], scarlett_data['Checksum'], TotalPrice, PaymentType, MnoId,
+                                 OrderId, ResultCode)
     response = requests.get(get_env_config()['url']['pay_scarlet_out'] + "/opaycenter/codapaynotify?" + req)
     result = response.content
-    print(result)
+    logger.info(str(result.decode("utf-8")))
 
 
 if __name__ == '__main__':

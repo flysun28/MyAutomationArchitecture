@@ -12,7 +12,7 @@ from lib.common_biz.biz_db_operate import get_balance
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.dubbo.near_me import Nearme
-from lib.interface_biz.dubbo.vou import VoucherInland
+from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.expend_pay import ExpendPay
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
@@ -94,8 +94,8 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount=round(random.uniform(0.01, 0
     if balance_before != round(decimal.Decimal(0), 4):
         ExpendPay(int(round(float(balance_before), 4)*100)).only_kb_spend()
     Nearme().nearme_add_subtract(str(kb_amount), ssoid, 0)
-    vou_info = VoucherInland().grantVoucher(partner_id, "KB_COUPON", "DIKOU", vou_amount+0.01, str(vou_amount), ssoid)
-    VoucherInland().checkVoucher(vou_info['batchId'])
+    vou_info = Voucher().grantVoucher(partner_id, "KB_COUPON", "DIKOU", vou_amount+0.01, str(vou_amount), ssoid)
+    Voucher().checkVoucher(vou_info['batchId'])
     """
         【2】. 调用下单接口，构造渠道回调报文
     """
@@ -138,7 +138,7 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount=round(random.uniform(0.01, 0
     """
         【10】. 检查优惠券状态是否正确
     """
-    FizAssert().assert_voucher(vou_info['vouId'])
+    FizAssert().assert_voucher(ssoid, vou_info['vouId'])
 
 
 if __name__ == '__main__':

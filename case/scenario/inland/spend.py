@@ -9,7 +9,7 @@ from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import get_pay_req_by_partner, get_balance
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.dubbo.near_me import Nearme
-from lib.interface_biz.dubbo.vou import VoucherInland
+from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.expend_pay import ExpendPay
 ssoid = GlobarVar.SSOID
 
@@ -31,8 +31,8 @@ def spend(amount, ssoid=ssoid, partner_id="2031",
     if balance_before != round(decimal.Decimal(0), 4):
         ExpendPay(int(round(float(balance_before), 4) * 100)).only_kb_spend()
     Nearme().nearme_add_subtract(amount/100, ssoid, 0)
-    vou_info = VoucherInland().grantVoucher(partner_id, "KB_COUPON", "DIKOU", vou_amount+0.01, vou_amount, ssoid)
-    VoucherInland().checkVoucher(vou_info['batchId'])
+    vou_info = Voucher().grantVoucher(partner_id, "KB_COUPON", "DIKOU", vou_amount+0.01, vou_amount, ssoid)
+    Voucher().checkVoucher(vou_info['batchId'])
     """
         【2】. 查询当前可币余额以及优惠券信息
     """
@@ -61,11 +61,12 @@ def spend(amount, ssoid=ssoid, partner_id="2031",
     """
         【8】. 检查优惠券信息
     """
-    FizAssert().assert_voucher(vou_info['vouId'])
+    FizAssert().assert_voucher(ssoid, vou_info['vouId'])
 
 
 if __name__ == '__main__':
     a = spend(1)
+
 
 
 
