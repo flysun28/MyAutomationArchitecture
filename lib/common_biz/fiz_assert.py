@@ -20,7 +20,7 @@ class FizAssert(metaclass=WithLogger):
         self.mysql = GlobarVar.MYSQL_IN
         self.mysql_out = GlobarVar.MYSQL_OUT
 
-    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0, vou_amount=0, vou_id=None):
+    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0 or None, vou_amount=0 or None, vou_id=None):
         db_order_info = SeparateDbTable(ssoid).get_order_db_table()
         order_info = {}
         sql_oder = str(Config(common_sql_path).read_config("order", "order")).format(
@@ -37,7 +37,9 @@ class FizAssert(metaclass=WithLogger):
             assert order_info['status'] == "OK"
             assert order_info['kebi_spent'] == kb_spent
             assert order_info['voucher_amount'] == vou_amount
-            assert order_info['voucher_id'] == vou_id
+            # 海外与国内订单表不一致，海外无该字段
+            if self.in_out == "inland":
+                assert order_info['voucher_id'] == vou_id
             self.logger.info("订单表信息记录正确")
         except AssertionError as e:
             self.logger.info("订单表信息记录异常")

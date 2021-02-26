@@ -3,13 +3,18 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
-
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.oversea_skippay import Skippay
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 
 
 def skip_pay_no_login(amount, notify_amount, payType="codapay_store"):
+    """
+    :param amount: 元
+    :param notify_amount:
+    :param payType:
+    :return:
+    """
     """
     【1】. 调用直扣接口，构造渠道回调报文
     """
@@ -31,4 +36,4 @@ def skip_pay_no_login(amount, notify_amount, payType="codapay_store"):
 
 
 if __name__ == '__main__':
-    skip_pay(500, 500)
+    skip_pay_no_login(500, 500)
