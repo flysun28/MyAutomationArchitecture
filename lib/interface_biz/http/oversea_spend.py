@@ -63,6 +63,7 @@ class Spend:
         ReplaceParams(req).replace_standard("expend")
         response = ProtoBuf(Spend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/spend', 'SpendRequest', req)
         result = ProtoBuf(Spend_pb2).parser('SpendResult', response)
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
     def kb_vou_spend(self, couponId, discountAmount):
         # discountAmount + pay_amount = priceLocal
@@ -113,5 +114,5 @@ class Spend:
 
 
 if __name__ == '__main__':
-    Spend(1000, 1000).kb_spend()
-    Spend(1001, 2000).kb_vou_spend(1213222, 999)
+    Spend(10, 10).kb_spend()
+    # Spend(1001, 2000).kb_vou_spend(1213222, 999)

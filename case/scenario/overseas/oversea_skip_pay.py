@@ -9,6 +9,7 @@ from lib.interface_biz.http.oversea_skippay import Skippay
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 ssoid = GlobarVar.SSOID
 
+
 def skip_pay(amount, notify_amount, payType="codapay_store"):
     """
     :param amount: 元
