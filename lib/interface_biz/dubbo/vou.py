@@ -60,9 +60,9 @@ class Voucher:
             # "DIKOU"
             "couponDiscountType": couponDiscountType,
             # 满（折扣券/消费折扣券最低消费金额）
-            "conditionAmount": conditionAmount,
+            "conditionAmount": str(conditionAmount),
             # 减
-            "cutAmount": cutAmount,
+            "cutAmount": str(cutAmount),
             # 折扣券打折
             "ratio": ratio,
             # 折扣券高低消费金额

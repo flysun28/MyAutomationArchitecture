@@ -19,7 +19,7 @@ class Recharge:
         self.version = version
         self.partner_id = partner_id
         self.country = country
-        # 元
+        # 元 当地币价格
         self.pay_amount = str(pay_amount)
         self.originalAmount = str(originalAmount)
         self.currency = currency
@@ -27,7 +27,7 @@ class Recharge:
 
     def recharge(self):
         rate = oversea_get_coin_rate(self.currency)
-        cocoinRechargeAmount = str(round(float(self.pay_amount)/float(rate), 2))
+        cocoinRechargeAmount = str(round(float(self.pay_amount)/float(rate), 2)/100)
         req = {
             "header": {
                 "version": self.version,
@@ -65,6 +65,7 @@ class Recharge:
         response = ProtoBuf(Recharge_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/cocoin/recharge', 'RechargeRequest'
                                                  , req)
         result = ProtoBuf(Recharge_pb2).parser('RechargeResponse', response)
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
 
 if __name__ == '__main__':

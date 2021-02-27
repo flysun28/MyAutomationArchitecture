@@ -6,12 +6,11 @@
 from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import GlobarVar, HTTPJSON_IN
+from lib.common.utils.globals import HTTPJSON_IN
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import account_path, key_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import expend_pay_sign_string
-from lib.config.path import do_case_path
 from lib.interface_biz.http.pay_pass import Pass
 from lib.pb_src.python_native import ExpendPayPb_pb2
 
@@ -20,9 +19,7 @@ key = Config(key_path).read_config("expend_pay", "key_2031")
 
 
 class ExpendPay(metaclass=WithLogger):
-    def __init__(self, price, partner_id="2031", version="6.0",
-                 sdkVer=int(Config(do_case_path).read_config("sdk_ver", "version")),
-                 notify_url=str(GlobarVar.URL_PAY_IN) + "/notify/receiver"):
+    def __init__(self, price, partner_id, version, sdkVer, notify_url):
         self.version = version
         self.sdkVer = sdkVer
         # 分 指商品价格

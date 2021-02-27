@@ -13,8 +13,7 @@ from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import SkipPay_pb2
 
 
-def skip_pay(payType, payAmount, partnerId="72724313", app_version=(Config(do_case_path).read_config("sdk_ver", "version")),
-             notifyUrl=str(GlobarVar.URL_PAY_IN)+"/notify/receiver"):
+def skip_pay(payType, payAmount, partnerId, app_version, notifyUrl):
     # payAmount 元
     req = {
         "header": {
@@ -33,7 +32,7 @@ def skip_pay(payType, payAmount, partnerId="72724313", app_version=(Config(do_ca
             "mobileos": "12",
             "androidVersion": "28"
         },
-        "partnerOrder": RandomOrder(30).business_order("GC"),
+        "partnerOrder": RandomOrder(28).business_order("HF"),
         "partnerId": partnerId,
         "country": "CN",
         "payType": payType,
@@ -63,4 +62,5 @@ def skip_pay(payType, payAmount, partnerId="72724313", app_version=(Config(do_ca
 
 
 if __name__ == '__main__':
-    skip_pay("wxpay", 1)
+    pass
+    #skip_pay("wxpay", 1)
