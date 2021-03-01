@@ -46,7 +46,7 @@ class Coin:
 
 
 if __name__ == '__main__':
-    Coin().cocoin_in_come("2076075925", "VN", "10")
+    Coin().cocoin_in_come("2076075925", "VN", "40")
 #     nearme_add_subtract('10.177.159.14', "0.03", "2086100900", "DEDUCT")    #test3
 #     nearme_add_subtract('10.177.110.171', "1", "2086100900", "PRESENT")     #test1
 #     nearme_add_subtract('10.177.110.171', "6", "2086100900", "DEDUCT")

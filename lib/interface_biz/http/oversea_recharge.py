@@ -14,8 +14,7 @@ from lib.pb_src.python_standard import Recharge_pb2
 
 
 class Recharge:
-    def __init__(self, pay_amount, originalAmount,country="VN", currency="VND", pay_type="upay_gamecard", version="15.0",
-                 partner_id="2031"):
+    def __init__(self, pay_amount, originalAmount, country, currency, pay_type, version, partner_id):
         self.version = version
         self.partner_id = partner_id
         self.country = country

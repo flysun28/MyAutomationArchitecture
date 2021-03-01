@@ -11,7 +11,7 @@ from lib.pb_src.python_standard import Spend_pb2
 
 
 class Spend:
-    def __init__(self, pay_amount, priceLocal, version="15.0", partner_id="2031", country="VN", currency="VND"):
+    def __init__(self, pay_amount, priceLocal, version, partner_id, country, currency):
         self.version = version
         self.partner_id = partner_id
         self.country = country
@@ -111,8 +111,9 @@ class Spend:
         ReplaceParams(req).replace_standard("expend")
         response = ProtoBuf(Spend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/spend', 'SpendRequest', req)
         result = ProtoBuf(Spend_pb2).parser('SpendResult', response)
-
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
 if __name__ == '__main__':
-    Spend(10, 10).kb_spend()
+    pass
+    # Spend(10).kb_spend()
     # Spend(1001, 2000).kb_vou_spend(1213222, 999)

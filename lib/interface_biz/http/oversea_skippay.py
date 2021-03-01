@@ -11,7 +11,7 @@ from lib.pb_src.python_standard import SkipPay_pb2
 
 
 class Skippay:
-    def __init__(self, payAmount, priceLocal, version="15.0", partner_id="2031", country="PH", currency="PHP", payType="codapay_gcash"):
+    def __init__(self, payAmount, priceLocal, version, partner_id, country, currency, payType):
         self.version = version
         self.partner_id = partner_id
         self.country = country
