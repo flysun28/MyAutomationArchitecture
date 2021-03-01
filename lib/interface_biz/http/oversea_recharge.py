@@ -68,4 +68,4 @@ class Recharge:
 
 
 if __name__ == '__main__':
-    Recharge("10000", "10000").recharge()
+    pass

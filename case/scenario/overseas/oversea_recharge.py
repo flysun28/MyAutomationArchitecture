@@ -28,6 +28,7 @@ def recharge(amount, notify_amount):
     order_info = Recharge(amount, amount, country=req.country, currency=req.currency, pay_type=req.pay_channel,
                           version=req.interface_version, partner_id=req.partner_id).recharge()
     time.sleep(1)
+    # 回调金额为分
     upay_pay_scarlet(notify_amount, order_info['pay_req_id'])
     """
         【3】.调用查询结果接口?海外无？
@@ -36,7 +37,7 @@ def recharge(amount, notify_amount):
         【4】. 检查充值成功后，可币余额是否正确
     """
     rate = oversea_get_coin_rate(currency[req.country])
-    cocoinRechargeAmount = (amount / rate)/100
+    cocoinRechargeAmount = (amount / rate)
     balance_after = get_balance(req.ssoid, country=req.country, in_out="oversea")
     try:
         # decimal.Decimal截取4位处理，与数据库保持一致
@@ -49,7 +50,7 @@ def recharge(amount, notify_amount):
     """
         【5】.检查订单表记录是否正确
     """
-    FizAssert(in_out="oversea").assert_order_info(req.ssoid, order_info['pay_req_id'], amount, amount*100,
+    FizAssert(in_out="oversea").assert_order_info(req.ssoid, order_info['pay_req_id'], notify_amount, notify_amount,
                                                   kb_spent=None, vou_amount=None)
     """
         【6】. 检查trade order表记录是否正确，海外无
@@ -61,4 +62,4 @@ def recharge(amount, notify_amount):
 
 
 if __name__ == '__main__':
-    recharge(1000, 1000)
+    recharge(1000, 100000)

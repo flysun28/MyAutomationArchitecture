@@ -11,8 +11,7 @@ from lib.pb_src.python_standard import RechargeAndSpend_pb2
 
 
 class RechargeSpend(metaclass=WithLogger):
-    def __init__(self, pay_amount, priceLocal, pay_type="upay_gamecard", country="VN", currency="VND",
-                 partner_id="2031", version="15.0"):
+    def __init__(self, pay_amount, priceLocal, pay_type, country, currency, partner_id, version):
         self.version = version
         self.partner_id = partner_id
         self.country = country
@@ -68,9 +67,11 @@ class RechargeSpend(metaclass=WithLogger):
         response = ProtoBuf(RechargeAndSpend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/cocoin/recharge/spend',
                                                          'RechargeAndSpendRequest', req, flag=1)
         result = ProtoBuf(RechargeAndSpend_pb2).parser('RechargeAndSpendResponse', response)
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
     def recharge_spend_with_voucher(self, coupon_id, discountAmount):
         """
+        payAmount + discountAmount = priceLocal
         :param coupon_id: 优惠券id
         :param discountAmount: 优惠金额
         :return:
@@ -105,7 +106,7 @@ class RechargeSpend(metaclass=WithLogger):
             "product": {
                 "name": "RECHARGE_SPEND",
                 "desc": "RECHARGE_SPEND",
-                "priceLocal": self.pay_amount
+                "priceLocal": self.priceLocal
             },
             "notifyUrl": str(GlobarVar.URL_PAY_IN) + "/notify/receiver",
             "partnerParams": "",
@@ -118,6 +119,7 @@ class RechargeSpend(metaclass=WithLogger):
         response = ProtoBuf(RechargeAndSpend_pb2).runner(HTTPJSON_OUT.prefix + '/plugin/cocoin/recharge/spend',
                                                          'RechargeAndSpendRequest', req, flag=1)
         result = ProtoBuf(RechargeAndSpend_pb2).parser('RechargeAndSpendResponse', response)
+        return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
 
 if __name__ == '__main__':

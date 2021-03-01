@@ -113,6 +113,7 @@ class Spend:
         result = ProtoBuf(Spend_pb2).parser('SpendResult', response)
         return {"pay_req_id": result.data.payRequestId, "partner_order": req["partnerOrder"]}
 
+
 if __name__ == '__main__':
     pass
     # Spend(10).kb_spend()

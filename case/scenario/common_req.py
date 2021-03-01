@@ -66,7 +66,7 @@ VOU_INLAND = Vou(vouConditionAmount=str(vou_amount), vouAmount=str(vou_amount - 
 OVERSEA_SKIP_PAY = Order(interface_version="15.0", country="PH", currency="PHP", pay_channel="codapay_store")
 OVERSEA_NO_LOGIN = Order(interface_version="15.0", country="PH", currency="PHP", pay_channel="codapay_gcash")
 OVERSEA_RECHARGE = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
-OVERSEA_RECHARGE_SPEND = ""
+OVERSEA_RECHARGE_SPEND = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
 OVERSEA_SPEND = Order(interface_version="15.0", country="VN", currency="VND")
 VOU_OVERSEA = Vou(vouConditionAmount=str(vou_amount), vouAmount=str(vou_amount - 0.01), country="VN", currency="VND")
 
