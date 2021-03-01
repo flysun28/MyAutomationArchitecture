@@ -185,10 +185,11 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
         table = SeparateDbTable(ssoid).get_vou_table()
         vou_info = {}
         sql_vou = str(Config(common_sql_path).read_config("voucher", "voucher_info")).format(table, vou_id)
+        sql_vou_oversea = str(Config(common_sql_path).read_config("voucher", "voucher_info_oversea")).format(table, vou_id)
         if self.in_out == "inland":
             vou_info = self.mysql.select_one(sql_vou)
         if self.in_out == "oversea":
-            vou_info = self.mysql_out.select_one(sql_vou)
+            vou_info = self.mysql_out.select_one(sql_vou_oversea)
         self.logger.info("优惠券详情：{}".format(vou_info))
         try:
             self.assertIsNotNone(vou_info)

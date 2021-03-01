@@ -88,6 +88,7 @@ def kb_vou_spend(amount, discountAmount):
         3. 检查可币与优惠券消费信息是否正确
     """
     assert get_balance(req.ssoid, req.country, "oversea") == round(decimal.Decimal(0), 4)
+    FizAssert(in_out="oversea").assert_voucher(req.ssoid, vou_info['vouId'])
     """
     4. 检查订单表信息是否正确(海外纯消费，未纳入订单表)
     """
@@ -103,4 +104,4 @@ def kb_vou_spend(amount, discountAmount):
 
 
 if __name__ == '__main__':
-    kb_vou_spend(10000, 10000)
+    kb_vou_spend(1000, 10000)
