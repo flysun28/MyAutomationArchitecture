@@ -14,7 +14,7 @@ class PayCenterDubbo():
         self.conn = DubRunner(*dubbo_info)
     
     def create_payorder(self, partner_order, partner_code, original_amount, products_name, 
-                        amount=0, kebi_spent=0, voucher_info={}, **kwargs):
+                        amount=0, pay_type='', kebi_spent=0, voucher_info={}, **kwargs):
         '''
         |       参数名      | 限制 |      类型     |      取值范围      |   说明   |
         | partnerOrder     | 必填 |    Integer    |                  | 业务订单号 |
@@ -25,7 +25,7 @@ class PayCenterDubbo():
         | counts           | 选填 |               |                  | 商品数量        
         | ssoid            | 选填 |    String     |   
         | channnelType     | 选填 |    String     |  
-        | payType          | 选填 |    String     |                  | 支付方式        
+        | payType          | 选填 |    String     |                  | 支付方式，amount不为空时，必填。例如：alipay,wxpay |   
         | directPay        | 选填 |    String     |  
         | presentAmount    | 选填 |    String     |                  | amount, kebiSpent, voucherAmount不能同时为空
         | countryCode      | 选填 |    timestamp  |      
@@ -55,13 +55,12 @@ class PayCenterDubbo():
         | mobileOsVer      | 选填 |    String     |   
         | platform         | 选填 |    String     |   
         | screenInfo       | 选填 |    String     |   
-        | factor           | 选填 |    String     |   
+        | factor           | 选填 |    String     |           | 使用优惠券时必填 |
         | notifyUrl        | 选填 |    String     |   
-        | subPartnerOrders | 选填 |  List<String> |           | 合单的子订单号列表 |        
-
+        | subPartnerOrders | 选填 |  List<String> |           | 合单的子订单号列表 |
+        | payContext       | 选填 |  Map<String,Object> |     | 渠道相关数据，amount不为空时，必填。例如: SZF需要cardAmount,cardNo,cardPwd |
         '''
-#         table = pandas.read_html('https://doc.myoas.com/display/pingtai/pay-biz-paycenter+PayService',
-#                                  encoding='utf-8')[0]
+#         table = pandas.read_html('https://doc.myoas.com/display/pingtai/pay-biz-paycenter+PayService', encoding='utf-8')[0]
 #         print(table)
         req = {
             'partnerOrder': partner_order,
@@ -69,10 +68,10 @@ class PayCenterDubbo():
             'originalAmount': original_amount,
             'amount': amount,
             'productsName': products_name,
-            'counts': '1',
+            'counts': '',
             'ssoid': '2086100900',
             'channnelType': '',
-            'payType': '',
+            'payType': pay_type,
             'directPay': '',
             'presentAmount': '',
             'countryCode': '',
@@ -110,7 +109,7 @@ class PayCenterDubbo():
             req['voucherAmount'] = voucher_info['cutAmount']
             req['voucherId'] = voucher_info['id']
         req.update(kwargs)
-        self.conn.invoke('PayService', 'tryPay', req, flag='SINGLE_STRING')
+        self.conn.invoke('PayService', 'tryPay', req, flag='JSON')
         
     def refund_order(self, pay_req_id, channel_refund=0, kebi_refund=0, voucher_refund=0, **kwargs):
         '''
@@ -163,7 +162,7 @@ if __name__ == '__main__':
     set_global_env_id(3)
     paycenter_dubbo = PayCenterDubbo()
     # 直扣
-    paycenter_dubbo.create_payorder('9f5a03cfc916433a806d057f9a1d7b11', '2031', 10.01, '\\', amount=0.01)
+    paycenter_dubbo.create_payorder('9f5a03cfc916433a806d057f9a1d7b11', '2031', 10.01, '\\', amount=0.01, pay_type='alipay')
     # 可币券+渠道
 #     paycenter_dubbo.create_payorder('9f5a03cfc916433a806d057f9a1d7b11', '2031', 10.01, '\\', 
 #                                     amount=0.01, kebi_spent=0, voucher_info={"cutAmount":"1000", "id":"64234483", "type":"2"}, )
