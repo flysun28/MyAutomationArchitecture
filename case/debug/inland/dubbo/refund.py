@@ -3,7 +3,7 @@
 # author:xy
 # datetime:2021/2/7 17:20
 # comment:
-from case.debug.inland.dubbo.order import Order
+from case.debug.inland.dubbo.order import Order as OrderDubbo
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
@@ -13,10 +13,11 @@ from lib.common.utils.globals import GlobarVar
 
 
 class Refund:
+    
     def __init__(self):
         dubbo_info = get_dubbo_info("dispatcher")
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
-        self.order_dubbo = Order()
+        self.conn = DubRunner(*dubbo_info)
+        self.order_dubbo = OrderDubbo()
 
     def refund_single(self, partnerOrderId, partnerCode, refundAmount, payReqId=''):
         """
@@ -68,10 +69,26 @@ class Refund:
         print(res)
         self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), res['pay_type'], res["pay_req_id"])
         self.refund_single(res['partner_order'], res['partner_code'], str(res['amount']/100))
-        
+
+    def refund_by_amount(self, ssoid, partner_order_id, amount=''):
+        sep_dbtbl = SeparateDbTable(ssoid)
+        order_db_info = sep_dbtbl.get_order_db_table()
+        del sep_dbtbl
+        sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM db_order_{}.order_info_{} WHERE '\
+              'amount!="0" AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
+                  order_db_info[0], order_db_info[1], partner_order_id)
+                #((STATUS="OK" AND refund=0) OR (STATUS="REFUNDED" AND refund!=0)) AND 
+        print(sql)
+        res = GlobarVar.MYSQL_IN.select_one(sql)
+        print(res)
+        refund_amount = amount if amount else str(res['amount']/100)
+        self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], refund_amount, res['pay_type'], res["pay_req_id"])
+        self.refund_single(res['partner_order'], res['partner_code'], refund_amount)
+
+    
 
 if __name__ == '__main__':
-    set_global_env_id(1)
+    set_global_env_id(3)
 #     Refund().refund_by_ssoid("2086100900")
-    Refund().refund_by_partner_order("2086100900", 'fa2ddc9c4c334f1ba58c9e544ac74f5e')
+    Refund().refund_by_amount("2086100900", '6b1c55df694e45db845590d211454677', '0.01')
     # Refund().refund_single("GC202101241407088040100320000", "5456925", "0.01")

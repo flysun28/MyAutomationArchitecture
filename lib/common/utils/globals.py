@@ -30,7 +30,7 @@ class GlobarVar():
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
     REDIS = GlobalVarDescriptor(connect_redis())
-    SSOID = Config(test_account_path).read_config("account", "ssoid")
+    SSOID = Config(test_account_path).read_config("account", "ssoid")    
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN

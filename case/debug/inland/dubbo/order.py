@@ -47,5 +47,6 @@ class Order:
         mysql.execute(str(Config(common_sql_path).read_config("refund", "refund_update")).format(payReqId))
 
 
+
 if __name__ == '__main__':
     Order().refund_approval("5456925", "149ee2d6e62547e6bbcaf8105ae00b48", "0.01", "alipay", "KB202101251049252076075925174742")

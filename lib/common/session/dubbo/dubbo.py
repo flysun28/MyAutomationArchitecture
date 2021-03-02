@@ -3,6 +3,7 @@
 # datetime:2021/1/22 17:51
 # comment:
 import json
+import simplejson
 import telnetlib
 import socket
 from lib.common.utils.meta import WithLogger
@@ -35,8 +36,9 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
                 service_name, method_name, arg)
             # 这个地方的arg不能写成json.dumps(arg)，即不能转换成string型，提高复用性，在调2个或2个以上的接口的方法的参数时
         elif flag == "SINGLE_STRING":
+            str_arg = simplejson.dumps(arg, ensure_ascii=False)
             command_str = "invoke {0}.{1}('{2}')".format(
-                service_name, method_name, arg)
+                service_name, method_name, str_arg)
         elif flag == "STRING":
             command_str = "invoke {0}.{1}{2}".format(
                 service_name, method_name, arg)
@@ -44,8 +46,9 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
             # 混合类型，直接传入字符串处理
             command_str = "invoke {0}.{1}({2})".format(
                 service_name, method_name, arg)
+        print(command_str)
         self.command(DubRunner.prompt, command_str)
-        self.logger.info("dubbo传参：{}".format(command_str))
+        self.logger.info("dubbo传参：{}".format(simplejson.dumps(arg, ensure_ascii=False, indent=2)))
         data = self.command(DubRunner.prompt, "")
         # data = data.decode(DubRunner.coding, errors='ignore').split('\n')[0].strip()
         temp = str(data, encoding="gbk").split("elapsed")[0]

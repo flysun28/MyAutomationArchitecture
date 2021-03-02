@@ -35,7 +35,7 @@ class GetKey(metaclass=WithLogger):
             res = self.mysql.select_one(sql_key)
             assert res
             key = res['merchant_key']
-            self.logger.info("查询到秘钥信息：{}".format(key))
+            self.logger.info("查询到业务线{}秘钥信息：{}".format(self.partner_id, key))
             self.__SECRET_KEYS.setdefault(self.partner_id, key)
             return key
         except AssertionError:

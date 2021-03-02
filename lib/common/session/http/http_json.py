@@ -35,6 +35,7 @@ class HttpJsonSession(metaclass=WithLogger):
         self.url = self.prefix + url
         data = data or self.data
         try:
+            self.logger.info(self.url)
             self.logger.info("传入的参数：{}".format(data))
             response = self.session.post(url=self.url, data=json.dumps(data)).json()
             self.logger.info("返回结果：{}".format(response))

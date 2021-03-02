@@ -18,7 +18,7 @@ class VoucherInland:
         self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, ratio=0,
-                     maxCutAmount='0'):
+                     maxCutAmount='0', count=1):
         """
         优惠券申请
         :param bizNo:
@@ -53,7 +53,7 @@ class VoucherInland:
             "ratio": ratio,
             # 折扣券高低消费金额
             "maxCutAmount": maxCutAmount,
-            "applyCount": "1",
+            "applyCount": count,
             "ssoidList": [ssoid],
             "batchId": ""
         }
@@ -78,7 +78,7 @@ class VoucherInland:
 
 
 if __name__ == '__main__':
-    vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
+    vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "1", "1", "2086100900", count=1)
     VoucherInland().checkVoucher(vou_info['batchId'])
 
 
