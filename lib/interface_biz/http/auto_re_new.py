@@ -14,8 +14,7 @@ from lib.pb_src.python_native import AutoRenewPb_pb2
 
 
 class AutoRenew:
-    def __init__(self, pay_type="wxpay", partner_code="2031", version="1.0", app_version="260",
-                 renewProductCode="20310001", notify_url=str(GlobarVar.URL_PAY_IN)+"/notify/receiver"):
+    def __init__(self, pay_type, partner_code, version, app_version, renewProductCode, notify_url):
         self.version = version
         self.renewProductCode = renewProductCode
         self.partner_code = partner_code

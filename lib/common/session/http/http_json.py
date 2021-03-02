@@ -37,9 +37,9 @@ class HttpJsonSession(metaclass=WithLogger):
         try:
             self.logger.info(self.url)
             self.logger.info("传入的参数：{}".format(data))
-            response = self.session.post(url=self.url, data=json.dumps(data)).json()
-            self.logger.info("返回结果：{}".format(response))
-            return response
+            response = self.session.post(url=self.url, data=json.dumps(data))
+            self.logger.info("返回状态码{}, 返回结果：{}".format(response.status_code, response.json()))
+            return response.json()
         except RequestException as e:
             raise HttpJsonException(e) from None        
         except AssertionError:
@@ -50,9 +50,9 @@ class HttpJsonSession(metaclass=WithLogger):
     def get(self, data=None):
         data = data or self.data
         try:
-            response = self.session.get(url=self.url, params=json.dumps(data)).json()
+            response = self.session.get(url=self.url, params=json.dumps(data))
             self.logger.info(response)
-            return response
+            return response.json()
         except RequestException as e:
             raise HttpJsonException(e) from None
 

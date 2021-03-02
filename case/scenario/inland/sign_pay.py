@@ -3,25 +3,18 @@
 # author:xy
 # datetime:2021/1/19 23:04
 # comment:
-import random
-from lib.common.utils.globals import GlobarVar
+from case.scenario.common_req import SIGN_PAY
 from lib.common_biz.biz_db_operate import update_sign_status, get_contract_code
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.find_key import GetKey
-from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.fiz_assert import FizAssert
-from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
-from lib.interface_biz.scarlett.wxpay import wx_sign_scarlet, wx_normal_pay_scarlet
 
 
-merchant_info = FindMerchant("2031").find_app_id_merchant_sign("wxpay")
-md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
-SSOID = GlobarVar.SSOID
+req = SIGN_PAY
 
 
-def sign_pay(amount, notify_amount, pay_type="wxpay"):
+def sign_pay(amount, notify_amount):
     """
     签约支付
     :param notify_amount:
@@ -32,20 +25,18 @@ def sign_pay(amount, notify_amount, pay_type="wxpay"):
     """
         【1】. 更新数据库状态为UNSIGN
     """
-    update_sign_status(SSOID, pay_type)
+    update_sign_status(req.ssoid, req.pay_channel)
     """
         【2】. 调用签约支付下单接口，构造支付与签约回调报文
     """
-    order_info = AutoRenew().auto_renew(amount=amount/100)
+    order_info =  AutoRenew(req.pay_channel, req.partner_id, req.interface_version, str(req.app_version),
+                                req.renewProductCode, req.notify_url).auto_renew(amount=amount/100)
     sign_request_id = order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
     # 签约回调
-    # wx_sign_scarlet(contract_code, merchant_info['merchant_no'], merchant_info["plan_id"],
-     #               md5_key)
-    choose_scarlett(1, "wxpay", "", "SIGN", contract_code)
+    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code)
     # 支付回调
-    #wx_normal_pay_scarlet(merchant_info["merchant_no"], order_info["pay_req_id"], merchant_info["app_id"], amount, md5_key)
-    choose_scarlett(notify_amount, pay_type, order_info['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'])
     """
     
         【3】. 查询支付结果
@@ -54,15 +45,15 @@ def sign_pay(amount, notify_amount, pay_type="wxpay"):
     """
         【4】. 查询order表记录是否正确
     """
-    FizAssert().assert_order_info(SSOID, order_info["pay_req_id"], amount, amount)
+    FizAssert().assert_order_info(req.ssoid, order_info["pay_req_id"], amount, amount)
     """
         【5】. 查询trade_order表记录是否正确
     """
-    FizAssert().assert_trade_order(SSOID, order_info["pay_req_id"], amount, amount)
+    FizAssert().assert_trade_order(req.ssoid, order_info["pay_req_id"], amount, amount)
     """
         【6】.检查autorenew_sign_info表信息
     """
-    FizAssert().assert_auto_renew_sign_info(SSOID, pay_type)
+    FizAssert().assert_auto_renew_sign_info(req.ssoid, req.pay_channel)
     """
         【7】.检查autorenew_sign_record表信息
     """

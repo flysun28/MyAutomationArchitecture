@@ -3,25 +3,19 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
-import random
+from case.scenario.common_req import NO_LOGIN_PAY
 from lib.common.logger.logging import Logger
-from lib.common.utils.globals import GlobarVar
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.find_key import GetKey
-from lib.common_biz.find_merchant_info import FindMerchant
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.skip_pay import skip_pay
-from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet
 
-ssoid = GlobarVar.SSOID
 
-merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
-md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
 logger = Logger('on_login_pay').get_logger()
+req = NO_LOGIN_PAY
 
 
-def on_login(amount, notify_amount, pay_type="wxpay"):
+def on_login(amount, notify_amount):
     """
         疑似有的走simplepay，此处针对skippay
     :param notify_amount:
@@ -32,8 +26,8 @@ def on_login(amount, notify_amount, pay_type="wxpay"):
     """
     【1】. 调用下单接口，渠道回调构造
     """
-    order = skip_pay(pay_type, amount/100)
-    choose_scarlett(notify_amount, pay_type, order['pay_req_id'])
+    order = skip_pay(req.pay_channel, amount/100, req.partner_id, str(req.app_version), req.notify_url)
+    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'])
     """
         【2】. 调用查询结果接口
     """

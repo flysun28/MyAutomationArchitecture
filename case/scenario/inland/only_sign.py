@@ -3,31 +3,31 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
-from lib.common.utils.globals import GlobarVar
+from case.scenario.common_req import ONLY_SIGN
 from lib.common_biz.biz_db_operate import get_contract_code, update_sign_status
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
 
-SSOID = GlobarVar.SSOID
 
-
-def only_sign(pay_type="wxpay"):
+req = ONLY_SIGN
+def only_sign():
     """
     :return:
     """
     """
     【1】. 更新数据库状态为UNSIGN
     """
-    update_sign_status(SSOID, pay_type)
+    update_sign_status(req.ssoid, req.pay_channel)
     """
     【2】. 调用签约接口，构造渠道回调报文
     """
-    sign_order_info = AutoRenew().only_sign()
+    sign_order_info = AutoRenew(req.pay_channel, req.partner_id, req.interface_version, str(req.app_version),
+                                req.renewProductCode, req.notify_url).only_sign()
     sign_request_id = sign_order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
-    choose_scarlett(1, pay_type, "", "SIGN", contract_code)
+    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code)
     """
     【3】. 查询支付结果
     """
@@ -41,7 +41,7 @@ def only_sign(pay_type="wxpay"):
     """
     【6】.检查autorenew_sign_info表信息
     """
-    FizAssert().assert_auto_renew_sign_info(SSOID, pay_type)
+    FizAssert().assert_auto_renew_sign_info(req.ssoid, req.pay_channel)
     """
     【7】.检查autorenew_sign_record表信息
     """
@@ -53,4 +53,4 @@ def only_sign(pay_type="wxpay"):
 
 
 if __name__ == '__main__':
-    only_sign("wxpay")
+    only_sign()

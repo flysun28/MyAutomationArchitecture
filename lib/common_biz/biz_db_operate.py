@@ -10,21 +10,29 @@ from lib.common.utils.globals import GlobarVar
 from lib.config.path import common_sql_path
 
 mysql = GlobarVar.MYSQL_IN
+mysql_out = GlobarVar.MYSQL_OUT
 logger = Logger('fiz_db_operate').get_logger()
 
 
-def get_balance(ssoid):
+def get_balance(ssoid, country="CN", in_out="inland"):
     """
     查询可币余额
+    :param country:
+    :param in_out:
     :param ssoid:
     :return:
     """
     db_balance_info = SeparateDbTable(ssoid).get_coin_db_table()
-    balance = mysql.select_one(
-        str(Config(common_sql_path).read_config("nearme", "sql_balance")).format(db_balance_info[0], db_balance_info[1],
-                                                                                 ssoid))['balance']
-    logger.info("可币余额：{}".format(balance))
-    return balance
+    sql_balance = str(Config(common_sql_path).read_config("nearme", "sql_balance")).format(
+                               db_balance_info[0], db_balance_info[1], ssoid, country)
+    if in_out == "inland":
+        balance = mysql.select_one(sql_balance)['balance']
+        logger.info("可币余额：{}".format(balance))
+        return balance
+    elif in_out == "oversea":
+        balance = mysql_out.select_one(sql_balance)['balance']
+        logger.info("可币余额：{}".format(balance))
+        return balance
 
 
 def get_pay_req_by_partner(ssoid, partnerOrder):
@@ -58,5 +66,19 @@ def update_sign_status(ssoid, pay_type, partner_code="2031", renew_product_code=
     mysql.execute(str(Config(common_sql_path).read_config("order", "sign_to_un")).format(ssoid, partner_code, renew_product_code, pay_type))
 
 
+def oversea_get_coin_rate(currency):
+    """
+    海外查询汇率
+    :param currency:
+    :return:
+    """
+    rate = mysql_out.select_one(str(Config(common_sql_path).read_config("platform_opay", "coin_rate")).
+                                          format(currency))['rate']
+    return rate
+
+
 if __name__ == '__main__':
-    update_sign_status("2076075925", "wxpay")
+    # print(get_balance("2076075925"))
+    print(get_balance("2076075925", country="VN", in_out="oversea"))
+    # oversea_get_coin_rate("VND")
+    #update_sign_status("2076075925", "wxpay")

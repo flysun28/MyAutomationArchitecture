@@ -54,7 +54,8 @@ class ReplaceParams(metaclass=WithLogger):
         r_v = tp_rv[0]
         t_p = tp_rv[1]
         m_p = tp_rv[2]
-        self.case['header']['sdkVer'] = int(Config(do_case_path).read_config("sdk_ver", 'version'))
+        if self.case['header']['sdkVer'] == '':
+            self.case['header']['sdkVer'] = int(Config(do_case_path).read_config("sdk_ver", 'version'))
         if 'basepay' in self.case:
             if self.case['basepay']['partnerorder'] == '':
                 self.case['basepay']['partnerorder'] = partner_order
@@ -114,13 +115,15 @@ class ReplaceParams(metaclass=WithLogger):
             """
         r_v = get_tp_rv(pay_method)[0]
         # self.case['header']['version'] = Config(do_case_path).read_config("sdk_ver", "version")
+        if self.case ['header']['appVerison'] == '':
+            self.case['header']['appVerison'] = Config(do_case_path).read_config("apk_ver_oversea", "version")
         if self.case['header']['token'] == '':
             self.case['header']['token'] = Config(account_path).read_config("account", "token")
         if self.case['header']['token'] == 'no_login':
             self.case['header']['token'] = ''
         if self.case['header']['r_v'] == '':
             self.case['header']['r_v'] = r_v
-        if 'partnerOrder' in self.case:
+        if self.case['partnerOrder'] == '':
             self.case['partnerOrder'] = RandomOrder(32).random_string()
         if self.case['header']['sign'] == '':
             self.case['header']['sign'] = md5(oversea_header_sign_string(
