@@ -2,12 +2,8 @@
 Created on 2021年2月26日
 @author: 80319739
 '''
-from decimal import Decimal
-
-import pandas
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
-from lib.common_biz.order_random import RandomOrder
 
 
 class PayCenterDubbo():
@@ -88,6 +84,54 @@ class PayCenterDubbo():
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
+        
+    def refund_order(self, pay_req_id, channel_refund=0, kebi_refund=0, voucher_refund=0, **kwargs):
+        '''
+        |    参数名      |    限制 |      类型     |  取值范围  |   说明   |
+        | refundId      |    选填 |    Integer    |          | 退款ID, 做幂等判断 |
+        | payReqId      |    必填 |    String     |          | 业务线ID         |
+        | refund        |    选填 |    BigDecimal |          | 渠道退款金额(单位元) |
+        | kebiRefund    |    选填 |    Long       |          | 可币退款金额      |
+        | voucherRefund |    选填 |    String     |    Y N   | 优惠券退款标识    |
+        | refundType    |    选填 |    String     |          | 退款类型         |
+        | ext1          |    选填 |    String     |
+        | ext2          |    选填 |    String     |        
+        | remark        |    选填 |    String     |        
+        | applyAccount  |    选填 |    String     |       
+        | refuseReason  |    选填 |    String     |        
+        | auditStatus   |    选填 |    String     |        
+        | approvalTime  |   选填  | LocalDateTime |
+        | financeStatus |    选填 |    Boolean    |
+        | batchNo       |    选填 |    BigDecimal |
+        | refundReason  |    选填 |    String     |
+        | fileUrl       |    选填 |    String     |
+        | notifyUrl     |    选填 |    String     |
+        | refundContext |    选填 | Map<String,Object> |    | 退款上下文数据, 一般存放渠道特定的参数 |
+        '''
+        req = {
+            'refundId': '',
+            'payReqId': pay_req_id,
+            'refund': channel_refund,
+            'kebiRefund': kebi_refund,
+            'voucherRefund': voucher_refund,
+            'refundType': '',
+            'ext1': '',
+            'ext2': '',
+            'applyAccount': '',
+            'refuseReason': '',
+            'auditStatus': '',
+            'approvalTime': '',
+            'financeStatus': '',
+            'batchNo': '',
+            'refundReason': '',
+            'fileUrl': '',
+            'notifyUrl': '',
+            'refundContext': ''
+        }
+        req.update(kwargs)
+        self.conn.invoke('RefundService', 'refund', req, flag='SINGLE_STRING')
+
+
 
 if __name__ == '__main__':
     set_global_env_id(3)
@@ -95,4 +139,7 @@ if __name__ == '__main__':
     # 直扣订单
     # paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "2031", "10.0", "10.0")
     # 可币消费订单
-    paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", 0)
+    #paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", 0)
+    # 退款
+    #paycenter_dubbo.refund_order('KB202103021104132086100900705822', channel_refund=0.01, kebi_refund=0, voucher_refund=9.99)
+    

@@ -107,6 +107,34 @@ def ali_sign_scarlet():
         logger.info("回调解析成功")
 
 
+def ali_pay_refund(amount, notify_id):
+    """
+    amount: 元
+    notify_id: 订单表支付notify_id
+    支付宝渠道退款
+    去除sign sign_type字段，排序后拼接=&，最后一个&去掉 拼接key做md5得到sign
+    key: `platform_opay`.`channel_merchant_info` 根据商户号查询
+    {notify_type=batch_refund_notify, notify_time=2021-02-25 17:22:02, batch_no=20210225172200090072222223155616,
+    success_num=1, sign=bcbc3fb4adcfc3b71029cce20a4d77cc, sign_type=MD5,
+    result_details=2021022522001448571439840247^0.01^SUCCESS, notify_id=2021022500222172202075461444782769}
+    :return:
+    """
+    scarlett_info = {"notify_type": "batch_refund_notify",
+                     "notify_time": time.strftime('%Y-%m-%d- %H:%M:%S', time.localtime()),
+                     "batch_no": RandomOrder(32).random_num(),
+                     "success_num": amount*100,
+                     "sign": "",
+                     "sign_type": "MD5",
+                     "result_details": "{}^{}^SUCCESS".format(notify_id, amount),
+                     "notify_id": RandomOrder(32).random_num()}
+    scarlett_info['sign'] = md5(Sign(scarlett_info).join_asc_have_key("", "sign_type") + "vle91cs2yv9g9w61f0dd8ev5sug0smo5")
+    response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/alipayrefundnotify",
+                             data=scarlett_info)
+    result = response.content
+    logger.info(str(result.decode("utf-8")))
+
+
 if __name__ == '__main__':
-    ali_sign_scarlet()
+    # ali_sign_scarlet()
     #ali_normal_pay_scarlet("kekezhifu@keke.cn", "RM202102091449342076075925647732", "0.01", "0.01", "2088311951685799")
+    ali_pay_refund(0.01, "2021030222001411401442199201")
