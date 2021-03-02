@@ -2,9 +2,12 @@
 Created on 2021年2月26日
 @author: 80319739
 '''
+from decimal import Decimal
+
 import pandas
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
+from lib.common_biz.order_random import RandomOrder
 
 
 class PayCenterDubbo():
@@ -52,72 +55,44 @@ class PayCenterDubbo():
     | notifyUrl        | 选填 |    String     |   
     | subPartnerOrders | 选填 |  List<String> |           | 合单的子订单号列表 |
     '''
+
     def __init__(self):
         dubbo_info = get_dubbo_info("pay_biz_paycenter")
         self.conn = DubRunner(*dubbo_info)
-    
-    def create_payorder(self, partnerOrder, partnerCode, originalAmount, productsName, **kwargs):
+
+    def create_payorder(self, payType, partnerOrder, partnerCode, originalAmount, amount, kebiSpent=0,
+                        ssoid="2076075925", channelType="NATIVE", directPay="ZHICHONG", tradeType="PAY"):
         '''
-        :param kwargs:
-            amount: 渠道支付金额
-            kebiSpent: 可币扣除额
-            voucherAmount: 可币券优惠额
-            voucherInfo: 可币券信息
-            voucherId: 可币券id
+            channelType : NATIVE
+            directPay : ZHICHONG KB
+            payType: wxpay alipay
+            tradeType : PAY
         '''
-#         table = pandas.read_html('https://doc.myoas.com/display/pingtai/pay-biz-paycenter+PayService',
-#                                  encoding='utf-8')[0]
-#         print(table)
         args = {
+            'amount': amount,
             'partnerOrder': partnerOrder,
             'partnerCode': partnerCode,
             'originalAmount': originalAmount,
-            'amount': kwargs.get('amount', 0),
-            'productsName': productsName,
-            'counts': '1',
-            'ssoid': '2086100900',
-            'channnelType': '',
-            'payType': '',
-            'directPay': '',
-            'presentAmount': '',
-            'countryCode': '',
-            'currency': '',
-            'kebiSpent': 0,
-            'voucherAmount': 10.0,
-            'voucherInfo': "{'cutAmount': '1000', 'id': '64234484', 'type': '2'}",
-            'voucherId': '64234484',
-            'tradeType': '',
-            'contents': '',
-            'mobileNum': '',
-            'imei': '',
-            'imsi': '',
-            'ip': '',
-            'mac': '',
-            'model': '',
-            'appPackage': '',
-            'appVer': '',
-            'sdkVer': '',
-            'channelId': '',
-            'gameType': '',
-            'extra': '',
-            'remark': '',
-            'discountInfo': '',
-            'openid': '',
-            'brandType': '',
-            'mobileOsVer': '',
-            'platform': '',
-            'screenInfo': '',
-            'factor': '',
-            'notifyUrl': '',
-            'subPartnerOrders': []
+            'ssoid': ssoid,
+            'channelType': channelType,
+            'countryCode': 'CN', 'currency': 'CNY', 'productsName': 'TEST', "counts": "1",
+            'directPay': directPay,
+            'payType': payType,
+            "tradeType": tradeType,
+            "contents": "", "mobileNum": "", "imei": "000000000000000", "imsi": "",
+            "ip": "127.0.0.1", "mac": "", "model": "PDCM00", "appPackage": "com.example.pay_demo", "appVer": "260",
+            "sdkVer": "1.0.0", "channelId": "", "gameType": "WANGYOU", "extra": "", "remark": "", "discountInfo": "",
+            "openid": "", "brandType": "OPPO", "mobileOsVer": "", "platform": "",
+            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
+            "kebiSpent": kebiSpent
         }
-#         self.conn.invoke('com.oppo.pay.paycenter.facade.PayService', 'tryPay', args, flag='SINGLE_STRING')
-        self.conn.invoke('PayService', 'tryPay', args, flag='SINGLE_STRING')
+        self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
 
 if __name__ == '__main__':
     set_global_env_id(3)
     paycenter_dubbo = PayCenterDubbo()
-    # 直扣
-    paycenter_dubbo.create_payorder('9f5a03cfc916433a806d057f9a1d7b11', '2031', 10.01, '\\', amount=0.01, )
-    
+    # 直扣订单
+    # paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "2031", "10.0", "10.0")
+    # 可币消费订单
+    paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", 0)

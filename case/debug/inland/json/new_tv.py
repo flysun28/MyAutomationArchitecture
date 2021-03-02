@@ -36,6 +36,10 @@ class NewTv:
         }
         temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(case_data['partnerCode']).get_key_from_merchant()
         case_data['sign'] = sha_256(temp_string)
+        """
+        http://gw-opay.oppomobile.com/gateway/payOrder
+        MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB
+        """
         GlobarVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
 
     def sign_order(self):

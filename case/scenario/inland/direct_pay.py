@@ -19,7 +19,6 @@ req = DIRECT_PAY
 def direct_pay(amount, notify_amount):
     """
     :param notify_amount: 分
-    :param pay_type:
     :param amount: 分
     :return:
     """

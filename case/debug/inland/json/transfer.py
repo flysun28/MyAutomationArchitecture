@@ -72,6 +72,11 @@ class Transfer:
         case_dict['bizContent'] = str(case_dict['bizContent'])
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
         case_dict['sign'] = md5(temp_string)
+        """
+        # 生产地址 https://gw-opay.oppomobile.com/gateway/transfer-apply
+        # 灰度地址 https://gw-opay.oppomobile.com/gateway/gray-transfer-apply
+        生产环境秘钥与验证签30223460: ec25bb85a7fb426e
+        """
         GlobarVar.HTTPJSON_GW_IN.post("/gateway/transfer-apply", data=case_dict)
 
 
