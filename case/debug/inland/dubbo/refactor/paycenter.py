@@ -4,6 +4,7 @@ Created on 2021年2月26日
 '''
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
+from lib.common_biz.order_random import RandomOrder
 
 
 class PayCenterDubbo():
@@ -56,35 +57,6 @@ class PayCenterDubbo():
         dubbo_info = get_dubbo_info("pay_biz_paycenter")
         self.conn = DubRunner(*dubbo_info)
 
-    def create_payorder(self, payType, partnerOrder, partnerCode, originalAmount, amount, kebiSpent=0,
-                        ssoid="2076075925", channelType="NATIVE", directPay="ZHICHONG", tradeType="PAY"):
-        '''
-            channelType : NATIVE
-            directPay : ZHICHONG KB
-            payType: wxpay alipay
-            tradeType : PAY
-        '''
-        args = {
-            'amount': amount,
-            'partnerOrder': partnerOrder,
-            'partnerCode': partnerCode,
-            'originalAmount': originalAmount,
-            'ssoid': ssoid,
-            'channelType': channelType,
-            'countryCode': 'CN', 'currency': 'CNY', 'productsName': 'TEST', "counts": "1",
-            'directPay': directPay,
-            'payType': payType,
-            "tradeType": tradeType,
-            "contents": "", "mobileNum": "", "imei": "000000000000000", "imsi": "",
-            "ip": "127.0.0.1", "mac": "", "model": "PDCM00", "appPackage": "com.example.pay_demo", "appVer": "260",
-            "sdkVer": "1.0.0", "channelId": "", "gameType": "WANGYOU", "extra": "", "remark": "", "discountInfo": "",
-            "openid": "", "brandType": "OPPO", "mobileOsVer": "", "platform": "",
-            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
-            "kebiSpent": kebiSpent
-        }
-        self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
-
-        
     def refund_order(self, pay_req_id, channel_refund=0, kebi_refund=0, voucher_refund=0, **kwargs):
         '''
         |    参数名      |    限制 |      类型     |  取值范围  |   说明   |
@@ -95,11 +67,11 @@ class PayCenterDubbo():
         | voucherRefund |    选填 |    String     |    Y N   | 优惠券退款标识    |
         | refundType    |    选填 |    String     |          | 退款类型         |
         | ext1          |    选填 |    String     |
-        | ext2          |    选填 |    String     |        
-        | remark        |    选填 |    String     |        
-        | applyAccount  |    选填 |    String     |       
-        | refuseReason  |    选填 |    String     |        
-        | auditStatus   |    选填 |    String     |        
+        | ext2          |    选填 |    String     |
+        | remark        |    选填 |    String     |
+        | applyAccount  |    选填 |    String     |
+        | refuseReason  |    选填 |    String     |
+        | auditStatus   |    选填 |    String     |
         | approvalTime  |   选填  | LocalDateTime |
         | financeStatus |    选填 |    Boolean    |
         | batchNo       |    选填 |    BigDecimal |
@@ -131,15 +103,96 @@ class PayCenterDubbo():
         req.update(kwargs)
         self.conn.invoke('RefundService', 'refund', req, flag='SINGLE_STRING')
 
+    def create_payorder(self, payType, partnerOrder, originalAmount, amount, kebiSpent, partnerCode="2031",
+                        ssoid="2076075925", channelType="NATIVE", directPay="ZHICHONG", tradeType="PAY"):
+        '''
+            channelType : NATIVE
+            directPay : ZHICHONG KB
+            payType: wxpay alipay
+            tradeType : PAY
+        '''
+        args = {
+            'amount': amount,
+            'partnerOrder': partnerOrder,
+            'partnerCode': partnerCode,
+            'originalAmount': originalAmount,
+            'ssoid': ssoid,
+            'channelType': channelType,
+            'countryCode': 'CN', 'currency': 'CNY', 'productsName': 'TEST', "counts": "1",
+            'directPay': directPay,
+            'payType': payType,
+            "tradeType": tradeType,
+            "contents": "", "mobileNum": "", "imei": "000000000000000", "imsi": "",
+            "ip": "127.0.0.1", "mac": "", "model": "PDCM00", "appPackage": "com.example.pay_demo", "appVer": "260",
+            "sdkVer": "1.0.0", "channelId": "", "gameType": "WANGYOU", "extra": "", "remark": "", "discountInfo": "",
+            "openid": "", "brandType": "OPPO", "mobileOsVer": "", "platform": "",
+            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [], "kebiSpent": kebiSpent
+        }
+        self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
+
+    def create_payorder_vou(self, payType, partnerOrder, originalAmount, amount, kb_spent, vou_amout,
+                            vou_original_amount, vou_id, partnerCode="2031",
+                            ssoid="2076075925", channelType="NATIVE", directPay="ZHICHONG", tradeType="PAY"):
+        '''
+            所有的金额都是元
+            channelType : NATIVE
+            directPay : ZHICHONG KB
+            payType: wxpay alipay
+            tradeType : PAY
+        '''
+        args = {
+            'amount': amount,
+            'partnerOrder': partnerOrder,
+            'partnerCode': partnerCode,
+            # 合单指两个订单
+            'originalAmount': originalAmount,
+            'ssoid': ssoid,
+            'channelType': channelType,
+            'countryCode': 'CN', 'currency': 'CNY', 'productsName': 'TEST', "counts": "1",
+            'directPay': directPay,
+            'payType': payType,
+            "tradeType": tradeType,
+            "contents": "", "mobileNum": "", "imei": "000000000000000", "imsi": "",
+            "ip": "127.0.0.1", "mac": "", "model": "PDCM00", "appPackage": "com.example.pay_demo", "appVer": "260",
+            "sdkVer": "1.0.0", "channelId": "", "gameType": "WANGYOU", "extra": "", "remark": "", "discountInfo": "",
+            "openid": "", "brandType": "OPPO", "mobileOsVer": "", "platform": "",
+            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
+            "voucherAmount": vou_amout,
+            "voucherInfo": str({'vouId': vou_id, 'amount': vou_amout, 'price': vou_original_amount}),
+            "voucherId": vou_id, "kb_spent": kb_spent
+        }
+        self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
 
 if __name__ == '__main__':
     set_global_env_id(3)
     paycenter_dubbo = PayCenterDubbo()
+    # originalAmount, amount, kb_spent, vou_amout, vou_original_amount
+    # originalAmount, amount, kebiSpent
+
     # 直扣订单
     # paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "2031", "10.0", "10.0")
-    # 可币消费订单
-    #paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", 0)
+
+    # 可币消费订单： 纯可币(未通)
+    # paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", kebiSpent=10, directPay="KB")
+
+    # 可币消费订单：纯优惠券
+    # paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "0.0", "10.0", "10.0", "20000", directPay="KB")
+
+    # 可币纯消费： 可币 + 优惠券(未通)
+    paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "2.0", "8.0", "8.0", "20000", directPay="KB")
+
+    # 充值消费：优惠券+可币+渠道（未通）
+    #paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "1.0", "1.0", "8.0", "10.0", "20000")
+
+    # 充值消费：优惠券+渠道
+    # paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "2.0", "", "8.0", "10.0", "20000")
+
+    # 充值消费：可币+渠道
+    #paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "10.0", "2.0", "8")
+
+    # 加购订单
+
+
     # 退款
-    #paycenter_dubbo.refund_order('KB202103021104132086100900705822', channel_refund=0.01, kebi_refund=0, voucher_refund=9.99)
-    
+    # paycenter_dubbo.refund_order('KB202103021104132086100900705822', channel_refund=0.01, kebi_refund=0, voucher_refund=9.99)

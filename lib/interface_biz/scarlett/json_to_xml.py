@@ -56,7 +56,6 @@ def wx_mock_refund_to_xml(wx_mock_refund_info, md5_key):
     :return:
     """
     wx_mock_refund_info['sign'] = md5(Sign(wx_mock_refund_info).join_asc_have_key("&key=") + md5_key)
-    print(Sign(wx_mock_refund_info).join_asc_have_key("&key=") + md5_key)
     str_xml = "<xml>"
     for item in wx_mock_refund_info:
         if item in ["refund_fee", "coupon_refund_fee", "total_fee", "cash_fee", "coupon_refund_count", "cash_refund_fee"]:

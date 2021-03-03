@@ -8,6 +8,7 @@ import time
 import requests
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
+from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml, wx_mock_refund_to_xml
 
@@ -135,7 +136,16 @@ def wx_refund_post():
     }
 
 
-def wx_refund_mock_scarlett():
+def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_refund_fee):
+    """
+
+    :param pay_req_id:
+    :param refund_fee: 分
+    :param total_fee: 分
+    :param cash_fee: 分
+    :param cash_refund_fee: 分
+    :return:
+    """
     """
     <xml><return_code><![CDATA[SUCCESS]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
@@ -165,26 +175,23 @@ def wx_refund_mock_scarlett():
         "nonce_str": "D4u7oaArJWL62aY2",
         "sign": "",
         "result_code": "SUCCESS",
-        "transaction_id": "4200000987202103020372370078",
-        "out_trade_no": "RM202103022135402076075925364572",
-        "out_refund_no": "20210302213557592536457225602334",
-        "refund_id": "50301007512021030206765005243",
+        "transaction_id": get_notify_id_by_request_id(pay_req_id),
+        "out_trade_no": pay_req_id,
+        "out_refund_no": RandomOrder(32).random_num(),
+        "refund_id": RandomOrder(29).random_num(),
         "refund_channel": "",
-        "refund_fee": "1",
+        "refund_fee": refund_fee,
         "coupon_refund_fee": "0",
-        "total_fee": "1",
-        "cash_fee": "1",
+        "total_fee": total_fee,
+        "cash_fee": cash_fee,
         "coupon_refund_count": "0",
-        "cash_refund_fee": "1"
+        "cash_refund_fee": cash_refund_fee
     }
-    print(wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33"))
-    # wx_refund_info['sign'] = ''
-    # req_scarlett = ''
-    # response = requests.post("127.0.0.1" + "/secapi/pay/refund",
-    #                          data=req_scarlett.encode("utf-8"))
-    # result = response.content
-    # logger.info(str(result.decode("utf-8")))
-
+    logger.info("mock报文：{}".format(wx_refund_info))
+    if get_notify_id_by_request_id(pay_req_id) == "False":
+        return "pay_req_id is error"
+    else:
+        return wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33")
 
 if __name__ == '__main__':
-    wx_refund_mock_scarlett()
+    wx_refund_mock_scarlett("", "1", "1", "1", "1")
