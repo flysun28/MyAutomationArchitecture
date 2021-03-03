@@ -14,6 +14,15 @@ mysql_out = GlobarVar.MYSQL_OUT
 logger = Logger('fiz_db_operate').get_logger()
 
 
+def get_ssoid_by_pay_req_id(pay_red_id):
+    """
+    根据支付订单号，查找ssoid
+    :param pay_red_id:
+    :return:
+    """
+    return pay_red_id[16: 26]
+
+
 def get_balance(ssoid, country="CN", in_out="inland"):
     """
     查询可币余额
@@ -77,8 +86,24 @@ def oversea_get_coin_rate(currency):
     return rate
 
 
+def get_notify_id_by_request_id(pay_req_id):
+    """
+    根据支付订单号查询notify)id
+    :return:
+    """
+    db_order_info = SeparateDbTable(get_ssoid_by_pay_req_id(pay_req_id)).get_order_db_table()
+    notify_id = mysql.select_one(str(Config(common_sql_path).read_config("order", "notify_id")).
+                                          format(db_order_info[0], db_order_info[1], pay_req_id))
+    if notify_id is None:
+        return "False"
+    else:
+        return notify_id['notify_id']
+
+
 if __name__ == '__main__':
     # print(get_balance("2076075925"))
-    print(get_balance("2076075925", country="VN", in_out="oversea"))
+    # print(get_balance("2076075925", country="VN", in_out="oversea"))
     # oversea_get_coin_rate("VND")
     #update_sign_status("2076075925", "wxpay")
+    print(get_ssoid_by_pay_req_id("RM202103031255262076075925123382"))
+    print(get_notify_id_by_request_id("RM202103031255262076075925123382"))

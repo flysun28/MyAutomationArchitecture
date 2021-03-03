@@ -51,6 +51,11 @@ class H5:
         temp_string = temp_string.replace("'", '"')
         temp_string = temp_string.replace(" ", '')
         case_dict['sign'] = sha_256(temp_string)
+        """
+        正式: https://gw-opay.oppomobile.com/pay/qrCode/trade
+        灰度：https://pre-nativepay.keke.cn/pay/qrCode/trade
+        72724314 ：MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB
+        """
         GlobarVar.HTTPJSON_GW_IN.post("/pay/qrCode/trade", data=case_dict)
 
 

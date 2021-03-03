@@ -8,8 +8,9 @@ import time
 import requests
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config
+from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.order_random import RandomOrder
-from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml
+from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml, wx_mock_refund_to_xml
 
 logger = Logger('wxpay-scarlet').get_logger()
 
@@ -102,5 +103,95 @@ def wx_sign_scarlet(contract_code, mch_id, plan_id, md5_key, result_cod="SUCCESS
         logger.info("回调解析成功")
 
 
+def wx_refund_post():
+    """
+    非异步，同步回调 https://api.mch.weixin.qq.com/secapi/pay/refund
+    <xml>
+    <appid>wx93eea96ecc33f168</appid>
+    <mch_id>1259634601</mch_id>
+    <nonce_str>ec287d47a74e4e21abf94300eec5cfa3</nonce_str>
+    <transaction_id>4200000987202103020372370078</transaction_id>
+    <sign>9450888586024CF0C4A700D03DFBDC79</sign>
+    <out_trade_no>RM202103022135402076075925364572</out_trade_no>
+    <out_refund_no>20210302213557592536457225602334</out_refund_no>
+    <total_fee>1</total_fee>
+    <refund_fee>1</refund_fee>
+    <refund_fee_type>CNY</refund_fee_type>
+    <op_user_id>1259634601</op_user_id>
+    </xml>
+    :return:
+    """
+    wx_refund_info = {
+        "appid": "wx93eea96ecc33f168",
+        "mch_id": "1259634601",
+        "nonce_str": "ec287d47a74e4e21abf94300eec5cfa3",
+        "transaction_id": "4200000987202103020372370078",
+        "sign": "",
+        "out_trade_no": "RM202103022135402076075925364572",
+        "out_refund_no": "20210302213557592536457225602334",
+        "total_fee": "1",
+        "refund_fee": "1",
+        "refund_fee_type": "CNY",
+        "op_user_id": "1259634601"
+    }
+
+
+def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_refund_fee):
+    """
+
+    :param pay_req_id:
+    :param refund_fee: 分
+    :param total_fee: 分
+    :param cash_fee: 分
+    :param cash_refund_fee: 分
+    :return:
+    """
+    """
+    <xml><return_code><![CDATA[SUCCESS]]></return_code>
+    <return_msg><![CDATA[OK]]></return_msg>
+    <appid><![CDATA[wx93eea96ecc33f168]]></appid>
+    <mch_id><![CDATA[1259634601]]></mch_id>
+    <nonce_str><![CDATA[D4u7oaArJWL62aY2]]></nonce_str>
+    <sign><![CDATA[EB67A6ADF5ECDA485243DAEE3E3AE9EE]]></sign>
+    <result_code><![CDATA[SUCCESS]]></result_code>
+    <transaction_id><![CDATA[4200000987202103020372370078]]></transaction_id>
+    <out_trade_no><![CDATA[RM202103022135402076075925364572]]></out_trade_no>
+    <out_refund_no><![CDATA[20210302213557592536457225602334]]></out_refund_no>
+    <refund_id><![CDATA[50301007512021030206765005243]]></refund_id>
+    <refund_channel><![CDATA[]]></refund_channel>
+    <refund_fee>1</refund_fee>
+    <coupon_refund_fee>0</coupon_refund_fee>
+    <total_fee>1</total_fee>
+    <cash_fee>1</cash_fee>
+    <coupon_refund_count>0</coupon_refund_count>
+    <cash_refund_fee>1</cash_refund_fee></xml>
+    :return:
+    """
+    wx_refund_info = {
+        "return_code": "SUCCESS",
+        "return_msg": "OK",
+        "appid": "wx93eea96ecc33f168",
+        "mch_id": "1259634601",
+        "nonce_str": "D4u7oaArJWL62aY2",
+        "sign": "",
+        "result_code": "SUCCESS",
+        "transaction_id": get_notify_id_by_request_id(pay_req_id),
+        "out_trade_no": pay_req_id,
+        "out_refund_no": RandomOrder(32).random_num(),
+        "refund_id": RandomOrder(29).random_num(),
+        "refund_channel": "",
+        "refund_fee": refund_fee,
+        "coupon_refund_fee": "0",
+        "total_fee": total_fee,
+        "cash_fee": cash_fee,
+        "coupon_refund_count": "0",
+        "cash_refund_fee": cash_refund_fee
+    }
+    logger.info("mock报文：{}".format(wx_refund_info))
+    if get_notify_id_by_request_id(pay_req_id) == "False":
+        return "pay_req_id is error"
+    else:
+        return wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33")
+
 if __name__ == '__main__':
-    pass
+    wx_refund_mock_scarlett("", "1", "1", "1", "1")
