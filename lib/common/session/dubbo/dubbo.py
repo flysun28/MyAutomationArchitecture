@@ -46,14 +46,13 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
             # 混合类型，直接传入字符串处理
             command_str = "invoke {0}.{1}({2})".format(
                 service_name, method_name, arg)
-        print(command_str)
+#         print(command_str)
         self.command(DubRunner.prompt, command_str)
         self.logger.info("dubbo传参：{}".format(simplejson.dumps(arg, ensure_ascii=False, indent=2)))
         data = self.command(DubRunner.prompt, "")
         # data = data.decode(DubRunner.coding, errors='ignore').split('\n')[0].strip()
-#         resp = str(data, encoding="gbk").split("elapsed")[0]
-        resp = data.decode(encoding=self.coding, errors='ignore')
-        print(resp)
+        resp = data.decode(encoding='gbk', errors='ignore').split('elapsed')[0]
+        self.logger.debug(resp)
         data = json.loads(resp)
         self.logger.info("dubbo回参：{}".format(data))
         return data

@@ -6,7 +6,7 @@
 import time
 from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
-from lib.common.utils.env import get_dubbo_info
+from lib.common.utils.env import get_dubbo_info, set_global_env_id
 from lib.common_biz.order_random import RandomOrder
 logger = Logger("nearme").get_logger()
 
@@ -59,8 +59,21 @@ class Nearme:
             "consumePageQuery",
             data
         )
+    
+    def query_balance(self, ssoid):
+        data = {'ssoid': ssoid}
+        result = self.conn.invoke('NearmeAccountQuery', 'queryAccountBalance', data, flag='JSON')
+        return result['data']['balance']
 
 
 if __name__ == '__main__':
-    Nearme().nearme_add_subtract("1000.00", "2076075925", 0)
+    set_global_env_id(3)
+    nearme = Nearme()
+    # 发放可币
+    nearme.nearme_add_subtract("1.00", "2086100900", 'PRESENT')
+#     # 扣减所有可币余额
+#     balance = nearme.query_balance(ssoid='2086100900')
+#     nearme.nearme_add_subtract(balance, "2086100900", 'DEDUCT')
+
     # Nearme().consume_page_query()
+

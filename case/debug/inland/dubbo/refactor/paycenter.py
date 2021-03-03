@@ -25,17 +25,17 @@ class PayCenterDubbo():
         | counts           | 选填 |               |                  | 商品数量        
         | ssoid            | 选填 |    String     |   
         | channnelType     | 选填 |    String     |  
-        | payType          | 选填 |    String     |                  | 支付方式，amount不为空时，必填。例如：alipay,wxpay |   
+        | payType          | 选填 |    String     | wxpay,alipay,alipay_hb,szfpay,qqwallet | 支付方式，amount不为空时，必填。例如：alipay,wxpay |   
         | directPay        | 选填 |    String     |  
-        | presentAmount    | 选填 |    String     |                  | amount, kebiSpent, voucherAmount不能同时为空
+        | presentAmount    | 选填 |    String     |                  | amount, kebiSpent, voucherAmount不能同时为空 |
         | countryCode      | 选填 |    timestamp  |      
         | currency         | 选填 |    timestamp  |  
-        | kebiSpent        | 选填 |    Long       |                  | 可币支付金额，amount, kebiSpent, voucherAmount不能同时为空
-        | voucherAmount    | 选填 |    BigDecimal |                  | 优惠券金额，voucherAmount 和 voucherInfo 需同时共存
-        | voucherInfo      | 选填 |    String     |                  | 优惠券信息JSON串
+        | kebiSpent        | 选填 |    Long       |                  | 可币支付金额，amount, kebiSpent, voucherAmount不能同时为空 |
+        | voucherAmount    | 选填 |    BigDecimal |                  | 优惠券金额，voucherAmount 和 voucherInfo 需同时共存 |
+        | voucherInfo      | 选填 |    String     |                  | 优惠券信息JSON串 |
         | voucherId        | 选填 |    String     |                  |
-        | tradeType        | 选填 |    String     | KB 或者 ZHICHONG  | 仅用于生成兼容的PayReqID, ZHICHONG 的话, payReqId开头字母为KB, 其余的话, 均为RM    
-        | contents         | 选填 |    String     |                  | 商品介绍
+        | tradeType        | 选填 |    String     | KB, ZHICHONG     | 仅用于生成兼容的PayReqID, ZHICHONG 的话, payReqId开头字母为KB, 其余的话, 均为RM |    
+        | contents         | 选填 |    String     |                  | 商品介绍 |
         | mobileNum        | 选填 |    String     |   
         | imei             | 选填 |    String     |   
         | imsi             | 选填 |    String     |   
@@ -69,7 +69,7 @@ class PayCenterDubbo():
             'amount': amount,
             'productsName': products_name,
             'counts': '',
-            'ssoid': '2086100900',
+            'ssoid': '',
             'channnelType': '',
             'payType': pay_type,
             'directPay': '',
@@ -126,7 +126,7 @@ class PayCenterDubbo():
         | applyAccount  |    选填 |    String     |       
         | refuseReason  |    选填 |    String     |        
         | auditStatus   |    选填 |    String     |        
-        | approvalTime  |   选填  | LocalDateTime |
+        | approvalTime  |    选填 | LocalDateTime |
         | financeStatus |    选填 |    Boolean    |
         | batchNo       |    选填 |    BigDecimal |
         | refundReason  |    选填 |    String     |
