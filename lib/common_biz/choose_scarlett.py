@@ -6,6 +6,7 @@
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
 from lib.interface_biz.scarlett.heepay import hee_pay_notify
+from lib.interface_biz.scarlett.qq_pay import qq_pay_scarlet
 from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet, wx_sign_scarlet
 
 merchant_info = FindMerchant("2031").find_app_id_merchant("wxpay")
@@ -31,11 +32,13 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
                                   md5_key)
         if pay_type == "heepay":
             hee_pay_notify(pay_req_id, amount/100)
+        if pay_type == "qqwallet":
+            qq_pay_scarlet(pay_req_id, amount/100)
     if sign_type is not None:
         if pay_type == "wxpay":
             wx_sign_scarlet(contract_code, merchant_info_sign['merchant_no'], merchant_info_sign["plan_id"], md5_key_sign)
 
 
 if __name__ == '__main__':
-    choose_scarlett(1, "wxpay", "KB")
+    choose_scarlett(1000, "wxpay", "RM20210304095657207607592506772t")
     # choose_scarlett(1, "wxpay", "KB", "SIGN", "SN")

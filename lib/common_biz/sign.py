@@ -10,7 +10,7 @@ from lib.common.algorithm.md5 import md5
 
 
 class Sign(metaclass=WithLogger):
-    
+
     def __init__(self, original_dict):
         self.signString = ""
         self.original_dict = original_dict
@@ -65,7 +65,8 @@ class Sign(metaclass=WithLogger):
                 self.signString = self.signString + list_fixed_key[i] + '=' + self.original_dict[list_fixed_key[i]]
                 self.signString += salt
             else:
-                self.signString = self.signString + list_fixed_key[i] + '=' + self.original_dict[list_fixed_key[i]] + '&'
+                self.signString = self.signString + list_fixed_key[i] + '=' + self.original_dict[
+                    list_fixed_key[i]] + '&'
         return self.signString
 
     def pb_common_sign_string(self, mp):
@@ -87,12 +88,14 @@ class Sign(metaclass=WithLogger):
                     if i == 'sdkVer' or i == 'rate':
                         self.signString = self.signString + string_temp + ': ' + str(self.original_dict[item][i]) + '\n'
                     elif i == 'partnerorder' or i == "androidVersion":
-                        self.signString = self.signString + string_temp + ': ' + '"' + str(self.original_dict[item][i]) + '"'
+                        self.signString = self.signString + string_temp + ': ' + '"' + str(
+                            self.original_dict[item][i]) + '"'
                     else:
-                        self.signString = self.signString + string_temp + ': ' + '"' + str(self.original_dict[item][i]) + '"' + '\n'
+                        self.signString = self.signString + string_temp + ': ' + '"' + str(
+                            self.original_dict[item][i]) + '"' + '\n'
         stringA = self.signString + mp
         return stringA
-    
+
     def to_md5_sign(self, string):
         self.logger.info('sign original string: %s', string)
         return md5(string)
@@ -215,9 +218,10 @@ def hee_pay_sign_string(scarlett_string):
     """
     md5_string = \
         "ret_code=" + scarlett_string["ret_code"] + "&" + "agent_id=" + scarlett_string['agent_id'] + "&" + "bill_id=" \
-        + scarlett_string['bill_id'] + "&" + "jnet_bill_no=" + scarlett_string['jnet_bill_no'] + "&" + "bill_status=" +\
+        + scarlett_string['bill_id'] + "&" + "jnet_bill_no=" + scarlett_string['jnet_bill_no'] + "&" + "bill_status=" + \
         scarlett_string["bill_status"] + "&" + "card_real_amt=" + scarlett_string['card_real_amt'] + "&" + \
-        "card_settle_amt=" + scarlett_string["card_settle_amt"] + "&" + "card_detail_data=|||" + "574A4702E0644DA29E827E05"
+        "card_settle_amt=" + scarlett_string[
+            "card_settle_amt"] + "&" + "card_detail_data=|||" + "574A4702E0644DA29E827E05"
     return md5_string
 
 
@@ -232,6 +236,19 @@ def coda_pay_sign_string(scarlett_string, api_key):
     return md5_string
 
 
+def szf_pay_sign_string(szf_scarlett):
+    """
+    神州付渠道签名原始串
+    :return:
+    """
+    md5_string = szf_scarlett['version'] + "|" + szf_scarlett['merId'] + "|" + szf_scarlett['payMoney'] + "|" + \
+                 szf_scarlett['cardMoney'] + "|" +  szf_scarlett['orderId'] + "|" + szf_scarlett['payResult'] + "|" + \
+                 szf_scarlett['privateField'] + "|" + szf_scarlett['payDetails'] + "|"
+    return md5_string
+
+
 if __name__ == '__main__':
-    a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '', 'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1', 'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}
+    a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '',
+         'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1',
+         'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}
     print(Sign(a).join_fixed_param("hee_pay_scarlett", "&"))
