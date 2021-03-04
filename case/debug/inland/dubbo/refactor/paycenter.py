@@ -57,7 +57,7 @@ class PayCenterDubbo():
         dubbo_info = get_dubbo_info("pay_biz_paycenter")
         self.conn = DubRunner(*dubbo_info)
 
-    def refund_order(self, pay_req_id, channel_refund=0, kebi_refund=0, voucher_refund=0, **kwargs):
+    def refund_order(self, pay_req_id, channel_refund, kebi_refund="", voucher_refund="", **kwargs):
         '''
         |    参数名      |    限制 |      类型     |  取值范围  |   说明   |
         | refundId      |    选填 |    Integer    |          | 退款ID, 做幂等判断 |
@@ -81,7 +81,7 @@ class PayCenterDubbo():
         | refundContext |    选填 | Map<String,Object> |    | 退款上下文数据, 一般存放渠道特定的参数 |
         '''
         req = {
-            'refundId': '',
+            'refundId': RandomOrder(32).random_num(),
             'payReqId': pay_req_id,
             'refund': channel_refund,
             'kebiRefund': kebi_refund,
@@ -100,8 +100,12 @@ class PayCenterDubbo():
             'notifyUrl': '',
             'refundContext': ''
         }
+        if req['kebiRefund'] == '':
+            del req['kebiRefund']
+        if req['voucherRefund'] == '':
+            del req['voucherRefund']
         req.update(kwargs)
-        self.conn.invoke('RefundService', 'refund', req, flag='SINGLE_STRING')
+        self.conn.invoke('RefundService', 'refund', req)
 
     def create_payorder(self, payType, partnerOrder, originalAmount, amount, kebiSpent, partnerCode="2031",
                         ssoid="2076075925", channelType="NATIVE", directPay="ZHICHONG", tradeType="PAY"):
@@ -126,7 +130,11 @@ class PayCenterDubbo():
             "ip": "127.0.0.1", "mac": "", "model": "PDCM00", "appPackage": "com.example.pay_demo", "appVer": "260",
             "sdkVer": "1.0.0", "channelId": "", "gameType": "WANGYOU", "extra": "", "remark": "", "discountInfo": "",
             "openid": "", "brandType": "OPPO", "mobileOsVer": "", "platform": "",
-            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [], "kebiSpent": kebiSpent
+            "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
+            "kebiSpent": kebiSpent,
+            #  SZF的话, 需要cardAmount,cardNo,cardPwdalipay:
+            #  1)plugintype, 取值有 0(其他如WAP), 1(APP支付)  wxpay: 1)plugintype, 取值有 0, NATIVE, JSAPI, APP 2)authorizationCode payWay是JSAPI时必填
+            "payContext": {"payWay": "1"}
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
@@ -159,7 +167,8 @@ class PayCenterDubbo():
             "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
             "voucherAmount": vou_amout,
             "voucherInfo": str({'vouId': vou_id, 'amount': vou_amout, 'price': vou_original_amount}),
-            "voucherId": vou_id, "kb_spent": kb_spent
+            "voucherId": vou_id, "kebiSpent": kb_spent,
+            "payContext": {"payWay": "1"}
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
@@ -167,29 +176,31 @@ class PayCenterDubbo():
 if __name__ == '__main__':
     set_global_env_id(3)
     paycenter_dubbo = PayCenterDubbo()
+    # pay_req_id, channel_refund=0, kebi_refund=0, voucher_refund=0
+    #paycenter_dubbo.refund_order("RM20210304095657207607592506772t", 10)
     # originalAmount, amount, kb_spent, vou_amout, vou_original_amount
-    # originalAmount, amount, kebiSpent
+    # payType, partnerOrder, originalAmount, amount, kebiSpent
 
     # 直扣订单
-    # paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "2031", "10.0", "10.0")
+    paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "10", "10.0", "0")
 
-    # 可币消费订单： 纯可币(未通)
-    # paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "2031", "", "", kebiSpent=10, directPay="KB")
+    # 可币消费订单： 纯可币
+    #paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "10", "0", "10", directPay="KB")
 
     # 可币消费订单：纯优惠券
-    # paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "0.0", "10.0", "10.0", "20000", directPay="KB")
+    #paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "0", "10.0", "10.0", "20000", directPay="KB")
 
-    # 可币纯消费： 可币 + 优惠券(未通)
-    paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "2.0", "8.0", "8.0", "20000", directPay="KB")
+    # 可币纯消费： 可币 + 优惠券
+    #paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0", "2", "8.0", "8.0", "20000", directPay="KB")
 
     # 充值消费：优惠券+可币+渠道（未通）
-    #paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "1.0", "1.0", "8.0", "10.0", "20000")
+    #paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "1.0", "1", "8.0", "10.0", "20000")
 
     # 充值消费：优惠券+渠道
-    # paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "2.0", "", "8.0", "10.0", "20000")
+    #paycenter_dubbo.create_payorder_vou("alipay", RandomOrder(32).random_string(), "10.0", "2.0", "0", "8.0", "10.0", "20000")
 
     # 充值消费：可币+渠道
-    #paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "10.0", "2.0", "8")
+    #paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "10.0", "10.0", "0")
 
     # 加购订单
 

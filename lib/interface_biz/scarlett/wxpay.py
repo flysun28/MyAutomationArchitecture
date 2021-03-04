@@ -138,7 +138,6 @@ def wx_refund_post():
 
 def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_refund_fee):
     """
-
     :param pay_req_id:
     :param refund_fee: 分
     :param total_fee: 分
@@ -194,4 +193,5 @@ def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_re
         return wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33")
 
 if __name__ == '__main__':
-    wx_refund_mock_scarlett("", "1", "1", "1", "1")
+    #wx_refund_mock_scarlett("", "1", "1", "1", "1")
+    wx_normal_pay_scarlet("1259634601", "RM20210303222400207607592553078t", "wx93eea96ecc33f168", "1", "g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR")
