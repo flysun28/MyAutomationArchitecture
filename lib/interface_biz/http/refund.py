@@ -6,7 +6,7 @@ import sys
 import time
 from lib.common_biz.sign import Sign
 from lib.common_biz.find_key import GetKey
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common.logger.logging import Logger
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.globals import GlobarVar
@@ -43,7 +43,7 @@ class Refund():
         logger.info('Sign加密前原始字符串: %s', orig_sign)
         for upper_case in False, True:
             req_kwargs['sign'] = md5(orig_sign, upper_case)
-            logger.info(req_kwargs)
+            logger.info('退款请求报文: %s', req_kwargs)
             response = self.http_session.post('/plugin/post/refund', data=req_kwargs)
             if '签名错误' == response['resMsg']:
                 continue
@@ -62,6 +62,7 @@ class Refund():
 
 if __name__ == '__main__':
     session = HttpJsonSession('https://pre-nativepay.keke.cn')
+    set_global_env_id(3)
     refund = Refund()
     per_amount = 0.01
     total_amount = 0.01
@@ -71,7 +72,7 @@ if __name__ == '__main__':
             if refund.is_on_the_way_refund_existed():
                 time.sleep(0.1)
             else:
-                refund.httpjson_refund("9b04ecc822ac4f16b3d491beaf53ee59", "5456925", per_amount)
+                refund.httpjson_refund("ee48e68ab339482ea10ae63e7fdbbecb", "2031", per_amount, pay_req_id='KB202103041505042086100900383572')
                 break
 
     
