@@ -89,5 +89,8 @@ class Refund:
 
 if __name__ == '__main__':
 #     Refund().refund_by_ssoid("2086100900")
+    Refund().refund_by_amount("2086100900", '9b04ecc822ac4f16b3d491beaf53ee59', '0.01')
+    # Refund().refund_single("GC202101241407088040100320000", "5456925", "0.01")
     #Refund().refund_by_amount("2086100900", '6b1c55df694e45db845590d211454677', '0.01')
     Refund().refund_single("4200000982202103030632224599", "2031", "0.01")
+

@@ -7,14 +7,14 @@ import json
 import time
 from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
-from lib.common.utils.env import get_dubbo_info
+from lib.common.utils.env import get_dubbo_info, set_global_env_id
 
 logger = Logger("voucher").get_logger()
 
 
 class VoucherInland:
     def __init__(self):
-        dubbo_info = get_dubbo_info("voucher_in")
+        dubbo_info = get_dubbo_info("voucher")
         self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, ratio=0,
@@ -78,6 +78,7 @@ class VoucherInland:
 
 
 if __name__ == '__main__':
+    set_global_env_id(3)
     vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "1", "1", "2086100900", count=1)
     VoucherInland().checkVoucher(vou_info['batchId'])
 

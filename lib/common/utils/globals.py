@@ -29,16 +29,9 @@ class GlobarVar():
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
-
-    REDIS = GlobalVarDescriptor(connect_redis())
-    SSOID = Config(test_account_path).read_config("account", "ssoid")    
-
     REDIS_IN = GlobalVarDescriptor(connect_redis())
     REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
-
     SSOID = Config(test_account_path).read_config("account", "ssoid")
-
-
     SDK_VER_IN = Config(do_case_path).read_config("sdk_ver", "version")
     SDK_VER_OUT = Config(do_case_path).read_config("apk_ver_oversea", "version")
 

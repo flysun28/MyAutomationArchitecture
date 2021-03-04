@@ -7,55 +7,109 @@ from lib.common.utils.env import get_dubbo_info, set_global_env_id
 from lib.common_biz.order_random import RandomOrder
 
 
-class PayCenterDubbo():
-    '''
-    |       参数名      | 限制 |      类型     |      取值范围      |   说明   |
-    | partnerOrder     | 必填 |    Integer    |                  | 业务订单号 |
-    | partnerCode      | 必填 |    String     |                  | 业务线ID |
-    | originalAmount   | 必填 |    BigDecimal |                  | 商品原价(单位元) =amount+kebiSpent+voucherAmount    
-    | amount           | 选填 |    BigDecimal |                  | 渠道支付金额，amount, kebiSpent, voucherAmount 不能同时为空    
-    | productsName     | 必填 |    String     |                  | 商品名称        
-    | counts           | 选填 |               |                  | 商品数量        
-    | ssoid            | 选填 |    String     |   
-    | channnelType     | 选填 |    String     |  
-    | payType          | 选填 |    String     |                  | 支付方式        
-    | directPay        | 选填 |    String     |  
-    | presentAmount    | 选填 |    String     |                  | amount, kebiSpent, voucherAmount不能同时为空
-    | countryCode      | 选填 |    timestamp  |      
-    | currency         | 选填 |    timestamp  |  
-    | kebiSpent        | 选填 |    Long       |                  | 可币支付金额，amount, kebiSpent, voucherAmount不能同时为空
-    | voucherAmount    | 选填 |    BigDecimal |                  | 优惠券金额，voucherAmount 和 voucherInfo 需同时共存
-    | voucherInfo      | 选填 |    String     |                  | 优惠券信息JSON串
-    | voucherId        | 选填 |    String     |                  |
-    | tradeType        | 选填 |    String     | KB 或者 ZHICHONG  | 仅用于生成兼容的PayReqID, ZHICHONG 的话, payReqId开头字母为KB, 其余的话, 均为RM    
-    | contents         | 选填 |    String     |                  | 商品介绍
-    | mobileNum        | 选填 |    String     |   
-    | imei             | 选填 |    String     |   
-    | imsi             | 选填 |    String     |   
-    | ip               | 选填 |    String     |   
-    | mac              | 选填 |    String     |  
-    | model            | 选填 |    String     |   
-    | appPackage       | 选填 |    String     |   
-    | appVer           | 选填 |    String     |   
-    | sdkVer           | 选填 |    String     | 
-    | channelId        | 选填 |    String     |   
-    | gameType         | 选填 |    String     |   
-    | extra            | 选填 |    String     |   
-    | remark           | 选填 |    String     |   
-    | discountInfo     | 选填 |    String     |   
-    | openid           | 选填 |    String     |   
-    | brandType        | 选填 |    String     |   
-    | mobileOsVer      | 选填 |    String     |   
-    | platform         | 选填 |    String     |   
-    | screenInfo       | 选填 |    String     |   
-    | factor           | 选填 |    String     |   
-    | notifyUrl        | 选填 |    String     |   
-    | subPartnerOrders | 选填 |  List<String> |           | 合单的子订单号列表 |
-    '''
+class PayCenterDubbo():    
 
     def __init__(self):
         dubbo_info = get_dubbo_info("pay_biz_paycenter")
         self.conn = DubRunner(*dubbo_info)
+    
+    def _create_payorder(self, partner_order, partner_code, original_amount, products_name, 
+                         amount=0, pay_type='', kebi_spent=0, voucher_info={}, **kwargs):
+        '''
+        |       参数名      | 限制 |      类型     |      取值范围      |   说明   |
+        | partnerOrder     | 必填 |    Integer    |                  | 业务订单号 |
+        | partnerCode      | 必填 |    String     |                  | 业务线ID |
+        | originalAmount   | 必填 |    BigDecimal |                  | 商品原价(单位元) =amount+kebiSpent+voucherAmount    
+        | amount           | 选填 |    BigDecimal |                  | 渠道支付金额，amount, kebiSpent, voucherAmount 不能同时为空    
+        | productsName     | 必填 |    String     |                  | 商品名称        
+        | counts           | 选填 |               |                  | 商品数量        
+        | ssoid            | 选填 |    String     |   
+        | channnelType     | 选填 |    String     |  
+        | payType          | 选填 |    String     | wxpay,alipay,alipay_hb,szfpay,qqwallet | 支付方式，amount不为空时，必填。例如：alipay,wxpay |   
+        | directPay        | 选填 |    String     |  
+        | presentAmount    | 选填 |    String     |                  | amount, kebiSpent, voucherAmount不能同时为空 |
+        | countryCode      | 选填 |    timestamp  |      
+        | currency         | 选填 |    timestamp  |  
+        | kebiSpent        | 选填 |    Long       |                  | 可币支付金额，amount, kebiSpent, voucherAmount不能同时为空 |
+        | voucherAmount    | 选填 |    BigDecimal |                  | 优惠券金额，voucherAmount 和 voucherInfo 需同时共存 |
+        | voucherInfo      | 选填 |    String     |                  | 优惠券信息JSON串 |
+        | voucherId        | 选填 |    String     |                  |
+        | tradeType        | 选填 |    String     | KB, ZHICHONG     | 仅用于生成兼容的PayReqID, ZHICHONG 的话, payReqId开头字母为KB, 其余的话, 均为RM |    
+        | contents         | 选填 |    String     |                  | 商品介绍 |
+        | mobileNum        | 选填 |    String     |   
+        | imei             | 选填 |    String     |   
+        | imsi             | 选填 |    String     |   
+        | ip               | 选填 |    String     |   
+        | mac              | 选填 |    String     |  
+        | model            | 选填 |    String     |   
+        | appPackage       | 选填 |    String     |   
+        | appVer           | 选填 |    String     |   
+        | sdkVer           | 选填 |    String     | 
+        | channelId        | 选填 |    String     |   
+        | gameType         | 选填 |    String     |   
+        | extra            | 选填 |    String     |   
+        | remark           | 选填 |    String     |   
+        | discountInfo     | 选填 |    String     |   
+        | openid           | 选填 |    String     |   
+        | brandType        | 选填 |    String     |   
+        | mobileOsVer      | 选填 |    String     |   
+        | platform         | 选填 |    String     |   
+        | screenInfo       | 选填 |    String     |   
+        | factor           | 选填 |    String     |           | 使用优惠券时必填 |
+        | notifyUrl        | 选填 |    String     |   
+        | subPartnerOrders | 选填 |  List<String> |           | 合单的子订单号列表 |
+        | payContext       | 选填 |  Map<String,Object> |     | 渠道相关数据，amount不为空时，必填。例如: SZF需要cardAmount,cardNo,cardPwd |
+        '''
+#         table = pandas.read_html('https://doc.myoas.com/display/pingtai/pay-biz-paycenter+PayService', encoding='utf-8')[0]
+#         print(table)
+        req = {
+            'partnerOrder': partner_order,
+            'partnerCode': partner_code,
+            'originalAmount': original_amount,
+            'amount': amount,
+            'productsName': products_name,
+            'counts': '',
+            'ssoid': '',
+            'channnelType': '',
+            'payType': pay_type,
+            'directPay': '',
+            'presentAmount': '',
+            'countryCode': '',
+            'currency': '',
+            'kebiSpent': kebi_spent,
+            'voucherAmount': '',
+            'voucherInfo': str(voucher_info),
+            'voucherId': '',
+            'tradeType': '',
+            'contents': '',
+            'mobileNum': '',
+            'imei': '',
+            'imsi': '',
+            'ip': '',
+            'mac': '',
+            'model': '',
+            'appPackage': '',
+            'appVer': '',
+            'sdkVer': '',
+            'channelId': '',
+            'gameType': '',
+            'extra': '',
+            'remark': '',
+            'discountInfo': '',
+            'openid': '',
+            'brandType': '',
+            'mobileOsVer': '',
+            'platform': '',
+            'screenInfo': '',
+            'factor': '',
+            'notifyUrl': '',
+            'subPartnerOrders': []
+        }
+        if voucher_info:
+            req['voucherAmount'] = voucher_info['cutAmount']
+            req['voucherId'] = voucher_info['id']
+        req.update(kwargs)
+        self.conn.invoke('PayService', 'tryPay', req, flag='JSON')
 
     def refund_order(self, pay_req_id, channel_refund, kebi_refund="", voucher_refund="", **kwargs):
         '''
@@ -167,8 +221,13 @@ class PayCenterDubbo():
             "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
             "voucherAmount": vou_amout,
             "voucherInfo": str({'vouId': vou_id, 'amount': vou_amout, 'price': vou_original_amount}),
+<<<<<<< HEAD
             "voucherId": vou_id, "kebiSpent": kb_spent,
             "payContext": {"payWay": "1"}
+=======
+            "voucherId": vou_id, 
+            "kb_spent": kb_spent
+>>>>>>> f24d7f90e336cdd224976afa927c5a57318a8d64
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
