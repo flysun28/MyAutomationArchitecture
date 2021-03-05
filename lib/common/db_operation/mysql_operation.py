@@ -91,10 +91,29 @@ def connect_mysql(in_out='inland', database=None):
     :param database:
     :return:
     """
-    mysql_args = get_env_config()['mysql_'+in_out]
-    if database:
-        mysql_args.update(db=database)
-    mysql = MySQLClient(**mysql_args)
-    mysql.logger.info('成功连接到测试环境%s-MYSQL：%s' % (get_env_id(), mysql_args))
-    return mysql
+    if is_connect_mysql():
+        mysql_args = get_env_config()['mysql_'+in_out]
+        if database:
+            mysql_args.update(db=database)
+        mysql = MySQLClient(**mysql_args)
+        mysql.logger.info('成功连接到测试环境%s-MYSQL：%s' % (get_env_id(), mysql_args))
+        return mysql
+    else:
+        return None
 
+
+def is_connect_mysql():
+    """
+    是否连接数据库标识
+    :param env:
+    :return:
+    """
+    env = get_env_id()
+    if env == "1" or env == "2" or env == "3":
+        return True
+    elif env == "grey" or env == "product":
+        return False
+
+
+if __name__ == '__main__':
+    print(connect_mysql("", ""))

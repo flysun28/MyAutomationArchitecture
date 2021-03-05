@@ -68,42 +68,17 @@ class PayCenterDubbo():
             'originalAmount': original_amount,
             'amount': amount,
             'productsName': products_name,
-            'counts': '',
-            'ssoid': '',
-            'channnelType': '',
-            'payType': pay_type,
-            'directPay': '',
-            'presentAmount': '',
-            'countryCode': '',
-            'currency': '',
+            'counts': '', 'ssoid': '', 'channnelType': '',   'payType': pay_type, 'directPay': '',
+            'presentAmount': '', 'countryCode': '', 'currency': '',
             'kebiSpent': kebi_spent,
             'voucherAmount': '',
             'voucherInfo': str(voucher_info),
-            'voucherId': '',
-            'tradeType': '',
-            'contents': '',
-            'mobileNum': '',
-            'imei': '',
-            'imsi': '',
-            'ip': '',
-            'mac': '',
-            'model': '',
-            'appPackage': '',
-            'appVer': '',
-            'sdkVer': '',
-            'channelId': '',
-            'gameType': '',
-            'extra': '',
-            'remark': '',
-            'discountInfo': '',
-            'openid': '',
-            'brandType': '',
-            'mobileOsVer': '',
-            'platform': '',
-            'screenInfo': '',
-            'factor': '',
-            'notifyUrl': '',
-            'subPartnerOrders': []
+            'voucherId': '', 'tradeType': '', 'contents': '', 'mobileNum': '',
+            'imei': '', 'imsi': '', 'ip': '', 'mac': '', 'model': '', 'appPackage': '',
+            'appVer': '', 'sdkVer': '', 'channelId': '', 'gameType': '',
+            'extra': '', 'remark': '', 'discountInfo': '',
+            'openid': '', 'brandType': '', 'mobileOsVer': '', 'platform': '',
+            'screenInfo': '', 'factor': '', 'notifyUrl': '', 'subPartnerOrders': []
         }
         if voucher_info:
             req['voucherAmount'] = voucher_info['cutAmount']
@@ -188,7 +163,7 @@ class PayCenterDubbo():
             "kebiSpent": kebiSpent,
             #  SZF的话, 需要cardAmount,cardNo,cardPwdalipay:
             #  1)plugintype, 取值有 0(其他如WAP), 1(APP支付)  wxpay: 1)plugintype, 取值有 0, NATIVE, JSAPI, APP 2)authorizationCode payWay是JSAPI时必填
-            "payContext": {"payWay": "1"}
+            "payContext": {"plugintype": "1"}
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
@@ -221,13 +196,8 @@ class PayCenterDubbo():
             "screenInfo": "HALF", "factor": "", "notifyUrl": "www.baidu.com", "subPartnerOrders": [],
             "voucherAmount": vou_amout,
             "voucherInfo": str({'vouId': vou_id, 'amount': vou_amout, 'price': vou_original_amount}),
-<<<<<<< HEAD
             "voucherId": vou_id, "kebiSpent": kb_spent,
-            "payContext": {"payWay": "1"}
-=======
-            "voucherId": vou_id, 
-            "kb_spent": kb_spent
->>>>>>> f24d7f90e336cdd224976afa927c5a57318a8d64
+            "payContext": {"plugintype": "1"}
         }
         self.conn.invoke('PayService', 'tryPay', args, flag='JSON')
 
@@ -241,10 +211,10 @@ if __name__ == '__main__':
     # payType, partnerOrder, originalAmount, amount, kebiSpent
 
     # 直扣订单
-    paycenter_dubbo.create_payorder("alipay", RandomOrder(32).random_string(), "10", "10.0", "0")
+    #paycenter_dubbo.create_payorder("qqwallet", RandomOrder(32).random_string(), "10", "10.0", "0")
 
     # 可币消费订单： 纯可币
-    #paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "10", "0", "10", directPay="KB")
+    paycenter_dubbo.create_payorder("", RandomOrder(32).random_string(), "0.01", "0", "0.01", directPay="KB")
 
     # 可币消费订单：纯优惠券
     #paycenter_dubbo.create_payorder_vou("", RandomOrder(32).random_string(), "10.0", "0.0", "0", "10.0", "10.0", "20000", directPay="KB")

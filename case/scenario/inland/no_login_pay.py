@@ -6,7 +6,7 @@
 from case.scenario.common_req import NO_LOGIN_PAY
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.skip_pay import skip_pay
 
@@ -32,18 +32,19 @@ def on_login(amount, notify_amount):
         【2】. 调用查询结果接口
     """
     assert str(queryResult(order["pay_req_id"], "no_login")) == "2002"
-    """
-        【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理
-    """
-    # FizAssert().assert_order_info(ssoid, order["pay_req_id"], amount, amount)
-    """
-        【4】. 检查trade_order表信息是否正确 无账号订单分库分表规则未梳理
-    """
-    # FizAssert().assert_trade_order(ssoid, order["pay_req_id"], amount, amount)
-    """
-        【5】. 检查通知表信息是否正确
-    """
-    FizAssert().assert_notify(order["partner_order"])
+    if is_assert():
+        """
+            【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理
+        """
+        # FizAssert().assert_order_info(ssoid, order["pay_req_id"], amount, amount)
+        """
+            【4】. 检查trade_order表信息是否正确 无账号订单分库分表规则未梳理
+        """
+        # FizAssert().assert_trade_order(ssoid, order["pay_req_id"], amount, amount)
+        """
+            【5】. 检查通知表信息是否正确
+        """
+        FizAssert().assert_notify(order["partner_order"])
 
 
 if __name__ == '__main__':

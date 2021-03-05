@@ -6,6 +6,7 @@
 from datetime import datetime
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
+from lib.common.utils.env import get_env_id
 from lib.common.utils.globals import GlobarVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.find_database_table import SeparateDbTable
@@ -198,3 +199,16 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
         except Exception as e:
             self.logger.info("优惠券表记录异常")
             raise e
+
+
+def is_assert():
+    """
+    生产环境不做数据库断言
+    :param env:
+    :return:
+    """
+    env = get_env_id()
+    if env == "1" or env == "2" or env == "3":
+        return True
+    elif env == "grey" or env == "product":
+        return False

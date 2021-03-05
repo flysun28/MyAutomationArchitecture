@@ -4,8 +4,9 @@
 # datetime:2021/2/8 16:45
 # comment:
 from lib.common.algorithm.md5 import md5
+from lib.common.utils.env import get_env_id
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
 
@@ -70,7 +71,11 @@ class Transfer:
             })
         }
         case_dict['bizContent'] = str(case_dict['bizContent'])
-        temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
+        temp_string = ''
+        if is_get_key_from_db():
+            temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
+        else:
+            temp_string = Sign(case_dict).join_asc_have_key() + "ec25bb85a7fb426e"
         case_dict['sign'] = md5(temp_string)
         """
         # 生产地址 https://gw-opay.oppomobile.com/gateway/transfer-apply

@@ -5,7 +5,7 @@
 # comment:
 from lib.common.algorithm.sha_256 import sha_256
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
 
@@ -34,7 +34,11 @@ class NewTv:
             'extendParams': '',
             'sign': ''
         }
-        temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(case_data['partnerCode']).get_key_from_merchant()
+        temp_string = ''
+        if is_get_key_from_db():
+            temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(case_data['partnerCode']).get_key_from_merchant()
+        else:
+            temp_string = Sign(case_data).join_asc_have_key("&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB"
         case_data['sign'] = sha_256(temp_string)
         """
         http://gw-opay.oppomobile.com/gateway/payOrder
@@ -79,4 +83,4 @@ class NewTv:
 
 
 if __name__ == '__main__':
-    NewTv().sign_order()
+    NewTv().pay_order()

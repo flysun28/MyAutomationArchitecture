@@ -43,4 +43,4 @@ def get_dubbo_info(dubbo_config, in_out="inland") -> list:
 
 
 if __name__ == '__main__':
-    pass
+    set_global_env_id("1")

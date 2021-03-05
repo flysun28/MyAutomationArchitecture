@@ -11,9 +11,9 @@ class Order:
     ssoid = GlobarVar.SSOID
 
     def __init__(self, amount=0, notify_amount=0, country="CN", currency="CNY", pay_channel="wxpay", partner_id="2031",
-                 notify_url= "http://secure.pay-test2.wanyol.com" + "/notify/receiver", app_version=260,
+                 notify_url=str(GlobarVar.URL_PAY_IN) + "/notify/receiver", app_version=260,
                  interface_version="12.0", version_exp="12.0", renewProductCode="20310001"):
-        # str(GlobarVar.URL_PAY_IN)
+        #  "http://secure.pay-test2.wanyol.com"
         self.amount = amount
         self.notify_amount = notify_amount
         self.pay_channel = pay_channel
