@@ -15,7 +15,7 @@ from lib.common.file_operation.config_operation import Config
 
 class SimplePay(metaclass=WithLogger):
     
-    def __init__(self, channel, amount, partner_code, sdk_ver, version='12.0', version_expend='12.0', 
+    def __init__(self, channel, amount, partner_code, sdk_ver, version='12.0', version_expend='12.0', partner_order=None,
                  notify_url='http://pay.pay-test.wanyol.com/notify/receiver'):
         """
         :param version:
@@ -30,7 +30,7 @@ class SimplePay(metaclass=WithLogger):
         self.version_exp = version_expend
         self.amount = amount
         self.partner_code = partner_code
-        self.partner_order = RandomOrder(32).random_string()
+        self.partner_order = partner_order if partner_order else RandomOrder(32).random_string()
         self.notify_url = notify_url
         self.sdk_ver = sdk_ver
 
@@ -60,12 +60,11 @@ class SimplePay(metaclass=WithLogger):
         else:
             self.logger.info("接口返回异常")
 
-    def direct_pay(self, partner_order=None):
+    def direct_pay(self):
         """
         直扣
         :return:
         """
-        self.partner_order = partner_order if partner_order else self.partner_order
         req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PCRM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17",
@@ -85,13 +84,12 @@ class SimplePay(metaclass=WithLogger):
         else:
             self.logger.info("接口返回异常")
 
-    def recharge_spend_amount_is_price(self, price, partner_order=None):
+    def recharge_spend_amount_is_price(self, price):
         """
         1. 充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
         2. amount>price, 针对点卡渠道，剩余的金额充值为可币
         :return:
         """
-        self.partner_order = partner_order if partner_order else self.partner_order
         req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
@@ -116,7 +114,7 @@ class SimplePay(metaclass=WithLogger):
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
-    def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor="", partner_order=None):
+    def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor=""):
         """
         充值并消费，带优惠券，可币金额体现不出来。若账户有可币余额，会扣除。
         :param price: int 单位：分 原始金额（商品金额）
@@ -126,7 +124,6 @@ class SimplePay(metaclass=WithLogger):
         :param factor: 优惠券影响因子，用于主题定向优惠券
         :return:
         """
-        self.partner_order = partner_order if partner_order else self.partner_order
         req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
@@ -150,6 +147,7 @@ class SimplePay(metaclass=WithLogger):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        print(result.baseresult.msg)
         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
     def recharge_spend_kb_buy_place(self, price, by_id="10001", add_amount="1"):
@@ -157,8 +155,7 @@ class SimplePay(metaclass=WithLogger):
         有加购位，但不使用优惠券
         注意：amount为实际支付金额，即原商品+加购商品
         :return:
-        """
-        self.partner_order = partner_order if partner_order else self.partner_order
+        """        
         req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",
                           "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
                           "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "16",
@@ -220,7 +217,10 @@ class SimplePay(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    wxspp = SimplePay("wxpay", "1", '2031', 265)
-    SimplePay("wxpay", "1").recharge_spend_amount_is_price(1)
+#     wxsimplepay = SimplePay("wxpay", "1", '2031', 265)
+#     wxsimplepay.recharge_spend_amount_is_price(1)
+    qqsimplepay = SimplePay("qqwallet", "1", '2031', 265, partner_order='d33038d830864f6d903e94ff2d0129ac')
+    print(qqsimplepay.recharge_spend_kb_and_voucher(11, 64234480, 2, 999))
+    
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
     # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)

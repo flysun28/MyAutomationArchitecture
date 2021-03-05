@@ -72,7 +72,7 @@ if __name__ == '__main__':
             if refund.is_on_the_way_refund_existed():
                 time.sleep(0.1)
             else:
-                refund.httpjson_refund("ee48e68ab339482ea10ae63e7fdbbecb", "2031", per_amount, pay_req_id='KB202103041505042086100900383572')
+                refund.httpjson_refund("JG202103051535032086100900182382", "72724314", per_amount, pay_req_id='')
                 break
 
     

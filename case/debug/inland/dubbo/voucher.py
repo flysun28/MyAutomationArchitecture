@@ -79,7 +79,7 @@ class VoucherInland:
 
 if __name__ == '__main__':
     set_global_env_id(3)
-    vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "DIKOU", "1", "1", "2086100900", count=1)
+    vou_info = VoucherInland().grantVoucher("5456925", "KB_COUPON", "DIKOU", "1", "0.99", "2086100900", count=10)
     VoucherInland().checkVoucher(vou_info['batchId'])
 
 

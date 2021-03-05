@@ -36,7 +36,12 @@ class MySQLClient(metaclass=WithLogger):
         """查询数据"""
         self.logger.info('执行sql语句：{}'.format(sql))
         self.cur.execute(sql)  # 查询数据
-        return self.cur.fetchall()
+        res = self.cur.fetchall()
+        for one in res:
+            for k, v in one.items():
+                one[k] = '' if v is None else v
+#         [{k:('' if v is None else v) for one in res for k, v in one.items()}]
+        return res
 
     def select_one(self, sql):
         """
@@ -47,6 +52,8 @@ class MySQLClient(metaclass=WithLogger):
         self.logger.info('执行sql语句：{}'.format(sql))
         self.cur.execute(sql)  # 查询数据
         res = self.cur.fetchone()
+        for k, v in res.items():
+            res[k] = '' if v is None else v
         if res is None:
             self.logger.info('查询数据为空')
         return res

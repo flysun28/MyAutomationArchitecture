@@ -5,7 +5,7 @@
 # comment:
 import requests
 from lib.common.algorithm.md5 import md5
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common_biz.sign import szf_pay_sign_string
 
 
@@ -45,4 +45,5 @@ def szf_pay(pay_req_id, card_amount, pay_money):
 
 
 if __name__ == '__main__':
-    szf_pay("KB202103041512202076075925428822", "1000", "1000")
+    set_global_env_id(3)
+    szf_pay("KB202103051339232086100900004352", "1000", "1000")
