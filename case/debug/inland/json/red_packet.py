@@ -7,7 +7,7 @@ import time
 
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
 
@@ -43,7 +43,12 @@ class RedPacket:
             'sign': ''
         }
         case_dict['bizContent'] = str(case_dict['bizContent'])
-        temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
+        temp_string = ''
+        if is_get_key_from_db():
+            temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['app_id']).get_key_from_server_info()
+        else:
+            # 线上 72724333
+            temp_string = Sign(case_dict).join_asc_have_key() + "ZVN7WawNPlCwE6YW8zWDvej746x3Ab7U"
         case_dict['sign'] = md5(temp_string)
         GlobarVar.HTTPJSON_GW_IN.post("/gateway/activity-repacket-grant", data=case_dict)
 

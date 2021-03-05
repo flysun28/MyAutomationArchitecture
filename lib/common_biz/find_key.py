@@ -4,6 +4,7 @@
 # datetime:2021/1/19 22:53
 # comment: 查询秘钥相关
 from lib.common.file_operation.config_operation import Config
+from lib.common.utils.env import get_env_id
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
 from pymysql.err import DataError
@@ -110,6 +111,18 @@ class GetKey(metaclass=WithLogger):
         except Exception as e:
             self.logger.info(e)
 
+
+def is_get_key_from_db():
+    """
+    根据环境的不同选择密钥的方式不同，如：测试环境可以直接从数据读取，生产环境由于无法连接数据库，需写死.
+    :param env:
+    :return:
+    """
+    env = get_env_id()
+    if env == "1" or env == "2" or env == "3":
+        return True
+    elif env == "grey" or env == "product":
+        return False
 
 
 if __name__ == '__main__':

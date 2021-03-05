@@ -4,7 +4,7 @@
 # datetime:2021/1/19 23:03
 # comment:
 from case.scenario.common_req import OVERSEA_NO_LOGIN
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.oversea_skippay import Skippay
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 req = OVERSEA_NO_LOGIN
@@ -35,7 +35,8 @@ def skip_pay_no_login(amount, notify_amount):
     """
     【5】. 检查通知表信息是否正确
     """
-    FizAssert(in_out="oversea").assert_notify(order_info["partner_order"])
+    if is_assert():
+        FizAssert(in_out="oversea").assert_notify(order_info["partner_order"])
 
 
 if __name__ == '__main__':

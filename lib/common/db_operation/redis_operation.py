@@ -4,6 +4,8 @@
 # datetime:2021/1/19 22:58
 # comment: redis操作
 import sys
+
+from lib.common.db_operation.mysql_operation import is_connect_mysql
 from lib.common.utils.meta import WithLogger
 try:
     from rediscluster import StrictRedisCluster
@@ -13,7 +15,7 @@ finally:
     this_mod = sys.modules.get(__name__, None)
     RedisClusterCls = getattr(this_mod, 'StrictRedisCluster', None) or getattr(this_mod, 'RedisCluster', None)
 #     print(sys.modules[RedisClusterCls.__module__].__file__)
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, get_env_id
 
 
 class RedisCluster(metaclass=WithLogger):
@@ -58,20 +60,34 @@ def connect_redis(in_out="inland"):
     redis连接
     :return:
     """
-    redis_args = get_env_config()['redis_' + in_out]
-    # 存放集群信息
-    conn_list = []
-    hosts = redis_args['host'].replace(' ', '').split(',')
-    ports = redis_args['port'].replace(' ', '').split(',')
-    if len(ports) == 1:
-        ports *= len(hosts)    
-    for (host, port) in zip(hosts, ports):
-        conn_list.append({'host': host, 'port': port})
-    
-    # 连接集群
-    redis = RedisCluster(conn_list)
-    redis.connect()
-    redis.logger.info('connection list: %s', conn_list)
-    return redis.redis_conn
+    if is_connect_redis():
+        redis_args = get_env_config()['redis_' + in_out]
+        # 存放集群信息
+        conn_list = []
+        hosts = redis_args['host'].replace(' ', '').split(',')
+        ports = redis_args['port'].replace(' ', '').split(',')
+        if len(ports) == 1:
+            ports *= len(hosts)
+        for (host, port) in zip(hosts, ports):
+            conn_list.append({'host': host, 'port': port})
+
+        # 连接集群
+        redis = RedisCluster(conn_list)
+        redis.connect()
+        redis.logger.info('connection list: %s', conn_list)
+        return redis.redis_conn
+    else:
+        return None
 
 
+def is_connect_redis():
+    """
+    是否连接redis标识
+    :param env:
+    :return:
+    """
+    env = get_env_id()
+    if env == "1" or env == "2" or env == "3":
+        return True
+    elif env == "grey" or env == "product":
+        return False

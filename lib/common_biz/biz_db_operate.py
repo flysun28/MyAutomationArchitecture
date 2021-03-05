@@ -101,7 +101,7 @@ def get_notify_id_by_request_id(pay_req_id):
 
 
 if __name__ == '__main__':
-    # print(get_balance("2076075925"))
+    print(get_balance("2076075925"))
     # print(get_balance("2076075925", country="VN", in_out="oversea"))
     # oversea_get_coin_rate("VND")
     #update_sign_status("2076075925", "wxpay")

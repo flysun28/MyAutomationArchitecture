@@ -7,7 +7,7 @@ import time
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.sha_256 import sha_256
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
 
@@ -36,7 +36,12 @@ class Msp:
             "userInfo": str({'platform': 'MSP_TV', 'ssoid': '2076075925', 'thirdPartId': '111'}),
             "sign": ""
         }
-        sign_string = Sign(case_dict).join_asc_have_key("&key=") + GetKey("2031").get_key_from_t_key()
+        sign_string = ''
+        if is_get_key_from_db():
+            sign_string = Sign(case_dict).join_asc_have_key("&key=") + GetKey("2031").get_key_from_t_key()
+        else:
+            # 2031密钥
+            sign_string = Sign(case_dict).join_asc_have_key("&key=") + "SxwBXAxZQgO8yLbWxIFVZWXX"
         case_dict['sign'] = md5(sign_string, to_upper=False)
         GlobarVar.HTTPJSON_IN.post("/api/pay/v1/trade", data=case_dict)
 
@@ -142,4 +147,5 @@ class Msp_NewTV:
 
 
 if __name__ == '__main__':
-    Msp_NewTV().msp_sign_cancel()
+    #Msp_NewTV().msp_sign_cancel()
+    Msp().pay_trade()

@@ -6,7 +6,7 @@
 from case.scenario.common_req import ONLY_SIGN
 from lib.common_biz.biz_db_operate import get_contract_code, update_sign_status
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
 
