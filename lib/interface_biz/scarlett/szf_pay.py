@@ -46,5 +46,5 @@ def szf_pay(pay_req_id, card_amount, pay_money):
 
 if __name__ == '__main__':
     set_global_env_id(3)
-    szf_pay("KB202103051339232086100900004352", "1000", "1000")
+    szf_pay("KB202103091444452086100900255582", "100000", "100000")
 

@@ -92,12 +92,12 @@ if __name__ == '__main__':
     set_global_env_id(3)
     refund = Refund()
     # 批量退款
-#     refund.refund_by_ssoid("2086100900")
+    refund.refund_by_ssoid("2086100900")
     # 全部退款
-#     refund.refund_by_partner_order("2086100900", '147115f0bda54224b224521993e093d4')
-    # 部分退款
-#     refund.refund_by_amount("2086100900", 'b99120d0d0134a26afbfce1ce2d225ed', '0.01') --------------
-    refund.refund_by_amount("2086100900", '4e5082877d054209b6a4f7a4d484ef7b', '0.01')
+    refund.refund_by_partner_order("2086100900", '147115f0bda54224b224521993e093d4')
+    # 支持部分退款
+    refund.refund_by_amount("2086100900", '5158237062d64d38b668c784b74bc0ce', '0.01')
+    refund.refund_by_amount("2086100900", 'JG202103091557402086100900646868', '0.01')
 
 #     refund.refund_single("GC202101241407088040100320000", "5456925", "0.01")
 #     refund.refund_single("4200000982202103030632224599", "2031", "0.01")

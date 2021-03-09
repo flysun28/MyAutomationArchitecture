@@ -72,7 +72,8 @@ if __name__ == '__main__':
             if refund.is_on_the_way_refund_existed():
                 time.sleep(0.1)
             else:
-                refund.httpjson_refund("JG202103051535032086100900182382", "72724314", per_amount, pay_req_id='')
+                refund.httpjson_refund("610306f201b84ecd9bf8beb834b3ecdc", "5456925", per_amount, pay_req_id='')
+#                 refund.httpjson_refund("JG202103082126042086100900703477", "72724314", per_amount, pay_req_id='')
                 break
 
     
