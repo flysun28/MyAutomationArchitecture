@@ -34,7 +34,6 @@ class GlobarVar():
     SDK_VER_IN = Config(do_case_path).read_config("sdk_ver", "version")
     SDK_VER_OUT = Config(do_case_path).read_config("apk_ver_oversea", "version")
 
-
     MYSQL_AUTO_TEST = connect_auto_test_special()
     env_id = get_env_id()
     sql_test_account = ""
