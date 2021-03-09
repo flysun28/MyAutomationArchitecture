@@ -102,6 +102,23 @@ def connect_mysql(in_out='inland', database=None):
         return None
 
 
+def connect_auto_test_special(database=None):
+    """
+    连接自动化测试专用数据库
+    :param database:
+    :return:
+    """
+    mysql_args = {'host': '10.52.54.122',
+                  'user': 'opay',
+                  'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi',
+                  'port': '33066'}
+    if database:
+        mysql_args.update(db=database)
+    mysql = MySQLClient(**mysql_args)
+    mysql.logger.info('成功连接到测试专用环境-MYSQL：%s' % mysql_args)
+    return mysql
+
+
 def is_connect_mysql():
     """
     是否连接数据库标识

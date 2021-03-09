@@ -6,15 +6,15 @@
 from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import HTTPJSON_IN
+from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
 from lib.common.utils.meta import WithLogger
-from lib.common_biz.file_path import account_path, key_path
+from lib.common_biz.file_path import key_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import expend_pay_sign_string
 from lib.interface_biz.http.pay_pass import Pass
 from lib.pb_src.python_native import ExpendPayPb_pb2
 
-token = Config(account_path).read_config("account", "token")
+token = GlobarVar.TOKEN
 key = Config(key_path).read_config("expend_pay", "key_2031")
 
 

@@ -8,11 +8,9 @@ import requests
 import hmac
 import hashlib
 import json
-from lib.common.file_operation.config_operation import Config
 from lib.common.utils.meta import WithLogger
-from lib.common_biz.file_path import account_path
 from lib.common.session.http.http_json import HttpJsonSession
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.common.utils.globals import GlobarVar
 
 url = "http://i.auth.ucnewtest.wanyol.com/loging"
 header = {"content-type": "application/json"}
@@ -22,7 +20,7 @@ appKey = "myKey"
 class Vip(metaclass=WithLogger):
     
     def __init__(self):
-        self.account_args = Config(account_path).as_dict("account")
+        self.account_args = GlobarVar.TEST_ACCOUNT
 
     def login(self):
         """
@@ -30,7 +28,7 @@ class Vip(metaclass=WithLogger):
         :return:
         """
         m = hashlib.md5()
-        m.update(self.account_args['password'].encode("utf8"))
+        m.update(self.account_args['pwd'].encode("utf8"))
         passWord_md5 = m.hexdigest()
         value = "{}{}{}".format(appKey, self.account_args['username'], passWord_md5).encode()
         sign = hmac.new(b"mySecret", value, hashlib.md5).hexdigest()

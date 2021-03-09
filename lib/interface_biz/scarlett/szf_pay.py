@@ -45,4 +45,4 @@ def szf_pay(pay_req_id, card_amount, pay_money):
 
 
 if __name__ == '__main__':
-    szf_pay("KB202103042037292076075925242672", "5000", "5000")
+    szf_pay("KB202103081515062076075925068302", "1000", "1000")

@@ -39,6 +39,7 @@ def qq_pay_scarlet(pay_req_id, amount):
         "appid": "1104946420",
         "attach": pay_req_id,
         "bank_type": "BALANCE",
+        # 分
         "cash_fee": amount,
         "fee_type": "CNY",
         "mch_id": "1282256301",
@@ -158,5 +159,5 @@ def qq_refund_mock_scarlett(pay_req_id, refund_fee, total_fee):
 
 
 if __name__ == '__main__':
-    # qq_pay_scarlet("RM202103021804312076075925281802", "0.01")
-    qq_refund_mock_scarlett("RM202103031056412076075925884122", "1", "1")
+    qq_pay_scarlet("KB202103091724082076075925432122", "1")
+    #qq_refund_mock_scarlett("RM202103031056412076075925884122", "1", "1")

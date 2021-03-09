@@ -53,7 +53,6 @@ class H5:
 
         else:
             temp_string = Sign(case_dict).join_asc_have_key("&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv0nFeJSOxOGxAv10mSpipOQ6iyhHt0udwuuU9QQdIHtAZlcECWKcb8iu3AHYSEyOaVgm30afXNNVZzP2lAxaaP74vFospYB1RpMwgLnzD4aoWwNOM9CjOLm84xVLndgP/pRJrcMjSoQoE0x6kMEqE5p91SusWWOdODxATavHDYwIDAQAB"
-
         temp_string = temp_string.replace("'", '"')
         temp_string = temp_string.replace(" ", '')
         case_dict['sign'] = sha_256(temp_string)

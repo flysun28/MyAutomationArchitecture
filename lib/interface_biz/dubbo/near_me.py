@@ -44,4 +44,10 @@ class Nearme:
 
 
 if __name__ == '__main__':
-    Nearme().nearme_add_subtract("1", "2076075925", 0)
+    flag = "1"
+    if flag == "1":
+        # 发
+        Nearme().nearme_add_subtract("10", "2076075925", 0)
+    if flag == "2":
+        # 扣
+        Nearme().nearme_add_subtract("5", "2076075925", 1)

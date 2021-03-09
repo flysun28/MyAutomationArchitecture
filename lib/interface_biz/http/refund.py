@@ -61,7 +61,7 @@ class Refund():
 
 
 if __name__ == '__main__':
-    session = HttpJsonSession('https://pre-nativepay.keke.cn')
+    # session = HttpJsonSession('https://pre-nativepay.keke.cn')
     refund = Refund()
     per_amount = 0.01
     total_amount = 0.01
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             if refund.is_on_the_way_refund_existed():
                 time.sleep(0.1)
             else:
-                refund.httpjson_refund("9b04ecc822ac4f16b3d491beaf53ee59", "5456925", per_amount)
+                refund.httpjson_refund("7d3c436664ed44f4bf4a5b8baab18281", "2031", per_amount)
                 break
 
     

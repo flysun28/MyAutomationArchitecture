@@ -7,13 +7,12 @@ from lib.common.algorithm.other import get_RV
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.env import get_env_config, set_global_env_id
+from lib.common.utils.env import get_env_config, set_global_env_id, get_env_id
 from lib.common.utils.meta import WithLogger
 from lib.interface_biz.http.vip_login import Vip
-from lib.common_biz.file_path import account_path
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
-from lib.common.utils.globals import redis
+from lib.common.utils.globals import redis, GlobarVar
 
 logger = Logger('鉴权').get_logger()
 
@@ -39,13 +38,16 @@ def get_check_t_p(param):
         return res
     else:
         token_new = Vip().login()
-        Config(account_path).write_config("account", "token", token_new)
-        logger.info('成功替换token:{} 并写入配置文件'.format(token_new))
-#         redis = connect_redis()
-        redis.set("token", token_new, ex=1000000)
-        logger.info('成功将token:{} 并写入redis'.format(token_new))
+        env_id = get_env_id()
+        if env_id == "1":
+            GlobarVar.MYSQL_AUTO_TEST.execute(
+                'UPDATE `test_account`.`account_test_env` SET token = "{}"'.format(token_new))
+        if env_id == "grey" or env_id == "product":
+            GlobarVar.MYSQL_AUTO_TEST.execute(
+                'UPDATE `test_account`.`account_pro_env` SET token = "{}"'.format(token_new))
+        logger.info('成功替换token:{} 并写入数据库'.format(token_new))
+        # logger.info('成功将token:{} 并写入redis'.format(token_new))
         return get_t_p(param)
-
 
 def pass_no_login_in():
     """
@@ -82,7 +84,7 @@ class Pass(metaclass=WithLogger):
 
     def pass_recharge(self, version="11.0", pay_type="0"):
         param = {
-            "token": Config(account_path).read_config("account", "token"),
+            "token": GlobarVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",
@@ -103,7 +105,7 @@ class Pass(metaclass=WithLogger):
 
     def pass_recharge_spend(self, version="11.0", pay_type="0"):
         param = {
-            "token": Config(account_path).read_config("account", "token"),
+            "token": GlobarVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",
@@ -129,7 +131,7 @@ class Pass(metaclass=WithLogger):
         :return:
         """
         param = {
-            "token": Config(account_path).read_config("account", "token"),
+            "token": GlobarVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",
