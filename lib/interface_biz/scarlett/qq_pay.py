@@ -14,7 +14,7 @@ from lib.interface_biz.scarlett.json_to_xml import qq_pay_to_xml, qq_mock_refund
 logger = Logger('qq-scarlet').get_logger()
 
 
-def qq_pay_scarlet(pay_req_id, amount):
+def qq_pay_scarlet(pay_req_id, amount, md5_key):
     """
     key = 46b3da6ee122993430adb1f7e20c4327
     <?xml version="1.0" encoding="UTF-8" ?><xml>
@@ -53,7 +53,7 @@ def qq_pay_scarlet(pay_req_id, amount):
         "trade_type": "APP",
         "transaction_id": RandomOrder(32).random_num(),
     }
-    req_scarlet = (qq_pay_to_xml(qq_scarlet, "46b3da6ee122993430adb1f7e20c4327"))
+    req_scarlet = (qq_pay_to_xml(qq_scarlet, md5_key))
     response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/qqpayNotifycation",
                              data=req_scarlet.encode("utf-8"))
     result = response.content

@@ -3,8 +3,11 @@
 # author:xy
 # datetime:2021/2/24 11:36
 # comment:
+from lib.common.file_operation.config_operation import Config
+from lib.common_biz.file_path import key_path
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.find_merchant_info import FindMerchant
+from lib.config.path import merchant_path
 from lib.interface_biz.scarlett.heepay import hee_pay_notify
 from lib.interface_biz.scarlett.qq_pay import qq_pay_scarlet
 from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet, wx_sign_scarlet
@@ -14,6 +17,8 @@ md5_key = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant
 
 merchant_info_sign = FindMerchant("2031").find_app_id_merchant_sign("wxpay")
 md5_key_sign = GetKey("").get_md5_key_from_merchant(merchant_info["app_id"], merchant_info["merchant_no"], "wxpay")
+
+qq_pay_merchant = Config(merchant_path).as_dict('qq_pay')
 
 
 def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=None):
@@ -33,7 +38,7 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
         if pay_type == "heepay":
             hee_pay_notify(pay_req_id, amount)
         if pay_type == "qqwallet":
-            qq_pay_scarlet(pay_req_id, amount)
+            qq_pay_scarlet(pay_req_id, amount, md5_key=qq_pay_merchant['md5_key'])
     if sign_type is not None:
         if pay_type == "wxpay":
             wx_sign_scarlet(contract_code, merchant_info_sign['merchant_no'], merchant_info_sign["plan_id"], md5_key_sign)
