@@ -96,4 +96,5 @@ def spend_only_kb(amount):
 
 
 if __name__ == '__main__':
-    spend_with_kb_vou(1)
+    #spend_with_kb_vou(1)
+    spend_only_kb(1)

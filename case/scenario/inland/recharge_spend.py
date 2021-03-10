@@ -4,17 +4,13 @@
 # datetime:2021/1/19 23:03
 # comment:
 import decimal
-import random
 import time
 from case.scenario.common_req import RECHARGE_SPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.biz_db_operate import get_balance
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
-from lib.interface_biz.dubbo.near_me import Nearme
-from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.expend_pay import ExpendPay
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.grant_voucher import grant_voucher
@@ -83,7 +79,7 @@ def rs_only_rmb(amount, notify_amount):
 
 def rs_with_kb_rmb(amount, notify_amount, kb_amount):
     """
-    商品金额=可币余额+优惠券抵扣+人民币支付
+    商品金额=可币余额+优惠券抵扣+人民币支付(优惠券金额写死在VOU类中)
     :param notify_amount:
     :param pay_type:
     :param kb_amount: 元
@@ -150,5 +146,5 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
 
 
 if __name__ == '__main__':
-    #rs_only_rmb(1, 1)
-    rs_with_kb_rmb(1, 1, 1)
+    rs_only_rmb(1, 1)
+    #rs_with_kb_rmb(1, 1, 1)

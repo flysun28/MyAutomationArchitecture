@@ -76,6 +76,7 @@ class ExpendPay(metaclass=WithLogger):
         response = ProtoBuf(ExpendPayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/expendpay', 'request', req,
                                                     flag=0)
         result = ProtoBuf(ExpendPayPb_pb2).parser('Result', response)
+        return result
 
     def kb_voucher_spend(self, vouId, vouType, vouCount):
         """

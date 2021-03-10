@@ -44,7 +44,7 @@ def skip_pay(payType, payAmount, partnerId, app_version, notifyUrl):
             "name": "NO_LOGIN_PAY",
             "desc": "话费充值",
             "count": "1",
-            "priceLocal": str(payAmount)
+            "priceLocal": str(payAmount/100)
         },
         "returnUrl": "finzpay://nearme.atlas.com",
         "notifyUrl": notifyUrl,
