@@ -10,7 +10,7 @@ from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path, key_path
@@ -144,8 +144,11 @@ def replace_gateway(case_req, app_id):
     gateway接口常见参数替换方法
     :return:
     """
-    key = GetKey(app_id).get_key_from_server_info()
-    # key = Config(key_path).as_dict('gateway_app_id')["key_" + app_id]
+    key = ''
+    if is_get_key_from_db():
+        key = GetKey(app_id).get_key_from_server_info()
+    else:
+        key = Config(key_path).as_dict('gateway_app_id')["key_" + app_id]
     case_req['timestamp'] = time.strftime("%Y-%m-%d %H:%M:%S")
     case_req['service'] = case_req['service']
     # bizContent 传输方式为字符串类型
