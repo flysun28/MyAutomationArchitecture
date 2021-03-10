@@ -78,7 +78,6 @@ class VoucherInland:
 
 
 if __name__ == '__main__':
-    set_global_env_id(3)
     flag = "2"
     if flag == "1":
         # 满减

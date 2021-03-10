@@ -20,14 +20,14 @@ class SimplePay(metaclass=WithLogger):
         :param version:
         :param version_exp:
         :param chanel:
-        :param amount: 单位：元
+        :param amount: 单位：元 ,传分，接口是元，/100处理
         :param partner_code:
         :param notify_url:
         """
         self.version = version
         self.version_exp = version_exp
         self.chanel = chanel
-        self.amount = amount
+        self.amount = amount/100
         self.partner_code = partner_code
         self.notify_url = notify_url
         self.sdk_ver = sdk_ver
@@ -86,6 +86,7 @@ class SimplePay(metaclass=WithLogger):
         """
         1. 充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
         2. amount>price, 针对点卡渠道，剩余的金额充值为可币
+        price接口传值为分
         :return:
         """
         partner_order = RandomOrder(32).random_string()

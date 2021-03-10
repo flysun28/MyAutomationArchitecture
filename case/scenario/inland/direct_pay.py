@@ -25,7 +25,7 @@ def direct_pay(amount, notify_amount):
     """
         【1】. 调用直扣接口，构造渠道回调报文
     """
-    order = SimplePay(req.pay_channel, amount/100, req.partner_id, req.app_version, req.interface_version, "",
+    order = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version, "",
                       req.notify_url).direct_pay()
     sleep(1)
     choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'])

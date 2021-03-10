@@ -31,9 +31,9 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
             wx_normal_pay_scarlet(merchant_info["merchant_no"], pay_req_id, merchant_info["app_id"], amount,
                                   md5_key)
         if pay_type == "heepay":
-            hee_pay_notify(pay_req_id, amount/100)
+            hee_pay_notify(pay_req_id, amount)
         if pay_type == "qqwallet":
-            qq_pay_scarlet(pay_req_id, amount/100)
+            qq_pay_scarlet(pay_req_id, amount)
     if sign_type is not None:
         if pay_type == "wxpay":
             wx_sign_scarlet(contract_code, merchant_info_sign['merchant_no'], merchant_info_sign["plan_id"], md5_key_sign)

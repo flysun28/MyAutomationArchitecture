@@ -3,16 +3,19 @@
 # author:xy
 # datetime:2021/1/19 22:55
 # comment: 接口参数替换
+import time
+
 from lib.common.algorithm.cipher import Cipher
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import GlobarVar
+from lib.common_biz.find_key import GetKey
 from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path, key_path
 from lib.common_biz.order_random import RandomOrder
-from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string, simple_pay_sign_string
+from lib.common_biz.sign import expend_pay_sign_string, oversea_header_sign_string, simple_pay_sign_string, Sign
 
 
 def get_tp_rv(pay_method):
@@ -136,4 +139,19 @@ class ReplaceParams(metaclass=WithLogger):
                                                         self.case['header']['appVerison']))
 
 
+def replace_gateway(case_req, app_id):
+    """
+    gateway接口常见参数替换方法
+    :return:
+    """
+    key = GetKey(app_id).get_key_from_server_info()
+    # key = Config(key_path).as_dict('gateway_app_id')["key_" + app_id]
+    case_req['timestamp'] = time.strftime("%Y-%m-%d %H:%M:%S")
+    case_req['service'] = case_req['service']
+    # bizContent 传输方式为字符串类型
+    case_req['bizContent'] = str(case_req['bizContent'])
+    # 签名替换
+    if case_req['sign'] == '':
+        sign_string = Sign(case_req).join_asc_have_key() + key
+        case_req['sign'] = md5(sign_string)
 

@@ -23,6 +23,10 @@ class AutoRenew:
         self.notify_url = notify_url
 
     def auto_renew(self, amount):
+        """
+        :param amount: 传分，接口传入为元 /100处理
+        :return:
+        """
         tp_rv = Pass().pass_direct_pay()
         r_v = tp_rv[0]
         t_p = tp_rv[1]
@@ -32,8 +36,8 @@ class AutoRenew:
                           "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17", "androidVersion": "29"
                           },
                "transType": "SIGNANDPAY", "renewProductCode": self.renewProductCode,
-               "signPartnerOrder": partner_order, "type": self.type, "amount": str(amount),
-               "oriAmount": str(amount), "ip": "58.252.5.75", "sign": "",
+               "signPartnerOrder": partner_order, "type": self.type, "amount": str(amount/100),
+               "oriAmount": str(amount/100), "ip": "58.252.5.75", "sign": "",
                "signAgreementNotifyUrl": self.notify_url, "appId": "",
                "isNeedExpend": "0",
                "basepay": {"channelId": "", "notifyurl": self.notify_url,

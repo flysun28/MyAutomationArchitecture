@@ -18,7 +18,6 @@ def sign_pay(amount, notify_amount):
     """
     签约支付
     :param notify_amount:
-    :param pay_type:
     :param amount:  分
     :return:
     """
@@ -29,8 +28,8 @@ def sign_pay(amount, notify_amount):
     """
         【2】. 调用签约支付下单接口，构造支付与签约回调报文
     """
-    order_info =  AutoRenew(req.pay_channel, req.partner_id, req.interface_version, str(req.app_version),
-                                req.renewProductCode, req.notify_url).auto_renew(amount=amount/100)
+    order_info = AutoRenew(req.pay_channel, req.partner_id, req.interface_version, str(req.app_version),
+                                req.renewProductCode, req.notify_url).auto_renew(amount=amount)
     sign_request_id = order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
     # 签约回调

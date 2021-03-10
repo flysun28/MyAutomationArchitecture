@@ -17,7 +17,7 @@ logger = Logger('heepay-scarlet').get_logger()
 def hee_pay_notify(bill_id, card_real_amt):
     """
     "bill_id": "KB202101141240530447214926427550" 支付订单号
-    "card_real_amt": "100.00" 回调金额 元
+    "card_real_amt": "100.00" 回调金额 元  传分， 接口是元，/100转成元
     "jnet_bill_no": 回调id
     :return:
     """
@@ -30,7 +30,7 @@ def hee_pay_notify(bill_id, card_real_amt):
         "card_settle_amt": "0.00",
         "ret_code": "0",
         "bill_status": "1",
-        "card_real_amt": str(card_real_amt),
+        "card_real_amt": str(card_real_amt/100),
         "jnet_bill_no": jnet_bill_no
     }
     sign_string = hee_pay_sign_string(scarlet_data)
