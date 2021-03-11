@@ -14,7 +14,7 @@ from lib.common_biz.sign import hee_pay_sign_string
 logger = Logger('heepay-scarlet').get_logger()
 
 
-def hee_pay_notify(bill_id, card_real_amt):
+def hee_pay_notify(bill_id, card_real_amt, md5_key):
     """
     "bill_id": "KB202101141240530447214926427550" 支付订单号
     "card_real_amt": "100.00" 回调金额 元  传分， 接口是元，/100转成元
@@ -33,7 +33,7 @@ def hee_pay_notify(bill_id, card_real_amt):
         "card_real_amt": str(card_real_amt/100),
         "jnet_bill_no": jnet_bill_no
     }
-    sign_string = hee_pay_sign_string(scarlet_data)
+    sign_string = hee_pay_sign_string(scarlet_data) + md5_key
     scarlet_data['sign'] = md5(sign_string, to_upper=False)
     notify_string = 'ret_msg=-%b2%e9%d1%af%b4%a6%c0%ed&' \
                     'ret_code=0&' \
@@ -55,5 +55,5 @@ def hee_pay_notify(bill_id, card_real_amt):
 
 if __name__ == '__main__':
     set_global_env_id(1)
-    hee_pay_notify("KB202103051729132076075925145722", "10")
+    hee_pay_notify("KB202103051729132076075925145722", 10, "574A4702E0644DA29E827E05")
 

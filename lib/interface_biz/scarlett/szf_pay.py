@@ -31,7 +31,7 @@ def szf_pay(pay_req_id, card_amount, pay_money, md5_key):
         "orderId": pay_req_id,
         "payDetails": "",
         # 分
-        "cardMoney": card_amount,
+        "cardMoney": str(card_amount),
         "payMoney": pay_money,
         "merId": "164928",
         "signString": "bujiaoyan",

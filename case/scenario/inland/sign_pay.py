@@ -33,9 +33,9 @@ def sign_pay(amount, notify_amount):
     sign_request_id = order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
     # 签约回调
-    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code)
+    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code, partner_id=req.partner_id)
     # 支付回调
-    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
     
         【3】. 查询支付结果

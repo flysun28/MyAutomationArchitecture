@@ -40,7 +40,7 @@ def rs_only_rmb(amount, notify_amount):
     """
     order_info = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version,
                            req.version_exp, req.notify_url).recharge_spend_amount_is_price(amount)
-    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
         【3】.调用查询结果接口
     """
@@ -107,7 +107,7 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
                            req.version_exp, req.notify_url).recharge_spend_kb_and_voucher(price, vou_id,
                                                                                           req_vou.vouType,
                                                                                           int(req_vou.vouAmount))
-    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
         【3】.调用查询结果接口
     """

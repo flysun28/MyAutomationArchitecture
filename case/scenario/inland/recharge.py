@@ -8,7 +8,6 @@ import time
 from case.scenario.common_req import RECHARGE_PAY
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.biz_db_operate import get_balance
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.gateway_query_account import query_account
@@ -37,7 +36,7 @@ def recharge(amount, notify_amount):
     pay_req_id = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version, "",
                       req.notify_url).recharge()
     time.sleep(1)
-    choose_scarlett(notify_amount, req.pay_channel, pay_req_id)
+    choose_scarlett(notify_amount, req.pay_channel, pay_req_id, partner_id=req.partner_id)
     """
         【3】.调用查询结果接口
     """

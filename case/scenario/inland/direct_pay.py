@@ -28,7 +28,7 @@ def direct_pay(amount, notify_amount):
     order = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version, "",
                       req.notify_url).direct_pay()
     sleep(1)
-    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'], partner_id=req.partner_id)
     """
         【2】. 调用查询结果接口
     """

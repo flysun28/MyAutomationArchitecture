@@ -221,7 +221,7 @@ def hee_pay_sign_string(scarlett_string):
         + scarlett_string['bill_id'] + "&" + "jnet_bill_no=" + scarlett_string['jnet_bill_no'] + "&" + "bill_status=" + \
         scarlett_string["bill_status"] + "&" + "card_real_amt=" + scarlett_string['card_real_amt'] + "&" + \
         "card_settle_amt=" + scarlett_string[
-            "card_settle_amt"] + "&" + "card_detail_data=|||" + "574A4702E0644DA29E827E05"
+            "card_settle_amt"] + "&" + "card_detail_data=|||"
     return md5_string
 
 
@@ -241,7 +241,7 @@ def szf_pay_sign_string(szf_scarlett):
     神州付渠道签名原始串
     :return:
     """
-    md5_string = szf_scarlett['version'] + "|" + szf_scarlett['merId'] + "|" + szf_scarlett['payMoney'] + "|" + \
+    md5_string = szf_scarlett['version'] + "|" + szf_scarlett['merId'] + "|" + str(szf_scarlett['payMoney']) + "|" + \
                  szf_scarlett['cardMoney'] + "|" +  szf_scarlett['orderId'] + "|" + szf_scarlett['payResult'] + "|" + \
                  szf_scarlett['privateField'] + "|" + szf_scarlett['payDetails'] + "|"
     return md5_string
