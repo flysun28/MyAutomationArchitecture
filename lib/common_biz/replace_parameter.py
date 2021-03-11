@@ -158,3 +158,5 @@ def replace_gateway(case_req, app_id):
         sign_string = Sign(case_req).join_asc_have_key() + key
         case_req['sign'] = md5(sign_string)
 
+
+

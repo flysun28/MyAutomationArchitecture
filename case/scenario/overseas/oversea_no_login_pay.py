@@ -4,10 +4,13 @@
 # datetime:2021/1/19 23:03
 # comment:
 from case.scenario.common_req import OVERSEA_NO_LOGIN
+from lib.common.logger.logging import Logger
+from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.oversea_skippay import Skippay
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 req = OVERSEA_NO_LOGIN
+logger = Logger('oversea_no_login').get_logger()
 
 
 def skip_pay_no_login(amount, notify_amount):
@@ -22,7 +25,7 @@ def skip_pay_no_login(amount, notify_amount):
     """
     order_info = Skippay(amount, amount, version=req.interface_version, partner_id=req.partner_id, country=req.country,
                          currency=req.currency, payType=req.pay_channel).skip_pay("no_login")
-    coda_pay(notify_amount, "390", "24", order_info['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
     【2】. 调用查询结果接口?疑似少部分渠道有？
     """
