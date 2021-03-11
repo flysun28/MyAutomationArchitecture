@@ -151,5 +151,5 @@ def qq_refund_mock_scarlett(pay_req_id, refund_fee, total_fee):
 
 
 if __name__ == '__main__':
-    qq_pay_scarlet("KB202103091724082076075925432122", "1")
+    qq_pay_scarlet("KB202103111021082076075925328022", "1", "46b3da6ee122993430adb1f7e20c4327")
     #qq_refund_mock_scarlett("RM202103031056412076075925884122", "1", "1")

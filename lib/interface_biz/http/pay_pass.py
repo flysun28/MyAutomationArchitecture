@@ -9,10 +9,11 @@ from lib.common.logger.logging import Logger
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.env import get_env_config, set_global_env_id, get_env_id
 from lib.common.utils.meta import WithLogger
+from lib.config.path import common_sql_path
 from lib.interface_biz.http.vip_login import Vip
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
-from lib.common.utils.globals import redis, GlobarVar
+from lib.common.utils.globals import GlobarVar
 
 logger = Logger('鉴权').get_logger()
 
@@ -41,13 +42,14 @@ def get_check_t_p(param):
         env_id = get_env_id()
         if env_id == "1":
             GlobarVar.MYSQL_AUTO_TEST.execute(
-                'UPDATE `test_account`.`account_test_env` SET token = "{}"'.format(token_new))
+                Config(common_sql_path).read_config("pay_auto_test_info", "test_update_account").format(token_new))
         if env_id == "grey" or env_id == "product":
             GlobarVar.MYSQL_AUTO_TEST.execute(
-                'UPDATE `test_account`.`account_pro_env` SET token = "{}"'.format(token_new))
+                Config(common_sql_path).read_config("pay_auto_test_info", "product_update_account").format(token_new))
         logger.info('成功替换token:{} 并写入数据库'.format(token_new))
         # logger.info('成功将token:{} 并写入redis'.format(token_new))
         return get_t_p(param)
+
 
 def pass_no_login_in():
     """
