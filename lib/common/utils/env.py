@@ -18,7 +18,12 @@ def set_global_env_id(env_id):
 
 
 def get_env_id():
-    return glob_env_cfg.read_config('environment', 'value')
+    # 默认走itest平台环境变量，若无，则读取本地环境变量
+    env = dict(os.environ)
+    if "CASE_ENV" in env:
+        return env
+    else:
+        return glob_env_cfg.read_config('environment', 'value')
 
 
 def get_env_config() -> dict:
@@ -40,6 +45,8 @@ def get_dubbo_info(dubbo_config, in_out="inland") -> list:
     """
     ip_port = get_env_config()['dubbo_' + in_out][dubbo_config].split(":")
     return ip_port
+
+
 
 
 if __name__ == '__main__':
