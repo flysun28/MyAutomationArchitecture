@@ -8,7 +8,7 @@ from case.scenario.common_req import EXPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.biz_db_operate import get_pay_req_by_partner, get_balance
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.expend_pay import ExpendPay
@@ -47,27 +47,27 @@ def spend_with_kb_vou(amount):
     """
         【4】. 检查可币与优惠券消费信息是否正确
     """
-
-    """
-        【5】. 检查order_info表信息是否正确
-    """
-    pay_req_id = get_pay_req_by_partner(req.ssoid, result['partner_order'])
-    FizAssert().assert_order_info(req.ssoid, pay_req_id, 0, int(amount + int(req_vou.vouAmount)), amount,
-                                  int(req_vou.vouAmount),
-                                  str(vou_id))
-    """
-        【6】. 检查trade_order表信息是否正确
-    """
-    FizAssert().assert_trade_order(req.ssoid, pay_req_id, 0, int(amount + int(req_vou.vouAmount)), amount,
-                                   int(req_vou.vouAmount))
-    """
-        【7】. 检查通知表信息是否正确
-    """
-    FizAssert().assert_notify(result["partner_order"])
-    """
-        【8】. 检查优惠券信息
-    """
-    FizAssert().assert_voucher(req.ssoid, vou_id)
+    if is_assert():
+        """
+            【5】. 检查order_info表信息是否正确
+        """
+        pay_req_id = get_pay_req_by_partner(req.ssoid, result['partner_order'])
+        FizAssert().assert_order_info(req.ssoid, pay_req_id, 0, int(amount + int(req_vou.vouAmount)), amount,
+                                      int(req_vou.vouAmount),
+                                      str(vou_id))
+        """
+            【6】. 检查trade_order表信息是否正确
+        """
+        FizAssert().assert_trade_order(req.ssoid, pay_req_id, 0, int(amount + int(req_vou.vouAmount)), amount,
+                                       int(req_vou.vouAmount))
+        """
+            【7】. 检查通知表信息是否正确
+        """
+        FizAssert().assert_notify(result["partner_order"])
+        """
+            【8】. 检查优惠券信息
+        """
+        FizAssert().assert_voucher(req.ssoid, vou_id)
 
 
 def spend_only_kb(amount):

@@ -10,7 +10,7 @@ from case.scenario.inland.recharge import recharge
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.expend_pay import ExpendPay
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.grant_voucher import grant_voucher
@@ -58,23 +58,24 @@ def rs_only_rmb(amount, notify_amount):
     """
         【5】.检查订单表记录是否正确
     """
-    FizAssert().assert_order_info(req.ssoid, order_info['pay_req_id'], amount, amount, vou_id="0")
-    """
-        【6】. 检查trade order表记录是否正确
-    """
-    FizAssert().assert_trade_order(req.ssoid, order_info['pay_req_id'], amount, amount)
-    """
-        【7】. 检查tb_recharge表记录是否正确(无记录)
-    """
-    FizAssert().assert_tb_recharge(req.ssoid, order_info['pay_req_id'], amount, flag=False)
-    """
-        【8】. 检查tb_payments表记录是否正确(无记录)
-    """
-    FizAssert().assert_tb_payment(req.ssoid, order_info['partner_order'], amount, flag=False)
-    """
-        【9】. 检查通知表信息是否正确
-    """
-    FizAssert().assert_notify(order_info["partner_order"])
+    if is_assert():
+        FizAssert().assert_order_info(req.ssoid, order_info['pay_req_id'], amount, amount, vou_id="0")
+        """
+            【6】. 检查trade order表记录是否正确
+        """
+        FizAssert().assert_trade_order(req.ssoid, order_info['pay_req_id'], amount, amount)
+        """
+            【7】. 检查tb_recharge表记录是否正确(无记录)
+        """
+        FizAssert().assert_tb_recharge(req.ssoid, order_info['pay_req_id'], amount, flag=False)
+        """
+            【8】. 检查tb_payments表记录是否正确(无记录)
+        """
+        FizAssert().assert_tb_payment(req.ssoid, order_info['partner_order'], amount, flag=False)
+        """
+            【9】. 检查通知表信息是否正确
+        """
+        FizAssert().assert_notify(order_info["partner_order"])
 
 
 def rs_with_kb_rmb(amount, notify_amount, kb_amount):

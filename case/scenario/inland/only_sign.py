@@ -12,6 +12,8 @@ from lib.interface_biz.http.query_result import queryResult
 
 
 req = ONLY_SIGN
+
+
 def only_sign():
     """
     :return:

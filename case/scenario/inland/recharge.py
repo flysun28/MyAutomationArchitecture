@@ -9,7 +9,7 @@ from case.scenario.common_req import RECHARGE_PAY
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert
+from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
@@ -55,15 +55,16 @@ def recharge(amount, notify_amount):
     """
         【5】.检查订单表记录是否正确
     """
-    FizAssert().assert_order_info(req.ssoid, pay_req_id, amount, amount)
-    """
-        【6】. 检查trade order表记录是否正确
-    """
-    FizAssert().assert_trade_order(req.ssoid, pay_req_id, amount, amount)
-    """
-        【7】. 检查tb_recharge表记录是否正确
-    """
-    FizAssert().assert_tb_recharge(req.ssoid, pay_req_id, amount)
+    if is_assert():
+        FizAssert().assert_order_info(req.ssoid, pay_req_id, amount, amount)
+        """
+            【6】. 检查trade order表记录是否正确
+        """
+        FizAssert().assert_trade_order(req.ssoid, pay_req_id, amount, amount)
+        """
+            【7】. 检查tb_recharge表记录是否正确
+        """
+        FizAssert().assert_tb_recharge(req.ssoid, pay_req_id, amount)
 
 
 if __name__ == '__main__':

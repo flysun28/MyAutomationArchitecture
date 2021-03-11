@@ -59,10 +59,9 @@ def find_merchant_info(channel, partner_id):
     if env_id == "grey" or env_id == "product":
         flag = "product"
     pay_merchant = mysql.select_one(
-        (Config(common_sql_path).read_config('pay_auto_test_info', '{}_merchant'.format(flag))).format(partner_id, channel))
+        (Config(common_sql_path).read_config('pay_auto_test_info', '{}_merchant'.format(flag))).format(partner_id,
+                                                                                                       channel))
     return pay_merchant
-
-
 
 
 if __name__ == '__main__':
