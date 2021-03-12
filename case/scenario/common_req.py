@@ -52,8 +52,7 @@ class KB:
         self.kb_amount = kb_amount
 
 
-# 分
-vou_amount = 1
+
 # 国内
 DIRECT_PAY = Order()
 NO_LOGIN_PAY = Order(partner_id="72724313")
@@ -62,6 +61,8 @@ RECHARGE_PAY = Order()
 SIGN_PAY = Order()
 EXPEND_PAY = Order(interface_version="6.0")
 RECHARGE_SPEND_PAY = Order()
+# 分
+vou_amount = 1
 VOU_INLAND = Vou(vouConditionAmount=str(0), vouAmount=str(vou_amount))
 
 # 海外
@@ -70,7 +71,9 @@ OVERSEA_NO_LOGIN = Order(interface_version="15.0", country="IN", currency="IN", 
 OVERSEA_RECHARGE = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
 OVERSEA_RECHARGE_SPEND = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
 OVERSEA_SPEND = Order(interface_version="15.0", country="VN", currency="VND")
-VOU_OVERSEA = Vou(vouConditionAmount=str(vou_amount), vouAmount=str(vou_amount - 0.01), country="VN", currency="VND")
+# 元
+oversea_vou_amount = 0.01
+VOU_OVERSEA = Vou(vouConditionAmount=str(0), vouAmount=oversea_vou_amount, country="VN", currency="VND")
 
 
 if __name__ == '__main__':

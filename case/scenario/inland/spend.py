@@ -7,10 +7,8 @@ import random
 from case.scenario.common_req import EXPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.biz_db_operate import get_pay_req_by_partner, get_balance
+from lib.common_biz.biz_db_operate import get_pay_req_by_partner
 from lib.common_biz.fiz_assert import FizAssert, is_assert
-from lib.interface_biz.dubbo.near_me import Nearme
-from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.expend_pay import ExpendPay
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.grant_voucher import grant_voucher

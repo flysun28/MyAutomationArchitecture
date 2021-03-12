@@ -8,3 +8,4 @@ case/report/
 case/htmlcov/
 case/.coverage
 case/.pytest_cache
+case/debug/main_dubug.py

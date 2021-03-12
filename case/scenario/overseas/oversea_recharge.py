@@ -19,6 +19,12 @@ logger = Logger('oversea_recharge').get_logger()
 
 def recharge(amount, notify_amount):
     """
+    amount指渠道支付金额
+    :param amount:
+    :param notify_amount:
+    :return:
+    """
+    """
         【1】. 查询可币初始化余额
     """
     balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
