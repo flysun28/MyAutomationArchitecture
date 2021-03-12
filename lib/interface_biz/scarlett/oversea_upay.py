@@ -29,7 +29,8 @@ def upay_pay_scarlet(amount, cpOrderId):
         "uid": "ZING"
     """
     scarlet_data = {
-        "amount": amount,
+        # 渠道回调为分，接口传入为元
+        "amount": amount*100,
         "cpOrderId": cpOrderId,
         "hash": "85238588E261A537E855FF9740A5BDE7",
         "tradeId": RandomOrder(18).random_num(),
@@ -47,9 +48,10 @@ def upay_pay_scarlet(amount, cpOrderId):
                      "op=92&" \
                      "result=200&" \
                      "test=true&" \
-                     "tradeId=210224182311113568&" \
-                     "ts=1614165820000&" \
-                     "uid=ZING".format(str(scarlet_data['amount']), scarlet_data['cpOrderId'])
+                     "tradeId={}&" \
+                     "ts={}&" \
+                     "uid=ZING".format(str(scarlet_data['amount']), scarlet_data['cpOrderId'],
+                                       scarlet_data['tradeId'], scarlet_data['ts'])
     response = requests.get(get_env_config()['url']['pay_scarlet_out'] + "/opaycenter/upaynotify?" + scarlet_string)
     result = response.content
     logger.info(str(result.decode("utf-8")))

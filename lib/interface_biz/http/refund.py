@@ -25,6 +25,7 @@ class Refund():
         self.ssoid = ssoid
         self.partner_order = self.partner_code = None
         self.http_session = http_session
+        self.db_order_info = SeparateDbTable(self.ssoid).get_order_db_table()        
     
     def httpjson_refund(self, partner_order, partner_code, amount, pay_req_id=None):
         '''
@@ -64,32 +65,42 @@ class Refund():
     
     def get_sub_partner_orders(self, pay_req_id):
         self.pay_req_id = pay_req_id
-        sep_dbtbl = SeparateDbTable(self.ssoid)
-        order_db_info = sep_dbtbl.get_order_db_table()
-        del sep_dbtbl
-        sql = 'SELECT partner_order, partner_code FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*order_db_info, pay_req_id)
+        sql = 'SELECT partner_order, partner_code FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*self.db_order_info, pay_req_id)
         results = GlobarVar.MYSQL_IN.select(sql)
         ret = []
         for res in results:
             ret.append(tuple(res.values()))
         return ret
+    
+    def refund_by_pay_req_id(self, pay_req_id, amount):
+        for partner_order, partner_code in self.get_sub_partner_orders(pay_req_id):
+            while True:
+                if refund.is_on_the_way_refund_existed():
+                    time.sleep(0.1)
+                else:
+                    refund.httpjson_refund(partner_order, partner_code, amount, pay_req_id=pay_req_id)
+                    break
 
 
 if __name__ == '__main__':
     session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
     set_global_env_id(1)
     refund = Refund('2086100900')
-    per_amount = 0.01
-    total_amount = 0.01
-    loop_num = int(total_amount/per_amount)
-    for partner_order, partner_code in refund.get_sub_partner_orders('KB202103111508592086100900248122'):
-        for i in range(loop_num):
-            while True:
-                if refund.is_on_the_way_refund_existed():
-                    time.sleep(0.1)
-                else:
-                    refund.httpjson_refund(partner_order, partner_code, per_amount, pay_req_id='')
-                    break
+    # 全额退款
+    refund.refund_by_pay_req_id('KB202103111508592086100900248122', 0.01)
+    # 部分退款
+#     per_amount = 0.01
+#     total_amount = 0.01
+#     loop_num = int(total_amount/per_amount)
+#     for partner_order, partner_code in refund.get_sub_partner_orders('KB202103111508592086100900248122'):
+#         for i in range(loop_num):
+#             while True:
+#                 if refund.is_on_the_way_refund_existed():
+#                     time.sleep(0.1)
+#                 else:
+#                     refund.httpjson_refund(partner_order, partner_code, per_amount, pay_req_id='')
+#                     break
+
     
     
 

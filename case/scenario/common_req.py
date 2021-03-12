@@ -29,7 +29,7 @@ class Order:
 
 class Vou:
     def __init__(self, vouConditionAmount, vouAmount, country="", currency="", partner_id="2031", vouId=0, vouType=2,
-                 couponType="KB_COUPON", couponDiscountType="DIKOU", factor=""):
+                 couponType="KB_COUPON", couponDiscountType="XIAOFEI", factor=""):
         self.partner_id = partner_id
         self.vouId = vouId
         # "KB_COUPON"
@@ -52,7 +52,8 @@ class KB:
         self.kb_amount = kb_amount
 
 
-vou_amount = round(random.uniform(0.02, 10), 2)
+# 分
+vou_amount = 1
 # 国内
 DIRECT_PAY = Order()
 NO_LOGIN_PAY = Order(partner_id="72724313")
@@ -61,11 +62,11 @@ RECHARGE_PAY = Order()
 SIGN_PAY = Order()
 EXPEND_PAY = Order(interface_version="6.0")
 RECHARGE_SPEND_PAY = Order()
-VOU_INLAND = Vou(vouConditionAmount=str(vou_amount), vouAmount=str(vou_amount - 0.01))
+VOU_INLAND = Vou(vouConditionAmount=str(0), vouAmount=str(vou_amount))
 
 # 海外
-OVERSEA_SKIP_PAY = Order(interface_version="15.0", country="PH", currency="PHP", pay_channel="codapay_store")
-OVERSEA_NO_LOGIN = Order(interface_version="15.0", country="PH", currency="PHP", pay_channel="codapay_gcash")
+OVERSEA_SKIP_PAY = Order(interface_version="15.0", country="IN", currency="INR", pay_channel="codapay_paytm")
+OVERSEA_NO_LOGIN = Order(interface_version="15.0", country="IN", currency="IN", pay_channel="codapay_paytm")
 OVERSEA_RECHARGE = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
 OVERSEA_RECHARGE_SPEND = Order(country="VN", currency="VND", pay_channel="upay_gamecard", interface_version="15.0")
 OVERSEA_SPEND = Order(interface_version="15.0", country="VN", currency="VND")

@@ -7,11 +7,11 @@ Created on 2021年2月9日
 '''
 import os
 from lib.common.session.http.http_json import HttpJsonSession
-from lib.common.utils.env import get_env_config
-from lib.common.db_operation.mysql_operation import connect_mysql
+from lib.common.utils.env import get_env_config, get_env_id
+from lib.common.db_operation.mysql_operation import connect_mysql, connect_auto_test_special
 from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
-from lib.config.path import test_account_path, do_case_path
+from lib.config.path import do_case_path, common_sql_path
 from lib.common.file_operation.config_operation import Config
 
 
@@ -31,13 +31,25 @@ class GlobarVar():
     MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
     REDIS_IN = GlobalVarDescriptor(connect_redis())
     REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
-    SSOID = Config(test_account_path).read_config("account", "ssoid")
     SDK_VER_IN = Config(do_case_path).read_config("sdk_ver", "version")
     SDK_VER_OUT = Config(do_case_path).read_config("apk_ver_oversea", "version")
+
+    MYSQL_AUTO_TEST = connect_auto_test_special()
+    env_id = get_env_id()
+    sql_test_account = ""
+    if env_id == "1" or env_id == "2" or env_id == "3":
+        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account")
+    if env_id == "grey" or env_id == "product":
+        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account")
+    TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
+
+    SSOID = TEST_ACCOUNT['ssoid']
+    TOKEN = TEST_ACCOUNT['token']
 
 
 HTTPJSON_IN = GlobarVar.HTTPJSON_IN
 HTTPJSON_OUT = GlobarVar.HTTPJSON_OUT
 redis = REDIS = GlobarVar.REDIS_IN
 HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET
+MYSQL_AUTO_TEST = GlobarVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(os.getcwd(), 'src')

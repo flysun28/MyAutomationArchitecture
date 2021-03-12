@@ -19,16 +19,28 @@ class SimplePay(metaclass=WithLogger):
                  notify_url='http://pay.pay-test.wanyol.com/notify/receiver'):
         """
         :param version:
+<<<<<<< HEAD
         :param version_expend:
         :param channel:
         :param amount: 单位：元
+=======
+        :param version_exp:
+        :param chanel:
+        :param amount: 单位：元 ,传分，接口是元，/100处理
+>>>>>>> bdcef2be75deca6a862c2fe6f1ef69df36c86bd8
         :param partner_code:
         :param notify_url:
         """
         self.channel = channel
         self.version = version
+<<<<<<< HEAD
         self.version_exp = version_expend
         self.amount = amount
+=======
+        self.version_exp = version_exp
+        self.chanel = chanel
+        self.amount = amount/100
+>>>>>>> bdcef2be75deca6a862c2fe6f1ef69df36c86bd8
         self.partner_code = partner_code
         self.partner_order = partner_order if partner_order else RandomOrder(32).random_string()
         self.notify_url = notify_url
@@ -88,6 +100,7 @@ class SimplePay(metaclass=WithLogger):
         """
         1. 充值并消费，渠道支付金额=商品金额，即非点卡情况下，不使用可币与可币券
         2. amount>price, 针对点卡渠道，剩余的金额充值为可币
+        price接口传值为分
         :return:
         """
         req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PDCM00", "apntype": "1",

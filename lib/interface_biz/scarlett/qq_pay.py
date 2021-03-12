@@ -14,7 +14,7 @@ from lib.interface_biz.scarlett.json_to_xml import qq_pay_to_xml, qq_mock_refund
 logger = Logger('qq-scarlet').get_logger()
 
 
-def qq_pay_scarlet(pay_req_id, amount):
+def qq_pay_scarlet(pay_req_id, amount, md5_key):
     """
     key = 46b3da6ee122993430adb1f7e20c4327
     <?xml version="1.0" encoding="UTF-8" ?><xml>
@@ -39,6 +39,7 @@ def qq_pay_scarlet(pay_req_id, amount):
         "appid": "1104946420",
         "attach": pay_req_id,
         "bank_type": "BALANCE",
+        # 分
         "cash_fee": amount,
         "fee_type": "CNY",
         "mch_id": "1282256301",
@@ -52,7 +53,7 @@ def qq_pay_scarlet(pay_req_id, amount):
         "trade_type": "APP",
         "transaction_id": RandomOrder(32).random_num(),
     }
-    req_scarlet = (qq_pay_to_xml(qq_scarlet, "46b3da6ee122993430adb1f7e20c4327"))
+    req_scarlet = (qq_pay_to_xml(qq_scarlet, md5_key))
     response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/qqpayNotifycation",
                              data=req_scarlet.encode("utf-8"))
     result = response.content
@@ -76,21 +77,13 @@ def qq_refund_post():
     </xml>
     :return:
     """
-    qq_refund_info = {
-        "appid": "1104946420",
-        "mch_id": "1282256301",
-        "nonce_str": "ba655fe9ca1643baadc4e556ca3a7188",
-        "op_user_id": "1282256301",
-        "op_user_passwd": "3c8d318f090f73e77da648a6654c7270",
-        "out_refund_no": "20210302213427592561556242617421",
-        "out_trade_no": "RM202103022132002076075925615562",
-        "refund_fee": "1",
-        "sign": "",
-        "transaction_id": "12822563016012202103021548430031",
-    }
-    qq_refund_info['sign'] = ""
+    qq_refund_info = {"appid": "1104946420", "mch_id": "1282256301", "nonce_str": "ba655fe9ca1643baadc4e556ca3a7188",
+                      "op_user_id": "1282256301", "op_user_passwd": "3c8d318f090f73e77da648a6654c7270",
+                      "out_refund_no": "20210302213427592561556242617421",
+                      "out_trade_no": "RM202103022132002076075925615562", "refund_fee": "1",
+                      "transaction_id": "12822563016012202103021548430031", 'sign': ""}
     req_scarlet = ""
-    req_scarlet = (qq_pay_to_xml(req_scarlet, "46b3da6ee122993430adb1f7e20c4327"))
+    req_scarlet = (qq_pay_to_xml(qq_refund_info, "46b3da6ee122993430adb1f7e20c4327"))
     response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/qqpayNotifycation",
                              data=req_scarlet.encode("utf-8"))
     result = response.content
@@ -158,5 +151,10 @@ def qq_refund_mock_scarlett(pay_req_id, refund_fee, total_fee):
 
 
 if __name__ == '__main__':
-    qq_pay_scarlet("KB202103041708042076075925776422", "0.01")
+
+
 #     qq_refund_mock_scarlett("KB202103041646552086100900042702", "1", "1")
+
+    qq_pay_scarlet("KB202103111021082076075925328022", "1", "46b3da6ee122993430adb1f7e20c4327")
+    #qq_refund_mock_scarlett("RM202103031056412076075925884122", "1", "1")
+

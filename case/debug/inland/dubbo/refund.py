@@ -18,6 +18,8 @@ class Refund:
     
     def __init__(self, ssoid):
         self.ssoid = ssoid
+        self.pay_req_id = None
+        self.db_order_info = SeparateDbTable(self.ssoid).get_order_db_table()
         dubbo_info = get_dubbo_info("dispatcher")
         self.conn = DubRunner(*dubbo_info)
         self.order_dubbo = OrderDubbo()
@@ -39,19 +41,14 @@ class Refund:
             'refundId': "",
             "class": "com.keke.dispatcher.inative.entity.SimpleRefundEntity"
         }
-        result = self.conn.invoke(
-            "IFacade",
-            "simpleRefund",
-            data
-        )
+        self.conn.invoke("IFacade", "simpleRefund", data)
 
     def refund_by_ssoid(self):
         """
         根据ssoid进行批量退款
         :return:
         """
-        db_info = SeparateDbTable(self.ssoid).get_order_db_table()
-        sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(db_info[0], db_info[1], self.ssoid)
+        sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(*self.db_order_info, self.ssoid)
         refund_list = GlobarVar.MYSQL_IN.select(sql_refund)
         # pay_req_id, amount, partner_order, partner_code, pay_type
         for item in refund_list:
@@ -59,13 +56,9 @@ class Refund:
             self.refund_single(item['partner_order'], item['partner_code'], str(item['amount']/100), payReqId=item["pay_req_id"])
     
     def refund_by_partner_order(self, partner_order_id):
-        sep_dbtbl = SeparateDbTable(self.ssoid)
-        order_db_info = sep_dbtbl.get_order_db_table()
-        del sep_dbtbl
         sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM pay_tradeorder_{}.trade_order_info_{} WHERE '\
               'STATUS="OK" AND refund=0 AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
-                  order_db_info[0], order_db_info[1], partner_order_id) #+ ' AND refund=0 AND amount!="0"'
-        print(sql)
+                  *self.db_order_info, partner_order_id) #+ ' AND refund=0 AND amount!="0"'
         results = GlobarVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
@@ -73,14 +66,10 @@ class Refund:
             self.refund_single(res['partner_order'], res['partner_code'], str(res['amount']/100), payReqId=res["pay_req_id"])
 
     def refund_by_amount(self, partner_order_id, amount=''):
-        sep_dbtbl = SeparateDbTable(self.ssoid)
-        order_db_info = sep_dbtbl.get_order_db_table()
-        del sep_dbtbl
         sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM pay_tradeorder_{}.trade_order_info_{} WHERE '\
               'request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
-                  order_db_info[0], order_db_info[1], partner_order_id) #+ ' AND amount!="0"'
+                  *self.db_order_info, partner_order_id) #+ ' AND amount!="0"'
                 #((STATUS="OK" AND refund=0) OR (STATUS="REFUNDED" AND refund!=0)) AND 
-        print(sql)
         results = GlobarVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
@@ -99,33 +88,42 @@ class Refund:
     
     def get_sub_partner_orders(self, pay_req_id):
         self.pay_req_id = pay_req_id
-        sep_dbtbl = SeparateDbTable(self.ssoid)
-        order_db_info = sep_dbtbl.get_order_db_table()
-        del sep_dbtbl
-        sql = 'SELECT partner_order FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*order_db_info, pay_req_id)
+        sql = 'SELECT partner_order FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*self.db_order_info, pay_req_id)
         results = GlobarVar.MYSQL_IN.select(sql)
         return list(chain(*[res.values() for res in results]))
+    
+    def refund_by_pay_req_id(self, pay_req_id):
+        for partner_order in self.get_sub_partner_orders(pay_req_id):
+            while True:
+                if self.is_on_the_way_refund_existed():
+                    time.sleep(0.1)
+                else:
+                    self.refund_by_partner_order(partner_order)
+                    break
 
 
 if __name__ == '__main__':
-    set_global_env_id(1)
-    refund = Refund("2086100900")
+    set_global_env_id(3)
+    refund = Refund("2086100900")    
     # 批量退款
-#     refund.refund_by_ssoid("2086100900")
+#     refund.refund_by_ssoid()
     # 全部退款
-#     refund.refund_by_partner_order("2086100900", '147115f0bda54224b224521993e093d4')
-    # 支持部分退款
-    per_amount = 0.01
-    total_amount = 0.01
-    loop_num = int(total_amount/per_amount)
-    for partner_order in refund.get_sub_partner_orders('RM202103111723152086100900483752'):
-        for i in range(loop_num):
-            while True:
-                if refund.is_on_the_way_refund_existed():
-                    time.sleep(0.1)
-                else:
-                    refund.refund_by_amount(partner_order, str(per_amount))
-                    break
+#     refund.refund_by_partner_order('147115f0bda54224b224521993e093d4')
+    refund.refund_by_pay_req_id('RM202103111723152086100900483752')
+#     # 支持部分退款
+#     per_amount = 0.01
+#     total_amount = 0.01
+#     loop_num = int(total_amount/per_amount)
+#     for partner_order in refund.get_sub_partner_orders('RM202103111723152086100900483752'):
+#         for i in range(loop_num):
+#             while True:
+#                 if refund.is_on_the_way_refund_existed():
+#                     time.sleep(0.1)
+#                 else:
+#                     refund.refund_by_amount(partner_order, str(per_amount))
+#                     break
+
 #     refund.refund_single("GC202101241407088040100320000", "5456925", "0.01")
 #     refund.refund_single("4200000982202103030632224599", "2031", "0.01")
+
 

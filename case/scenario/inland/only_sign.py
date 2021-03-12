@@ -12,6 +12,8 @@ from lib.interface_biz.http.query_result import queryResult
 
 
 req = ONLY_SIGN
+
+
 def only_sign():
     """
     :return:
@@ -27,7 +29,7 @@ def only_sign():
                                 req.renewProductCode, req.notify_url).only_sign()
     sign_request_id = sign_order_info['pay_req_id']
     contract_code = get_contract_code(sign_request_id)
-    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code)
+    choose_scarlett(1, req.pay_channel, "", "SIGN", contract_code, partner_id=req.partner_id)
     """
     【3】. 查询支付结果
     """

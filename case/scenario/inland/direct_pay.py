@@ -25,15 +25,15 @@ def direct_pay(amount, notify_amount):
     """
         【1】. 调用直扣接口，构造渠道回调报文
     """
-    order = SimplePay(req.pay_channel, amount/100, req.partner_id, req.app_version, req.interface_version, "",
+    order = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version, "",
                       req.notify_url).direct_pay()
     sleep(1)
-    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'])
+    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'], partner_id=req.partner_id)
     """
         【2】. 调用查询结果接口
     """
+    assert str(queryResult(order["pay_req_id"], "direct")) == "2002"
     if is_assert():
-        assert str(queryResult(order["pay_req_id"], "direct")) == "2002"
         """
             【3】. 检查order_info表信息是否正确
         """

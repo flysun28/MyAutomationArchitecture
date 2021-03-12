@@ -12,7 +12,7 @@ from lib.common_biz.sign import coda_pay_sign_string
 logger = Logger('coda-scarlet').get_logger()
 
 
-def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
+def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, md5_key, ResultCode="0"):
     """
     {TxnId=6142429221971401254, Checksum=cc9281050d4ac0888b24b003f5f61186, TotalPrice=10000.00, PaymentType=1, MnoId=24, OrderId=ID202102250848423749T8JV1N847233, ResultCode=0}
     :param TotalPrice:
@@ -33,7 +33,6 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
     :param ResultCode:
     :return:
     """
-
     scarlett_data = {
         # 类似回调id
         "TxnId": RandomOrder(19).random_num(),
@@ -53,7 +52,7 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
     "764_codapay_dtac":"d07e95af7695870be6ffccd6f1e979b63","764_codapay_ais":"4cf10001f642acef41697461f6b95b663",
     "608_codapay_globe":"82a48c16fd04f4221363d07a15c3c19b2","608_codapay_smart":"b8d30842761de43d501052ce4a797e3d2"}
     """
-    scarlett_data['Checksum'] = md5(coda_pay_sign_string(scarlett_data, "1c3d4a652f744f340e7ad9471dbdcb5d"), False)
+    scarlett_data['Checksum'] = md5(coda_pay_sign_string(scarlett_data, md5_key), False)
     req = 'TxnId={}&' \
           'Checksum={}' \
           '&TotalPrice={}&' \
@@ -68,4 +67,4 @@ def coda_pay(TotalPrice, PaymentType, MnoId, OrderId, ResultCode="0"):
 
 
 if __name__ == '__main__':
-    coda_pay("1000.00", "390", "24", "PH20210225150418730J3EDAJH124703")
+    coda_pay("1000.00", "390", "24", "PH20210225150418730J3EDAJH124703", "1c3d4a652f744f340e7ad9471dbdcb5d")

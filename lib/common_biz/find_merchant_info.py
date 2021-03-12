@@ -4,7 +4,8 @@
 # datetime:2021/2/9 15:24
 # comment:
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.env import get_env_id
+from lib.common.utils.globals import GlobarVar, MYSQL_AUTO_TEST
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
 
@@ -42,6 +43,25 @@ class FindMerchant(metaclass=WithLogger):
             return merchant
         except Exception as e:
             self.logger.info(e)
+
+
+def find_merchant_info(channel, partner_id):
+    """
+    :param partner_id: 2031
+    :param channel: wxpay,qq_pay,szf_pay,heepay
+    :return:
+    """
+    env_id = get_env_id()
+    mysql = MYSQL_AUTO_TEST
+    flag = ""
+    if env_id == "1" or env_id == "2" or env_id == "3":
+        flag = "test"
+    if env_id == "grey" or env_id == "product":
+        flag = "product"
+    pay_merchant = mysql.select_one(
+        (Config(common_sql_path).read_config('pay_auto_test_info', '{}_merchant'.format(flag))).format(partner_id,
+                                                                                                       channel))
+    return pay_merchant
 
 
 if __name__ == '__main__':

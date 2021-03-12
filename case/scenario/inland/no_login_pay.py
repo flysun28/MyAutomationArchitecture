@@ -26,8 +26,8 @@ def on_login(amount, notify_amount):
     """
     【1】. 调用下单接口，渠道回调构造
     """
-    order = skip_pay(req.pay_channel, amount/100, req.partner_id, str(req.app_version), req.notify_url)
-    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'])
+    order = skip_pay(req.pay_channel, amount, req.partner_id, str(req.app_version), req.notify_url)
+    choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'], partner_id=req.partner_id)
     """
         【2】. 调用查询结果接口
     """

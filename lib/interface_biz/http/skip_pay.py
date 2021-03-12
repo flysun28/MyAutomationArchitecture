@@ -14,7 +14,7 @@ from lib.pb_src.python_standard import SkipPay_pb2
 
 
 def skip_pay(payType, payAmount, partnerId, app_version, notifyUrl):
-    # payAmount 元
+    # payAmount 元 。传分，接口传元，/100处理
     req = {
         "header": {
             "version": "16.0",
@@ -38,13 +38,13 @@ def skip_pay(payType, payAmount, partnerId, app_version, notifyUrl):
         "payType": payType,
         "channel": payType,
         # 元
-        "payAmount": str(payAmount),
+        "payAmount": str(payAmount/100),
         "currency": "CNY",
         "product": {
             "name": "NO_LOGIN_PAY",
             "desc": "话费充值",
             "count": "1",
-            "priceLocal": str(payAmount)
+            "priceLocal": str(payAmount/100)
         },
         "returnUrl": "finzpay://nearme.atlas.com",
         "notifyUrl": notifyUrl,

@@ -9,7 +9,7 @@ from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common_biz.sign import szf_pay_sign_string
 
 
-def szf_pay(pay_req_id, card_amount, pay_money):
+def szf_pay(pay_req_id, card_amount, pay_money, md5_key):
     """
     {payResult=1,
     privateField=testfield,
@@ -31,20 +31,21 @@ def szf_pay(pay_req_id, card_amount, pay_money):
         "orderId": pay_req_id,
         "payDetails": "",
         # 分
-        "cardMoney": card_amount,
+        "cardMoney": str(card_amount),
         "payMoney": pay_money,
         "merId": "164928",
         "signString": "bujiaoyan",
         "version": "3",
         "errcode": "200"
     }
-    szf_scarlett['md5String'] = md5(szf_pay_sign_string(szf_scarlett) + "azkypmyzip82sx9tynmoqlsxcvt653yu", to_upper=False)
+    szf_scarlett['md5String'] = md5(szf_pay_sign_string(szf_scarlett) + md5_key, to_upper=False)
     response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/szfnotify",
                              data=szf_scarlett)
     print(response.content)
 
 
 if __name__ == '__main__':
+
     set_global_env_id(3)
-    szf_pay("KB202103091444452086100900255582", "100000", "100000")
+    szf_pay("KB202103102215382076075925707802", "1000", "1000", "azkypmyzip82sx9tynmoqlsxcvt653yu")
 

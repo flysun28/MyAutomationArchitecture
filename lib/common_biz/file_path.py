@@ -8,8 +8,6 @@ import os
 project_path = os.path.split(os.path.split(os.path.realpath(__file__))[0])[0]
 project_path.replace('\\', '/')
 
-# 测试账户
-account_path = os.path.join(project_path, 'config/', 'test_account.ini')
 # 环境切换
 environment_path = os.path.join(project_path, 'config/', 'environment.ini')
 # 国内数据库
