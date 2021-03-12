@@ -67,7 +67,7 @@ class Nearme:
 
 
 if __name__ == '__main__':
-#     set_global_env_id(3)
+    set_global_env_id(3)
 #     nearme = Nearme()
 #     # 发放可币
 #     # nearme.nearme_add_subtract("20.00", "2076075925", 'PRESENT')
@@ -83,3 +83,4 @@ if __name__ == '__main__':
     if flag == "2":
         # 扣
         Nearme().nearme_add_subtract("5", "2076075925", 1)
+

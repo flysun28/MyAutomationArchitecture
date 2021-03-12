@@ -4,24 +4,28 @@
 '''
 import sys
 import time
+from itertools import chain
 from lib.common_biz.sign import Sign
 from lib.common_biz.find_key import GetKey
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common.logger.logging import Logger
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.globals import GlobarVar
 from lib.common.exception.http_exception import HttpJsonException
 from lib.common.exception.intf_exception import ArgumentException
 from lib.common.session.http.http_json import HttpJsonSession
+from lib.common_biz.find_database_table import SeparateDbTable
 
 logger = Logger('退款接口', sys.__stdout__).get_logger()
 
 
 class Refund():
     
-    def __init__(self, http_session=GlobarVar.HTTPJSON_IN):
+    def __init__(self, ssoid, http_session=GlobarVar.HTTPJSON_IN):
+        self.ssoid = ssoid
         self.partner_order = self.partner_code = None
         self.http_session = http_session
+        self.db_order_info = SeparateDbTable(self.ssoid).get_order_db_table()        
     
     def httpjson_refund(self, partner_order, partner_code, amount, pay_req_id=None):
         '''
@@ -43,7 +47,7 @@ class Refund():
         logger.info('Sign加密前原始字符串: %s', orig_sign)
         for upper_case in False, True:
             req_kwargs['sign'] = md5(orig_sign, upper_case)
-            logger.info(req_kwargs)
+            logger.info('退款请求报文: %s', req_kwargs)
             response = self.http_session.post('/plugin/post/refund', data=req_kwargs)
             if '签名错误' == response['resMsg']:
                 continue
@@ -58,21 +62,44 @@ class Refund():
             res = GlobarVar.MYSQL_IN.select(sql)            
             return True if res else False
         return False
+    
+    def get_sub_partner_orders(self, pay_req_id):
+        self.pay_req_id = pay_req_id
+        sql = 'SELECT partner_order, partner_code FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*self.db_order_info, pay_req_id)
+        results = GlobarVar.MYSQL_IN.select(sql)
+        ret = []
+        for res in results:
+            ret.append(tuple(res.values()))
+        return ret
+    
+    def refund_by_pay_req_id(self, pay_req_id, amount):
+        for partner_order, partner_code in self.get_sub_partner_orders(pay_req_id):
+            while True:
+                if refund.is_on_the_way_refund_existed():
+                    time.sleep(0.1)
+                else:
+                    refund.httpjson_refund(partner_order, partner_code, amount, pay_req_id=pay_req_id)
+                    break
 
 
 if __name__ == '__main__':
-    # session = HttpJsonSession('https://pre-nativepay.keke.cn')
-    refund = Refund()
-    per_amount = 0.01
-    total_amount = 0.01
-    loop_num = int(total_amount/per_amount)
-    for i in range(loop_num):
-        while True:
-            if refund.is_on_the_way_refund_existed():
-                time.sleep(0.1)
-            else:
-                refund.httpjson_refund("288f0ff4e3ab4c6a9b22d2aefb5290d4", "2031", per_amount)
-                break
+    session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+    set_global_env_id(1)
+    refund = Refund('2086100900')
+    # 全额退款
+    refund.refund_by_pay_req_id('KB202103111508592086100900248122', 0.01)
+    # 部分退款
+#     per_amount = 0.01
+#     total_amount = 0.01
+#     loop_num = int(total_amount/per_amount)
+#     for partner_order, partner_code in refund.get_sub_partner_orders('KB202103111508592086100900248122'):
+#         for i in range(loop_num):
+#             while True:
+#                 if refund.is_on_the_way_refund_existed():
+#                     time.sleep(0.1)
+#                 else:
+#                     refund.httpjson_refund(partner_order, partner_code, per_amount, pay_req_id='')
+#                     break
 
     
     

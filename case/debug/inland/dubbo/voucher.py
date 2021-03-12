@@ -78,6 +78,14 @@ class VoucherInland:
 
 
 if __name__ == '__main__':
+    set_global_env_id(1)
+    # 满减券，满1减0.99
+    vou_info = VoucherInland().grantVoucher("5456925", "KB_COUPON", "DIKOU", "0.01", "0.01", "2086100900", count=1)
+    VoucherInland().checkVoucher(vou_info['batchId'])
+#     # 消费券，额度10
+#     vou_info = VoucherInland().grantVoucher("5456925", "KB_COUPON", "XIAOFEI", "0.01", "10", "2086100900", count=1)
+#     VoucherInland().checkVoucher(vou_info['batchId'])
+
     flag = "2"
     if flag == "1":
         # 满减
@@ -87,5 +95,6 @@ if __name__ == '__main__':
     if flag == "2":
         vou_info = VoucherInland().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925", count=1)
         VoucherInland().checkVoucher(vou_info['batchId'])
+
 
 
