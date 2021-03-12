@@ -4,7 +4,6 @@
 # datetime:2021/3/11 20:43
 # comment: 海外查询可币余额
 import decimal
-
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.common_biz.file_path import key_path
@@ -30,7 +29,6 @@ def oversea_query_account(country, ssoid, partner_id):
     case_req['sign'] = md5(Sign(case_req).join_asc_have_key(salt="&key=") + key, False)
     response = GlobarVar.HTTPJSON_OUT.post("/plugin/post/queryCocoinBalance", data=case_req)
     return round(decimal.Decimal(response['balance']), 4)
-
 
 
 if __name__ == '__main__':

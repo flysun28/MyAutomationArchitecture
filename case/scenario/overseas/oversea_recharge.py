@@ -8,14 +8,11 @@ import time
 from case.scenario.common_req import OVERSEA_RECHARGE
 from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobarVar
-from lib.common_biz.biz_db_operate import get_balance, oversea_get_coin_rate
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
-from lib.config.country_currency import currency, rate_coin
-from lib.interface_biz.dubbo.oversea_coin import Coin
+from lib.config.country_currency import rate_coin
 from lib.interface_biz.http.oversea_query_account import oversea_query_account
 from lib.interface_biz.http.oversea_recharge import Recharge
-from lib.interface_biz.scarlett.oversea_upay import upay_pay_scarlet
 req = OVERSEA_RECHARGE
 logger = Logger('oversea_recharge').get_logger()
 
