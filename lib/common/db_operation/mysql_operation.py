@@ -40,6 +40,7 @@ class MySQLClient(metaclass=WithLogger):
         for one in res:
             for k, v in one.items():
                 one[k] = '' if v is None else v
+        self.logger.info('查询结果：%s', res)
 #         [{k:('' if v is None else v) for one in res for k, v in one.items()}]
         return res
 
@@ -69,6 +70,7 @@ class MySQLClient(metaclass=WithLogger):
         except BaseException as f:
             self.logger.info(f)
             self.conn.rollback()
+#             raise
         # 返回受影响行数
         return self.cur.rowcount
 

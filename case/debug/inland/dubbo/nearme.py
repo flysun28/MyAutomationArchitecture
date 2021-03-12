@@ -67,11 +67,11 @@ class Nearme:
 
 
 if __name__ == '__main__':
-    set_global_env_id(3)
+    set_global_env_id(1)
     nearme = Nearme()
     # 发放可币
-    nearme.nearme_add_subtract("1.00", "2086100900", 'PRESENT')
-#     # 扣减所有可币余额
+#     nearme.nearme_add_subtract("0.01", "2086100900", 'PRESENT')
+    # 扣减所有可币余额
     balance = nearme.query_balance(ssoid='2086100900')    
     nearme.nearme_add_subtract(balance, "2086100900", 'DEDUCT')
 

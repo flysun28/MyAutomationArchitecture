@@ -7,10 +7,12 @@ import datetime
 import time
 import requests
 from lib.common.logger.logging import Logger
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, set_global_env_id
 from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml, wx_mock_refund_to_xml
+from lib.common_biz.find_merchant_info import FindMerchant
+from lib.common_biz.find_key import GetKey
 
 logger = Logger('wxpay-scarlet').get_logger()
 
@@ -192,6 +194,61 @@ def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_re
     else:
         return wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33")
 
+
+class WxPayScarlett():
+    
+    def __init__(self, partner_code):
+        FindMerchant(partner_code)
+        self.merchant_info = FindMerchant(partner_code).find_app_id_merchant("wxpay")        
+        self.md5_key = GetKey("").get_md5_key_from_merchant(self.merchant_info["app_id"], self.merchant_info["merchant_no"], "wxpay")
+    
+    def normal_pay_scarlett(self, out_trade_no, total_fee, trade_type="APP", attach="TEST", result_code="SUCCESS", return_code="SUCCESS"):
+        """
+        微信普通app支付回调报文构造
+        :param mch_id: 商户号 1259634601
+        :param out_trade_no: 支付订单号 RM202101131635122076075925041132
+        :param appid: appid wx93eea96ecc33f168
+        :param total_fee: 金额 2 分
+        :param trade_type: 支付方式 APP
+        :param attach: 附加数据 RM202101131635122076075925041132
+        :param result_code: SUCCESS
+        :param return_code: SUCCESS
+        transaction_id： 微信支付系统生成的订单号
+        :return:
+        """
+        wx_scarlet = {
+            "transaction_id": RandomOrder(28).random_num(),
+            "nonce_str": RandomOrder(32).random_string(),
+            "bank_type": "OTHERS",
+            "openid": "oCg6Xt8NvRi7jGuap_5B6XdY4oYk",
+            "sign": "",
+            "fee_type": "CNY",
+            "mch_id": self.merchant_info['merchant_no'],
+            "cash_fee": "1",
+            "out_trade_no": out_trade_no,
+            "appid": self.merchant_info['app_id'],
+            "total_fee": total_fee,
+            "trade_type": trade_type,
+            "result_code": result_code,
+            "attach": attach,
+            "time_end": time.strftime('%Y%m%d%H%M%S', time.localtime()),
+            "is_subscribe": "N",
+            "return_code": return_code
+        }
+        wx_scarlet_dict = wx_normal_pay_to_xml(wx_scarlet, self.md5_key)
+        logger.info("回调参数：{}".format(wx_scarlet_dict))
+        response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/WxpayNotificationSecondary",
+                                 data=wx_scarlet_dict.encode("utf-8"))
+        result = response.content
+        logger.info(str(result.decode("utf-8")))
+        if "SUCCESS" in str(result.decode("utf-8")):
+            logger.info("回调解析成功")
+        
+
 if __name__ == '__main__':
+    set_global_env_id(1)
     #wx_refund_mock_scarlett("", "1", "1", "1", "1")
-    wx_normal_pay_scarlet("1259634601", "RM20210303222400207607592553078t", "wx93eea96ecc33f168", "1", "g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR")
+#     wx_normal_pay_scarlet("1259634601", "RM20210303222400207607592553078t", "wx93eea96ecc33f168", "1", "g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR")
+    wx_scarlett = WxPayScarlett('5456925')
+    wx_scarlett.normal_pay_scarlett("KB202103111519232086100900845042", "3")
+    

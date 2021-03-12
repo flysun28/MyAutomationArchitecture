@@ -40,5 +40,5 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
 
 
 if __name__ == '__main__':
-    choose_scarlett(1000, "wxpay", "RM20210304095657207607592506772t")
+    choose_scarlett(1, "wxpay", "KB202103101140312086100900160822")
     # choose_scarlett(1, "wxpay", "KB", "SIGN", "SN")

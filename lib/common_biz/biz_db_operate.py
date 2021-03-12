@@ -3,11 +3,14 @@
 # author:xy
 # datetime:2021/2/22 10:20
 # comment:
+import sys
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.common.utils.globals import GlobarVar
 from lib.config.path import common_sql_path
+from itertools import product
+from lib.common.utils.env import set_global_env_id
 
 mysql = GlobarVar.MYSQL_IN
 mysql_out = GlobarVar.MYSQL_OUT
@@ -100,10 +103,59 @@ def get_notify_id_by_request_id(pay_req_id):
         return notify_id['notify_id']
 
 
+def _drop_spec_columns_on_all_order_tables(*args):
+    '''
+    仅内部使用
+    '''
+    sql = 'ALTER TABLE db_order_%d.order_info_%d\n'
+    for arg in args:
+        sql += f' DROP COLUMN `{arg}`,'
+    lsql = sql.rsplit(',', 1)
+    assert len(lsql) == 2
+    lsql[-1] = ';'
+    sql = ''.join(lsql)
+    for db_order_id, order_info_id in product(range(8), range(128)): 
+        sql_ = sql %(db_order_id, order_info_id)
+        print(sql_)
+        GlobarVar.MYSQL_IN.execute(sql_)
+
+
+def _add_columns_on_all_order_tables(*args):
+    '''
+    仅内部使用
+    '''
+    if not args:
+        return
+    sql = 'ALTER TABLE db_order_%d.order_info_%d'
+    for idx, arg in enumerate(args):
+        appended = '\nADD COLUMN `%s` varchar(10) DEFAULT NULL'
+        if idx == 0:
+            appended += ','
+            sql += appended %arg
+        else:
+            appended += ' AFTER `%s`,'
+            sql += appended %(arg, args[idx-1])
+    lsql = sql.rsplit(',', 1)
+    assert len(lsql) == 2
+    lsql[-1] = ';'
+    sql = ''.join(lsql)
+    for db_order_id, order_info_id in product(range(8), range(128)):
+        sql_ = sql %(db_order_id, order_info_id)
+        print(sql_)
+        try:
+            GlobarVar.MYSQL_IN.execute(sql_)
+        except:
+            raise
+
+
 if __name__ == '__main__':
-    print(get_balance("2076075925"))
+#     print(get_balance("2076075925"))
     # print(get_balance("2076075925", country="VN", in_out="oversea"))
     # oversea_get_coin_rate("VND")
     #update_sign_status("2076075925", "wxpay")
-    print(get_ssoid_by_pay_req_id("RM202103031255262076075925123382"))
-    print(get_notify_id_by_request_id("RM202103031255262076075925123382"))
+#     print(get_ssoid_by_pay_req_id("RM202103031255262076075925123382"))
+#     print(get_notify_id_by_request_id("RM202103031255262076075925123382"))
+    pass
+#     set_global_env_id(1)
+#     _drop_spec_columns_on_all_order_tables('voucher_status', 'kebi_status', 'channel_status')
+#     _add_columns_on_all_order_tables('voucher_status', 'kebi_status', 'channel_status')
