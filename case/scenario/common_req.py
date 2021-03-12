@@ -52,7 +52,6 @@ class KB:
         self.kb_amount = kb_amount
 
 
-
 # 国内
 DIRECT_PAY = Order()
 NO_LOGIN_PAY = Order(partner_id="72724313")

@@ -39,7 +39,7 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
             # coda_pay回调金额为元
             coda_pay(amount, "390", "24", pay_req_id, find_merchant_info("codapay_paytm", partner_id)['md5_key'])
         if pay_type == "upay_gamecard":
-            # upay回调金额为分， 未验证签名？
+            # upay回调金额为分， 未验证签名？ 此处传元
             upay_pay_scarlet(amount, pay_req_id)
     if sign_type is not None:
         if pay_type == "wxpay":
@@ -49,6 +49,7 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
 
 if __name__ == '__main__':
 
+    choose_scarlett(1, "upay_gamecard", "KB202103101140312086100900160822")
     choose_scarlett(1, "wxpay", "KB202103101140312086100900160822")
     # choose_scarlett(1, "wxpay", "KB", "SIGN", "SN")
 
