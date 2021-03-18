@@ -4,7 +4,6 @@
 # datetime:2021/1/19 22:55
 # comment: 接口参数替换
 import time
-
 from lib.common.algorithm.cipher import Cipher
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.rsa import rsa
@@ -157,6 +156,3 @@ def replace_gateway(case_req, app_id):
     if case_req['sign'] == '':
         sign_string = Sign(case_req).join_asc_have_key() + key
         case_req['sign'] = md5(sign_string)
-
-
-

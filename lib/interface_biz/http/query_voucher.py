@@ -2,7 +2,7 @@
 # -*- encoding:utf-8 *-*
 # author:xy
 # datetime:2021/3/12 14:38
-# comment:
+# comment: 国内海外通用
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import GlobarVar
