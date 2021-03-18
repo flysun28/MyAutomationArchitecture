@@ -3,13 +3,8 @@
 # author:xy
 # datetime:2021/3/17 19:20
 # comment:
-import requests
+from lib.common.utils.globals import GlobarVar
 from lib.common_biz.replace_parameter import replace_gateway
-from pandas._libs import json
-
-header = {'Content-Type': 'application/json'}
-
-url = "http://pay-gateway.pay-test.wanyol.com/gateway/batchGrant"
 
 
 def batchGrant():
@@ -29,9 +24,7 @@ def batchGrant():
                    "'ratio': 0, 'maxCutAmount': '0', 'applyCount': 1, 'ssoidList': ['2086100900'], 'batchId': ''} "
 }
     replace_gateway(req, req['app_id'])
-    print(req)
-    response = requests.post(url, data=json.dumps(req), headers=header)
-    print(response.json())
+    response = GlobarVar.HTTPJSON_GW_IN.post("/gateway/batchGrant", data=req)
 
 
 if __name__ == '__main__':

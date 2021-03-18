@@ -56,7 +56,7 @@ def insert_one(interfaceName, method, parameter_types):
     # 查询方法是否被添加/返回新增方法id
     select_server_id = 'SELECT id FROM `db_platform_gateway`.`dubbo_service_info` WHERE method = "{}" ORDER BY id DESC ' \
                        'LIMIT 1'.format(method)
-    server_id = mysql.select(select_server_id)[0]['id']
+    server_id = mysql.select(select_server_id)
     if server_id == ():
         # 新增服务信息配置 SQL（先执行）
         add_server_info = "INSERT INTO `db_platform_gateway`.`dubbo_service_info` VALUES (NULL, 'platform-test','{}'," \
@@ -69,6 +69,7 @@ def insert_one(interfaceName, method, parameter_types):
                         "'1.0', 'DUBBO','','{}','','',NULL,NULL,'{}','{}')".format(server_id, local_time, local_time)
         mysql.execute(add_rout_info)
     else:
+        server_id = mysql.select(select_server_id)[0]['id']
         # 查询路由是否配置，注意：request_route_info 中的service字段默认写method
         select_is_route = 'SELECT service FROM `db_platform_gateway`.`request_route_info` WHERE app_id="000000" AND ' \
                           'dubbo_service_id = "{}" AND service = "{}"'.format(server_id, method)
@@ -92,7 +93,7 @@ def insert_batch():
     dubbo_info = parser_dubbo_excel()
     for item in dubbo_info:
         if item[4] == "OK":
-            logger.info("路由信息已添加，无需添加")
+            logger.info("excel标识路由信息已添加，无需添加")
         else:
             insert_one(item[1], item[2], item[3])
 
