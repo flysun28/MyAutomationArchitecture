@@ -7,7 +7,7 @@ import time
 from itertools import chain
 from lib.common_biz.sign import Sign
 from lib.common_biz.find_key import GetKey
-from lib.common.utils.env import get_env_config, set_global_env_id
+from lib.common.utils.env import get_env_config, set_global_env_id, get_env_id
 from lib.common.logger.logging import Logger
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.globals import GlobarVar
@@ -20,7 +20,12 @@ logger = Logger('退款接口', sys.__stdout__).get_logger()
 
 
 class Refund():
-    
+    partner_private_key = {
+        '5456925': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmreYIkPwVovKR8rLHWlFVw7YDfm9uQOJKL89Smt6ypXGVdrAKKl0wNYc3/jecAoPi2ylChfa2iRu5gunJyNmpWZzlCNRIau55fxGW0XEu553IiprOZcaw5OuYGlf60ga8QT6qToP0/dpiL/ZbmNUO9kUhosIjEu22uFgR+5cYyQIDAQAB',
+        '2031': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCMVhIN5xQPRdmo1fmm0HBOlRk2XnJsuKgOBi6b1IFAUWtROpm6lRnw45M83a/XiHEZv5FOp+rssGlgwcWeLuexI6kCF5hFT6gsEYy9XRfpSBOUA2UwcajPRsMoEKRmEIm+NpmwnGAeeZK2Y7Xwr3imHdLJ86VgJ5zMedqd4IfXWQIDAQAB',
+        '72724314': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB'
+    }
+
     def __init__(self, ssoid, http_session=GlobarVar.HTTPJSON_IN):
         self.ssoid = ssoid
         self.partner_order = self.partner_code = None
@@ -42,7 +47,10 @@ class Refund():
                       'clientIp': ''}
         sign_maker = Sign(req_kwargs)
         key_getter = GetKey(partner_code)
-        salt_key = key_getter.get_key_from_merchant()
+        if get_env_id() in ('grey', 'product'):
+            salt_key = self.partner_private_key[partner_code]
+        else:
+            salt_key = key_getter.get_key_from_merchant()
         orig_sign = sign_maker.join_asc_have_key(salt='&key='+salt_key)
         logger.info('Sign加密前原始字符串: %s', orig_sign)
         for upper_case in False, True:
@@ -54,6 +62,7 @@ class Refund():
             break
         self.partner_order = partner_order
         self.partner_code = partner_code
+        return response
     
     def is_on_the_way_refund_existed(self):
         if self.partner_order:
@@ -83,23 +92,22 @@ class Refund():
 
 
 if __name__ == '__main__':
-    session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-    set_global_env_id(1)
+    set_global_env_id(3)
     refund = Refund('2086100900')
     # 全额退款
-    refund.refund_by_pay_req_id('KB202103111508592086100900248122', 0.01)
+    refund.refund_by_pay_req_id('KB202103161012050633943089234032', 0.01)
     # 部分退款
-#     per_amount = 0.01
-#     total_amount = 0.01
-#     loop_num = int(total_amount/per_amount)
-#     for partner_order, partner_code in refund.get_sub_partner_orders('KB202103111508592086100900248122'):
-#         for i in range(loop_num):
-#             while True:
-#                 if refund.is_on_the_way_refund_existed():
-#                     time.sleep(0.1)
-#                 else:
-#                     refund.httpjson_refund(partner_order, partner_code, per_amount, pay_req_id='')
-#                     break
+    per_amount = 1
+    total_amount = 5
+    loop_num = int(total_amount/per_amount)
+    for partner_order, partner_code in refund.get_sub_partner_orders('KB202103111508592086100900248122'):
+        for i in range(loop_num):
+            while True:
+                if refund.is_on_the_way_refund_existed():
+                    time.sleep(0.1)
+                else:
+                    refund.httpjson_refund(partner_order, partner_code, per_amount, pay_req_id='')
+                    break
 
     
     

@@ -103,13 +103,13 @@ class Refund:
 
 
 if __name__ == '__main__':
-    set_global_env_id(3)
-    refund = Refund("2086100900")    
+#     set_global_env_id(1)
+    refund = Refund("633943089")
     # 批量退款
 #     refund.refund_by_ssoid()
     # 全部退款
 #     refund.refund_by_partner_order('147115f0bda54224b224521993e093d4')
-    refund.refund_by_pay_req_id('RM202103111723152086100900483752')
+    refund.refund_by_pay_req_id('KB202103151602290633943089358622')
 #     # 支持部分退款
 #     per_amount = 0.01
 #     total_amount = 0.01

@@ -9,9 +9,10 @@ from requests.exceptions import *
 class HttpJsonException(Exception):
     
     def __str__(self, *args):
-        for arg in args:
+        largs = list(args)
+        for idx, arg in enumerate(largs):
             if type(arg) is RequestException or arg.__base__ is RequestException:
-                arg = str(arg)
-        args = ('<HttpJson> exception:', ) + args
+                largs[idx] = str(arg)
+        args = ['<HttpJson> exception:'] + largs
         return ' '.join(args)
 

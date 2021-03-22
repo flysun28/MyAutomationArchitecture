@@ -57,3 +57,4 @@ class Vip(metaclass=WithLogger):
 
 if __name__ == '__main__':
     a = Vip().login()
+#     print(Vip().get_verification_code('18948606750'))

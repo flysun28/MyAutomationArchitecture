@@ -5,18 +5,21 @@
 # comment:
 import base64
 import rsa
-from Crypto.PublicKey import RSA
+from Crypto.PublicKey import RSA as RSA_LIB
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from lib.common_biz.file_path import public_key_path
 
 
 class Cipher:
-    def __init__(self, original_str):
+    
+    def __init__(self, original_str, key_path=public_key_path):
         """
         :param original_str: 加密内容
+        :param key_path: 公钥保存文件路径
         """
         self.original_str = original_str
+        self.public_key_path = key_path
 
     def cipher(self):
         """
@@ -24,15 +27,15 @@ class Cipher:
         :return:  加密之后的密文
         """
         # 获取公钥
-        with open(public_key_path, 'rb') as public_key_file:
+        with open(self.public_key_path, 'rb') as public_key_file:
             key = public_key_file.read()
-        public_key = RSA.importKey(key)
+        public_key = RSA_LIB.importKey(key)
         # 分段加密
         pk = Cipher_pkcs1_v1_5.new(public_key)
         encrypt_text = []
         for i in range(0, len(self.original_str), 100):
             cont = self.original_str[i:i+100]
-            encrypt_text.append(pk.encrypt(cont.encode()))
+            encrypt_text.append(pk.encrypt(cont.encode('utf-8') if isinstance(cont, str) else cont))
         cipher_text = b''.join(encrypt_text)
         result = base64.b64encode(cipher_text)
         return result.decode()
@@ -44,7 +47,7 @@ class Cipher:
         """
         msg = base64.b64decode(self.original_str)
         private_key = open('private.pem').read()
-        rsa_key = RSA.importKey(private_key)
+        rsa_key = RSA_LIB.importKey(private_key)
         cipher = PKCS1_v1_5.new(rsa_key)
         # 进行解密
         text = []
@@ -81,18 +84,21 @@ class Cipher:
         return res
 
 
-def encrypt_data(original_str):
+def encrypt_data(original_str, rsa_public_key_path):
     """
     用公钥加密
     :param original_str:
     :return:
     """
-    with open(public_key_path, 'rb') as public_key_file:
+    with open(rsa_public_key_path, 'rb') as public_key_file:
         p = public_key_file.read()
     pubkey = rsa.PublicKey.load_pkcs1(p)
     crypt_text = rsa.encrypt(original_str, pubkey)
     a = base64.b64encode(crypt_text)
     return a
+
+
+RSA = Cipher
 
 
 if __name__ == '__main__':

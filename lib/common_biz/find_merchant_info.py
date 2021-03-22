@@ -11,6 +11,9 @@ from lib.config.path import common_sql_path
 
 
 class FindMerchant(metaclass=WithLogger):
+    '''
+    业务线私钥
+    '''
     def __init__(self, partner_code):
         """
         :param partner_code: 业务线
@@ -47,6 +50,7 @@ class FindMerchant(metaclass=WithLogger):
 
 def find_merchant_info(channel, partner_id):
     """
+    渠道私钥
     :param partner_id: 2031
     :param channel: wxpay,qq_pay,szf_pay,heepay
     :return:
@@ -58,9 +62,13 @@ def find_merchant_info(channel, partner_id):
         flag = "test"
     if env_id == "grey" or env_id == "product":
         flag = "product"
+    '''
+    test_merchant = SELECT * FROM `pay_auto_test_info`.`test_env_merchant_info` WHERE partner_id = "{}" AND channel = "{}"
+    product_merchant = SELECT * FROM `pay_auto_test_info`.`product_env_merchant_info` WHERE partner_id = "{}" AND channel = "{}"
+    '''
     pay_merchant = mysql.select_one(
-        (Config(common_sql_path).read_config('pay_auto_test_info', '{}_merchant'.format(flag))).format(partner_id,
-                                                                                                       channel))
+        (Config(common_sql_path).read_config('pay_auto_test_info', '{}_merchant'.format(flag))).format(partner_id, channel)
+    )
     return pay_merchant
 
 

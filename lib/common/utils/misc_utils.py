@@ -2,6 +2,8 @@
 
 import os
 import re
+import random
+import string
 from lib import pardir
 from lib.config.path import lib_dir
 
@@ -103,3 +105,10 @@ def make_pbsrc_to_interface_map(region:str='inland'):
     region = 'native' if region == 'inland' else region
     pbsrc_path = os.path.join(lib_dir, 'pb_src', 'python_'+region)    
 #     for file in 
+
+
+def create_random_str(length:int):
+    '''
+    仅支持字母数字
+    '''
+    return ''.join(random.sample(string.ascii_letters + string.digits, length))    

@@ -57,3 +57,10 @@ def get_RV(s_p, step_count=4):
     sp_key = base64.b64decode(s_p.encode('utf-8'))
     r_v = extra_key(4, s_p, sp_key)
     return str(r_v, encoding="utf-8")
+
+
+def str_to_base64(text:(str, bytes)):
+    if isinstance(text, str):
+        b = bytes(text, encoding='utf-8')
+    return base64.b64encode(b)
+

@@ -45,7 +45,6 @@ def szf_pay(pay_req_id, card_amount, pay_money, md5_key):
 
 
 if __name__ == '__main__':
-
-    set_global_env_id(3)
-    szf_pay("KB202103102215382076075925707802", "1000", "1000", "azkypmyzip82sx9tynmoqlsxcvt653yu")
+    set_global_env_id('grey')
+    szf_pay("KB202103151718240633943089374882", "3000", "3000", "azkypmyzip82sx9tynmoqlsxcvt653yu")
 

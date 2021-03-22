@@ -12,7 +12,7 @@ def set_global_env_id(env_id):
     if isinstance(env_id, int):
         env_id = str(env_id)
     elif not env_id.isdigit():
-        env_id = re.search('\d+', env_id).group()
+        env_id = re.search('[a-zA-Z]+$', env_id).group()
     glob_env_cfg.write_config('environment', 'value', env_id)
     assert glob_env_cfg.read_config('environment', 'value') == env_id
 
