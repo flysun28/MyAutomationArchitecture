@@ -9,3 +9,4 @@ case/htmlcov/
 case/.coverage
 case/.pytest_cache
 case/debug/main_debug.py
+case/interface/inland/dubbo/dubbo_info.xlsx
