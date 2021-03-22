@@ -1,22 +1,12 @@
-#!/usr/bin/env Python3
-# -*- encoding:utf-8 *-*
-# author:xy
-# datetime:2021/2/24 13:17
-# comment:
-import unittest
+'''
+Created on 2021年3月22日
+@author: 80319739
+'''
+import pytest
 from case.scenario.inland.direct_pay import direct_pay
 
 
-class Scenario(unittest.TestCase):
-    def setUp(self) -> None:
-        pass
+class TestScenarioInland():
 
-    def test_01(self):
+    def test_direct_pay(self):
         direct_pay(1, 1)
-
-    def tearDown(self) -> None:
-        pass
-
-# if __name__ == '__main__':
-#     suite = unittest.TestSuite()
-#     suite.addTest(Scenario("test_01"))

@@ -10,6 +10,7 @@ from lib.interface_biz.scarlett.oversea_upay import upay_pay_scarlet
 from lib.interface_biz.scarlett.qq_pay import qq_pay_scarlet
 from lib.interface_biz.scarlett.szf_pay import szf_pay
 from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet, wx_sign_scarlet
+from lib.common.utils.env import set_global_env_id
 
 
 def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=None, partner_id=None):
@@ -48,13 +49,12 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
 
 
 if __name__ == '__main__':
-
     choose_scarlett(1, "upay_gamecard", "KB202103101140312086100900160822")
     choose_scarlett(1, "wxpay", "KB202103101140312086100900160822")
     # choose_scarlett(1, "wxpay", "KB", "SIGN", "SN")
 
     #choose_scarlett(1000, "wxpay", "KB202103111330352076075925258582", partner_id="2031")
     #choose_scarlett(1000, "qqwallet", "RM202103111318192076075925068062", partner_id="2031")
-    choose_scarlett(1000, "szf_pay", "KB202103111803182076075925365662", partner_id="2031")
+    choose_scarlett(3000, "szf_pay", "KB202103151718240633943089374882", partner_id="2031")
     # choose_scarlett(1, "wxpay", "KB", "SIGN", "SN", partner_id="2031")
 

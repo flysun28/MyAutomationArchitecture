@@ -3,6 +3,7 @@
 # author:xy
 # datetime:2021/2/8 18:05
 # comment:
+import sys
 from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path
@@ -11,6 +12,7 @@ from lib.pb_src.python_native import SimplePayPb_pb2
 from lib.common_biz.order_random import RandomOrder
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.file_operation.config_operation import Config
+from lib.common.exception.http_exception import HttpJsonException
 
 
 class SimplePay(metaclass=WithLogger):
@@ -37,6 +39,7 @@ class SimplePay(metaclass=WithLogger):
         self.partner_order = partner_order if partner_order else RandomOrder(32).random_string()
         self.notify_url = notify_url
         self.sdk_ver = sdk_ver
+        self.pb = ProtoBuf(SimplePayPb_pb2)
 
     def recharge(self):
         """
@@ -63,6 +66,7 @@ class SimplePay(metaclass=WithLogger):
             return result.payrequestid
         else:
             self.logger.info("接口返回异常")
+            raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
 
     def direct_pay(self):
         """
@@ -80,13 +84,12 @@ class SimplePay(metaclass=WithLogger):
                "sign": "", "ip": "58.252.5.75", "isNeedExpend": "0", "appId": "", "payTypeRMBType": "0",
                "tradeType": "common", "screenInfo": "FULL"}
         ReplaceParams(req).replace_native("direct")
-        response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
-                                                    flag=0)
-        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        result = self.run(req)
         if result.payrequestid:
             return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
         else:
             self.logger.info("接口返回异常")
+            raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
 
     def recharge_spend_amount_is_price(self, price):
         """
@@ -114,9 +117,7 @@ class SimplePay(metaclass=WithLogger):
                                  "ver": "208006", "source": "auto_test", "attach": "", "sign": "", "factor": ""},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
         ReplaceParams(req).replace_native("expend")
-        response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
-                                                    flag=0)
-        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        result = self.run(req)
         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
     def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor=""):
@@ -149,9 +150,7 @@ class SimplePay(metaclass=WithLogger):
                                  "voucherId": vou_id, "voucherType": vou_type, "voucherCount": vou_count, "factor": factor},
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
         ReplaceParams(req).replace_native("expend", voucher_info={"id": vou_id, "type": vou_type, "count": vou_count})
-        response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
-                                                    flag=0)
-        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        result = self.run(req)
         print(result.baseresult.msg)
         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
@@ -181,10 +180,7 @@ class SimplePay(metaclass=WithLogger):
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
                "buyPlaceId": by_id, "chooseBuyPlace": "Y", "attachGoodsAmount": add_amount}
         ReplaceParams(req).replace_native("expend")
-        response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
-                                                    flag=0)
-        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result
+        return self.run(req)
 
     def recharge_spend_kb_voucher_buy_place(self, price, vou_id, vou_count, by_id, add_amount, vou_type=8):
         """
@@ -214,11 +210,13 @@ class SimplePay(metaclass=WithLogger):
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL",
                "buyPlaceId": by_id, "chooseBuyPlace": "Y", "attachGoodsAmount": add_amount}
         ReplaceParams(req).replace_native("expend", voucher_info={"id": vou_id, "type": vou_type, "count": vou_count})
+        return self.run(req)
+    
+    def run(self, req):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
-        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        return result
-
+        return ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        
 
 
 if __name__ == '__main__':

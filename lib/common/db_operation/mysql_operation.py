@@ -113,7 +113,7 @@ def connect_mysql(in_out='inland', database=None):
 
 def connect_auto_test_special(database=None):
     """
-    连接自动化测试专用数据库
+    连接自动化测试专用数据库10.52.54.122
     :param database:
     :return:
     """

@@ -5,7 +5,6 @@
 # comment:
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
-from time import sleep
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
@@ -14,6 +13,7 @@ from case.scenario.common_req import DIRECT_PAY
 logger = Logger('direct_pay').get_logger()
 
 req = DIRECT_PAY
+fizassert = FizAssert()
 
 
 def direct_pay(amount, notify_amount):
@@ -23,29 +23,29 @@ def direct_pay(amount, notify_amount):
     :return:
     """
     """
-        【1】. 调用直扣接口，构造渠道回调报文
+    【1】. 调用直扣接口，构造渠道回调报文
     """
     order = SimplePay(req.pay_channel, amount, req.partner_id, req.app_version, req.interface_version, "",
                       req.notify_url).direct_pay()
-    sleep(1)
+#     sleep(1)
     choose_scarlett(notify_amount, req.pay_channel, order['pay_req_id'], partner_id=req.partner_id)
     """
-        【2】. 调用查询结果接口
+    【2】. 调用查询结果接口
     """
     assert str(queryResult(order["pay_req_id"], "direct")) == "2002"
     if is_assert():
         """
-            【3】. 检查order_info表信息是否正确
+        【3】. 检查order_info表信息是否正确
         """
-        FizAssert().assert_order_info(req.ssoid, order["pay_req_id"], amount, amount)
+        fizassert.assert_order_info(req.ssoid, order["pay_req_id"], amount, amount)
         """
-            【4】. 检查trade_order表信息是否正确
+        【4】. 检查trade_order表信息是否正确
         """
-        FizAssert().assert_trade_order(req.ssoid, order["pay_req_id"], amount, amount)
+        fizassert.assert_trade_order(req.ssoid, order["pay_req_id"], amount, amount)
         """
-            【5】. 检查通知表信息是否正确
+        【5】. 检查通知表信息是否正确
         """
-        FizAssert().assert_notify(order["partner_order"])
+        fizassert.assert_notify(order["partner_order"])
 
 
 if __name__ == '__main__':

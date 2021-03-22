@@ -14,6 +14,8 @@ environment_path = os.path.join(project_path, 'config/', 'environment.ini')
 mysql_in_path = os.path.join(project_path, 'config/', 'mysql_in.ini')
 # 公钥
 public_key_path = os.path.join(project_path, 'config/', 'public.pem')
+# 加密json传输rsa公钥
+encjson_rsa_public_key_path = os.path.join(project_path, 'config/', 'encjson_rsa_public.pem')
 # 签名拼接字符串
 join_sign_path = os.path.join(project_path, 'config/', 'join_sign_key.ini')
 # 用例执行
