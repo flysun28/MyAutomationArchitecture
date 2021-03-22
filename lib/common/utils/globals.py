@@ -41,8 +41,8 @@ class GlobarVar():
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account")
     if env_id == "grey" or env_id == "product":
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account")
-#     TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
-#     SSOID = TEST_ACCOUNT['ssoid']
+    TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
+    SSOID = TEST_ACCOUNT['ssoid']
 #     TOKEN = TEST_ACCOUNT['token']
 
 

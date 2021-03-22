@@ -64,13 +64,14 @@ if __name__ == '__main__':
 #                 time.sleep(1)
 #             else:
 #                 break
+
     exp = 'g1f0ecbjsm/94OZ1cJ2Fo8HLPaYl6n+58oNBz+PS+HRhSxMd2KhIvcVV+w8T5zXHqJy/KZfM2Rq5V+ZOPEugC8RTxwi4uSkTA+k7RaneHMLgsOw0negWYWR01GAMWWh3rHDXA1N8heL+Iy1FtGZTH/5kG+sxmvv6KQ7l+HAwgUbAVHSnmvwWxr95TBzaf6FIoxA='
     text = '{"imei":"","mac":"0","serialNum":"unknown","serial":"unknown","hasPermission":true,"wifissid":"<unknown ssid>","deviceName":"PEDM00","slot1":"{}"}'
     print('原文：', text)
     base64_iv = 'QxbF3LonVTkM9UxJkoysmQ=='
     bytes_iv = base64.b64decode(base64_iv)
     aes_cbc = AES_CBC('FsZtyBxlB_oTcrXQ7kiYDQ==', bytes_iv)
-    res = aes_cbc.encrypt_and_base64(text)
+#     res = aes_cbc.encrypt_and_base64(text)
     
     print('开始解密')
 #     x = binascii.b2a_base64(base64.b64decode(exp)).strip(b'\n')
@@ -78,11 +79,7 @@ if __name__ == '__main__':
     x = base64.b64decode(exp)   # decode base64
     print('base64解密之后：', x)
     print('aes解密之后：', aes_cbc.decrypt(x))
-    
-    '''
-    base64.b64encode(bytesString) & b2a_base64(bytesString) 功能一致       
-    base64.b64decode(encodestr) & a2b_base64(encodestr) 功能一致
-    '''
+
     
 #     # pb2json 加密传输新协议
 #     set_global_env_id(3)

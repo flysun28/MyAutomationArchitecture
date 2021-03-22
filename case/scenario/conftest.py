@@ -12,12 +12,13 @@ def pytest_configure(config):
     config.addinivalue_line('markers', 'full')
     config.addinivalue_line('markers', 'positive')
     config.addinivalue_line('markers', 'negative')
+    config.addinivalue_line('markers', 'simplepay')
 
  
 @pytest.fixture(scope='session', autouse=True)
 def global_setup_and_teardown():
     '''
-    1. è®¾ç½®ç¬¬å‡ å¥—æµ‹è¯•ç¯å¢ƒ
+    1. ÉèÖÃµÚ¼¸Ì×²âÊÔ»·¾³
     '''
     set_global_env_id(3)
     vip = Vip()
