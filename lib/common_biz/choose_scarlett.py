@@ -24,11 +24,11 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
     :param contract_code: 签约订单号
     :return:
     """
-    wx_pay_merchant = {}
+    if pay_type == 'wxpay':
+        wx_pay_merchant = find_merchant_info("wxpay", partner_id)
+        print('查询到微信私钥信息：', wx_pay_merchant)
     if sign_type is None:
-        if pay_type == "wxpay":
-            wx_pay_merchant = find_merchant_info("wxpay", partner_id)
-            print('查询到微信私钥信息：', wx_pay_merchant)
+        if pay_type == "wxpay":            
             wx_normal_pay_scarlet(wx_pay_merchant["merchant_no"], pay_req_id, wx_pay_merchant["app_id"], amount,
                                   wx_pay_merchant['md5_key'])
         if pay_type == "heepay":
