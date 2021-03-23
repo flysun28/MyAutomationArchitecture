@@ -70,7 +70,7 @@ class GrantMultiVous():
         self.appid = partner_id
         self.vou_info = []
     
-    def update_vou_info(self, voutype, name, count, amount, max_amount):
+    def update_vou_info(self, vou_type, name, count, amount, max_amount):
         
 
 def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
@@ -123,5 +123,5 @@ def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
 
 if __name__ == '__main__':
 #    print(grant_voucher())
-   set_global_env_id(3)
-   grant_multi_vouchers('2086100900', '2031')
+    set_global_env_id(3)
+    grant_multi_vouchers('2086100900', '2031')
