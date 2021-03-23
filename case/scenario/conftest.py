@@ -4,8 +4,6 @@
 import os
 import time
 import pytest
-from lib.interface_biz.http.vip_login import Vip
-from lib.common.utils.env import set_global_env_id
 
 
 def pytest_configure(config):
@@ -15,16 +13,6 @@ def pytest_configure(config):
     config.addinivalue_line('markers', 'negative')
     config.addinivalue_line('markers', 'inland')
 
- 
-# @pytest.fixture(scope='session', autouse=True)
-# def global_setup_and_teardown():
-#     set_global_env_id(3)
-#     vip = Vip()
-# #     vip.login()
-#     
-#     yield
-#     
-#     print('\nTest Finished...')
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
