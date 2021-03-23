@@ -9,7 +9,7 @@ from binascii import b2a_hex, a2b_hex
 
 
 class AES_CBC():
-    mode = AES.MODE_CBC
+    mode = AES.MODE_CTR
     
     def __init__(self, priv_key, iv):
         self.priv_key = priv_key
@@ -39,11 +39,14 @@ class AES_CBC():
     def decrypt(self, enc_text=None):
         key = self.priv_key.encode('utf-8') if isinstance(self.priv_key, str) else self.priv_key
         enc_text = enc_text if enc_text else self.enc_text
-        cryptos = AES.new(key, self.mode, self.iv)  # Data must be padded to 16 byte boundary in CBC mode
+#         cryptos = AES.new(key, self.mode, self.iv)  # Data must be padded to 16 byte boundary in CBC mode
+        cryptos = AES.new(key, self.mode)
         try:
             plain_text = cryptos.decrypt(a2b_hex(enc_text))
         except:
             plain_text = cryptos.decrypt(enc_text)
+#         return plain_text
+        return plain_text.decode()
         return bytes.decode(plain_text).rstrip('\0')
     
     def encrypt_and_base64(self, text):

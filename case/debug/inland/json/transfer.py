@@ -5,7 +5,7 @@
 # comment:
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.env import get_env_id
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -82,7 +82,7 @@ class Transfer:
         # 灰度地址 https://gw-opay.oppomobile.com/gateway/gray-transfer-apply
         生产环境秘钥与验证签30223460: ec25bb85a7fb426e
         """
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/transfer-apply", data=case_dict)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/transfer-apply", data=case_dict)
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@
 # comment:
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert, is_assert
+from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
 from case.scenario.common_req import DIRECT_PAY
@@ -13,7 +13,6 @@ from case.scenario.common_req import DIRECT_PAY
 logger = Logger('direct_pay').get_logger()
 
 req = DIRECT_PAY
-fizassert = FizAssert()
 
 
 def direct_pay(amount, notify_amount):
@@ -37,15 +36,15 @@ def direct_pay(amount, notify_amount):
         """
         【3】. 检查order_info表信息是否正确
         """
-        fizassert.assert_order_info(req.ssoid, order["pay_req_id"], amount, amount)
+        ASSERTION_IN.assert_order_info(req.ssoid, order["pay_req_id"], amount, amount)
         """
         【4】. 检查trade_order表信息是否正确
         """
-        fizassert.assert_trade_order(req.ssoid, order["pay_req_id"], amount, amount)
+        ASSERTION_IN.assert_trade_order(req.ssoid, order["pay_req_id"], amount, amount)
         """
         【5】. 检查通知表信息是否正确
         """
-        fizassert.assert_notify(order["partner_order"])
+        ASSERTION_IN.assert_notify(order["partner_order"])
 
 
 if __name__ == '__main__':

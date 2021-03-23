@@ -7,13 +7,13 @@ import sys
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common_biz.find_database_table import SeparateDbTable
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.config.path import common_sql_path
 from itertools import product
 from lib.common.utils.env import set_global_env_id
 
-mysql = GlobarVar.MYSQL_IN
-mysql_out = GlobarVar.MYSQL_OUT
+mysql = GlobalVar.MYSQL_IN
+mysql_out = GlobalVar.MYSQL_OUT
 logger = Logger('fiz_db_operate').get_logger()
 
 
@@ -117,7 +117,7 @@ def _drop_spec_columns_on_all_order_tables(*args):
     for db_order_id, order_info_id in product(range(8), range(128)): 
         sql_ = sql %(db_order_id, order_info_id)
         print(sql_)
-        GlobarVar.MYSQL_IN.execute(sql_)
+        GlobalVar.MYSQL_IN.execute(sql_)
 
 
 def _add_columns_on_all_order_tables(*args):
@@ -143,7 +143,7 @@ def _add_columns_on_all_order_tables(*args):
         sql_ = sql %(db_order_id, order_info_id)
         print(sql_)
         try:
-            GlobarVar.MYSQL_IN.execute(sql_)
+            GlobalVar.MYSQL_IN.execute(sql_)
         except:
             raise
 

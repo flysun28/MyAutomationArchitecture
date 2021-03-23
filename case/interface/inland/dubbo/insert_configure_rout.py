@@ -7,7 +7,7 @@ import os
 import time
 from lib.common.file_operation.excel_operation import Excel
 from lib.common.logger.logging import Logger
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 local_time = time.strftime("%Y-%m-%d %H:%M:%S")
 # 新增appId SQL(一般不执行)
 add_app_id = "INSERT INTO `db_platform_gateway`.`server_app_info` VALUES (NULL,'platform-gateway','平台网关','000000'," \
@@ -15,7 +15,7 @@ add_app_id = "INSERT INTO `db_platform_gateway`.`server_app_info` VALUES (NULL,'
              "'{}','{}',NULL,'')".format(local_time, local_time)
 
 
-mysql = GlobarVar.MYSQL_IN
+mysql = GlobalVar.MYSQL_IN
 logger = Logger('parser_dubbo').get_logger()
 
 

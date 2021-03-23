@@ -6,7 +6,7 @@
 from case.scenario.common_req import NO_LOGIN_PAY
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
-from lib.common_biz.fiz_assert import FizAssert, is_assert
+from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.skip_pay import skip_pay
 
@@ -15,7 +15,7 @@ logger = Logger('on_login_pay').get_logger()
 req = NO_LOGIN_PAY
 
 
-def on_login(amount, notify_amount):
+def no_login(amount, notify_amount):
     """
         疑似有的走simplepay，此处针对skippay
     :param notify_amount:
@@ -44,8 +44,8 @@ def on_login(amount, notify_amount):
         """
             【5】. 检查通知表信息是否正确
         """
-        FizAssert().assert_notify(order["partner_order"])
+        ASSERTION_IN.assert_notify(order["partner_order"])
 
 
 if __name__ == '__main__':
-    on_login(1, 1)
+    no_login(1, 1)

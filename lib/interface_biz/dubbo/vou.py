@@ -6,7 +6,7 @@
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 import time
 
 from lib.config.path import common_sql_path
@@ -18,9 +18,9 @@ class Voucher:
         dubbo_info = get_dubbo_info("voucher", self.in_out)
         self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
         if in_out == "inland":
-            self.mysql = GlobarVar.MYSQL_IN
+            self.mysql = GlobalVar.MYSQL_IN
         if in_out == "oversea":
-            self.mysql_out = GlobarVar.MYSQL_OUT
+            self.mysql_out = GlobalVar.MYSQL_OUT
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country="",
                      currency='', ratio=0, maxCutAmount='0'):

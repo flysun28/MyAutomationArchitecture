@@ -4,7 +4,7 @@
 # datetime:2021/2/8 18:05
 # comment:
 import sys
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.common.utils.globals import HTTPJSON_IN, GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path
 from lib.common_biz.replace_parameter import ReplaceParams
@@ -17,7 +17,7 @@ from lib.common.exception.http_exception import HttpJsonException
 
 class SimplePay(metaclass=WithLogger):
     
-    def __init__(self, channel, amount, partner_code, sdk_ver, version='12.0', version_expend='12.0', partner_order=None,
+    def __init__(self, channel, amount, partner_code, sdk_ver, version='12.0', version_expend='12.0', 
                  notify_url='http://pay.pay-test.wanyol.com/notify/receiver'):
         """
         :param version:
@@ -36,7 +36,7 @@ class SimplePay(metaclass=WithLogger):
         self.amount = amount
         self.amount = amount/100
         self.partner_code = partner_code
-        self.partner_order = partner_order if partner_order else RandomOrder(32).random_string()
+        self.partner_order = ''
         self.notify_url = notify_url
         self.sdk_ver = sdk_ver
         self.pb = ProtoBuf(SimplePayPb_pb2)
@@ -65,7 +65,7 @@ class SimplePay(metaclass=WithLogger):
         if result.payrequestid:
             return result.payrequestid
         else:
-            self.logger.info("接口返回异常")
+            self.logger.error("接口返回异常")
             raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
 
     def direct_pay(self):
@@ -88,7 +88,7 @@ class SimplePay(metaclass=WithLogger):
         if result.payrequestid:
             return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
         else:
-            self.logger.info("接口返回异常")
+            self.logger.error("接口返回异常")
             raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
 
     def recharge_spend_amount_is_price(self, price):
@@ -118,7 +118,12 @@ class SimplePay(metaclass=WithLogger):
                "isNeedExpend": "1", "appId": "", "payTypeRMBType": "0", "tradeType": "common", "screenInfo": "FULL"}
         ReplaceParams(req).replace_native("expend")
         result = self.run(req)
-        return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
+        if result.payrequestid:
+            return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
+        else:
+            self.logger.error("接口返回异常")
+            raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
+#         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
     def recharge_spend_kb_and_voucher(self, price, vou_id, vou_type, vou_count, factor=""):
         """
@@ -152,7 +157,12 @@ class SimplePay(metaclass=WithLogger):
         ReplaceParams(req).replace_native("expend", voucher_info={"id": vou_id, "type": vou_type, "count": vou_count})
         result = self.run(req)
         print(result.baseresult.msg)
-        return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
+        if result.payrequestid:
+            return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
+        else:
+            self.logger.error("接口返回异常")
+            raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
+#         return {"pay_req_id": result.payrequestid, "partner_order": self.partner_order}
 
     def recharge_spend_kb_buy_place(self, price, by_id="10001", add_amount="1"):
         """
@@ -215,8 +225,9 @@ class SimplePay(metaclass=WithLogger):
     def run(self, req):
         response = ProtoBuf(SimplePayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/simplepay', 'Request', req,
                                                     flag=0)
-        return ProtoBuf(SimplePayPb_pb2).parser('Result', response)
-        
+        result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
+        self.logger.info('SimplePay Response: %s', result)
+        return result
 
 
 if __name__ == '__main__':

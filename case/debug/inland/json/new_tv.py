@@ -4,7 +4,7 @@
 # datetime:2021/2/8 16:40
 # comment:
 from lib.common.algorithm.sha_256 import sha_256
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -44,7 +44,7 @@ class NewTv:
         http://gw-opay.oppomobile.com/gateway/payOrder
         MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB
         """
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
 
     def sign_order(self):
         case_data = {
@@ -73,7 +73,7 @@ class NewTv:
         temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
             case_data['partnerId']).get_key_from_merchant()
         case_data['sign'] = sha_256(temp_string)
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/wxpay/qrcode/signAndPay", data=case_data)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/wxpay/qrcode/signAndPay", data=case_data)
 
     def query_order(self):
         pass

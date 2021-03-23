@@ -4,7 +4,7 @@
 # datetime:2021/3/8 23:22
 # comment: 国内gateway查看可币余额
 from lib.common_biz.replace_parameter import replace_gateway
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 
 def query_account(ssoid):
@@ -21,10 +21,10 @@ def query_account(ssoid):
                 'version': '1.0',
                 'bizContent': str({'ssoid': '{}'.format(ssoid)})}
     replace_gateway(case_req, "100002")
-    response = GlobarVar.HTTPJSON_GW_IN.post("/gateway/"+case_req['service'], data=case_req)
+    response = GlobalVar.HTTPJSON_GW_IN.post("/gateway/"+case_req['service'], data=case_req)
     # 需要确认是否加上totalGiveBalance与giveBalance
     return response['data']['useableBalance']
 
 
 if __name__ == '__main__':
-    query_account(GlobarVar.SSOID)
+    query_account(GlobalVar.SSOID)

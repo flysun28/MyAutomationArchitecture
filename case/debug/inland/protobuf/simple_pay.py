@@ -1,6 +1,6 @@
 # coding=utf-8
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.common.utils.globals import HTTPJSON_IN, GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path
 from lib.common_biz.replace_parameter import ReplaceParams
@@ -13,7 +13,7 @@ class SimplePay(metaclass=WithLogger):
 
     def __init__(self, chanel, amount, partner_code="2031",
                  sdk_ver=int(Config(do_case_path).read_config("sdk_ver", "version")), version="12.0", version_exp="12.0",
-                 notify_url=str(GlobarVar.URL_PAY_IN)+"/notify/receiver"):
+                 notify_url=str(GlobalVar.URL_PAY_IN)+"/notify/receiver"):
         """
         :param version:
         :param version_exp:

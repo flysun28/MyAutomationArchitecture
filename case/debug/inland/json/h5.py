@@ -5,7 +5,7 @@
 # comment:
 import random
 from lib.common.algorithm.sha_256 import sha_256
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -60,7 +60,7 @@ class H5:
         灰度：https://pre-nativepay.keke.cn/pay/qrCode/trade
         72724314 ：MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB
         """
-        GlobarVar.HTTPJSON_GW_IN.post("/pay/qrCode/trade", data=case_dict)
+        GlobalVar.HTTPJSON_GW_IN.post("/pay/qrCode/trade", data=case_dict)
 
 
 if __name__ == '__main__':

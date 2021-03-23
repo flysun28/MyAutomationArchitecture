@@ -15,7 +15,7 @@ from lib.config.path import do_case_path, common_sql_path
 from lib.common.file_operation.config_operation import Config
 
 
-class GlobarVar():
+class GlobalVar():
     ENV_CONFIG = get_env_config()
     URL_PAY_IN = ENV_CONFIG['url']['pay_in']
     URL_PAY_OUT = ENV_CONFIG['url']['pay_out']
@@ -43,12 +43,12 @@ class GlobarVar():
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account")
     TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
     SSOID = TEST_ACCOUNT['ssoid']
-#     TOKEN = TEST_ACCOUNT['token']
+    TOKEN = TEST_ACCOUNT['token']
 
 
-HTTPJSON_IN = GlobarVar.HTTPJSON_IN
-HTTPJSON_OUT = GlobarVar.HTTPJSON_OUT
-redis = REDIS = GlobarVar.REDIS_IN
-HTTPJSON_SCARLET = GlobarVar.HTTPJSON_SCARLET
-MYSQL_AUTO_TEST = GlobarVar.MYSQL_AUTO_TEST
+HTTPJSON_IN = GlobalVar.HTTPJSON_IN
+HTTPJSON_OUT = GlobalVar.HTTPJSON_OUT
+redis = REDIS = GlobalVar.REDIS_IN
+HTTPJSON_SCARLET = GlobalVar.HTTPJSON_SCARLET
+MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(os.getcwd(), 'src')

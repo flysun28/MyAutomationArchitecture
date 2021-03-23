@@ -5,7 +5,7 @@
 # comment:
 import decimal
 from case.scenario.common_req import OVERSEA_RECHARGE_SPEND, VOU_OVERSEA
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.biz_db_operate import get_balance, oversea_get_coin_rate
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
@@ -32,7 +32,7 @@ def rs_only_channel(amount, notify_amount):
     """
     【1】. 查询可币初始化余额
     """
-    balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_before = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     """
     【2】. 调用可币充值消费接口，构造渠道回调报文
     """
@@ -43,7 +43,7 @@ def rs_only_channel(amount, notify_amount):
     """
     【3】. 检查可币余额是否正确
      """
-    balance_after = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_after = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     # 渠道下单金额!=商品金额 少的扣可币，多的充可币
     assert balance_after == round(decimal.Decimal((notify_amount-amount)/rate_coin[req.currency]), 4) + balance_before
     if is_assert():
@@ -53,7 +53,7 @@ def rs_only_channel(amount, notify_amount):
         FizAssert(in_out="oversea").assert_notify(order_info["partner_order"])
 
 
-def rd_with_vou_channel(amount, notify_amount):
+def rs_with_vou_channel(amount, notify_amount):
     """
     目前只考虑notify_amount = amount
     :param amount:元
@@ -63,7 +63,7 @@ def rd_with_vou_channel(amount, notify_amount):
     """
     1. 查询可币余额，发券
     """
-    balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_before = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     vou_id = oversea_grant_voucher(req_vou.vouAmount, req_vou.vouType, req_vou.country, req_vou.partner_id)
     """
     【2】. 调用充值消费即可，构造渠道回调报文
@@ -76,7 +76,7 @@ def rd_with_vou_channel(amount, notify_amount):
     """
     【3】. 检查可币与优惠券消费信息是否正确
      """
-    balance_after = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_after = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     assert balance_after == round(decimal.Decimal((notify_amount-amount)/rate_coin[req.currency]), 4) + balance_before
     assert query_vou_by_id(vou_id, req.ssoid, "oversea") == "USED"
     if is_assert():
@@ -95,5 +95,5 @@ def rd_with_vou_channel(amount, notify_amount):
 
 if __name__ == '__main__':
     #rs_only_channel(10000, 8000)
-    rd_with_vou_channel(10000, 10000)
+    rs_with_vou_channel(10000, 10000)
 

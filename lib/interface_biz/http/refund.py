@@ -10,7 +10,7 @@ from lib.common_biz.find_key import GetKey
 from lib.common.utils.env import get_env_config, set_global_env_id, get_env_id
 from lib.common.logger.logging import Logger
 from lib.common.algorithm.md5 import md5
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common.exception.http_exception import HttpJsonException
 from lib.common.exception.intf_exception import ArgumentException
 from lib.common.session.http.http_json import HttpJsonSession
@@ -26,7 +26,7 @@ class Refund():
         '72724314': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB'
     }
 
-    def __init__(self, ssoid, http_session=GlobarVar.HTTPJSON_IN):
+    def __init__(self, ssoid, http_session=GlobalVar.HTTPJSON_IN):
         self.ssoid = ssoid
         self.partner_order = self.partner_code = None
         self.http_session = http_session
@@ -68,14 +68,14 @@ class Refund():
         if self.partner_order:
             sql = 'SELECT pay_req_id, pay_type, status, refund as 当笔退款金额, pay_amount as 总退款额 FROM db_order_0.refund_info '\
                     'WHERE partner_order="%s" AND status="init"' %self.partner_order
-            res = GlobarVar.MYSQL_IN.select(sql)            
+            res = GlobalVar.MYSQL_IN.select(sql)            
             return True if res else False
         return False
     
     def get_sub_partner_orders(self, pay_req_id):
         self.pay_req_id = pay_req_id
         sql = 'SELECT partner_order, partner_code FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*self.db_order_info, pay_req_id)
-        results = GlobarVar.MYSQL_IN.select(sql)
+        results = GlobalVar.MYSQL_IN.select(sql)
         ret = []
         for res in results:
             ret.append(tuple(res.values()))

@@ -5,7 +5,7 @@
 # comment:
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.env import get_env_id
-from lib.common.utils.globals import GlobarVar, MYSQL_AUTO_TEST
+from lib.common.utils.globals import GlobalVar, MYSQL_AUTO_TEST
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
 
@@ -19,7 +19,7 @@ class FindMerchant(metaclass=WithLogger):
         :param partner_code: 业务线
         """
         self.partner_id = partner_code
-        self.mysql = GlobarVar.MYSQL_IN
+        self.mysql = GlobalVar.MYSQL_IN
 
     def find_app_id_merchant(self, channel):
         """

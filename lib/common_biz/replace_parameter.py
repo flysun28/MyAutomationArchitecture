@@ -8,7 +8,7 @@ from lib.common.algorithm.cipher import Cipher
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in
 from lib.common.utils.meta import WithLogger
@@ -86,7 +86,7 @@ class ReplaceParams(metaclass=WithLogger):
                 self.case['expendRequest']['voucherCount'] = voucher_info["count"]
             # 替换expendpay中的sign
             if self.case['expendRequest']['sign'] == '':
-                sign_string = expend_pay_sign_string(GlobarVar.TOKEN,
+                sign_string = expend_pay_sign_string(GlobalVar.TOKEN,
                                                      self.case['header']['package'],
                                                      self.case['expendRequest']['partnerid'],
                                                      self.case['expendRequest']['partnerOrder'],
@@ -121,7 +121,7 @@ class ReplaceParams(metaclass=WithLogger):
         if self.case ['header']['appVerison'] == '':
             self.case['header']['appVerison'] = Config(do_case_path).read_config("apk_ver_oversea", "version")
         if self.case['header']['token'] == '':
-            self.case['header']['token'] = GlobarVar.TOKEN
+            self.case['header']['token'] = GlobalVar.TOKEN
         if self.case['header']['token'] == 'no_login':
             self.case['header']['token'] = ''
         if self.case['header']['r_v'] == '':

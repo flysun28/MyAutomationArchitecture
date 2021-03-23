@@ -10,7 +10,7 @@ import hashlib
 import json
 from lib.common.utils.meta import WithLogger
 from lib.common.session.http.http_json import HttpJsonSession
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 url = "http://i.auth.ucnewtest.wanyol.com/loging"
 header = {"content-type": "application/json"}
@@ -20,7 +20,7 @@ appKey = "myKey"
 class Vip(metaclass=WithLogger):
     
     def __init__(self):
-        self.account_args = GlobarVar.TEST_ACCOUNT
+        self.account_args = GlobalVar.TEST_ACCOUNT
 
     def login(self):
         """

@@ -6,7 +6,7 @@
 import random
 from case.scenario.common_req import EXPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.biz_db_operate import get_pay_req_by_partner
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.expend_pay import ExpendPay
@@ -26,7 +26,7 @@ def spend_with_kb_vou(amount):
     """
         【1】. 初始化可币余额，发放可币与优惠券
     """
-    balance_before = query_account(GlobarVar.SSOID)
+    balance_before = query_account(GlobalVar.SSOID)
     if balance_before != 0:
         ExpendPay(balance_before, req.partner_id, req.interface_version,
                   req.app_version, req.notify_url).only_kb_spend()
@@ -80,7 +80,7 @@ def spend_only_kb(amount):
     """
     2. 查询可币余额
     """
-    balance_before = query_account(GlobarVar.SSOID)
+    balance_before = query_account(GlobalVar.SSOID)
     """
     3. 调用纯消费接口
     """
@@ -89,7 +89,7 @@ def spend_only_kb(amount):
     """
     4. 查询消费后的可币余额
     """
-    balance_after = query_account(GlobarVar.SSOID)
+    balance_after = query_account(GlobalVar.SSOID)
     assert balance_before == balance_after + amount
 
 

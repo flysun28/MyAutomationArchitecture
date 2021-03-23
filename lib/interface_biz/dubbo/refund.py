@@ -9,7 +9,7 @@ from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 
 class Refund:
@@ -49,7 +49,7 @@ class Refund:
         """
         db_info = SeparateDbTable(ssoid).get_order_db_table()
         sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(db_info[0], db_info[1], ssoid)
-        mysql = GlobarVar.MYSQL_IN
+        mysql = GlobalVar.MYSQL_IN
         refund_list = mysql.select(sql_refund)
         # pay_req_id, amount, partner_order, partner_code, pay_type
         for item in refund_list:
@@ -64,7 +64,7 @@ class Refund:
               'STATUS="OK" AND refund=0 AND amount!="0" AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
                   order_db_info[0], order_db_info[1], partner_order_id)
         print(sql)
-        res = GlobarVar.MYSQL_IN.select_one(sql)
+        res = GlobalVar.MYSQL_IN.select_one(sql)
         print(res)
         self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), res['pay_type'], res["pay_req_id"])
         self.refund_single(res['partner_order'], res['partner_code'], str(res['amount']/100))

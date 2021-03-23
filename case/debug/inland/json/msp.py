@@ -6,7 +6,7 @@
 import time
 from lib.common.algorithm.md5 import md5
 from lib.common.algorithm.sha_256 import sha_256
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -43,13 +43,13 @@ class Msp:
             # 2031密钥
             sign_string = Sign(case_dict).join_asc_have_key("&key=") + "SxwBXAxZQgO8yLbWxIFVZWXX"
         case_dict['sign'] = md5(sign_string, to_upper=False)
-        GlobarVar.HTTPJSON_IN.post("/api/pay/v1/trade", data=case_dict)
+        GlobalVar.HTTPJSON_IN.post("/api/pay/v1/trade", data=case_dict)
 
     def query_result(self):
         case_dict = {
             "partnerOrder": "zKljSk1yGaVfYcZOAunHUTw7IB9CEerp", "queryType": "PAY"
         }
-        GlobarVar.HTTPJSON_IN.post("/api/pay/v1/qrcode/order-query-result", data=case_dict)
+        GlobalVar.HTTPJSON_IN.post("/api/pay/v1/qrcode/order-query-result", data=case_dict)
 
 
 class Msp_NewTV:
@@ -82,7 +82,7 @@ class Msp_NewTV:
         temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
             case_data['partnerCode']).get_key_from_merchant()
         case_data['sign'] = sha_256(temp_string)
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
 
     def msp_sign_and_pay(self):
         """
@@ -118,7 +118,7 @@ class Msp_NewTV:
         temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
             case_data['partnerId']).get_key_from_merchant()
         case_data['sign'] = sha_256(temp_string)
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/wxpay/qrcode/signAndPay", data=case_data)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/wxpay/qrcode/signAndPay", data=case_data)
 
     def msp_query_result(self):
         case_data = {
@@ -129,7 +129,7 @@ class Msp_NewTV:
             # 商户订单号
             "partnerOrder": "TV202012081733307952298093395196"
         }
-        GlobarVar.HTTPJSON_IN.post("/api/pay/v1/qrcode/order-query-result", data=case_data)
+        GlobalVar.HTTPJSON_IN.post("/api/pay/v1/qrcode/order-query-result", data=case_data)
 
     def msp_sign_cancel(self):
         case_data = {
@@ -143,7 +143,7 @@ class Msp_NewTV:
         temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
             case_data['partnerId']).get_key_from_merchant()
         case_data['sign'] = sha_256(temp_string)
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/sign/cancel", data=case_data)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/sign/cancel", data=case_data)
 
 
 if __name__ == '__main__':

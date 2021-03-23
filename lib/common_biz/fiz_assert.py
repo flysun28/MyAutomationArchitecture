@@ -8,7 +8,7 @@ from datetime import datetime
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_id
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
@@ -19,10 +19,10 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
     
     def __init__(self, in_out="inland"):
         self.in_out = in_out
-        self.mysql = GlobarVar.MYSQL_IN if in_out == 'inland' else GlobarVar.MYSQL_OUT
+        self.mysql = GlobalVar.MYSQL_IN if in_out == 'inland' else GlobalVar.MYSQL_OUT
         self._type_equality_funcs = {}
 
-    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0, vou_amount=0, vou_id=None):
+    def assert_order_info(self, ssoid, pay_req_id, amount, original_amount, kb_spent=0, vou_amount=0, vou_id=''):
         db_order_info = SeparateDbTable(ssoid).get_order_db_table()
         sql_order = str(Config(common_sql_path).read_config("order", "order")).format(
             db_order_info[0], db_order_info[1], ssoid, pay_req_id)
@@ -40,7 +40,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
                 assert order_info['voucher_id'] == vou_id
             self.logger.info("订单表信息记录正确")
         except AssertionError as e:
-            self.logger.info("订单表信息记录异常")
+            self.logger.error("订单表信息记录异常")
             raise e
 
     def assert_trade_order(self, ssoid, pay_req_id, amount, original_amount, kb_amount=0, vou_amount=0):
@@ -58,7 +58,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.assertEqual(trade_order_info['voucher_amount'], vou_amount)
             self.logger.info("trade订单表信息记录正确")
         except AssertionError as e:
-            self.logger.info("trade订单表信息记录异常")
+            self.logger.error("trade订单表信息记录异常")
             raise e
 
     def assert_tb_recharge(self, ssoid, pay_req_id, amount, flag=True):
@@ -82,7 +82,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
                 self.assertIsNone(recharge_info)
             self.logger.info("tb_recharge订单表信息记录正确")
         except AssertionError as e:
-            self.logger.info("tb_recharge订单表信息记录异常")
+            self.logger.error("tb_recharge订单表信息记录异常")
             raise e
 
     def assert_tb_payment(self, ssoid, partnerOrder, amount, flag=True):
@@ -106,12 +106,13 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
                 self.assertIsNone(payments_info)
             self.logger.info("tb_payment订单表信息记录正确")
         except AssertionError as e:
-            self.logger.info("tb_payment订单表信息记录正确")
+            self.logger.error("tb_payment订单表信息记录正确")
             raise e
 
     def assert_notify(self, request_id):
         """
         :param request_id: 商户订单号
+        select * from db_pay_notify_1.notify_info where request_id = `request_id`
         :return:
         """
         sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)        
@@ -144,7 +145,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.assertEqual(sign_status['status'], "SIGN")
             self.logger.info("签约信息表记录正确")
         except AssertionError as e:
-            self.logger.info("签约信息表记录异常")
+            self.logger.error("签约信息表记录异常")
             raise e
 
     def assert_auto_renew_sign_record(self, pay_req_id):
@@ -159,7 +160,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.assertEqual(sign_record_status['status'], "SUCC")
             self.logger.info("签约记录表记录正确")
         except Exception as e:
-            self.logger.info("签约记录表记录异常")
+            self.logger.error("签约记录表记录异常")
             raise e
 
     def assert_voucher(self, ssoid, vou_id, status="6"):
@@ -178,7 +179,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.assertEqual(vou_info['status'], status)
             self.logger.info("优惠券表记录正确")
         except Exception as e:
-            self.logger.info("优惠券表记录异常")
+            self.logger.error("优惠券表记录异常")
             raise e
 
 
@@ -193,3 +194,7 @@ def is_assert():
         return True
     elif env == "grey" or env == "product":
         return False
+
+
+ASSERTION_IN = FizAssert('inland')
+ASSERTION_OUT = FizAssert('oversea')

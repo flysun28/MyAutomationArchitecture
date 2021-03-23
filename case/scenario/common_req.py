@@ -4,14 +4,14 @@
 # datetime:2021/2/27 16:04
 # comment:
 import random
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 
 class Order:
-    ssoid = GlobarVar.SSOID
+    ssoid = GlobalVar.SSOID
 
     def __init__(self, amount=0, notify_amount=0, country="CN", currency="CNY", pay_channel="wxpay", partner_id="2031",
-                 notify_url=str(GlobarVar.URL_PAY_IN) + "/notify/receiver", app_version=260,
+                 notify_url=str(GlobalVar.URL_PAY_IN) + "/notify/receiver", app_version=260,
                  interface_version="12.0", version_exp="12.0", renewProductCode="20310001"):
         #  "http://secure.pay-test2.wanyol.com"
         self.amount = amount

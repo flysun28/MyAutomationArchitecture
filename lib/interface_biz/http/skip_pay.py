@@ -6,7 +6,7 @@
 import random
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import GlobarVar, HTTPJSON_IN
+from lib.common.utils.globals import GlobalVar, HTTPJSON_IN
 from lib.common_biz.file_path import do_case_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.replace_parameter import ReplaceParams

@@ -8,7 +8,7 @@ from lib.common.utils.env import get_env_id
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
 from pymysql.err import DataError
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 
 class GetKey(metaclass=WithLogger):
@@ -20,7 +20,7 @@ class GetKey(metaclass=WithLogger):
         """
         self.partner_id = partner_id
         if getattr(self, 'mysql', None) is None:
-            self.mysql = GlobarVar.MYSQL_IN if in_out == 'inland' else GlobarVar.MYSQL_OUT
+            self.mysql = GlobalVar.MYSQL_IN if in_out == 'inland' else GlobalVar.MYSQL_OUT
 #         self.mysql = connect_mysql(in_out)
 
     def get_key_from_merchant(self):
