@@ -11,7 +11,7 @@ from lib.common.utils.env import get_env_config, get_env_id
 from lib.common.db_operation.mysql_operation import connect_mysql, connect_auto_test_special
 from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
-from lib.config.path import do_case_path, common_sql_path
+from lib.config.path import do_case_path, common_sql_path, global_env_path
 from lib.common.file_operation.config_operation import Config
 
 
@@ -38,9 +38,11 @@ class GlobalVar():
     env_id = get_env_id()
     sql_test_account = ""
     if env_id == "1" or env_id == "2" or env_id == "3":
-        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account")
+        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account").\
+            format(Config(global_env_path).read_config("test_count", "count"))
     if env_id == "grey" or env_id == "product":
-        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account")
+        sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account").\
+            format(Config(global_env_path).read_config("test_count", "count"))
     TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
     SSOID = TEST_ACCOUNT['ssoid']
     TOKEN = TEST_ACCOUNT['token']
