@@ -1,7 +1,6 @@
 '''
 @author: 80319739
 '''
-import os
 import time
 import pytest
 

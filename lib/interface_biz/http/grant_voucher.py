@@ -11,6 +11,7 @@ from lib.common_biz.file_path import key_path
 from lib.common_biz.find_key import is_get_key_from_db, GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
+from lib.common.utils.env import set_global_env_id
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -62,5 +63,54 @@ def grant_voucher(amount=1, vou_type=1, appId="2031"):
     return result['vouIdList'][0]
 
 
+def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
+    '''
+    按照用户维度，批量发不同类型的券
+    :param ssoid: 账户id
+    :param partner_id: 业务线id
+    :请求参数列表：
+    字段          类型        含义        必要性
+    ssoid       String      用户ID           Y
+    country     String    二位字母的国家代码   N
+    timezone    String    UTC时区            N
+    currency    String    三位字母的币种      N
+    appId       String    业务线ID           Y    
+    requestId   String    请求ID            Y
+    sign        String    签名              Y
+    grantVoucherInfoList    List<GrantVoucherInfo>    Y
+        vouType    String    券优惠类型                Y
+        vouName    String    优惠券名称                Y
+        grantCount    Integer    发放数量              Y
+        amount    BigDecimal    金额,元    
+        maxAmount    BigDecimal    金额,元    
+        ratio    BigDecimal    打折的折扣    打折券使用
+        beginTime    Long    允许使用的开始时间         Y
+        expireTime    Long    允许使用的结束时间        Y
+        scopeId    String    使用范围ID                Y
+        subScopeId    String    子范围ID              N
+        blackScopeId    String    黑名单范围ID         N
+        settleType    String    结算类型               Y
+        batchId    String    批次号                    N
+
+    '''
+    req = {
+        'ssoid': ssoid,
+        'country': '',
+        'timezone': '',
+        'currency': '',
+        'appId': partner_id,
+        'requestId': '',
+        'sign': '',
+        'grantVoucherInfoList': []
+    }
+    if is_get_key_from_db:
+        priv_key = GetKey(req['appId']).get_key_from_voucher()
+    orig_sign_str = Sign(req).join_asc_have_key("&key=") + priv_key
+    req['sign'] = md5(orig_sign_str)
+    result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=req)
+
+
 if __name__ == '__main__':
-   print(grant_voucher())
+#    print(grant_voucher())
+   set_global_env_id(3)
+   grant_multi_vouchers('2086100900', '2031')
