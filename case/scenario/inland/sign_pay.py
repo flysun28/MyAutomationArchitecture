@@ -37,14 +37,13 @@ def sign_pay(amount, notify_amount):
     # 支付回调
     choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
-    
         【3】. 查询支付结果
     """
     assert str(queryResult(order_info["pay_req_id"])) == "2002"
     """
         【4】. 查询order表记录是否正确
     """
-    FizAssert().assert_order_info(req.ssoid, order_info["pay_req_id"], amount, amount)
+    FizAssert().assert_order_info(req.ssoid, order_info["pay_req_id"], amount, amount, vou_id="")
     """
         【5】. 查询trade_order表记录是否正确
     """

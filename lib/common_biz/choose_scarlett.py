@@ -3,7 +3,7 @@
 # author:xy
 # datetime:2021/2/24 11:36
 # comment:
-from lib.common_biz.find_merchant_info import find_merchant_info
+from lib.common_biz.find_merchant_info import find_merchant_info, FindMerchant
 from lib.interface_biz.scarlett.heepay import hee_pay_notify
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 from lib.interface_biz.scarlett.oversea_upay import upay_pay_scarlet

@@ -53,10 +53,11 @@ class MySQLClient(metaclass=WithLogger):
         self.logger.info('执行sql语句：{}'.format(sql))
         self.cur.execute(sql)  # 查询数据
         res = self.cur.fetchone()
-        for k, v in res.items():
-            res[k] = '' if v is None else v
         if res is None:
             self.logger.info('查询数据为空')
+            return
+        for k, v in res.items():
+            res[k] = '' if v is None else v
         return res
 
     def execute(self, sql):
