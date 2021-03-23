@@ -4,7 +4,7 @@ import sys
 from itertools import product
 from lib.common.logger.logging import Logger
 from lib.common.utils.descriptors import StatisDescriptor
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common.utils.misc_utils import to_iterable_nested, extend_to_longest
 from lib.common.exception.intf_exception import ArgumentException
@@ -28,7 +28,7 @@ class InterfaceExecStatistics():
         return 'URL: %s\n' \
                'PASSED: %d\n' \
                'FAILED: %d\n' \
-               'PASSED_RATE: %.2f%%' %(GlobarVar.HTTPJSON_IN.url, self.PASS_NUM, self.FAIL_NUM, self.PASS_NUM/self.TOTAL*100)
+               'PASSED_RATE: %.2f%%' %(GlobalVar.HTTPJSON_IN.url, self.PASS_NUM, self.FAIL_NUM, self.PASS_NUM/self.TOTAL*100)
         
 
 class InterfaceTestTemplate(metaclass=WithLogger):

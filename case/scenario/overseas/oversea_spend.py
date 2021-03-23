@@ -5,7 +5,7 @@
 # comment:
 import decimal
 from case.scenario.common_req import OVERSEA_SPEND, VOU_OVERSEA
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.biz_db_operate import oversea_get_coin_rate
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.oversea_grant_coin import oversea_grant_coin
@@ -28,8 +28,8 @@ def kb_spend(amount):
     1. 发可币
     """
     # app_key测试环境==partner_id，生产需单独处理
-    oversea_grant_coin(req.partner_id, req.partner_id, req.country, GlobarVar.SSOID, amount)
-    balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    oversea_grant_coin(req.partner_id, req.partner_id, req.country, GlobalVar.SSOID, amount)
+    balance_before = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     """
     2. 调用消费接口
     """
@@ -39,7 +39,7 @@ def kb_spend(amount):
     """
     3. 检查可币与优惠券消费信息是否正确
     """
-    balance_after = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_after = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     assert balance_before == balance_after + round(decimal.Decimal(amount), 4)
     """
     4. 检查订单表信息是否正确(海外纯消费，未纳入订单表)
@@ -69,8 +69,8 @@ def kb_vou_spend(amount):
     1. 发可币, 发券
     """
     # app_key测试环境==partner_id，生产需单独处理
-    oversea_grant_coin(req.partner_id, req.partner_id, req.country, GlobarVar.SSOID, amount)
-    balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    oversea_grant_coin(req.partner_id, req.partner_id, req.country, GlobalVar.SSOID, amount)
+    balance_before = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
 
     vou_id = oversea_grant_voucher(req_vou.vouAmount, req_vou.vouType, req_vou.country, req_vou.partner_id)
     rate = float(oversea_get_coin_rate(currency[req.country]))
@@ -82,7 +82,7 @@ def kb_vou_spend(amount):
     """
         3. 检查可币与优惠券消费信息是否正确
     """
-    balance_after = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_after = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     assert balance_after == balance_before - round(decimal.Decimal(amount), 4)
     assert query_vou_by_id(vou_id, req.ssoid, "oversea") == "USED"
     if is_assert():

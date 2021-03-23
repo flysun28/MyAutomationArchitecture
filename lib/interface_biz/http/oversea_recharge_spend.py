@@ -4,7 +4,7 @@
 # datetime:2021/2/24 19:54
 # comment:
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import HTTPJSON_OUT, GlobarVar
+from lib.common.utils.globals import HTTPJSON_OUT, GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import RechargeAndSpend_pb2
@@ -58,7 +58,7 @@ class RechargeSpend(metaclass=WithLogger):
                 "desc": "RECHARGE_SPEND",
                 "priceLocal": self.priceLocal
             },
-            "notifyUrl": str(GlobarVar.URL_PAY_IN)+"/notify/receiver",
+            "notifyUrl": str(GlobalVar.URL_PAY_IN)+"/notify/receiver",
             "partnerParams": "",
             "businessChannelId": "",
             "factor": ""
@@ -108,7 +108,7 @@ class RechargeSpend(metaclass=WithLogger):
                 "desc": "RECHARGE_SPEND",
                 "priceLocal": self.priceLocal
             },
-            "notifyUrl": str(GlobarVar.URL_PAY_IN) + "/notify/receiver",
+            "notifyUrl": str(GlobalVar.URL_PAY_IN) + "/notify/receiver",
             "partnerParams": "",
             "businessChannelId": "",
             "couponId": coupon_id,

@@ -6,7 +6,7 @@
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.order_random import RandomOrder
 from lib.config.path import common_sql_path
 
@@ -43,7 +43,7 @@ class Order:
             data,
             "FIX"
         )
-        mysql = GlobarVar.MYSQL_IN
+        mysql = GlobalVar.MYSQL_IN
         mysql.execute(str(Config(common_sql_path).read_config("refund", "refund_update")).format(payReqId))
 
 

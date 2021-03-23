@@ -11,7 +11,7 @@ from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 
 class Refund:
@@ -49,7 +49,7 @@ class Refund:
         :return:
         """
         sql_refund = str(Config(common_sql_path).read_config("refund", "sql_refund")).format(*self.db_order_info, self.ssoid)
-        refund_list = GlobarVar.MYSQL_IN.select(sql_refund)
+        refund_list = GlobalVar.MYSQL_IN.select(sql_refund)
         # pay_req_id, amount, partner_order, partner_code, pay_type
         for item in refund_list:
             self.order_dubbo.refund_approval(item['partner_code'], item['partner_order'], str(item['amount']/100), item['pay_type'], item["pay_req_id"])
@@ -59,7 +59,7 @@ class Refund:
         sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM pay_tradeorder_{}.trade_order_info_{} WHERE '\
               'STATUS="OK" AND refund=0 AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
                   *self.db_order_info, partner_order_id) #+ ' AND refund=0 AND amount!="0"'
-        results = GlobarVar.MYSQL_IN.select(sql)
+        results = GlobalVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
             self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), res['pay_type'], res["pay_req_id"])
@@ -70,7 +70,7 @@ class Refund:
               'request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
                   *self.db_order_info, partner_order_id) #+ ' AND amount!="0"'
                 #((STATUS="OK" AND refund=0) OR (STATUS="REFUNDED" AND refund!=0)) AND 
-        results = GlobarVar.MYSQL_IN.select(sql)
+        results = GlobalVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
             refund_amount = amount if amount else str(res['amount']/100)
@@ -82,14 +82,14 @@ class Refund:
         if self.pay_req_id:
             sql = 'SELECT pay_req_id, pay_type, status, refund as 当笔退款金额, pay_amount as 总退款额 FROM db_order_0.refund_info '\
                     'WHERE pay_req_id="%s" AND status="init"' %self.pay_req_id
-            res = GlobarVar.MYSQL_IN.select(sql)
+            res = GlobalVar.MYSQL_IN.select(sql)
             return True if res else False
         return False
     
     def get_sub_partner_orders(self, pay_req_id):
         self.pay_req_id = pay_req_id
         sql = 'SELECT partner_order FROM pay_tradeorder_{}.trade_order_info_{} WHERE pay_req_id="{}"'.format(*self.db_order_info, pay_req_id)
-        results = GlobarVar.MYSQL_IN.select(sql)
+        results = GlobalVar.MYSQL_IN.select(sql)
         return list(chain(*[res.values() for res in results]))
     
     def refund_by_pay_req_id(self, pay_req_id):

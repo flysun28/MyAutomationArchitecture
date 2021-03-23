@@ -4,7 +4,7 @@
 # datetime:2021/2/8 16:35
 # comment:
 from lib.common.algorithm.sha_256 import sha_256
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -40,7 +40,7 @@ class Ios:
         temp_string = temp_string.replace("'", '"')
         temp_string = temp_string.replace(" ", '')
         case_dict['sign'] = sha_256(temp_string)
-        GlobarVar.HTTPJSON_GW_IN.post("/gateway/api/orderCreate", data=case_dict)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/api/orderCreate", data=case_dict)
 
 
 if __name__ == '__main__':

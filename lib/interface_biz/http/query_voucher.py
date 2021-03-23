@@ -5,7 +5,7 @@
 # comment: 国内海外通用
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.file_path import key_path
 from lib.common_biz.find_key import is_get_key_from_db, GetKey
 from lib.common_biz.sign import Sign
@@ -23,7 +23,7 @@ def query_vou_by_id(vou_id, ssoid, env="inland", app_id="2031"):
         else:
             key = Config(key_path).as_dict('inland_t_key')["key_" + req['appId']]
         req['sign'] = md5(Sign(req).join_asc_have_key("&key=") + key)
-        result = GlobarVar.HTTPJSON_IN.post("/voucher/queryById", data=req)
+        result = GlobalVar.HTTPJSON_IN.post("/voucher/queryById", data=req)
         return result['data']['status']
     elif env == "oversea":
         if is_get_key_from_db:
@@ -31,7 +31,7 @@ def query_vou_by_id(vou_id, ssoid, env="inland", app_id="2031"):
         else:
             key = Config(key_path).as_dict('oversea_t_key')["key_" + req['appId']]
         req['sign'] = md5(Sign(req).join_asc_have_key("&key=") + key)
-        result = GlobarVar.HTTPJSON_OUT.post("/voucher/queryById", data=req)
+        result = GlobalVar.HTTPJSON_OUT.post("/voucher/queryById", data=req)
         return result['data']['status']
 
 

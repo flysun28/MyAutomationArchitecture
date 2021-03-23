@@ -4,7 +4,7 @@
 # datetime:2021/2/25 16:04
 # comment:
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import GlobarVar, HTTPJSON_OUT
+from lib.common.utils.globals import GlobalVar, HTTPJSON_OUT
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_standard import Spend_pb2
@@ -53,7 +53,7 @@ class Spend:
                 "priceLocal": self.pay_amount
             },
             "returnUrl": "",
-            "notifyUrl": str(GlobarVar.URL_PAY_IN) + "/notify/receiver",
+            "notifyUrl": str(GlobalVar.URL_PAY_IN) + "/notify/receiver",
             "partnerParams": "",
             "extendParams": "",
             "businessType": "WANGYOU",

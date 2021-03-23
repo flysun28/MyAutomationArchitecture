@@ -13,7 +13,7 @@ from lib.config.path import common_sql_path
 from lib.interface_biz.http.vip_login import Vip
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 
 logger = Logger('鉴权').get_logger()
 
@@ -41,10 +41,10 @@ def get_check_t_p(param):
         token_new = Vip().login()
         env_id = get_env_id()
         if env_id == "1":
-            GlobarVar.MYSQL_AUTO_TEST.execute(
+            GlobalVar.MYSQL_AUTO_TEST.execute(
                 Config(common_sql_path).read_config("pay_auto_test_info", "test_update_account").format(token_new))
         if env_id == "grey" or env_id == "product":
-            GlobarVar.MYSQL_AUTO_TEST.execute(
+            GlobalVar.MYSQL_AUTO_TEST.execute(
                 Config(common_sql_path).read_config("pay_auto_test_info", "product_update_account").format(token_new))
         logger.info('成功替换token:{} 并写入数据库'.format(token_new))
         # logger.info('成功将token:{} 并写入redis'.format(token_new))
@@ -86,7 +86,7 @@ class Pass(metaclass=WithLogger):
 
     def pass_recharge(self, version="11.0", pay_type="0"):
         param = {
-            "token": GlobarVar.TOKEN,
+            "token": GlobalVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",
@@ -107,7 +107,7 @@ class Pass(metaclass=WithLogger):
 
     def pass_recharge_spend(self, version="11.0", pay_type="0"):
         param = {
-            "token": GlobarVar.TOKEN,
+            "token": GlobalVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",
@@ -133,7 +133,7 @@ class Pass(metaclass=WithLogger):
         :return:
         """
         param = {
-            "token": GlobarVar.TOKEN,
+            "token": GlobalVar.TOKEN,
             "partner": self.partner,
             "package": self.package,
             "ext": "",

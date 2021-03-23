@@ -7,7 +7,7 @@ import decimal
 import time
 from case.scenario.common_req import RECHARGE_PAY
 from lib.common.logger.logging import Logger
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.gateway_query_account import query_account
@@ -29,7 +29,7 @@ def recharge(amount, notify_amount):
     """
         【1】. 查询可币初始化余额, 并初始化为0
     """
-    balance_before = query_account(GlobarVar.SSOID)
+    balance_before = query_account(GlobalVar.SSOID)
     """
         【2】. 调用可币充值接口，构造渠道回调报文
     """
@@ -44,7 +44,7 @@ def recharge(amount, notify_amount):
     """
         【4】. 检查充值成功后，可币余额是否正确
     """
-    balance_after = query_account(GlobarVar.SSOID)
+    balance_after = query_account(GlobalVar.SSOID)
     try:
         # decimal.Decimal截取4位处理，与数据库保持一致
         assert balance_after == balance_before + amount

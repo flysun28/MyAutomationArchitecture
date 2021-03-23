@@ -6,7 +6,7 @@
 
 from lib.common.algorithm.cipher import Cipher
 from lib.common.session.http.protobuf import ProtoBuf
-from lib.common.utils.globals import HTTPJSON_IN, GlobarVar
+from lib.common.utils.globals import HTTPJSON_IN, GlobalVar
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import auto_renew_sign_string
 from lib.interface_biz.http.pay_pass import Pass

@@ -10,7 +10,7 @@ import binascii
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common.utils.env import set_global_env_id
 from lib.interface_biz.http.refund import Refund
 from lib.common.algorithm.aes import AES_CBC
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 #     elif env_id == 'product':
 #         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
 #     set_global_env_id(env_id)
-#     refund = Refund('2086100900', http_session=session or GlobarVar.HTTPJSON_IN)   # 14213467928
+#     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
 #     per_amount = 0.01
 #     total_amount = 0.01
 #     loop_num = int(total_amount/per_amount)
@@ -78,12 +78,15 @@ if __name__ == '__main__':
 #     print('base64解密之后：', x)
     x = base64.b64decode(exp)   # decode base64
     print('base64解密之后：', x)
-    print('aes解密之后：', aes_cbc.decrypt(x))
+    y = aes_cbc.decrypt(x)
+    print('aes解密之后：', y)
+#     z = 
+    
 
     
 #     # pb2json 加密传输新协议
 #     set_global_env_id(3)
-#     encjson = EncryptJson(GlobarVar.URL_PAY_IN)
+#     encjson = EncryptJson(GlobalVar.URL_PAY_IN)
 #     encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
     
     

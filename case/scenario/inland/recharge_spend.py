@@ -8,7 +8,7 @@ import time
 from case.scenario.common_req import RECHARGE_SPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
 from lib.common.logger.logging import Logger
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.expend_pay import ExpendPay
@@ -30,11 +30,11 @@ def rs_only_rmb(amount, notify_amount):
     """
         【1】. 查询可币初始化余额, 并消费可币余额至0
     """
-    balance_before = query_account(GlobarVar.SSOID)
+    balance_before = query_account(GlobalVar.SSOID)
     if balance_before != 0:
         ExpendPay(balance_before, req.partner_id, req.interface_version,
                   req.app_version, req.notify_url).only_kb_spend()
-        balance_before = query_account(GlobarVar.SSOID)
+        balance_before = query_account(GlobalVar.SSOID)
     """
         【2】. 调用下单接口，构造渠道回调报文
     """
@@ -48,7 +48,7 @@ def rs_only_rmb(amount, notify_amount):
     """
         【4】. 检查可币余额是否正确
     """
-    balance_after = query_account(GlobarVar.SSOID)
+    balance_after = query_account(GlobalVar.SSOID)
     try:
         assert balance_before == balance_after
         logger.info("可币余额正常")
@@ -93,7 +93,7 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
         【1】. 查询可币初始化余额, 发放可币与优惠券
     """
 
-    balance_before = query_account(GlobarVar.SSOID)
+    balance_before = query_account(GlobalVar.SSOID)
     if balance_before != 0:
         ExpendPay(balance_before, req.partner_id, req.interface_version,
                   req.app_version, req.notify_url).only_kb_spend()
@@ -117,7 +117,7 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
         【4】. 检查可币余额是否正确
     """
     time.sleep(2)
-    assert query_account(GlobarVar.SSOID) == round(decimal.Decimal(0), 4)
+    assert query_account(GlobalVar.SSOID) == round(decimal.Decimal(0), 4)
     """
         【5】.检查订单表记录是否正确
     """

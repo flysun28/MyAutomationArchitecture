@@ -7,7 +7,7 @@ import decimal
 import time
 from case.scenario.common_req import OVERSEA_RECHARGE
 from lib.common.logger.logging import Logger
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.config.country_currency import rate_coin
@@ -27,7 +27,7 @@ def recharge(amount, notify_amount):
     """
         【1】. 查询可币初始化余额
     """
-    balance_before = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_before = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     """
         【2】. 调用可币充值接口，构造渠道回调报文
     """
@@ -43,7 +43,7 @@ def recharge(amount, notify_amount):
     """
     rate = rate_coin[req.currency]
     cocoinRechargeAmount = round(decimal.Decimal(amount / rate), 4)
-    balance_after = oversea_query_account(req.country, GlobarVar.SSOID, req.partner_id)
+    balance_after = oversea_query_account(req.country, GlobalVar.SSOID, req.partner_id)
     try:
         # decimal.Decimal截取4位处理，与数据库保持一致
         assert balance_after == cocoinRechargeAmount + balance_before

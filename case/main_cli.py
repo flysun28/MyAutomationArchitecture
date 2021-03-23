@@ -54,7 +54,8 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
     try:
         # Setup argument parser
         parser = ArgumentParser(description=program_license, formatter_class=RawDescriptionHelpFormatter)
-        parser.add_argument("-i", "--include", dest="include", choices=['smoke', 'functional', '', 'positive', 'negative'], 
+        parser.add_argument("-i", "--include", dest="include", 
+                            choices=['smoke', 'functional', 'positive', 'negative', 'inland', 'overseas'], 
                             help="only include tags to run, comma separated.")
         parser.add_argument("-e", "--exclude", dest="exclude", help="exclude tags not to run, comma separated.") #, metavar="RE" 
         parser.add_argument('-V', '--version', action='version', version=program_version_message)

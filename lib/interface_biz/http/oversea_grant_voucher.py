@@ -6,7 +6,7 @@
 import datetime
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.file_path import key_path
 from lib.common_biz.find_key import is_get_key_from_db, GetKey
 from lib.common_biz.order_random import RandomOrder
@@ -47,7 +47,7 @@ def oversea_grant_voucher(amount=100, vou_type=1, country="VN", appId="2031"):
         "scopeId": "cbb5d302b98c4eff8c4550071d099697",
         "settleType": 1,
         "sign": "",
-        "ssoid": GlobarVar.SSOID,
+        "ssoid": GlobalVar.SSOID,
         "subScopeId": "",
         "timezone": "",
         # 1 消费券
@@ -60,7 +60,7 @@ def oversea_grant_voucher(amount=100, vou_type=1, country="VN", appId="2031"):
     else:
         key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + req['appId']]
     req['sign'] = md5(Sign(req).join_asc_have_key("&key=") + key)
-    result = GlobarVar.HTTPJSON_OUT.post("/voucher/grantSingle", data=req)
+    result = GlobalVar.HTTPJSON_OUT.post("/voucher/grantSingle", data=req)
     # 返回优惠券id
     return result['vouIdList'][0]
 

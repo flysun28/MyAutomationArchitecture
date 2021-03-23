@@ -7,6 +7,7 @@ from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import HTTPJSON_IN
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_native import QueryResultPb_pb2
+import sys
 
 
 def queryResult(request_id, query_type="PAY", pass_type="expend"):
@@ -20,7 +21,7 @@ def queryResult(request_id, query_type="PAY", pass_type="expend"):
             "package": "com.example.pay_demo",
             "r_v": "",
             "ext": "",
-            "sdkVer": 260,
+            "sdkVer": 265,
             "country": "CN",
             "currency": "CNY",
             "brandType": "OPPO",
@@ -28,13 +29,14 @@ def queryResult(request_id, query_type="PAY", pass_type="expend"):
             "androidVersion": "29"
         },
         "payrequestid": request_id,
-        "version": "260",
+        "version": "265",
         # "queryType": "SIGN"
         "queryType": query_type
     }
     ReplaceParams(req).replace_native(pass_type)
     response = ProtoBuf(QueryResultPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/queryresult', 'Request', req, flag=0)
     result = ProtoBuf(QueryResultPb_pb2).parser('Result', response)
+    print('Query result:', result)
     return result.baseresult.code
 
 

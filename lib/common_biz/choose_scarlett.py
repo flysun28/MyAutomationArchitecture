@@ -27,6 +27,7 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
     wx_pay_merchant = find_merchant_info("wxpay", partner_id)
     if sign_type is None:
         if pay_type == "wxpay":
+            wx_pay_merchant = find_merchant_info("wxpay", partner_id)
             wx_normal_pay_scarlet(wx_pay_merchant["merchant_no"], pay_req_id, wx_pay_merchant["app_id"], amount,
                                   wx_pay_merchant['md5_key'])
         if pay_type == "heepay":
@@ -41,7 +42,7 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
         if pay_type == "upay_gamecard":
             # upay回调金额为分， 未验证签名？ 此处传元
             upay_pay_scarlet(amount, pay_req_id)
-    if sign_type is not None:
+    else:
         if pay_type == "wxpay":
             wx_sign_scarlet(contract_code, wx_pay_merchant['sign_merchant_no'], wx_pay_merchant["sign_plan_id"],
                             wx_pay_merchant['sign_md5_key'])

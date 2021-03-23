@@ -4,7 +4,7 @@
 # datetime:2021/2/8 17:52
 # comment:
 from lib.common.algorithm.md5 import md5
-from lib.common.utils.globals import GlobarVar
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
@@ -43,7 +43,7 @@ class AutoRenew:
         }
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
         case_dict['sign'] = md5(temp_string)
-        GlobarVar.HTTPJSON_IN.post("/plugin/autorenew/autorenewpay", data=case_dict)
+        GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/autorenewpay", data=case_dict)
 
     def query_sign(self):
         """
@@ -58,7 +58,7 @@ class AutoRenew:
             "country": "CN",
             "sign": "efe9a9b2d3b058789cdd51ed007e5860"
         }
-        GlobarVar.HTTPJSON_IN.post("/plugin/autorenew/querysign", data=case_dict)
+        GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/querysign", data=case_dict)
 
     def un_sign(self):
         """
@@ -78,7 +78,7 @@ class AutoRenew:
         }
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
         case_dict['sign'] = md5(temp_string)
-        GlobarVar.HTTPJSON_IN.post("/plugin/autorenew/unsign", data=case_dict)
+        GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/unsign", data=case_dict)
 
 
 if __name__ == '__main__':
