@@ -3,7 +3,7 @@
 # author:xy
 # datetime:2021/2/24 11:36
 # comment:
-from lib.common_biz.find_merchant_info import find_merchant_info
+from lib.common_biz.find_merchant_info import find_merchant_info, FindMerchant
 from lib.interface_biz.scarlett.heepay import hee_pay_notify
 from lib.interface_biz.scarlett.oversea_coda import coda_pay
 from lib.interface_biz.scarlett.oversea_upay import upay_pay_scarlet
@@ -24,10 +24,9 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
     :param contract_code: 签约订单号
     :return:
     """
-    wx_pay_merchant = {}
+    wx_pay_merchant = find_merchant_info("wxpay", partner_id)
     if sign_type is None:
         if pay_type == "wxpay":
-            wx_pay_merchant = find_merchant_info("wxpay", partner_id)
             wx_normal_pay_scarlet(wx_pay_merchant["merchant_no"], pay_req_id, wx_pay_merchant["app_id"], amount,
                                   wx_pay_merchant['md5_key'])
         if pay_type == "heepay":
