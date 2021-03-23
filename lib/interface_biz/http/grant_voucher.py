@@ -63,6 +63,16 @@ def grant_voucher(amount=1, vou_type=1, appId="2031"):
     return result['vouIdList'][0]
 
 
+class GrantMultiVous():
+    
+    def __init__(self, ssoid, partner_id):
+        self.ssoid = ssoid
+        self.appid = partner_id
+        self.vou_info = []
+    
+    def update_vou_info(self, voutype, name, count, amount, max_amount):
+        
+
 def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
     '''
     按照用户维度，批量发不同类型的券
@@ -91,7 +101,6 @@ def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
         blackScopeId    String    黑名单范围ID         N
         settleType    String    结算类型               Y
         batchId    String    批次号                    N
-
     '''
     req = {
         'ssoid': ssoid,
@@ -105,8 +114,10 @@ def grant_multi_vouchers(ssoid, partner_id, *vouinfos):
     }
     if is_get_key_from_db:
         priv_key = GetKey(req['appId']).get_key_from_voucher()
+    else:
+        priv_key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + req['appId']]
     orig_sign_str = Sign(req).join_asc_have_key("&key=") + priv_key
-    req['sign'] = md5(orig_sign_str)
+    req['sign'] = md5(orig_sign_str, to_upper=False)
     result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=req)
 
 
