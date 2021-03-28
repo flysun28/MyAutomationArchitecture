@@ -12,12 +12,11 @@ from lib.common.utils.meta import WithLogger
 from lib.common.session.http.http_json import HttpJsonSession
 from lib.common.utils.globals import GlobalVar
 
-url = "http://i.auth.ucnewtest.wanyol.com/loging"
 header = {"content-type": "application/json"}
 appKey = "myKey"
 
 
-class Vip(metaclass=WithLogger):
+class Account(metaclass=WithLogger):
     
     def __init__(self):
         self.account_args = GlobalVar.TEST_ACCOUNT
@@ -27,6 +26,7 @@ class Vip(metaclass=WithLogger):
         获取token
         :return:
         """
+        url = "http://i.auth.ucnewtest.wanyol.com/loging"
         m = hashlib.md5()
         m.update(self.account_args['pwd'].encode("utf8"))
         passWord_md5 = m.hexdigest()
@@ -36,7 +36,7 @@ class Vip(metaclass=WithLogger):
         response = requests.post(url, data=body, headers=header)
         self.logger.info('返回的登录信息：{}'.format(response.json()))
         if response.json()['resultCode'] == '1700':
-            self.logger.info('返回的异常登录信息：{}'.format(response.text))
+            self.logger.error('返回的异常登录信息：{}'.format(response.text))
         else:
             return response.json()['token']
     
@@ -56,5 +56,5 @@ class Vip(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    a = Vip().login()
-#     print(Vip().get_verification_code('18948606750'))
+    a = Account().login()
+#     print(Account().get_verification_code('18948606750'))

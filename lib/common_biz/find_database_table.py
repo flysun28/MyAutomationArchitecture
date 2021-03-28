@@ -71,7 +71,7 @@ class SeparateDbTable(metaclass=WithLogger):
             """
         count = 20
         table = int(abs(GetHashCode.getHashCode(self.ssoid))) % count + 1
-        # self.logger.info("`oppopay_voucher`.`vou_info_{}`".format(table))
+        self.logger.info("`oppopay_voucher`.`vou_info_{}`".format(table))
         return table
 
     def get_user_type_db_table(self):

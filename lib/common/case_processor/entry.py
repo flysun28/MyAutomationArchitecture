@@ -1,15 +1,11 @@
 '''
 @author: 80319739
 '''
-import os
-import re
 from six import with_metaclass
 from lib.common.utils.meta import WithLogger
-from collections import OrderedDict
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
 from lib.common.utils.misc_utils import to_iterable
-from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 
 
 class CaseFile(with_metaclass(WithLogger)):

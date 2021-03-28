@@ -49,7 +49,9 @@ class HttpJsonSession(metaclass=WithLogger):
             self.logger.info(self.url)
             self.logger.info("传入的参数：{}".format(data))
             response = self.session.post(url=self.url, data=json.dumps(data))
-            self.logger.info("返回状态码{}, 返回结果：{}".format(response.status_code, response.json()))
+            self.logger.info("返回状态码：{}".format(response.status_code))
+            assert response.status_code == 200, "返回状态码：{}".format(response.status_code)
+            self.logger.info("返回结果：{}".format(response.json()))
             return response.json()
         except RequestException as e:
             raise HttpJsonException(e) from None        
