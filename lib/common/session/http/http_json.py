@@ -41,6 +41,7 @@ class HttpJsonSession(metaclass=WithLogger):
         self.session = requests.Session()
         self.header.update(kwargs)
         self.session.headers = self.header
+        self.logger.info('HTTP Header: %s', self.session.headers)
 
     def post(self, url, data=None):
         self.url = self.prefix + url
@@ -50,11 +51,11 @@ class HttpJsonSession(metaclass=WithLogger):
             self.logger.info("传入的参数：{}".format(data))
             response = self.session.post(url=self.url, data=json.dumps(data))
             self.logger.info("返回状态码：{}".format(response.status_code))
-            assert response.status_code == 200, "返回状态码：{}".format(response.status_code)
+            assert response.status_code == 200, "返回状态码：{} != 200".format(response.status_code)
             self.logger.info("返回结果：{}".format(response.json()))
             return response.json()
         except RequestException as e:
-            raise HttpJsonException(e) from None        
+            raise HttpJsonException(e) from None
         except AssertionError:
             raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
         except:

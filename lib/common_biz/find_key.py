@@ -79,7 +79,7 @@ class GetKey(metaclass=WithLogger):
         try:
             sql_key = str(Config(common_sql_path).read_config('voucher', 'voucher_key')).format(self.partner_id)
             KEY = self.mysql.select_one(sql_key)["appkey"]
-            self.logger.info("查询到秘钥信息：{}".format(KEY))
+            self.logger.info("查询到优惠券秘钥信息：{}".format(KEY))
             return KEY
         except Exception as e:
             self.logger.info(e)
@@ -106,7 +106,7 @@ class GetKey(metaclass=WithLogger):
         try:
             sql_key = str(Config(common_sql_path).read_config('platform_opay', 'sql_md5_key')).format(app_id, merchant_no, pay_channel)
             KEY = self.mysql.select_one(sql_key)["md5_key"]
-            self.logger.info("查询到秘钥信息：{}".format(KEY))
+            self.logger.info("查询到渠道md5秘钥信息：{}".format(KEY))
             return KEY
         except Exception as e:
             self.logger.info(e)

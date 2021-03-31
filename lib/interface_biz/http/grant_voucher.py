@@ -6,6 +6,7 @@
 import datetime
 import random
 import simplejson
+import threading
 from six import with_metaclass
 from itertools import product
 from lib.common.algorithm.md5 import md5
@@ -18,6 +19,7 @@ from lib.common_biz.sign import Sign
 from lib.common.utils.misc_utils import create_random_str, to_iterable_nested
 from openpyxl.reader.excel import load_workbook 
 from lib.common.utils.meta import WithLogger
+from lib.common.exception.http_exception import HttpJsonException
 
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -149,11 +151,6 @@ class VouInfo(with_metaclass(WithLogger)):
         print('表格测试数据：')
         for info in self.vou_info:
             print(info)
-    
-#     def create_negative(self, voutype, **neg_kwargs):
-#         for d in self.vou_info:
-#             if d['vouType'] == voutype:
-#                 d.update(neg_kwargs)
 
 
 class HttpGrantMultiVous(with_metaclass(WithLogger)):
@@ -168,6 +165,8 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
         else:
             self.salt_key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + self.partner_id]
+        self.request_ids = set()
+        self.lock = threading.Lock()
     
     def post(self, data=None):
         '''
@@ -199,14 +198,18 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             settleType    String    结算类型               Y
             batchId    String    批次号                    N
         '''
-        if not data:
-            self.assign_req()
+        if data:
+            req_id = data['requestId']
+        else:
+            req_id = self.init_req()
             self.make_sign(self.req)
             data = self.req
-        result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=data)
+        with self.lock:
+            self.request_ids.add(req_id)
+        result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=data)        
         self.validate_response(result)
     
-    def assign_req(self):
+    def init_req(self):
         self.req = {
             'ssoid': self.ssoid,
             'country': 'CN',
@@ -217,6 +220,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             'sign': '',
             'grantVoucherInfoList': self.vouinfo_obj.vou_info
         }
+        return self.req['requestId']
     
     def make_sign(self, req):
         req_ = req.copy()
@@ -233,7 +237,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
         assert len(resp_vouinfo) == self.vouinfo_obj.count, '返回的优惠券个数 != %d' %self.vouinfo_obj.count
         resp_batch_ids = set(d['batchId'] for d in resp_vouinfo)
         for batchid in resp_batch_ids:
-            assert batchid in self.vouinfo_obj.batchIds, '返回的批次号 %s 不在 %s范围内' %(batchid, self.vouinfo_obj.batchIds)
+            assert batchid in self.vouinfo_obj.batchIds, '返回的批次号 %s 不在 %s范围内' %(batchid, self.vouinfo_obj.batchIds)        
     
     def _make_neg_data(self, data, **neg_kwargs):
         '''
@@ -245,9 +249,10 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
         for param_values in product(*neg_kwargs.values()):
             req = data.copy()
             upd_kw = dict(zip(neg_kwargs.keys(), param_values))
-            print(upd_kw)
+            print('当前负向参数:', upd_kw)
             req.update(upd_kw)
             yield req
+            del req
     
     def _do_neg_test(self, req):
         self.make_sign(req)
@@ -259,11 +264,12 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             raise
         else:
             self.logger.error('异常测试期望失败-实际成功：%s' %req)
-            raise Exception('异常测试期望失败-实际成功：%s' %req)
+            raise HttpJsonException('异常测试期望失败-实际成功：%s' %req)
     
     def common_params_negative_test(self, **neg_kwargs):
-        self.assign_req()
-        for idx, req in enumerate(self._make_neg_data(self.req, **neg_kwargs), 1):            
+        self.init_req()
+        self.logger.info('负向测试开始......')
+        for idx, req in enumerate(self._make_neg_data(self.req, **neg_kwargs), 1):
             if idx == 1:
                 continue
             self._do_neg_test(req)
@@ -271,15 +277,18 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
         sql = "SELECT * FROM oppopay_voucher.vou_info_5 WHERE ssoid='2086100900' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 1 MINUTE ORDER BY id DESC;"
         result = GlobalVar.MYSQL_IN.select(sql)
         assert result == ()
+        self.logger.info('负向测试结束......')
     
     def vouinfolist_negative_test(self, **neg_kwargs):
-        self.assign_req()
+        self.init_req()
         req = self.req.copy()
+        self.logger.info('负向测试开始......')
         for idx, vouinfolist in enumerate(self._make_neg_data(self.req['grantVoucherInfoList'][0], **neg_kwargs), 1):
             if idx == 1:
                 continue
             req['grantVoucherInfoList'][0] = vouinfolist
             self._do_neg_test(req)
+        self.logger.info('负向测试结束......')
 
 
 if __name__ == '__main__':

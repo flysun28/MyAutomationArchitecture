@@ -19,19 +19,24 @@ from lib.common.file_operation.config_operation import Config
 class GlobalVar():
     env_id = get_env_id()
     ENV_CONFIG = get_env_config()
-    print(env_id, ENV_CONFIG)
+    print('env_id:', env_id)
+    print('ENV_CONFIG:', ENV_CONFIG)
     URL_PAY_IN = ENV_CONFIG['url']['pay_in']
     URL_PAY_OUT = ENV_CONFIG['url']['pay_out']
     URL_GW_IN = ENV_CONFIG['url']['pay_gateway_in']
     URL_GW_OUT = ENV_CONFIG['url']['pay_gateway_out']
     URL_PAY_SCARLETT = ENV_CONFIG['url']['pay_scarlet']
+    ACCOUNT_URL_IN = ENV_CONFIG['account_url']
     HTTPJSON_IN = GlobalVarDescriptor(HttpJsonSession(URL_PAY_IN))
+    HTTPJSON_ACCOUNT_IN = GlobalVarDescriptor(HttpJsonSession(ACCOUNT_URL_IN))
     HTTPJSON_OUT = GlobalVarDescriptor(HttpJsonSession(URL_PAY_OUT))
     HTTPJSON_GW_IN = GlobalVarDescriptor(HttpJsonSession(URL_GW_IN))
     HTTPJSON_GW_OUT = GlobalVarDescriptor(HttpJsonSession(URL_GW_OUT))
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
-    if env_id != '2':
+    if env_id == '2':
+        MYSQL_OUT = REDIS_IN = REDIS_OUT = None
+    else:
         MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
         REDIS_IN = GlobalVarDescriptor(connect_redis())
         REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
@@ -51,12 +56,12 @@ class GlobalVar():
     TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
     if env_id == "1" or env_id == "2" or env_id == "3":
         SSOID = TEST_ACCOUNT['ssoid']
-        TOKEN = TEST_ACCOUNT['token']    
+        TOKEN = TEST_ACCOUNT['token']
+    
 
 HTTPJSON_IN = GlobalVar.HTTPJSON_IN
 HTTPJSON_OUT = GlobalVar.HTTPJSON_OUT
-if GlobalVar.env_id != '2':
-    redis = REDIS = GlobalVar.REDIS_IN
+redis = REDIS = GlobalVar.REDIS_IN
 HTTPJSON_SCARLET = GlobalVar.HTTPJSON_SCARLET
 MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(case_dir, 'src')

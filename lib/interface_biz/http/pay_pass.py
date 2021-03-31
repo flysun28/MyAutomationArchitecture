@@ -10,7 +10,7 @@ from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.env import get_env_config, set_global_env_id, get_env_id
 from lib.common.utils.meta import WithLogger
 from lib.config.path import common_sql_path
-from lib.interface_biz.http.vip_login import Account
+from lib.interface_biz.http.user_account import Account
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
 from lib.common.utils.globals import GlobalVar

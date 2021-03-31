@@ -33,6 +33,9 @@ def get_env_config() -> dict:
     result = {}
     for section in env_config.sections():
         result[section] = env_config.as_dict(section)
+    # 账号域名
+    account_urls = glob_env_cfg.as_dict('account_url')
+    result['account_url'] = account_urls['test'] if env_id.isdigit() else account_urls['bj_sm']
     return result
 
 

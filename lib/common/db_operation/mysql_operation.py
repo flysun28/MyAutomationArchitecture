@@ -40,7 +40,7 @@ class MySQLClient(metaclass=WithLogger):
         for one in res:
             for k, v in one.items():
                 one[k] = '' if v is None else v
-        self.logger.info('查询结果：%s', res)
+        self.logger.info('select查询结果: %s', res)
 #         [{k:('' if v is None else v) for one in res for k, v in one.items()}]
         return res
 
@@ -58,6 +58,7 @@ class MySQLClient(metaclass=WithLogger):
             return
         for k, v in res.items():
             res[k] = '' if v is None else v
+        self.logger.info('select_one查询结果: %s', res)
         return res
 
     def execute(self, sql):
