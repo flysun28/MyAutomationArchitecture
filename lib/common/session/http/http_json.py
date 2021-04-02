@@ -52,7 +52,7 @@ class HttpJsonSession(metaclass=WithLogger):
             self.logger.info("返回状态码{}, 返回结果：{}".format(response.status_code, response.json()))
             return response.json()
         except RequestException as e:
-            raise HttpJsonException(e) from None        
+            raise HttpJsonException(e) from None
         except AssertionError:
             raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
         except:
@@ -85,7 +85,7 @@ class EncryptJson(HttpJsonSession):
         'X-Protocol': {'key': '',     #RSA公钥加密后的sessionKey
                        'iv': '',      #key对应的随机iv信息
                        #会话秘钥，服务端用对称私钥加密sessionKey后的产物，由服务端回传给客户端，下一次通讯用该字段代替sessionKey
-                       'sessionTicket': ''    
+                       'sessionTicket': ''
                       },
         'X-SDK': {'sdkBuildTime': '', #sdk编译时间，实时时间，格式2020-07-29 20:23
                   'sdkName': '',
@@ -129,7 +129,7 @@ class EncryptJson(HttpJsonSession):
                   'payVersion': '',
                   'hostPackage': '',
                   'hostVersion': '',
-                  'dynamicUIVersion2': ''                        
+                  'dynamicUIVersion2': ''
                  },
         'X-Safety': {'imei': '',
                      'hasPermission': '',
@@ -139,7 +139,7 @@ class EncryptJson(HttpJsonSession):
                      'deviceName': '',
                      'wifissid': '',
                      'slot0': '',
-                     'slot1': ''                                        
+                     'slot1': ''
                     }
     }
     common_params = {
@@ -165,17 +165,17 @@ class EncryptJson(HttpJsonSession):
         iv4aes = create_random_str(16).encode('utf-8')
         self.__iv = str_to_base64(iv4aes.decode('utf-8')).decode()
         self.__sessionTicket = None
-        self.keys = Config(key_configfile_path).as_dict('encrypted_json')        
+        self.keys = Config(key_configfile_path).as_dict('encrypted_json')
         rsa_ = RSA(self.__sessionKey, encjson_rsa_public_key_path)
         self.__pub_sessionKey = rsa_.cipher()
-        print('pub-sessionKey:', self.__pub_sessionKey)      
+        print('pub-sessionKey:', self.__pub_sessionKey)
         self.req_header['X-Protocol']['key'] = self.__pub_sessionKey
         self.req_header['X-Protocol']['iv'] = self.__iv
         self.aes_cbc = AES_CBC(self.__sessionKey, iv4aes)
         self.common_params['appKey'] = partner_id
         self.logger.info('原始header：%s', self.req_header)
         self.session.headers = self.encrypt_header()
-    
+
     def post(self, url, data:dict):
         '''
         :param url:
@@ -186,13 +186,13 @@ class EncryptJson(HttpJsonSession):
         data['sign'] = self.make_sign(data)
         aes_body = self.encrypt_body(data)
         self.logger.info("url:%s" %self.url)
-        self.logger.info("原始body:%s" %data)
-        self.logger.info("加密body:%s" %aes_body)
+        self.logger.info("原始body:%s" % data)
+        self.logger.info("加密body:%s" % str(aes_body, encoding="utf-8"))
         try:
-            response = self.session.post(url=self.url, data=aes_body)
+            response = self.session.post(url=self.url, data=str(aes_body, encoding="utf-8"))
 #             print(response.content)
-            self.logger.info("返回状态码:{}".format(response.status_code))
-            self.logger.info('POST返回结果:{}'.format(response.json()))
+#             self.logger.info("返回状态码:{}".format(response.status_code))
+#             self.logger.info('POST返回结果:{}'.format(response.json()))
         except:
             raise
         else:
@@ -200,7 +200,7 @@ class EncryptJson(HttpJsonSession):
             print('Response headers:', response.headers)
             self.__sessionTicket = response.headers['X-Session-Ticket']
             return resp_json
-    
+
     def make_sign(self, data:dict):
         '''
         第一步：对参数按照key=value的格式，并按照参数名ASCII字典序排序如下：
@@ -217,7 +217,7 @@ class EncryptJson(HttpJsonSession):
         '''
         orig_sign = Sign(data).join_asc_have_key('key='+self.keys['salt_key'])
         return md5(orig_sign, to_upper=False)
-        
+
     def encrypt_header(self):
         to_bytes_keys = 'X-Protocol', 'X-SDK', 'X-Device-Info', 'X-Context', 'X-Sys', 'X-APP'
         enc_header = self.req_header.copy()
@@ -232,15 +232,14 @@ class EncryptJson(HttpJsonSession):
             2. urlencode
             '''
             aes_x_safety = self.aes_cbc.encrypt_and_base64(str(enc_header['X-Safety']))
-            print(aes_x_safety)
             urlencode_x_safety = quote(aes_x_safety.decode(chardet.detect(aes_x_safety)['encoding']),
                                        encoding='utf-8')
             return urlencode_x_safety
-        
+
         enc_header['X-Safety'] = encrypt_x_safety()
         self.logger.info('加密header：%s' %enc_header)
         return enc_header
-    
+
     def encrypt_body(self, body):
         enc_body = self.aes_cbc.encrypt_and_base64(str(body))
         return enc_body
