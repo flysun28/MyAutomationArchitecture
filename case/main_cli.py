@@ -12,6 +12,7 @@ import pytest
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 from lib.common.exception.intf_exception import CLIError
+from lib.common.utils.env import set_global_env_id, get_env_id
 
 __all__ = []
 __version__ = 1.0
@@ -66,6 +67,8 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         parser.add_argument('-f', '--instantfail', dest='instantfail', action='store_true', 
                             help='show failures and errors instantly as they occur, [default: %(default)s]')
         parser.add_argument('-x', '--exitonfail', action='store_true', help='exit instantly on first error or failed test.')
+        parser.add_argument('-eid', '--env-id', dest='env_id', choices=['1', '2', '3', 'grey', 'product'],
+                            help='environment id')
         # Process arguments
         args = parser.parse_args()
         inpat = args.include
@@ -76,6 +79,7 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         schema = args.schema
         instantfail = args.instantfail
         exitonfail = args.exitonfail
+        env_id = args.env_id
         if inpat and expat and inpat == expat:
             raise CLIError("include and exclude pattern are equal! Nothing will be processed.")
     except KeyboardInterrupt:
@@ -105,6 +109,9 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
             pytest_opts += ['-m', markers]
         if intf_name:
             pytest_opts += ['-k', ' or '.join(intf_name.split(','))]
+        if env_id:
+            set_global_env_id(env_id)
+            assert get_env_id() == env_id
         path = os.getcwd()
         if case_type:
             path = os.path.join(path, case_type)
@@ -113,7 +120,7 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
                 if schema:
                     path = os.path.join(path, schema)
         pytest_opts.append(path)
-        print(pytest_opts)
+        print('pytest options:', pytest_opts)
         pytest.main(pytest_opts)
         return 0
 

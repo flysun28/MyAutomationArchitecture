@@ -15,8 +15,11 @@ class WithLogger(ABCMeta):
             module_name = module_name.strip('\\').replace('\\', '.')
         else:
             module_name = module.__name__
-        if getattr(cls, 'logger', None) is None:
-            cls.logger = Logger(module_name).get_logger()
+        logger = getattr(module, 'logger', None)
+        if logger:
+            cls.logger = logger            
+        else:
+            module.logger = cls.logger = Logger(module_name).get_logger()
         return type.__call__(cls, *args, **kwargs)
     
 

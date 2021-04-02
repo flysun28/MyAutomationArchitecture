@@ -1,6 +1,5 @@
 # coding=utf-8
-
-NO_FILE_PARSER = -1
+from lib.common.utils.meta import WithLogger
 
 
 class ArgumentException(Exception):
@@ -28,3 +27,19 @@ class CLIError(Exception):
     def __str__(self):
         return self.msg
 
+
+class IgnoreException(metaclass=WithLogger):
+    
+    def __init__(self, callback, *args, **kwargs):
+        self.cb = callback
+        self.args = args
+        self.kwargs = kwargs
+    
+    def __enter__(self):
+        if self.cb:
+            return self.cb(*self.args, **self.kwargs)
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if any([exc_type, exc_val, exc_tb]):
+            self.logger.error(exc_val)
+        return True # 不抛异常

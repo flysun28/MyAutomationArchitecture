@@ -1,0 +1,762 @@
+2021-03-29 12:43:40,986-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 12:43:41,245-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 12:43:41,296-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 12:43:41,296-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 12:43:41,518-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 12:43:41,518-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 12:43:41,540-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 12:43:41,553-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 12:43:42,012-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:43:42,013-INFO-lib.common.session.http.protobuf-41-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "02076244060934"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "WMRy7wTxqjhfP8NE9JUm1kGYbauOL0d4"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-03-29 12:43:43,460-INFO-lib.common.session.http.protobuf-58-返回的参数baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "a1fc36627dc5488b838cb6ea0ac75f88"
+s_p: "VkFWVjEzTzZtWjdrcTBPTm5DUWI1N2Z2WWFYZ2FNekVIVENwQXdJRG0zNkpkdVJTbERvMTIwbzZtcmNlZ3VDZjR6aklhY2VrY252WTRROTlGVDFESjVYR2xSN25ZenRDZml6cDJrR0R3aFlLWUJPOW1PWVFFYks0YndYRE1yc0g5bUR6QnRJb3QzaDNZSXJweWFJRDRUbDlzR1U0Yk5WTDZtRFZCSTlNbGhvQXo0NmpWem8zOTBwYm1wUlR3VVhZT2tRTG5pbW5MSTBQNWk4SE1zR2hxeWpHQU9SWUlyOE81TEg3VW1QUnBpMU9UMWE4NjVUOWMxSG9tUUZHa1FzUVhWcVFxVWJ0THF1dEVqNzJpdGREZW9lWXN2ODQ0bHlGcTcyTHFIRVdVdWNDd3AwbEI3dVpkZXhGTHV3UVNqbFpzbDVLTE5GNEFNaU5vWFYxb3ZpMEhzYXozd1EzWnZybVdKTDdsVjRWbHA1clBpUG1jTzF0Q0JBNHEzVlhERnI1R3RKTlhkeXBYQk5kZ3FBRXRiSTF2Y3VSVkFJSmtMUGltQ2l6eTJxVkhuN2ZaTUk3aldEazlXYVZLZjhXU0lGaUQ1c25RNVE0M2s0WmJSbDd6UlBvUmRNa3ZjOTRnTFcwMVNkUTZEcWt2QVJOSktWZTc4aG1zTjQ0bGpDWDVwUTFjZmx2dlk1OWlnalJoazllSzlWbEd2T2YyeWE0STB3VUpiaGdCNGtNQVZTblNrUm5Fd0VRY0pUSU92U0lmdk5Fd1ZPVGxxUnR4enZDNmhIV1p4SjdmUVZjaFlaYlhvQW9KRFN4YTFMQUl3WHpvY1hYNkxuYVRNbWpYbHRNVklPM1Y3SDlGRHpadFU3Y2o2czRqcjFHTGtFdDdpQlBGUnQ2aU5yZHU2bm1FYkN0RG9nVU1UaUl1cWdGWWZrcDZPNlJLT3Zlbzd5RGcycFl1WmpnVndSV0NucTVxTUpmUmU3eGMya2w0TnNMdGtSM0hpdldNVzg0Mmc1cjVwZGxDeVFjSUFNNlFUOGV0TEE0bTA0b1dXR05wT1FweFlUeUNublU="
+m_p: "6C1hO2v3E101YWC9f19kH5M8guiJlsS7CZf18YtZ8kw6zza4o5F3ANyTipVg39fy"
+e_t: "1617101023433"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "156******06"
+}
+
+2021-03-29 12:45:05,097-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 12:45:05,415-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 12:45:05,465-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 12:45:05,465-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 12:45:05,704-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 12:45:05,704-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 12:45:05,724-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 12:45:05,726-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 12:45:05,779-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:45:05,779-INFO-lib.common.session.http.protobuf-41-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "38793929206229"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "RiqlKdopTIaytUhS9c7nFLJZmGvkP86W"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-03-29 12:45:05,870-INFO-lib.common.session.http.protobuf-58-返回的参数baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "28d5faa4b53a426ab3a3cf3682aecfab"
+s_p: "UTJVa2p3YldabHZXV0N1bkR4NWZVREZjM2FxeXhpdGw1czVMMlNvUFZqbDN0S2NHQTkzQzhzVUpmcklrU0hpMkNGeU1qS1p6TmREaXV3blZBMThETmZHVWRoVjJzSFFrN09jcXJEdDdxU0ZzZVMyNVlxN2ZhYkJkM3dicnZ1V1JsdjVFZjVZdWRJVmtXNGM4MFV5REtud3JQQXVzV3RiYWRrSFZiMzI0eGFiRXlmOTV1UFNCZ1Y3T0JXYlM4eDhBYkJqb1JlS0ozU01IaDRGc3p1WEFFZzlBTjhOaTNpUUZsSnRTbVNMU1JrNHl4Y1o1UzlXektwUmJUYU1CR3hjcFJsQTB6NEtlN2ZrVzVDekRCR25MSW9lbkNiOUQ1M3RsT3NSZ3lkVk1ESE0wWWNIeTZhNzNwRWJvZ0RoTElDVzVNRU9yaEhKNW5DUHJnVDRqeGYxcGVDTGd0WUthNzN1VHR0SXFMZk8xcmdIRmRhT25SVnhNY3I3b29wTmw2emlQampvNFhlZ1JKNGJkZ2pHQ1REcDlseEsyOW1xanR2TkY4OUM0MUlHSFdrTWVBeVY2SkxMYmp5YjJDZFJXTFRlRHd3d0djbVNoSWtTbm5nWXNsVExIbjdneERodVpWdVdDcVA2WDkzQzZIbHFCT2RZS3I3blV1VEE0d0F6YlA5WkVLTlFxV0toNkw5Uml1QjJHZ01IRDNCRmhOeTBoSlNxcENSenN4dmFodjZUekw0dkVmZUIycTRzbkRyWlVMS2o3VmVhNkYyQ2p1OThJSEtPSzhoUnloRWJlZTFZcTN5MUdOSFpzenZBS1c4dUh2bmdNV2dzMkg4Sk1JSGxRN1NtM01GekxOSmdxZ1ZiY01YT2xGZG1zMUZ4bXJXY2lLYlRNb09oRzR5VnZXbEFsdVFiUkZ0T0RIQk1DRWc3S2V1clBucUJBOUdSaWNlUTFrQ2h5TmVPdHR6Nk9rdDRFY05uQ1hVSTJRWVJqWlVqNDRGZHNmUzVlMEdKMHJqVmlyWmVwOGE0V1BCa0syeHFWbjk5ZjhaanhydzJLS0FHYkRUakk="
+m_p: "5nVldg51Fjo1yd0g055A29LjJLVwIe01JGR8V97r5OHdxSPBZjfW879333a7vp30"
+e_t: "1617101105844"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "156******06"
+}
+
+2021-03-29 12:45:05,888-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:45:05,888-INFO-lib.common.session.http.protobuf-41-传入的参数：header {
+  version: "15.0"
+  token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+  imei: ""
+  model: ""
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "RvDf0ABC"
+  sign: "223EE58ED1BF73D7EB0DDAC13B41B3A0"
+  sdkVer: "4.0"
+  appVerison: "280"
+  ip: "0.0.0.0"
+  openId: "30AF518AF857457481A6D985E80EBF2C0e67f9ccc083ec944055856e0cf9c0ac"
+  brandType: "OPPO"
+  mobileos: "19"
+  androidVersion: "30"
+}
+country: "ID"
+payAmount: "0.01"
+currency: "IDR"
+renewal: "N"
+partnerId: "2031"
+factor: ""
+isNeedAggregate: "Y"
+noApp: "paytm_paytm"
+callFrom: 0
+
+2021-03-29 12:45:07,759-INFO-lib.common.session.http.protobuf-58-返回的参数
+2021-03-29 12:46:23,048-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 12:46:23,344-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 12:46:23,393-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 12:46:23,393-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 12:46:23,632-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 12:46:23,633-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 12:46:23,654-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 12:46:23,655-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 12:46:23,683-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:46:23,683-INFO-lib.common.session.http.protobuf-41-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "25440151149307"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "6IjbELGXUfVyMBPwksWKH9SJdzth1vTZ"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-03-29 12:46:23,782-INFO-lib.common.session.http.protobuf-58-返回的参数baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "6996b96138e342148fc2b10a167c82b7"
+s_p: "Z0lGMER4aVZOanRFVm9iaFk3bmR3bzFHQ0xveDZRVFBibzFVRERsdXVXNFNreGNqTFJNQ1QySjRPQVdiWXJVU2ljMTJqOEpHdXVvZ2xOc1RsVDU3dm5KMTRXVFQwSFc4ZjN1OXUyc1hOV1NrVnBzdFpDYzh5dmQ2VUZ6ajZwQ3lrQnhaM2J5a1o0UzZadGJzQ0MwWDdxeEM5dnFQOUFKMG5pTTVEbkNHZHhWSUMyTHNTbExjYnRDdGhIbGJJaEgzdEZFc0lOeGduRXRVNkNQdllLZlZOUmdnNmdVb3M5WDhJUElHN21TRjlUQXpZNWlDV09XNE8yTHBBRVhwWWxtS0F5a2g3ekZVWmF0S0JGU3hOSkp0TzFCblZaT3U0NzEydGduYnAwcmNjSkJkQ2VlZDI1WXNZeElJMHdHWVhOdW9OZjRPQUZkdTBQTDVvY2pEVlg5TEI0dUZSWGVZdXo2ZDZNWVRuT3BSd2VFN1o3VDJsQURpUTZkbkFNT3V1c1U1MUFiWkVudVRKY3piOGQ1RjlpWVBlTVBqbHk4YjYzS1ZnNXo0TW0zdnVwRmlRQVVQblJDUThaTVNFY0FSYURQbVpmaWg0dWtaRURUS1lsOHZOVDBzY1ZPMTNpUXVMNm1CSExqYkVaNEFMSVMzdmtPcWliVVZGT0JKQjZrWkMyUlFsZGIyNHE4NmVYQ0pLS3RwTk91TXd2VVJpMU5vT052eVB6UHJwUzlXZHlGMVZDSnRDUXJuV1hwVVF1UVdjcFhDWWtMOERiOUN5aHJ0alF6WFFyRlIwRHlQQ214eGgwekJHbFVsTGUwb0J0MG1uZ21xUmRlVThGQ1g1SVk1SE5LdUg4bFF3S1libmJNOGtyNFRRUjJDSmhZME5sWGNoa1Bna1RrTzRMZzNhdFhvWDRxdUxvczllT0szSmx4T3VHYlpiM2ZIV0xjS0E3T2VTbnZ3TG9CUVFIYklGd002SFFDWnBrNGk2eFdEcm52MVdiWjdCMFlPbXQybU44bWtKVWpZOUR0NzVzcjV4MDJ0U1RGOGpNeFJIQWNoTFprNWF0TFE="
+m_p: "M2teu89Z4NaXbRlKd0OX4jeAEvAAYBJSw5OQ9TU0Y7tVYGkysDWN5E4gl7Ue20J1"
+e_t: "1617101183747"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "156******06"
+}
+
+2021-03-29 12:46:23,782-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:46:23,782-INFO-lib.common.session.http.protobuf-41-传入的参数：header {
+  version: "15.0"
+  token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+  imei: ""
+  model: ""
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "RvDf0ABC"
+  sign: "223EE58ED1BF73D7EB0DDAC13B41B3A0"
+  sdkVer: "4.0"
+  appVerison: "280"
+  ip: "0.0.0.0"
+  openId: "30AF518AF857457481A6D985E80EBF2C0e67f9ccc083ec944055856e0cf9c0ac"
+  brandType: "OPPO"
+  mobileos: "19"
+  androidVersion: "30"
+}
+country: "ID"
+payAmount: "0.01"
+currency: "IDR"
+renewal: "N"
+partnerId: "2031"
+factor: ""
+isNeedAggregate: "Y"
+noApp: "paytm_paytm"
+callFrom: 0
+
+2021-03-29 12:46:23,928-INFO-lib.common.session.http.protobuf-58-返回的参数
+2021-03-29 12:47:34,432-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 12:47:34,694-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 12:47:34,750-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 12:47:34,750-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 12:47:34,960-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 12:47:34,960-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 12:47:34,982-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 12:47:34,984-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 12:47:35,012-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 12:47:35,012-INFO-lib.common.session.http.protobuf-41-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "84092377372296"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "9Ch2dXcSlpULIGbHzZxaMD3E5kVJg4RA"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-03-29 12:47:35,104-INFO-lib.common.session.http.protobuf-58-返回的参数baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "0a8424b917564fab98cc8313109e707c"
+s_p: "U1E4d3BLbGxLQXAxaWVPaGNwczdUYUp0NTJVYkJXRGxWRnkzNmYzOVRJV1RDMU1XZ1NOMU8zZDU5UVhiSGtTd25tRDNWNzRWTUY3WlNNUUpYUFZXOExjelRHNnlRaDcxWVRHNGp4QjhFcEN6amowMlJVeEhkbGhNVHdIa0ZnWWNxZEROelM3bTY0bms4c29CbXBlbkl0TGFnTmNmenBRb3pXOEgyQlM2MkZDQkZydDd0WHU3cVhIRVl4encyMkRkeThYelVNbjlJNmI5SEJZNkp6QkRsa21TSklNN0w3QW5JVDhLaHk2R3ZOUEJBNmtZMURic0pvUldOZDQ3Z2ZGZ3ZFbkhOZzg4WVFaZEFBVzNHNnNKcERkVHVqMnhNOUZVWkhlNHZXUEpEQ2ZDaXUyNUQ1d1VtRkhsanZTYmlVaFhwa3A2ZzdPU1dZZWxIbGUxQ1paUGFHdUlObTVtYXkwTERZMEF0S0VsWDJwWldQM253dU1CV0lHOGRUcDRKZ2VyOWgwMGdqMk1mYW9Ibnh6elI0Z2s5V3V6UzNuaDlCM3ZqN2ZzYjd4REIwUW5vU2k3YmZ6ZlYzMHVndDk2OHY2WDdkV0I2VlUxUHUxd3d0dkhRb2lGNG4xb0ZLQWUyRmk2VDNUcnJKNmNyRzE4bUprMEI2ZkNIMWQxV3hRVlhXSFkzblc3dUF5V205czNNUW1EenVEN0Y3VDR2ZnA5VklUaGtJWUM4WHJsdUVjTkxaZ0NXUXFad0lGdnMzalE5c1JiaFN6YUpUWU52ejVTV2NIVmo5MU42OVNUOFNXWlducW85NTVhOFFVY2tHWFhoMHRZdVdZTTBFTzJGUTBqdjRCYTVsNGVlZVpxTXhLOE00R0dQZGw5bkNPN1g3OTBvbGNEUXB2S3hEbTYzdkNnY3M3QnpHVXhJb2RqR0NCMFhXODBxT2xrU1F0c3BRcGtVWjlZZU5SczU3VVlFdkFmZ0ZCYkxId0tIcnR5bjIxUUFjaHQ1aU1kMkM0YW5yTU9nandhUUdBbHVjOEp5UzhsNmFxUU9FRkZvZGxPUXlwbTZJQlQ="
+m_p: "617EhSY4wGP123FYCZR3d0K0tHa2a794a71KSmr4IU4i2YK8kRS78XK4202609C6"
+e_t: "1617101255079"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "156******06"
+}
+
+2021-03-29 12:47:35,104-DEBUG-lib.common.session.http.protobuf-35-无需加入随机字节，标志位：1
+2021-03-29 12:47:35,104-INFO-lib.common.session.http.protobuf-36-传入的参数：header {
+  version: "15.0"
+  token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+  imei: ""
+  model: ""
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "RvDf0ABC"
+  sign: "223EE58ED1BF73D7EB0DDAC13B41B3A0"
+  sdkVer: "4.0"
+  appVerison: "280"
+  ip: "0.0.0.0"
+  openId: "30AF518AF857457481A6D985E80EBF2C0e67f9ccc083ec944055856e0cf9c0ac"
+  brandType: "OPPO"
+  mobileos: "19"
+  androidVersion: "30"
+}
+country: "ID"
+payAmount: "0.01"
+currency: "IDR"
+renewal: "N"
+partnerId: "2031"
+factor: ""
+isNeedAggregate: "Y"
+noApp: "paytm_paytm"
+callFrom: 0
+
+2021-03-29 12:47:35,518-INFO-lib.common.session.http.protobuf-58-返回的参数isSuccess: true
+code: "0000"
+msg: "SUCCESS"
+data {
+  frontName: "BankTransfer"
+  payType: "adyen_banktransfer"
+  channel: "adyen_banktransfer"
+  renewal: "N"
+  limit: ""
+  icon: "http://s3.ap-southeast-1.amazonaws.com/pay-image/111110.jpg"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "0"
+  customPage: "N"
+  prompt: "adyen_banktransfer"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "visa"
+  payType: "adyen_credit"
+  channel: "adyen_credit"
+  renewal: "N"
+  limit: ""
+  icon: "http://s3.ap-southeast-1.amazonaws.com/pay-image/rBAoMGAYsaOAdp2zAACQhOiBHTM609.jpg"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "10"
+  customPage: "N"
+  prompt: "adyen_credit"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "KoKo Coins"
+  payType: "cocoin"
+  channel: "cocoin"
+  renewal: "N"
+  limit: ""
+  icon: "https://img-sg-opay.heytapmobile.com/logo/cocoin.png"
+  login: "Y"
+  additionalFees: "N"
+  lastPayType: "N"
+  index: "15"
+  customPage: "N"
+  prompt: "cocoin"
+  cciFlag: "Y"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "Indomaret"
+  payType: "codapay_indomaret"
+  channel: "codapay_indomaret"
+  renewal: "N"
+  limit: ""
+  icon: "https://img-sg-opay.heytapmobile.com/logo/id/Indomaret.png"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "12"
+  customPage: "N"
+  prompt: "indomaret"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "50000-200000"
+  limitDenomination: ""
+}
+needExchange: false
+orderAmount: "0.01"
+binkInfoData {
+  id: "255"
+  agreementNo: "9971174392691148711"
+  pictureUrl: "https://img-sg-opay.finzfin.com/logo/worldpaybankcardlogo.png"
+  payType: "worldpay"
+  bankName: "VISA_CREDIT-SSL"
+  cardNo: "4444********1111"
+  backColour: "red"
+}
+binkInfoData {
+  id: "164"
+  agreementNo: "9971106189728266901"
+  pictureUrl: "https://img-sg-opay.finzfin.com/logo/worldpaybankcardlogo.png"
+  payType: "worldpay"
+  bankName: "VISA_CREDIT-SSL"
+  cardNo: "4444********1111"
+  backColour: "red"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Mandiri VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "CIMB VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Danamon VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "BNI VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Bank Transfer"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Fiona SB"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "You SB"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Alipay"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "paypal"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "FuPo"
+}
+exchangeData {
+  country: "ID"
+  srcCurrency: "IDR"
+  dstCurrency: "CCI"
+  srcAmount: "160.000000"
+  dstAmount: "1"
+}
+exchangeData {
+  country: "ID"
+  srcCurrency: "CCI"
+  dstCurrency: "IDR"
+  srcAmount: "1"
+  dstAmount: "160.000000"
+}
+
+2021-03-29 15:06:59,668-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 15:06:59,931-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 15:06:59,980-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 15:06:59,980-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 15:07:00,205-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 15:07:00,205-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 15:07:00,227-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 15:07:00,229-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 15:07:00,277-DEBUG-lib.common.session.http.protobuf-40-需加入随机字节，标志位：0
+2021-03-29 15:07:00,277-INFO-lib.common.session.http.protobuf-41-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "54871597535562"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "7D8d42hKS6LRP3MOaWcy0mn9IQfEqzGB"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-03-29 15:07:00,393-INFO-lib.common.session.http.protobuf-58-返回的参数baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "3199ed2de3aa4ba39e8c1669e76bce9f"
+s_p: "NnJEMTRZcXVNYnJEM3RBc2xZaW1DYjE5SDVyY29GVU5sNU5SODlFQXJyTzJyak12emtveFpxSzRrTkpOZFJyT3hhRm5zV2JWbzBzQ0toamtnSkFoaFh2aE1YdUNjNU1ZT2JkY3VOSUEzS25jS3JuQVNxVTBmcDVEWHpCZ2tJcXB1RVZXa09JNVFYZ1V3SlN5dG9XTnlaOTFuUHJhWDVzQWhMNGUwWmdKSkt5cmhEZk5Qd1BHd042Z3JhREtLNmwwZmZxVWVJQ2FwVDdlN1Nab2NmRHUwZ2hYcDc5eHI3VWxFYUxJVnNTbjRBMWxDdEhBSE9nWDFvb2wyZzltOHpWc0Y3SDNEb3ZTbVVvcTkxSVdlcXd3aVk2YlpUOUwxTENaWTZQVDl1Ums3VzB2V29pTDRZT0RXdlMwYjRRQ05KWk1iWHhwZXlNcm5BR3dhRXVjV2Zab1ByWTJ6Y292QThZQzh0cGVSb08wN2lnWEE3bnMxYldQMk9GbkwyOVNkMXBpNVhHczdrT0VkOURnMFJkVzlMYlA4ZE1rdzg2endTU3pIQkFESFFibzFkYlhUR1VrMTM4NnN0N0RPT0I2enRnTzI5YjdsN2c3Qld1WWROMXBCRHhoYmlDUUxIUUkzNXA2OHljRUk2dElaM2ZCd3NFZUl1QlNBSDZOY3NFSU1iZm1OS05pWHBINHZob3NHcUpJdjVoaVhFSlhXblZNVlA3VDNDWWY2TWwyNU9IY3pVR0ppU1laQmtyZTNXekpLQ3dTbVd1elpkdlpzcXVmMkU4S21kR2lCZ0Nxc3QxVVpKYmQxb0RzUEE0cHVreG1wQ09yU3RGSE5NVTBISFZqRWt1bjZWdGZJcFBYalBCM2x2OXIyQzdHblR3TDU3MWJ1RDJRbkpFdnRGbFJHekZSdldCWGE0TVJ1bmNTTUpObVA1NDlqMWZxckc2STdJM0M4SWg2NzB0MTRDNndGaGdnZ1JpTXA4TWpFemdhNnJocXR0dXpBVGpjMHg5MkRPSXB5VGJ3NW1ieWJqRHdoTURGT3h0VXp2MkRQaGdWODRGSGt3QU4="
+m_p: "gPxkRv0A1n9xc62l9Fb2S636Hq49gtOpctIa80ub41o8v450V41M4m581xs61dc5"
+e_t: "1617109620376"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "156******06"
+}
+
+2021-03-29 15:07:00,393-DEBUG-lib.common.session.http.protobuf-35-无需加入随机字节，标志位：1
+2021-03-29 15:07:00,393-INFO-lib.common.session.http.protobuf-36-传入的参数：header {
+  version: "15.0"
+  token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MTUyNzQ3NDE5MzQsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiNzZTc0Q3QnI5RzVNTTJ6ckVYYlFxM3hJcHBlcE1UUEV0Uk96K2llVHZQQ05EdEN6OWs2ZGQrcEx6ejM3U2haTERkNURZMWMySUhtdVJiVDhyTXpQbUUzN2FkcHFZUFZZRjl3VTV6S3MxaVE9In0.MEUCIQD2IYKDHG9mwD77tk3ZU8IPNjoRvxqnNGXlYNi5bMH6hQIgEToRmoC23fRVBgACcnr00MPKE21gA81s98S5B9Goprg"
+  imei: ""
+  model: ""
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "RvDf0ABC"
+  sign: "223EE58ED1BF73D7EB0DDAC13B41B3A0"
+  sdkVer: "4.0"
+  appVerison: "280"
+  ip: "0.0.0.0"
+  openId: "30AF518AF857457481A6D985E80EBF2C0e67f9ccc083ec944055856e0cf9c0ac"
+  brandType: "OPPO"
+  mobileos: "19"
+  androidVersion: "30"
+}
+country: "ID"
+payAmount: "0.01"
+currency: "IDR"
+renewal: "N"
+partnerId: "2031"
+factor: ""
+isNeedAggregate: "Y"
+noApp: "paytm_paytm"
+callFrom: 0
+
+2021-03-29 15:07:01,886-INFO-lib.common.session.http.protobuf-58-返回的参数isSuccess: true
+code: "0000"
+msg: "SUCCESS"
+data {
+  frontName: "BankTransfer"
+  payType: "adyen_banktransfer"
+  channel: "adyen_banktransfer"
+  renewal: "N"
+  limit: ""
+  icon: "http://s3.ap-southeast-1.amazonaws.com/pay-image/111110.jpg"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "0"
+  customPage: "N"
+  prompt: "adyen_banktransfer"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "visa"
+  payType: "adyen_credit"
+  channel: "adyen_credit"
+  renewal: "N"
+  limit: ""
+  icon: "http://s3.ap-southeast-1.amazonaws.com/pay-image/rBAoMGAYsaOAdp2zAACQhOiBHTM609.jpg"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "10"
+  customPage: "N"
+  prompt: "adyen_credit"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "KoKo Coins"
+  payType: "cocoin"
+  channel: "cocoin"
+  renewal: "N"
+  limit: ""
+  icon: "https://img-sg-opay.heytapmobile.com/logo/cocoin.png"
+  login: "Y"
+  additionalFees: "N"
+  lastPayType: "N"
+  index: "15"
+  customPage: "N"
+  prompt: "cocoin"
+  cciFlag: "Y"
+  customPageType: "N"
+  limitInterval: "-"
+  limitDenomination: ""
+}
+data {
+  frontName: "Indomaret"
+  payType: "codapay_indomaret"
+  channel: "codapay_indomaret"
+  renewal: "N"
+  limit: ""
+  icon: "https://img-sg-opay.heytapmobile.com/logo/id/Indomaret.png"
+  login: "N"
+  additionalFees: "Y"
+  lastPayType: "N"
+  index: "12"
+  customPage: "N"
+  prompt: "indomaret"
+  cciFlag: "N"
+  customPageType: "N"
+  limitInterval: "50000-200000"
+  limitDenomination: ""
+}
+needExchange: false
+orderAmount: "0.01"
+binkInfoData {
+  id: "255"
+  agreementNo: "9971174392691148711"
+  pictureUrl: "https://img-sg-opay.finzfin.com/logo/worldpaybankcardlogo.png"
+  payType: "worldpay"
+  bankName: "VISA_CREDIT-SSL"
+  cardNo: "4444********1111"
+  backColour: "red"
+}
+binkInfoData {
+  id: "164"
+  agreementNo: "9971106189728266901"
+  pictureUrl: "https://img-sg-opay.finzfin.com/logo/worldpaybankcardlogo.png"
+  payType: "worldpay"
+  bankName: "VISA_CREDIT-SSL"
+  cardNo: "4444********1111"
+  backColour: "red"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Mandiri VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "CIMB VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Danamon VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "BNI VA"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Bank Transfer"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Fiona SB"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "You SB"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "Alipay"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "paypal"
+}
+binkInfoData {
+  pictureUrl: "https://img-sg-opay.heytapmobile.com/logo/paypal.png"
+  payType: "adyen_banktransfer"
+  bankName: "FuPo"
+}
+exchangeData {
+  country: "ID"
+  srcCurrency: "IDR"
+  dstCurrency: "CCI"
+  srcAmount: "160.000000"
+  dstAmount: "1"
+}
+exchangeData {
+  country: "ID"
+  srcCurrency: "CCI"
+  dstCurrency: "IDR"
+  srcAmount: "1"
+  dstAmount: "160.000000"
+}
+
+2021-03-29 18:19:07,449-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 18:19:07,746-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 18:19:07,790-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 18:19:07,790-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 18:19:08,098-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 18:19:08,099-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 18:19:08,114-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 18:19:08,115-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 18:19:08,122-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT merchant_key FROM `db_order_0`.`merchant_info` WHERE merchant_id = '72724324'
+2021-03-29 18:19:08,126-INFO-lib.common_biz.find_key-39-查询到业务线72724324秘钥信息：MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDirPtoazCWi/zHeXxgAwneWOnpMOi3V7ZXL5YNvzNg//8C5SJLCNMlzh4mbNNrEjwDU791V8NeY1XwPWOCKnVYQjPXOYoNQs5bghSkiMoKNe25zq9s5ghVDtqEXOjJ7cUyde95olyxuoJ+0QxP7gIij5Ba2DZBsn/A69LLUS7QqwIDAQAB
+2021-03-29 18:19:08,134-INFO-lib.common.session.http.http_json-49-http://secure-gateway.pay-test3.wanyol.com/pay/qrCode/trade
+2021-03-29 18:19:08,135-INFO-lib.common.session.http.http_json-50-传入的参数：{'accessType': 'NATIVE', 'serviceType': 'PAY', 'userInfo': {'ssoid': '2100063514'}, 'partnerCode': '72724324', 'contractInfo': {'contractPartnerOrder': '46347903333332140737126827490911', 'contractNotifyUrl': 'http://pay.pay-test.wanyol.com/notify/receiver', 'renewProductCode': '727243140027'}, 'sign': '249c716234f2f4b9504734b44f679407ae70b77304a86c1549417f138d1bff68', 'attach': 'attachtest', 'returnUrl': 'https://i-insurance-test.wanyol.com/insurance/product/details/resultCommon/?orderNo=H2021032918190832533408550573139400379709981496', 'payInfo': {'country': 'CN', 'amount': 1, 'partnerOrder': 'H2021032918190832533408550573139400379709981496', 'notifyUrl': 'http://pay.pay-test.wanyol.com/notify/receiver', 'currency': 'CNY'}, 'goodsInfo': {'subject': 'H5-TEST'}}
+2021-03-29 18:19:08,561-INFO-lib.common.session.http.http_json-52-返回状态码200, 返回结果：{'success': True, 'code': None, 'msg': None, 'data': {'payReqId': None, 'accessType': 'NATIVE', 'url': 'https://opdwz.cn/nuU3ae7', 'channelJson': None}}
+2021-03-29 20:02:42,023-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:02:42,301-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:02:42,356-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 20:02:42,356-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 20:02:42,599-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:02:42,599-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:02:42,621-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:02:42,623-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:04:33,442-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:04:33,762-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:04:33,815-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:04:33,815-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:04:34,046-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:04:34,046-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:04:34,060-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:04:34,061-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:05:29,816-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:05:30,040-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:05:30,084-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 20:05:30,084-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 20:05:30,301-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:05:30,301-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:05:30,323-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:05:30,325-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:05:35,040-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:05:35,300-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:05:35,346-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 20:05:35,346-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 20:05:35,576-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:05:35,577-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:05:35,591-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:05:35,592-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:05:49,406-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:05:49,667-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:05:49,712-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-29 20:05:49,712-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-29 20:05:49,963-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:05:49,963-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:05:49,986-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:05:49,987-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:05:58,267-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:05:58,562-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:05:58,604-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:05:58,605-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:05:58,820-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:05:58,820-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:05:58,843-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:05:58,845-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:06:11,043-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:06:11,310-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:06:11,355-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:06:11,355-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:06:11,555-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:06:11,556-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:06:11,578-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:06:11,579-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:06:16,554-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:06:16,824-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:06:16,871-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:06:16,871-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:06:17,102-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:06:17,102-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:06:17,125-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:06:17,126-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:06:44,808-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:06:45,070-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:06:45,113-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:06:45,113-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:06:45,360-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:06:45,360-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:06:45,374-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:06:45,375-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'
+2021-03-29 20:11:01,887-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-29 20:11:02,149-INFO-lib.common.db_operation.mysql_operation-109-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-29 20:11:02,195-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]成功
+2021-03-29 20:11:02,195-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-03-29 20:11:02,415-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-29 20:11:02,415-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-29 20:11:02,438-INFO-lib.common.db_operation.mysql_operation-128-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-03-29 20:11:02,439-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '15609010306'

@@ -24,7 +24,7 @@ class Logger():
         # 日志分别打印在控制台以及写入日志文件
         # 文件写入debug及以上
         # 控制台只显示info及以上
-        filename = 'securepayment_lib-' + str(date.today())
+        filename = 'securepayment_lib-{}.log'.format(str(date.today()))
         log_path = os.path.join(log_dir, filename)
         file_hdlr = logging.FileHandler(log_path, encoding='utf-8')
         file_hdlr.setLevel(logging.DEBUG)

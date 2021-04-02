@@ -22,7 +22,7 @@ def is_sequence(seq)-> bool:
     return True
 
 
-def to_iterable(item, type_: (list, tuple, set)):
+def to_iterable(item, type_:(list, tuple, set)):
     '''
     Convert the type of `item` to `type_`
     :param item: a sequence
@@ -109,6 +109,7 @@ def make_pbsrc_to_interface_map(region:str='inland'):
 
 def create_random_str(length:int):
     '''
-    仅支持字母数字
+    仅支持字母数字，长度小于等于62（26*2+10）
     '''
     return ''.join(random.sample(string.ascii_letters + string.digits, length))    
+

@@ -6,7 +6,6 @@ import sys
 from lib.common.case_processor.parser import ExcelParser
 from lib.common.file_operation.excel_operation import Excel
 from lib.common.file_operation.config_operation import Config
-from lib.common.exception.intf_exception import NO_FILE_PARSER
 
 
 class ExcelProxy():
@@ -48,7 +47,7 @@ class Distributor():
             assert 'interface' in kwargs or len(args)
         if proxy_cls is None:
             self.logger.error(20*'#' + ' No file parser found! ' + 20*'#')
-            sys.exit(NO_FILE_PARSER)
+            sys.exit(-1)
         else:
             self.proxy = proxy_cls(path, *args, **kwargs)
 

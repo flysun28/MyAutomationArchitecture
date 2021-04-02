@@ -3,14 +3,12 @@
 # author:xy
 # datetime:2021/2/22 10:20
 # comment:
-import sys
+from itertools import product
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.common.utils.globals import GlobalVar
 from lib.config.path import common_sql_path
-from itertools import product
-from lib.common.utils.env import set_global_env_id
 
 mysql = GlobalVar.MYSQL_IN
 mysql_out = GlobalVar.MYSQL_OUT

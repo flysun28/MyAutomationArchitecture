@@ -9,7 +9,6 @@ from _collections_abc import _check_methods
 from openpyxl.worksheet.worksheet import Worksheet
 from lib.common.utils.meta import WithLogger
 from .case import ExcelTestCase
-from openpyxl.cell.cell import Cell
  
 
 class Parser(metaclass=ABCMeta):
