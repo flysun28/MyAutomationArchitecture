@@ -112,3 +112,4 @@ def create_random_str(length:int):
     仅支持字母数字，长度小于等于62（26*2+10）
     '''
     return ''.join(random.sample(string.ascii_letters + string.digits, length))    
+

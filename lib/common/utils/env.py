@@ -20,8 +20,9 @@ def set_global_env_id(env_id):
 def get_env_id():
     # 默认走itest平台环境变量，若无，则读取本地环境变量
     env = dict(os.environ)
-    if "CASE_ENV" in env:
-        return env
+    env_id = env.get('CASE_ENV')
+    if env_id:
+        return str(env_id)
     else:
         return glob_env_cfg.read_config('environment', 'value')
 

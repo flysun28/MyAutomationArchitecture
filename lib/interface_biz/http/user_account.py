@@ -10,7 +10,6 @@ import hashlib
 import json
 import time
 from lib.common.utils.meta import WithLogger
-from lib.common.session.http.http_json import HttpJsonSession
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.sign import Sign
 from lib.common.algorithm.md5 import md5
@@ -59,7 +58,7 @@ class Account(metaclass=WithLogger):
         url = 'http://ucadmin.ucnewtest.wanyol.com/api/admin/account/autotest/query-latest-code'
         body = {"destination": phone_number}
         body = json.dumps(body)
-        response = requests.post(url, data=body, headers=HttpJsonSession.header)
+        response = requests.post(url, data=body, headers=type(GlobalVar.HTTPJSON_IN).header)
         print(response.status_code)
         print(response.json())
 

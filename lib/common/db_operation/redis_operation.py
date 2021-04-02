@@ -32,20 +32,19 @@ class RedisCluster(metaclass=WithLogger):
         try:
             # 非密码连接redis集群
             self.redis_conn = RedisClusterCls(startup_nodes=self.conn_list, decode_responses=True)
-            self.logger.info("连接redis集群{}成功".format(self.conn_list))
+            self.logger.info("连接redis集群成功:{}".format(self.conn_list))
             # 使用密码连接redis集群
             # redis_conn = StrictRedisCluster(startup_nodes=self.conn_list, password='123456')            
         except Exception as e:
             self.logger.logger(e)
-            self.logger.info("连接redis集群{}失败".format(self.conn_list))
-        print(self.redis_conn)
+            self.logger.info("连接redis集群失败:{}".format(self.conn_list))
+        self.logger.info('redis连接:%s', self.redis_conn)
 
     def get_state(self):
         """
         获取状态
         :return:
         """        
-        # print("连接集群对象",res,type(res),res.__dict__)
         if not self.redis_conn:
             return False
         dic = self.redis_conn.cluster_info()  # 查看info信息, 返回dict

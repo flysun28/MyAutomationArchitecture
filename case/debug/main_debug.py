@@ -3,8 +3,7 @@
 # author:xy
 # datetime:2021/3/12 14:38
 # comment:
-from itertools import chain
-env_id = '2'
+env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -14,6 +13,8 @@ import base64
 import binascii
 import string
 import random
+import requests
+from itertools import chain
 from concurrent.futures import ALL_COMPLETED, wait
 from concurrent.futures.thread import ThreadPoolExecutor
 from lib.common.utils.misc_utils import create_random_str
@@ -24,13 +25,15 @@ from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
 from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR, GlobalVar
 from lib.interface_biz.http.refund import Refund as HttpRefund
 from case.debug.inland.dubbo.refund import Refund as GrantRefund
-from lib.common.algorithm.aes import AES_CBC
+from lib.common.algorithm.aes import AES_CBC, AES4J
 from lib.interface_biz.http.grant_voucher import VouInfo, HttpGrantMultiVous
 from lib.common.exception.intf_exception import IgnoreException
 from lib.common.logger.logging import Logger
 from lib.common_biz.sign import Sign
 from lib.common_biz.find_key import GetKey
 from lib.common.algorithm.md5 import md5
+from lib.interface_biz.http.user_account import Account
+from lib.common.file_operation.xml_operation import MvnSettingXML
 
 logger = Logger('main_debug').get_logger()
 
@@ -87,26 +90,26 @@ if __name__ == '__main__':
 #             else:
 #                 break
 
-#     exp = 'g1f0ecbjsm/94OZ1cJ2Fo8HLPaYl6n+58oNBz+PS+HRhSxMd2KhIvcVV+w8T5zXHqJy/KZfM2Rq5V+ZOPEugC8RTxwi4uSkTA+k7RaneHMLgsOw0negWYWR01GAMWWh3rHDXA1N8heL+Iy1FtGZTH/5kG+sxmvv6KQ7l+HAwgUbAVHSnmvwWxr95TBzaf6FIoxA='
-#     text = '{"imei":"","mac":"0","serialNum":"unknown","serial":"unknown","hasPermission":true,"wifissid":"<unknown ssid>","deviceName":"PEDM00","slot1":"{}"}'
-#     print('原文：', text)
-#     base64_iv = 'QxbF3LonVTkM9UxJkoysmQ=='
+#     base64_iv = 'VHl2UW1oWUlqM25lcEx1cw=='
 #     bytes_iv = base64.b64decode(base64_iv)
-#     aes_cbc = AES_CBC('FsZtyBxlB_oTcrXQ7kiYDQ==', bytes_iv)
-# #     res = aes_cbc.encrypt_and_base64(text)
-#     
+#     aes_cbc = AES4J('8i_Dq8KHbCtGm9mjQWcx4A==', bytes_iv)
+# #     aes_cbc = AES_CBC('NE90SWF2bU0xa1c3Y1FmaQ==', bytes_iv)
+#      
 #     print('开始解密')
-# #     x = binascii.b2a_base64(base64.b64decode(exp)).strip(b'\n')
-# #     print('base64解密之后：', x)
-#     x = base64.b64decode(exp)   # decode base64
-#     print('base64解密之后：', x)
+#     x = 'ZjFiMDRjMmRjYWM5ZjdhYzg5ZTIyY2M0NTNjNDkyZDYyZTUyYzdiODZlZWEzMWI0MzVlZDJlMDhmNzZjZGU5NTYxYTMxMDMyYTI2MTllN2YyNTYwMGEwOWY3OTFiYzAzY2U3ZDcxMWM2YTllYjBjNWNjOGU5M2ZkZGQ1MmUwYzY2M2E0YjMyZDBhYjFkMjQ0MDlkMGY3YjZmNzFjZjM1MDAzNjg2M2RjODIwMWMyZjZiMDEwY2QxODM1Yjc5MThhMGIzZmNhYThiZGQ0N2U5YzczMjBhY2VkM2EwZTlmYTgxZTFiMmZmOTQ5NzVkZjZmMThlOGUwODBjYmM1YWM0ZjBkMGZjNzY0NjE0N2FhNDFjMzlkYzRmY2E5ZjE2ZmNl'
 #     y = aes_cbc.decrypt(x)
-#     print('aes解密之后：', y)
-#     z =     
+#     print('aes解密之后：', y)    
+#     z = aes_cbc.encrypt('{"appKey": "2033","position": "result_page","nonce": "12345678","timestamp": "1612670150","partnerId": "5456925","bizId": "BN1022","sign": "bdf1aea649bddee826c0a36909a391b5"}')
+#     print(z)
    
-#     # pb2json 加密传输新协议
-#     set_global_env_id(3)
-#     encjson = EncryptJson(GlobalVar.URL_PAY_IN)
-#     encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
+    # pb2json 加密传输新协议
+    encjson = EncryptJson(GlobalVar.URL_PAY_IN)
+    result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
+    print(result['data']['contactInfo'])
+    result = encjson.post('/api/conf/v1/package-name', {})
+    print(result['data']['walletPackageName'])
+
 
     
+
+        

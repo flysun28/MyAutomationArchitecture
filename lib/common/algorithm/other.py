@@ -62,5 +62,7 @@ def get_RV(s_p, step_count=4):
 def str_to_base64(text:(str, bytes)):
     if isinstance(text, str):
         b = bytes(text, encoding='utf-8')
+    else:
+        b = text
     return base64.b64encode(b)
 

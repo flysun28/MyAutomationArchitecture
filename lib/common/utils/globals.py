@@ -1,6 +1,4 @@
 # coding=utf-8
-
-
 '''
 Created on 2021年2月9日
 @author: 80319739
@@ -63,6 +61,8 @@ HTTPJSON_IN = GlobalVar.HTTPJSON_IN
 HTTPJSON_OUT = GlobalVar.HTTPJSON_OUT
 redis = REDIS = GlobalVar.REDIS_IN
 HTTPJSON_SCARLET = GlobalVar.HTTPJSON_SCARLET
+MYSQL_IN = GlobalVar.MYSQL_IN
+MYSQL_OUT = GlobalVar.MYSQL_OUT
 MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(case_dir, 'src')
 
