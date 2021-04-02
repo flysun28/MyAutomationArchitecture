@@ -21,7 +21,7 @@ def test_service_info(encjson):
     print(result['data']['contactInfo'])
 
 
-# def test_wallet_package(encjson):
-#     result = encjson.post('/api/conf/v1/package-name', {})
-#     print(result['data']['walletPackageName'])
+def test_wallet_package(encjson):
+    result = encjson.post('/api/conf/v1/package-name', {})
+    print(result['data']['walletPackageName'])
     
