@@ -126,8 +126,9 @@ class ReplaceParams(metaclass=WithLogger):
             self.case['header']['token'] = ''
         if self.case['header']['r_v'] == '':
             self.case['header']['r_v'] = r_v
-        if self.case['partnerOrder'] == '':
-            self.case['partnerOrder'] = RandomOrder(32).random_string()
+        if 'partnerOrder' in self.case:
+            if self.case['partnerOrder'] == '':
+                self.case['partnerOrder'] = RandomOrder(32).random_string()
         if self.case['header']['sign'] == '':
             self.case['header']['sign'] = md5(oversea_header_sign_string(
                                                         self.case['header']['version'],

@@ -1,0 +1,42 @@
+2021-03-06 16:06:46,245-INFO-lib.common.session.dubbo.dubbo-51-dubbo invoke语句：invoke com.oppo.voucher.api.CouponBatchGrant.batchGrant({'couponName': 'anto_grant1615018006242', 'useableFromTime': '2020-01-01 00:00:00', 'useableEndTime': '2022-12-31 00:00:00', 'settleType': '1', 'bizNo': '2031', 'scopeId': '7104f7bc23e445daba913a5a96a264ac', 'blackScopeId': '', 'subScopeId': '', 'couponType': 'KB_COUPON', 'couponDiscountType': 'XIAOFEI', 'conditionAmount': '0', 'cutAmount': '10', 'ratio': 0, 'maxCutAmount': '0', 'applyCount': 1, 'ssoidList': ['2076075925'], 'batchId': ''})
+2021-03-06 16:06:46,332-DEBUG-lib.common.session.dubbo.dubbo-55-{"data":{"batchVouCreateResList":[{"ssoid":"2076075925","vouId":"64234575"}],"vouIdList":null,"batchId":"48fdfe6550c1460a8dd16905bee95387"},"success":true,"errorDetail":"成功","resCode":"000000","resMsg":"成功"}
+
+2021-03-06 16:06:46,332-INFO-lib.common.session.dubbo.dubbo-57-dubbo回参：{'data': {'batchVouCreateResList': [{'ssoid': '2076075925', 'vouId': '64234575'}], 'vouIdList': None, 'batchId': '48fdfe6550c1460a8dd16905bee95387'}, 'success': True, 'errorDetail': '成功', 'resCode': '000000', 'resMsg': '成功'}
+2021-03-06 16:06:46,367-INFO-lib.common.session.dubbo.dubbo-51-dubbo invoke语句：invoke com.oppo.voucher.api.admin.CouponBatchInfoAdmin.operate({'couponBatchId': '48fdfe6550c1460a8dd16905bee95387', 'batchOperateType': 'PASS'})
+2021-03-06 16:06:51,399-DEBUG-lib.common.session.dubbo.dubbo-55-{"data":{},"success":true,"errorDetail":"成功","resCode":"000000","resMsg":"成功"}
+
+2021-03-06 16:06:51,400-INFO-lib.common.session.dubbo.dubbo-57-dubbo回参：{'data': {}, 'success': True, 'errorDetail': '成功', 'resCode': '000000', 'resMsg': '成功'}
+2021-03-06 17:30:10,722-INFO-lib.common.db_operation.mysql_operation-99-成功连接到测试环境3-MYSQL：{'host': '10.52.46.169', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-03-06 17:30:11,078-INFO-lib.common.db_operation.mysql_operation-99-成功连接到测试环境3-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-03-06 17:30:11,122-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]成功
+2021-03-06 17:30:11,123-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.177.85.103', 'port': '6379', 'name': '10.177.85.103:6379'}, {'host': '10.177.85.98', 'port': '6379', 'name': '10.177.85.98:6379'}, {'host': '10.177.85.100', 'port': '6379', 'name': '10.177.85.100:6379'}]
+2021-03-06 17:30:11,338-INFO-lib.common.db_operation.redis_operation-35-连接redis集群[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]成功
+2021-03-06 17:30:11,338-INFO-lib.common.db_operation.redis_operation-77-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-03-06 17:30:11,637-INFO-lib.common.db_operation.mysql_operation-37-执行sql语句：SELECT app_id, merchant_no FROM `platform_opay`.`partner_map_merchant` WHERE partner_code='2031' AND pay_channel = "wxpay" AND renewal=0
+2021-03-06 17:30:11,640-INFO-lib.common_biz.find_merchant_info-28-查询到商户信息：{'app_id': 'wx93eea96ecc33f168', 'merchant_no': '1603465160'}
+2021-03-06 17:30:11,642-INFO-lib.common.db_operation.mysql_operation-47-执行sql语句：SELECT md5_key FROM `platform_opay`.`channel_merchant_info` WHERE app_id = 'wx93eea96ecc33f168' AND merchant_no = '1603465160' AND pay_channel = 'wxpay'
+2021-03-06 17:30:11,645-INFO-lib.common_biz.find_key-109-查询到秘钥信息：g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR
+2021-03-06 17:30:11,646-INFO-lib.common.db_operation.mysql_operation-37-执行sql语句：SELECT app_id, merchant_no, plan_id FROM `platform_opay`.`partner_map_merchant` WHERE partner_code='2031' AND pay_channel = "wxpay" AND renewal=1
+2021-03-06 17:30:11,649-INFO-lib.common_biz.find_merchant_info-41-查询到商户信息：{'app_id': 'wx93eea96ecc33f168', 'merchant_no': '1259634601', 'plan_id': '120877'}
+2021-03-06 17:30:11,650-INFO-lib.common.db_operation.mysql_operation-47-执行sql语句：SELECT md5_key FROM `platform_opay`.`channel_merchant_info` WHERE app_id = 'wx93eea96ecc33f168' AND merchant_no = '1603465160' AND pay_channel = 'wxpay'
+2021-03-06 17:30:11,653-INFO-lib.common_biz.find_key-109-查询到秘钥信息：g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR
+2021-03-06 17:30:11,654-INFO-wxpay-scarlet-52-回调参数：<xml><transaction_id><![CDATA[9416310888369867195128074291]]></transaction_id>
+<nonce_str><![CDATA[LRTjIqofuJyHM0BKWDNCS9ZX8gQ4zn6c]]></nonce_str>
+<bank_type><![CDATA[OTHERS]]></bank_type>
+<openid><![CDATA[oCg6Xt8NvRi7jGuap_5B6XdY4oYk]]></openid>
+<sign><![CDATA[952066E0F2439D9D9A6ABCCA7C73D4CB]]></sign>
+<fee_type><![CDATA[CNY]]></fee_type>
+<mch_id><![CDATA[1603465160]]></mch_id>
+<cash_fee><![CDATA[1]]></cash_fee>
+<out_trade_no><![CDATA[RM20210304095657207607592506772t]]></out_trade_no>
+<appid><![CDATA[wx93eea96ecc33f168]]></appid>
+<total_fee>1000</total_fee>
+<trade_type><![CDATA[APP]]></trade_type>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<attach><![CDATA[TEST]]></attach>
+<time_end><![CDATA[20210306173011]]></time_end>
+<is_subscribe><![CDATA[N]]></is_subscribe>
+<return_code><![CDATA[SUCCESS]]></return_code>
+</xml>
+2021-03-06 17:30:12,066-INFO-wxpay-scarlet-56-<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>
+2021-03-06 17:30:12,066-INFO-wxpay-scarlet-58-回调解析成功

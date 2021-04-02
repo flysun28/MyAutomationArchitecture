@@ -11,6 +11,7 @@ import os
 import time
 import base64
 import binascii
+
 import string
 import random
 import requests
@@ -22,20 +23,12 @@ from lib.common_biz.find_database_table import SeparateDbTable
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
-from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR, GlobalVar
-from lib.interface_biz.http.refund import Refund as HttpRefund
-from case.debug.inland.dubbo.refund import Refund as GrantRefund
-from lib.common.algorithm.aes import AES_CBC, AES4J
-from lib.interface_biz.http.grant_voucher import VouInfo, HttpGrantMultiVous
-from lib.common.exception.intf_exception import IgnoreException
-from lib.common.logger.logging import Logger
-from lib.common_biz.sign import Sign
-from lib.common_biz.find_key import GetKey
-from lib.common.algorithm.md5 import md5
-from lib.interface_biz.http.user_account import Account
-from lib.common.file_operation.xml_operation import MvnSettingXML
-
-logger = Logger('main_debug').get_logger()
+from lib.common.utils.globals import GlobalVar
+from lib.common.utils.env import set_global_env_id
+from lib.interface_biz.http.refund import Refund
+from lib.common.algorithm.aes import AES_CBC
+import chardet
+from lib.interface_biz.scarlett.oversea_coda import coda_pay
 
 
 if __name__ == '__main__':
@@ -70,7 +63,7 @@ if __name__ == '__main__':
 #     # 审批退款
 #     refund = GrantRefund("2086100900")
 #     refund.refund_by_pay_req_id('RM202103251132432086100900173732')
-    
+
 #     # http自动退款
 #     session = None
 #     env_id = 'product'
@@ -83,13 +76,43 @@ if __name__ == '__main__':
 #     total_amount = 35
 #     loop_num = int(total_amount/per_amount)
 #     for i in range(loop_num):
+
 #         while True:
 #             response = refund.httpjson_refund('GC202103291303557330900240000', '5456925', per_amount, pay_req_id='')
 #             if response['resMsg'] == '退款失败':
 #                 time.sleep(1)
 #             else:
 #                 break
+#
+#     flag_coin = "1"
+#     if flag_coin == "1":
+#         # 发
+#         Nearme().nearme_add_subtract("10", "2076075925", 0)
+#     if flag_coin == "2":
+#         # 扣
+#         Nearme().nearme_add_subtract("5", "2076075925", 1)
+# 
+    flag = "4"
+#     if flag == "1":
+#         # 满减
+#         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])
+#         # 消费
+#     if flag == "2":
+#         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])X
+#     if flag == "3":
+#         # 红包券
+#         vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])
+    if flag == "4":
+        # 海外满减
+        vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "5000", "1000", "2076075925", "IN",
+                                                   "INR")
+        Voucher("oversea").checkVoucher(vou_info['batchId'])
 
+    coda_pay("10000.00", "390", "", "IN202104020907322076075925462453", "1c3d4a652f744f340e7ad9471dbdcb5d")
+    # print(SeparateDbTable("2086762813").get_order_db_table())
 #     base64_iv = 'VHl2UW1oWUlqM25lcEx1cw=='
 #     bytes_iv = base64.b64decode(base64_iv)
 #     aes_cbc = AES4J('8i_Dq8KHbCtGm9mjQWcx4A==', bytes_iv)
@@ -109,7 +132,3 @@ if __name__ == '__main__':
     result = encjson.post('/api/conf/v1/package-name', {})
     print(result['data']['walletPackageName'])
 
-
-    
-
-        
