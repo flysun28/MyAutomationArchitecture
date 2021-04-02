@@ -52,7 +52,7 @@ class HttpJsonSession(metaclass=WithLogger):
         try:
             self.logger.info(self.url)
             self.logger.info("传入的参数：{}".format(data))
-            response = self.session.post(url=self.url, data=json.dumps(data))
+            response = self.session.post(url=self.url, data=simplejson.dumps(data))
             self.logger.info("返回状态码：{}".format(response.status_code))
             assert response.status_code == 200, "返回状态码：{} != 200".format(response.status_code)
             self.logger.info("返回结果：{}".format(response.json()))
@@ -175,7 +175,7 @@ class EncryptJson(HttpJsonSession):
         self.url = ''
         self.session = requests.Session()
         self.header = deepcopy(self.req_header)
-        self.req_header.update(kwargs)
+        self.header.update(kwargs)
         self.__sessionKey = str_to_base64(create_random_str(16))
         print('X-Protocol sessionKey:', self.__sessionKey)
         iv4aes = create_random_str(16)
@@ -186,22 +186,22 @@ class EncryptJson(HttpJsonSession):
         rsa_ = RSA(self.__sessionKey, encjson_rsa_public_key_path)
         self.__pub_sessionKey = rsa_.cipher()
         print('pub-sessionKey:', self.__pub_sessionKey)
-        self.req_header['X-Protocol']['key'] = self.__pub_sessionKey
-        self.req_header['X-Protocol']['iv'] = self.__iv
-        #         self.aes_codec = AES_CBC(self.__sessionKey.decode(), base64.b64decode(self.__iv))
+        self.header['X-Protocol']['key'] = self.__pub_sessionKey
+        self.header['X-Protocol']['iv'] = self.__iv
+#         self.aes_codec = AES_CBC(self.__sessionKey.decode(), base64.b64decode(self.__iv))
         self.aes_codec = AES4J(self.__sessionKey.decode(), base64.b64decode(self.__iv),
-                               self.req_header['X-Protocol-Ver'])
-        self.logger.info('原始header：%s', self.req_header)
-        self.session.headers = self.encrypt_header()
-        self.logger.info('加密header：%s' % self.session.headers)
+                               self.header['X-Protocol-Ver'])
         self.common_params['appKey'] = appkey
         self.appSecret = Config(key_configfile_path).read_config('encrypted_json', 'app_secret')
 
-    def post(self, url, data: dict):
+    def post(self, url, data:dict):
         '''
         :param url:
         :param data: request parameters dict
         '''
+        self.logger.info('原始header：%s', self.header)
+        self.session.headers = self.encrypt_header()
+        self.logger.info('加密header：%s' % self.session.headers)
         self.url = self.prefix + url
         data.update(self.common_params)
         data['sign'] = self.make_sign(data)
@@ -219,7 +219,7 @@ class EncryptJson(HttpJsonSession):
         else:
             print('Response headers:', response.headers)
             self.__sessionTicket = response.headers['X-Session-Ticket']
-            self.req_header['X-Protocol']['sessionTicket'] = self.__sessionTicket
+            self.header['X-Protocol']['sessionTicket'] = self.__sessionTicket
             return simplejson.loads(resp_text, encoding='utf-8')
 
     def make_sign(self, data: dict):
@@ -241,7 +241,7 @@ class EncryptJson(HttpJsonSession):
 
     def encrypt_header(self):
         to_bytes_keys = 'X-Protocol', 'X-SDK', 'X-Device-Info', 'X-Context', 'X-Sys', 'X-APP'
-        enc_header = self.req_header.copy()
+        enc_header = self.header.copy()
         '''urlencode 'X-Protocol', 'X-SDK', 'X-Device-Info', 'X-Context', 'X-Sys', 'X-APP'
         '''
         for k in to_bytes_keys:
@@ -254,14 +254,14 @@ class EncryptJson(HttpJsonSession):
             '''
             aes_x_safety = self.aes_codec.encrypt(str(enc_header['X-Safety']))
             urlencode_x_safety = quote(aes_x_safety, encoding='utf-8')
-            #             aes_x_safety = self.aes_codec.encrypt_and_base64(str(enc_header['X-Safety']))
-            #             _encoding = chardet.detect(aes_x_safety)['encoding']
-            #             urlencode_x_safety = quote(aes_x_safety.decode(_encoding), encoding='utf-8')
+#             aes_x_safety = self.aes_codec.encrypt_and_base64(str(enc_header['X-Safety']))
+#             _encoding = chardet.detect(aes_x_safety)['encoding']
+#             urlencode_x_safety = quote(aes_x_safety.decode(_encoding), encoding='utf-8')
             return urlencode_x_safety
 
         enc_header['X-Safety'] = encrypt_x_safety()
         return enc_header
 
     def encrypt_body(self, body):
-        #         return self.aes_codec.encrypt_and_base64(str(body))
+#         return self.aes_codec.encrypt_and_base64(str(body))
         return self.aes_codec.encrypt(str(body))

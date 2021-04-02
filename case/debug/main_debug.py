@@ -92,7 +92,7 @@ if __name__ == '__main__':
 #         # 扣
 #         Nearme().nearme_add_subtract("5", "2076075925", 1)
 # 
-    flag = "4"
+#     flag = "4"
 #     if flag == "1":
 #         # 满减
 #         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
@@ -105,14 +105,15 @@ if __name__ == '__main__':
 #         # 红包券
 #         vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
 #         Voucher().checkVoucher(vou_info['batchId'])
-    if flag == "4":
-        # 海外满减
-        vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "5000", "1000", "2076075925", "IN",
-                                                   "INR")
-        Voucher("oversea").checkVoucher(vou_info['batchId'])
+#     if flag == "4":
+#         # 海外满减
+#         vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "5000", "1000", "2076075925", "IN",
+#                                                    "INR")
+#         Voucher("oversea").checkVoucher(vou_info['batchId'])
 
-    coda_pay("10000.00", "390", "", "IN202104020907322076075925462453", "1c3d4a652f744f340e7ad9471dbdcb5d")
+#     coda_pay("10000.00", "390", "", "IN202104020907322076075925462453", "1c3d4a652f744f340e7ad9471dbdcb5d")
     # print(SeparateDbTable("2086762813").get_order_db_table())
+
 #     base64_iv = 'VHl2UW1oWUlqM25lcEx1cw=='
 #     bytes_iv = base64.b64decode(base64_iv)
 #     aes_cbc = AES4J('8i_Dq8KHbCtGm9mjQWcx4A==', bytes_iv)

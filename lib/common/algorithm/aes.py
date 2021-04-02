@@ -8,7 +8,6 @@ import jnius_config
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 from lib.common.file_operation.xml_operation import MvnSettingXML
-# from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 from lib.config.path import case_dir
 
 

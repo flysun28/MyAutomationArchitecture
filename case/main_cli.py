@@ -142,5 +142,5 @@ if __name__ == "__main__":
         stats.print_stats()
         statsfile.close()
         sys.exit(0)
-    sys.exit(main())
+    main()
 
