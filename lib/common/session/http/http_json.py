@@ -44,7 +44,7 @@ class HttpJsonSession(metaclass=WithLogger):
         self.session = requests.Session()
         self.header.update(kwargs)
         self.session.headers = self.header
-        self.logger.info('HTTP Header: %s', self.session.headers)
+#         self.logger.info('HTTP Header: %s', self.session.headers)
 
     def post(self, url, data: dict = None):
         self.url = self.prefix + url

@@ -16,7 +16,7 @@ class Logger():
     def __init__(self, name, console_stream=sys.__stderr__):
         """
         :param name: 日志打印名称
-        :param path: 日志打印路径，默认为支付日志路径
+        :param console_stream: 日志输出流文件，默认为标准错误，可以修改为sys.__stdout__
         """
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
