@@ -105,13 +105,13 @@ if __name__ == '__main__':
 #         # 红包券
 #         vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
 #         Voucher().checkVoucher(vou_info['batchId'])
-    if flag == "4":
-        # 海外满减
-        vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "5000", "1000", "2076075925", "IN",
-                                                   "INR")
-        Voucher("oversea").checkVoucher(vou_info['batchId'])
+#     if flag == "4":
+#         # 海外满减
+#         vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "5000", "1000", "2076075925", "IN",
+#                                                    "INR")
+#         Voucher("oversea").checkVoucher(vou_info['batchId'])
 
-    coda_pay("10000.00", "390", "", "IN202104020907322076075925462453", "1c3d4a652f744f340e7ad9471dbdcb5d")
+    coda_pay("9500.00", "390", "", "IN202104040305312076075925776873", "1c3d4a652f744f340e7ad9471dbdcb5d")
     # print(SeparateDbTable("2086762813").get_order_db_table())
 #     base64_iv = 'VHl2UW1oWUlqM25lcEx1cw=='
 #     bytes_iv = base64.b64decode(base64_iv)
@@ -126,9 +126,9 @@ if __name__ == '__main__':
 #     print(z)
    
     # pb2json 加密传输新协议
-    encjson = EncryptJson(GlobalVar.URL_PAY_IN)
-    result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
-    print(result['data']['contactInfo'])
-    result = encjson.post('/api/conf/v1/package-name', {})
-    print(result['data']['walletPackageName'])
+    # encjson = EncryptJson(GlobalVar.URL_PAY_IN)
+    # result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
+    # print(result['data']['contactInfo'])
+    # result = encjson.post('/api/conf/v1/package-name', {})
+    # print(result['data']['walletPackageName'])
 

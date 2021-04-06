@@ -65,7 +65,7 @@ class AES_CTR():
 
 
 class AES4J_MultiJars():
-    mvn_repo_root = MvnSettingXML().local_repo
+    # mvn_repo_root = MvnSettingXML().local_repo
 #     jars = [
 #         mvn_repo_root + '/org/slf4j/slf4j-log4j12/2.0.0-alpha1/slf4j-log4j12-2.0.0-alpha1.jar',
 #         mvn_repo_root + '/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar',
