@@ -73,17 +73,17 @@ if __name__ == '__main__':
     elif env_id == 'product':
         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-    per_amount = 4.8
-    total_amount = 4.8
+    per_amount = 0.01
+    total_amount = 0.01
     loop_num = int(total_amount/per_amount)
     for i in range(loop_num): 
         while True:
-            response = refund.httpjson_refund('GC202104042131312860900230000', '5456925', per_amount, pay_req_id='')
+            response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
             if response['resMsg'] == '退款失败':
                 time.sleep(1)
             else:
                 break
-#
+
 #     flag_coin = "1"
 #     if flag_coin == "1":
 #         # 发
