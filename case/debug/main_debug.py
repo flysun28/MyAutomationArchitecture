@@ -27,31 +27,32 @@ from lib.interface_biz.http.grant_voucher import HttpGrantMultiVous, VouInfo
 
 
 if __name__ == '__main__':
-    flag_coin = "0"
-    if flag_coin == "1":
-        # 发
-        Nearme().nearme_add_subtract("10", "2076075925", 0)
-    if flag_coin == "2":
-        # 扣
-        Nearme().nearme_add_subtract("5", "2076075925", 1)
-    flag = "1"
-    if flag == "1":
-        # 满减
-        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
-        # 消费
-    if flag == "2":
-        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
-    if flag == "3":
-        # 红包券
-        vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
-    if flag == "4":
-        # 海外满减
-        vou_info = Voucher("oversea").grantVoucher("9809089", "KB_COUPON", "DIKOU", "10000", "7500", "2076075925", "VN",
-                                                   "VND")
-        Voucher("oversea").checkVoucher(vou_info['batchId'])
+    pass
+#     flag_coin = "0"
+#     if flag_coin == "1":
+#         # 发
+#         Nearme().nearme_add_subtract("10", "2076075925", 0)
+#     if flag_coin == "2":
+#         # 扣
+#         Nearme().nearme_add_subtract("5", "2076075925", 1)
+#     flag = "1"
+#     if flag == "1":
+#         # 满减
+#         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])
+#         # 消费
+#     if flag == "2":
+#         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])
+#     if flag == "3":
+#         # 红包券
+#         vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
+#         Voucher().checkVoucher(vou_info['batchId'])
+#     if flag == "4":
+#         # 海外满减
+#         vou_info = Voucher("oversea").grantVoucher("9809089", "KB_COUPON", "DIKOU", "10000", "7500", "2076075925", "VN",
+#                                                    "VND")
+#         Voucher("oversea").checkVoucher(vou_info['batchId'])
 
 #     # 审批退款
 #     refund = GrantRefund("2086100900")
@@ -148,19 +149,20 @@ if __name__ == '__main__':
 #     print(result['data']['walletPackageName'])
 
     # grant multi voucher
+    tps = 4000
+    ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
     case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
     vouinfo = VouInfo(case_file_path)
     vouinfo.create()
-    ssoids = '2086100900', '2076075925', '2086628989'
     all_request_ids = {}
     all_tasks = []
-    thr_num = int(3000/len(ssoids))
+    thr_num = int(tps/len(ssoids))
     executor = ThreadPoolExecutor(max_workers=thr_num)
     for ssoid in ssoids:
         httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
         [all_tasks.append(executor.submit(httpobj.post))
                           for i in range(executor._max_workers)]
-        start = time.perf_counter()        
+        start = time.perf_counter()
         while time.perf_counter() - start < 10:
             if len(httpobj.request_ids) == executor._max_workers:
                 break
@@ -171,27 +173,25 @@ if __name__ == '__main__':
             raise TimeoutError('Exceed %d, timeout occurred!!!' %self.timeout)
         for reqid in httpobj.request_ids:
             all_request_ids.setdefault(ssoid, set()).add(reqid)
-    for ssoid, request_ids in all_request_ids.items():
-        print(ssoid, request_ids)
     wait(all_tasks, return_when=ALL_COMPLETED)
-    exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
-    for ssoid in ssoids:
-        start = time.perf_counter()
-        table_id = SeparateDbTable(ssoid).get_vou_table()
-        sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-        while time.perf_counter() - start < 10:
-            count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
-            if count == exp_vou_count:            
-                break
-            else:
-                time.sleep(1)
-        else:
-            print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
-#             raise Exception('Exceed 10s, TIMEOUT!')
-        sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-        db_request_ids = set(chain(*(d['partnerOrder'] for d in GlobalVar.MYSQL_IN.select(sql))))
-        for reqid in all_request_ids[ssoid]:
-            with IgnoreException(None) as ign:
-                assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
+#     exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
+#     for ssoid in ssoids:
+#         start = time.perf_counter()
+#         table_id = SeparateDbTable(ssoid).get_vou_table()
+#         sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#         while time.perf_counter() - start < 10:
+#             count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
+#             if count == exp_vou_count:            
+#                 break
+#             else:
+#                 time.sleep(1)
+#         else:
+#             print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
+# #             raise Exception('Exceed 10s, TIMEOUT!')
+#         sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#         db_request_ids = set(chain(*[d.values() for d in GlobalVar.MYSQL_IN.select(sql)]))
+#         for reqid in all_request_ids[ssoid]:
+#             with IgnoreException(None) as ign:
+#                 assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
     
 

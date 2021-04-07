@@ -50,7 +50,7 @@ class GlobalVar():
     MYSQL_AUTO_TEST = connect_auto_test_special()
 
     SSOID = TOKEN = None
-    if env_id == "1" or env_id == "2" or env_id == "3":
+    if env_id.isdigit():
         # SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '{}'
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account").\
             format(Config(global_env_path).read_config("test_account", "account"))
