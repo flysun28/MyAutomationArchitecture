@@ -12,10 +12,9 @@ from lib.config.path import common_sql_path
 
 
 class Order:
-    
     def __init__(self):
-        dubbo_info = get_dubbo_info("order")
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
+        server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.pay.order.facade.RefundLogic")
+        self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def refund_approval(self, partnerId, partnerOrder, refundAmount, payType, payReqId=""):
         """

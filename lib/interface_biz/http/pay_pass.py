@@ -48,6 +48,7 @@ def get_check_t_p(param):
                 Config(common_sql_path).read_config("pay_auto_test_info", "product_update_account").format(token_new))
         logger.info('成功替换token:{} 并写入数据库'.format(token_new))
         # logger.info('成功将token:{} 并写入redis'.format(token_new))
+        param['token'] = token_new
         return get_t_p(param)
 
 

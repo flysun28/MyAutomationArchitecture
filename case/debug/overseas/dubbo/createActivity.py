@@ -18,9 +18,9 @@ def create(flag):
         data = {
             "activityId": 0, "bizNo": 5456925, "activityName": "auto_create_MANJIAN", "startTime": "2021-03-27 21:30:00",
             "endTime": "2021-04-09 21:30:00",
-            "discountType": "MANJIAN", "totalAmount": 100000, "totalNum": 3,
+            "discountType": "MANJIAN", "totalAmount": 100000, "totalNum": 5,
             "creater": "80264408", "operateType": "CREATE", "currency": "INR", "country": "IN",
-            "allowTimes": 0,
+            "allowTimes": 1,
             "mono": "auto_create_mo", "channelType": "codapay_paytm", "amountType": "ACTIVITY", "activityType": "YOUHUI",
             "userType": "ALL_USERS",
             "totalAttendTimes": 1,
@@ -98,7 +98,7 @@ def activity_off(activityId):
 
 
 if __name__ == '__main__':
-    list_id = [186,173,168,159]
+    list_id = [192]
     for item in list_id:
         activity_off(item)
     activity_id = create("1")

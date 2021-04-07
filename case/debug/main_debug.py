@@ -63,12 +63,12 @@ if __name__ == '__main__':
 #     elif env_id == 'product':
 #         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
 #     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     per_amount = 518.4
-#     total_amount = 518.4
+#     per_amount = 0.01
+#     total_amount = 0.01
 #     loop_num = int(total_amount/per_amount)
 #     for i in range(loop_num): 
 #         while True:
-#             response = refund.httpjson_refund('GC202104071324359050700690000', '5456925', per_amount, pay_req_id='KB202104071325260692039187064360')
+#             response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
 #             if response['resMsg'] == '退款失败':
 #                 time.sleep(1)
 #             else:
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 #     print('aes解密之后：', y)
 #     z = aes_cbc.encrypt('{"appKey": "2033","position": "result_page","nonce": "12345678","timestamp": "1612670150","partnerId": "5456925","bizId": "BN1022","sign": "bdf1aea649bddee826c0a36909a391b5"}')
 #     print(z)
-   
+
 #     # pb2json 加密传输新协议
 #     encjson = EncryptJson(GlobalVar.URL_PAY_IN)
 #     result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})

@@ -6,14 +6,15 @@
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_dubbo_info
+from lib.common.utils.globals import GlobalVar
 
 logger = Logger("mongo_order").get_logger()
 
 
 class MongoOrder:
     def __init__(self):
-        dubbo_info = get_dubbo_info("mongo_order")
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
+        server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.zeus.mongo.order.service.QueryConsumeService")
+        self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def queryConsumeAmountBySsoid(self, ssoid):
         """
@@ -21,7 +22,7 @@ class MongoOrder:
         :return:
         """
         result = self.conn.invoke(
-            "QueryConsumeService",
+            "com.oppo.zeus.mongo.order.service.QueryConsumeService",
             "queryComsumeAmountBySsoid",
             ssoid,
             flag="SINGLE_STRING"
