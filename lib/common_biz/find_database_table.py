@@ -29,10 +29,10 @@ class SeparateDbTable(metaclass=WithLogger):
 
     def get_order_db_table(self):
         """
-            order-info表/tradeorder表，分库分表
-            :param ssoid:
-            :return:
-            """
+        order-info表/tradeorder表，分库分表
+        :param ssoid:
+        :return:
+        """
         hash_code = abs(GetHashCode.getHashCode(self.ssoid))
         db = int(hash_code / 128 % 8)
         table = hash_code % 128
@@ -41,9 +41,9 @@ class SeparateDbTable(metaclass=WithLogger):
 
     def get_coin_db_table(self):
         """
-            可币用户信息分库分表
-            :return:
-            """
+        可币用户信息分库分表
+        :return:
+        """
         hash_code = abs(GetHashCode.getHashCode(self.ssoid))
         temp = int(hash_code / 256)
         db = temp % 4
@@ -53,9 +53,9 @@ class SeparateDbTable(metaclass=WithLogger):
 
     def get_coin_order_db_table(self):
         """
-            可币订单分库分表
-            :return:
-            """
+        可币订单分库分表
+        :return:
+        """
         db_count = 4
         table_count = 1024
         temp = int(abs(GetHashCode.getHashCode(self.ssoid)) / table_count)
@@ -66,9 +66,9 @@ class SeparateDbTable(metaclass=WithLogger):
 
     def get_vou_table(self):
         """
-            优惠券分库分表
-            :return:
-            """
+        优惠券分库分表
+        :return:
+        """
         count = 20
         table = int(abs(GetHashCode.getHashCode(self.ssoid))) % count + 1
         self.logger.info("`oppopay_voucher`.`vou_info_{}`".format(table))
@@ -76,9 +76,9 @@ class SeparateDbTable(metaclass=WithLogger):
 
     def get_user_type_db_table(self):
         """
-            用户上次成功支付的支付方式
-            :return:
-            """
+        用户上次成功支付的支付方式
+        :return:
+        """
         db_count = 2
         table_count = 128
         userId = re.sub("^0*", "", get_route_ssoid(self.ssoid))

@@ -38,21 +38,19 @@ this_package = sys.modules[this_module.__package__]
 
 class WaitUntilTimeOut(metaclass=WithLogger):
     
-    def __init__(self, true_condition, callback=None, *args, timeout=10, interval=1, **kwargs):
+    def __init__(self, true_condition, timeout=10, interval=1):
         if isinstance(true_condition, str):
             self.condition = eval(true_condition)
-        self.func = partial(callback, *args, *kwargs) if callback else None
         self.timeout = timeout
         self.interval = interval
     
     def __enter__(self):
+#         self.wait()
         return self
     
     def wait(self):
         start = time.perf_counter()
-        while time.perf_counter() - start:
-            if self.func:
-                self.func()
+        while time.perf_counter() - start < self.timeout:
             if self.condition:
                 break
             else:

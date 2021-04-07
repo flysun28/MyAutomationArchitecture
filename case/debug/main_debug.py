@@ -1,3 +1,4 @@
+# coding=utf-8
 env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
@@ -57,18 +58,17 @@ if __name__ == '__main__':
 
 #     # http自动退款
 #     session = None
-#     env_id = 'product'
 #     if env_id == 'grey':
 #         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
 #     elif env_id == 'product':
 #         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
 #     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     per_amount = 0.01
-#     total_amount = 0.01
+#     per_amount = 518.4
+#     total_amount = 518.4
 #     loop_num = int(total_amount/per_amount)
 #     for i in range(loop_num): 
 #         while True:
-#             response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
+#             response = refund.httpjson_refund('GC202104071324359050700690000', '5456925', per_amount, pay_req_id='KB202104071325260692039187064360')
 #             if response['resMsg'] == '退款失败':
 #                 time.sleep(1)
 #             else:
@@ -99,11 +99,10 @@ if __name__ == '__main__':
     ssoids = '2086100900', '2076075925', '2086628989'
     all_request_ids = {}
     all_tasks = []
-    thr_num = int(3000/len(ssoids))
+    thr_num = int(1000/len(ssoids))
     executor = ThreadPoolExecutor(max_workers=thr_num)
     for ssoid in ssoids:
         httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
-        start = time.perf_counter()
         [all_tasks.append(executor.submit(httpobj.post))
                           for i in range(executor._max_workers)]
         with WaitUntilTimeOut(len(httpobj.request_ids) == executor._max_workers, interval=0.5) as wt:
@@ -116,8 +115,8 @@ if __name__ == '__main__':
             all_request_ids.setdefault(ssoid, set()).add(reqid)
     wait(all_tasks, return_when=ALL_COMPLETED)
     exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
-    start = time.perf_counter()
     for ssoid in ssoids:
+        start = time.perf_counter()
         table_id = SeparateDbTable(ssoid).get_vou_table()
         sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
         while time.perf_counter() - start < 10:
