@@ -132,7 +132,7 @@ class EncryptJson(HttpJsonSession):
                   'utype': '',
                   'betaEnv': ''
                   },
-        'X-APP': {'appPackage': '',
+        'X-APP': {'appPackage': '支付测试demo',
                   'appVersion': '',
                   'deviceId': '',
                   'ucVersion': '',
@@ -160,7 +160,7 @@ class EncryptJson(HttpJsonSession):
     common_params = {
         'appKey': '',
         'sign': '',
-        'timestamp': str(int(time.time() * 10 ** 3)),
+        'timestamp': str(int(time.time() * 10**3)),
         'nonce': create_random_str(8)
     }
     resp_params = {'success': None, 'error': {'code': '', 'message': ''}, 'data': {}}
@@ -213,14 +213,17 @@ class EncryptJson(HttpJsonSession):
             response = self.session.post(url=self.url, data=aes_body)
             self.logger.info("返回状态码:{}".format(response.status_code))
             resp_text = self.aes_codec.decrypt(response.text)
-            self.logger.info('POST返回结果:{}'.format(resp_text))
+            pyobj_resp = simplejson.loads(resp_text, encoding='utf-8')
+            self.logger.info('POST返回结果:{}'.format(
+                simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
+            )
         except:
             raise HttpJsonException('<%s> exception: %s' % (type(self), sys.exc_info()[1]))
         else:
-            print('Response headers:', response.headers)
+            self.logger.info('Response headers:%s', response.headers)
             self.__sessionTicket = response.headers['X-Session-Ticket']
             self.header['X-Protocol']['sessionTicket'] = self.__sessionTicket
-            return simplejson.loads(resp_text, encoding='utf-8')
+            return pyobj_resp
 
     def make_sign(self, data: dict):
         '''

@@ -6,7 +6,11 @@
 
 import sys
 import os
+import time
+from _functools import partial
 from .http_exception import *
+from .intf_exception import *
+
 
 
 class _Anonymous(): pass
@@ -30,5 +34,31 @@ this_package = sys.modules[this_module.__package__]
 
 
 # import_modules_recursively(pardir(__file__))
-        
-        
+
+
+class WaitUntilTimeOut(metaclass=WithLogger):
+    
+    def __init__(self, true_condition, callback=None, *args, timeout=10, interval=1, **kwargs):
+        if isinstance(true_condition, str):
+            self.condition = eval(true_condition)
+        self.func = partial(callback, *args, *kwargs) if callback else None
+        self.timeout = timeout
+        self.interval = interval
+    
+    def __enter__(self):
+        return self
+    
+    def wait(self):
+        start = time.perf_counter()
+        while time.perf_counter() - start:
+            if self.func:
+                self.func()
+            if self.condition:
+                break
+            else:
+                time.sleep(self.interval)
+        else:
+            raise TimeoutError('Exceed %d, timeout occurred!!!' %self.timeout)
+    
+
+            
