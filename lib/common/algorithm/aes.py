@@ -8,7 +8,6 @@ import jnius_config
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 from lib.common.file_operation.xml_operation import MvnSettingXML
-# from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 from lib.config.path import case_dir
 
 
@@ -49,7 +48,6 @@ class AES_CBC():
             plain_text = cryptos.decrypt(a2b_hex(enc_text))
         except:
             plain_text = cryptos.decrypt(enc_text)
-#         print(plain_text)
         return bytes.decode(plain_text).rstrip('\0')
 
     def encrypt_and_base64(self, text):
@@ -65,7 +63,7 @@ class AES_CTR():
 
 
 class AES4J_MultiJars():
-    # mvn_repo_root = MvnSettingXML().local_repo
+#     mvn_repo_root = MvnSettingXML().local_repo
 #     jars = [
 #         mvn_repo_root + '/org/slf4j/slf4j-log4j12/2.0.0-alpha1/slf4j-log4j12-2.0.0-alpha1.jar',
 #         mvn_repo_root + '/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar',

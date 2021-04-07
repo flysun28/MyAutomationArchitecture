@@ -3,6 +3,7 @@ main.py
 __pycache__
 .idea
 test/
+log/
 case/report/
 case/htmlcov/
 case/.coverage

@@ -8,14 +8,15 @@ import time
 from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
+from lib.common.utils.globals import GlobalVar
 
 logger = Logger("voucher").get_logger()
 
 
 class VoucherInland:
     def __init__(self):
-        dubbo_info = get_dubbo_info("voucher")
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
+        server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.voucher.api.CouponBatchGrant")
+        self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, ratio=0,
                      maxCutAmount='0', count=1):

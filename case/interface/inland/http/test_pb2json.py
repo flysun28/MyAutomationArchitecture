@@ -16,12 +16,12 @@ def encjson():
 
 def test_service_info(encjson):
     encjson.header['X-Context']['country'] = 'CN'
-    encjson.header['X-Device-Info']['brand'] = 'OPPO'    
+    encjson.header['X-Device-Info']['brand'] = 'OPPO'
     result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
     print(result['data']['contactInfo'])
 
 
-# def test_wallet_package(encjson):
-#     result = encjson.post('/api/conf/v1/package-name', {})
-#     print(result['data']['walletPackageName'])
+def test_wallet_package(encjson):
+    result = encjson.post('/api/conf/v1/package-name', {})
+    print(result['data']['walletPackageName'])
     

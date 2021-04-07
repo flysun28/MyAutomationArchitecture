@@ -3,7 +3,8 @@
 # author:xy
 # datetime:2021/3/12 14:38
 # comment:
-env_id = '3'
+from lib.interface_biz.scarlett.alipay import ali_normal_pay_scarlet
+env_id = 'product'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -64,26 +65,25 @@ if __name__ == '__main__':
 #     refund = GrantRefund("2086100900")
 #     refund.refund_by_pay_req_id('RM202103251132432086100900173732')
 
-#     # http自动退款
-#     session = None
-#     env_id = 'product'
-#     if env_id == 'grey':
-#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-#     elif env_id == 'product':
-#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-#     refund = HttpRefund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     per_amount = 35
-#     total_amount = 35
-#     loop_num = int(total_amount/per_amount)
-#     for i in range(loop_num):
+    # http自动退款
+    session = None
+    env_id = 'product'
+    if env_id == 'grey':
+        session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+    elif env_id == 'product':
+        session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
+    refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+    per_amount = 0.01
+    total_amount = 0.01
+    loop_num = int(total_amount/per_amount)
+    for i in range(loop_num): 
+        while True:
+            response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
+            if response['resMsg'] == '退款失败':
+                time.sleep(1)
+            else:
+                break
 
-#         while True:
-#             response = refund.httpjson_refund('GC202103291303557330900240000', '5456925', per_amount, pay_req_id='')
-#             if response['resMsg'] == '退款失败':
-#                 time.sleep(1)
-#             else:
-#                 break
-#
 #     flag_coin = "1"
 #     if flag_coin == "1":
 #         # 发
@@ -92,7 +92,7 @@ if __name__ == '__main__':
 #         # 扣
 #         Nearme().nearme_add_subtract("5", "2076075925", 1)
 # 
-    flag = "4"
+#     flag = "4"
 #     if flag == "1":
 #         # 满减
 #         vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
@@ -112,7 +112,9 @@ if __name__ == '__main__':
 #         Voucher("oversea").checkVoucher(vou_info['batchId'])
 
     coda_pay("9500.00", "390", "", "IN202104040305312076075925776873", "1c3d4a652f744f340e7ad9471dbdcb5d")
+#     coda_pay("10000.00", "390", "", "IN202104020907322076075925462453", "1c3d4a652f744f340e7ad9471dbdcb5d")
     # print(SeparateDbTable("2086762813").get_order_db_table())
+
 #     base64_iv = 'VHl2UW1oWUlqM25lcEx1cw=='
 #     bytes_iv = base64.b64decode(base64_iv)
 #     aes_cbc = AES4J('8i_Dq8KHbCtGm9mjQWcx4A==', bytes_iv)
@@ -124,11 +126,11 @@ if __name__ == '__main__':
 #     print('aes解密之后：', y)    
 #     z = aes_cbc.encrypt('{"appKey": "2033","position": "result_page","nonce": "12345678","timestamp": "1612670150","partnerId": "5456925","bizId": "BN1022","sign": "bdf1aea649bddee826c0a36909a391b5"}')
 #     print(z)
-   
-    # pb2json 加密传输新协议
-    # encjson = EncryptJson(GlobalVar.URL_PAY_IN)
-    # result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
-    # print(result['data']['contactInfo'])
-    # result = encjson.post('/api/conf/v1/package-name', {})
-    # print(result['data']['walletPackageName'])
+
+#     # pb2json 加密传输新协议
+    encjson = EncryptJson(GlobalVar.URL_PAY_IN)
+    result = encjson.post('/api/conf/v1/service-base-info', {'partnerId': '2031'})
+    print(result['data']['contactInfo'])
+    result = encjson.post('/api/conf/v1/package-name', {})
+    print(result['data']['walletPackageName'])
 

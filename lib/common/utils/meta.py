@@ -19,7 +19,7 @@ class WithLogger(ABCMeta):
         if logger:
             cls.logger = logger            
         else:
-            module.logger = cls.logger = Logger(module_name).get_logger()
+            module.logger = cls.logger = Logger(module_name, sys.__stdout__).get_logger()
         return type.__call__(cls, *args, **kwargs)
     
 
