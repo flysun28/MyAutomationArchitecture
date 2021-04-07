@@ -4,11 +4,9 @@
 # datetime:2021/3/30 14:16
 # comment:
 from lib.common.session.dubbo.dubbo import DubRunner
-from lib.common.utils.env import get_dubbo_info
 from lib.common.utils.globals import GlobalVar
-
-dubbo_info = get_dubbo_info("activity", in_out="oversea")
-conn = DubRunner(dubbo_info[0], dubbo_info[1])
+server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.payactivity.api.facade.ActivityWhiteService")
+conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
 
 def create(flag):

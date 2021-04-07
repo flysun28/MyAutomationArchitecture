@@ -6,6 +6,7 @@
 from lib.common.logger.logging import Logger
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info
+from lib.common.utils.globals import GlobalVar
 from lib.common_biz.order_random import RandomOrder
 
 logger = Logger('oversea_cocoin').get_logger()
@@ -13,8 +14,8 @@ logger = Logger('oversea_cocoin').get_logger()
 
 class Coin:
     def __init__(self):
-        dubbo_info = get_dubbo_info("coin", in_out="oversea")
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
+        server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.cocoin.facade.CocoinAccountOperationFacade")
+        self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def cocoin_in_come(self, ssoid, country, amount):
         """

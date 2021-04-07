@@ -5,7 +5,6 @@
 # comment:
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.logger.logging import Logger
-from lib.common.utils.env import get_dubbo_info
 from lib.common.utils.globals import GlobalVar
 
 logger = Logger("mongo_order").get_logger()

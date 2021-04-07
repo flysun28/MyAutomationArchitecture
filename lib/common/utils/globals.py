@@ -35,6 +35,7 @@ class GlobalVar():
     HTTPJSON_GW_OUT = GlobalVarDescriptor(HttpJsonSession(URL_GW_OUT))
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
     ZK_CLIENT_IN = GlobalVarDescriptor(connect_zk())
+    ZK_CLIENT_OUT = GlobalVarDescriptor(connect_zk('oversea'))
 
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     if env_id == '2':
