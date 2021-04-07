@@ -24,7 +24,6 @@ from lib.interface_biz.http.refund import Refund
 from lib.common.algorithm.aes import AES4J
 from lib.common.exception.intf_exception import IgnoreException
 from lib.interface_biz.http.grant_voucher import HttpGrantMultiVous, VouInfo
-from lib.common.exception import WaitUntilTimeOut
 
 
 if __name__ == '__main__':
@@ -92,46 +91,51 @@ if __name__ == '__main__':
 #     result = encjson.post('/api/conf/v1/package-name', {})
 #     print(result['data']['walletPackageName'])
 
-    # grant multi voucher
-    case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
-    vouinfo = VouInfo(case_file_path)
-    vouinfo.create()
-    ssoids = '2086100900', '2076075925', '2086628989'
-    all_request_ids = {}
-    all_tasks = []
-    thr_num = int(1000/len(ssoids))
-    executor = ThreadPoolExecutor(max_workers=thr_num)
-    for ssoid in ssoids:
-        httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
-        [all_tasks.append(executor.submit(httpobj.post))
-                          for i in range(executor._max_workers)]
-        with WaitUntilTimeOut(len(httpobj.request_ids) == executor._max_workers, interval=0.5) as wt:
-            try:
-                wt.wait()
-            except:
-                print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
-                raise
-        for reqid in httpobj.request_ids:
-            all_request_ids.setdefault(ssoid, set()).add(reqid)
-    wait(all_tasks, return_when=ALL_COMPLETED)
-    exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
-    for ssoid in ssoids:
-        start = time.perf_counter()
-        table_id = SeparateDbTable(ssoid).get_vou_table()
-        sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-        while time.perf_counter() - start < 10:
-            count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
-            if count == exp_vou_count:            
-                break
-            else:
-                time.sleep(1)                
-        else:
-            print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
-            raise Exception('Exceed 10s, TIMEOUT!')
-        sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-        db_request_ids = set(chain(*(d['partnerOrder'] for d in GlobalVar.MYSQL_IN.select(sql))))
-        for reqid in all_request_ids[ssoid]:
-            with IgnoreException(None) as ign:
-                assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
+#     # grant multi voucher
+#     case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
+#     vouinfo = VouInfo(case_file_path)
+#     vouinfo.create()
+#     ssoids = '2086100900', '2076075925', '2086628989'
+#     all_request_ids = {}
+#     all_tasks = []
+#     thr_num = int(1000/len(ssoids))
+#     executor = ThreadPoolExecutor(max_workers=thr_num)
+#     for ssoid in ssoids:
+#         httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
+#         [all_tasks.append(executor.submit(httpobj.post))
+#                           for i in range(executor._max_workers)]
+#         start = time.perf_counter()        
+#         while time.perf_counter() - start < 10:
+#             if len(httpobj.request_ids) == executor._max_workers:
+#                 break
+#             else:
+#                 time.sleep(0.5)
+#         else:
+#             print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
+#             raise TimeoutError('Exceed %d, timeout occurred!!!' %self.timeout)
+#         for reqid in httpobj.request_ids:
+#             all_request_ids.setdefault(ssoid, set()).add(reqid)
+#     for ssoid, request_ids in all_request_ids.items():
+#         print(ssoid, request_ids)
+#     wait(all_tasks, return_when=ALL_COMPLETED)
+#     exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
+#     for ssoid in ssoids:
+#         start = time.perf_counter()
+#         table_id = SeparateDbTable(ssoid).get_vou_table()
+#         sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#         while time.perf_counter() - start < 10:
+#             count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
+#             if count == exp_vou_count:            
+#                 break
+#             else:
+#                 time.sleep(1)
+#         else:
+#             print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
+# #             raise Exception('Exceed 10s, TIMEOUT!')
+#         sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#         db_request_ids = set(chain(*(d['partnerOrder'] for d in GlobalVar.MYSQL_IN.select(sql))))
+#         for reqid in all_request_ids[ssoid]:
+#             with IgnoreException(None) as ign:
+#                 assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
     
         

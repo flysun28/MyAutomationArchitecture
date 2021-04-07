@@ -6,7 +6,7 @@
 from kazoo.client import KazooClient
 import urllib.parse
 import re
-from lib.common.utils.env import get_env_config
+from lib.common.utils.env import get_env_config, get_env_id
 from lib.common.utils.meta import WithLogger
 
 

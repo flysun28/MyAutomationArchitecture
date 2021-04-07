@@ -38,25 +38,28 @@ this_package = sys.modules[this_module.__package__]
 
 class WaitUntilTimeOut(metaclass=WithLogger):
     
-    def __init__(self, true_condition, timeout=10, interval=1):
-        if isinstance(true_condition, str):
-            self.condition = eval(true_condition)
+    def __init__(self, true_condition:str, timeout=10, interval=1):
+        assert isinstance(true_condition, str), '`true_condition` must be a string'
+        self.condition = true_condition
         self.timeout = timeout
         self.interval = interval
     
     def __enter__(self):
 #         self.wait()
         return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if any([exc_type, exc_val, exc_tb]):
+            self.logger.error(exc_val)
     
     def wait(self):
         start = time.perf_counter()
         while time.perf_counter() - start < self.timeout:
-            if self.condition:
+            if eval(self.condition):
                 break
             else:
                 time.sleep(self.interval)
         else:
             raise TimeoutError('Exceed %d, timeout occurred!!!' %self.timeout)
     
-
             
