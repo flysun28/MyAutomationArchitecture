@@ -54,7 +54,7 @@ class MySQLClient(metaclass=WithLogger):
         self.cur.execute(sql)  # 查询数据
         res = self.cur.fetchone()
         if res is None:
-            self.logger.info('查询数据为空')
+            self.logger.error('查询数据为空')
             return
         for k, v in res.items():
             res[k] = '' if v is None else v

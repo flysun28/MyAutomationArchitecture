@@ -30,13 +30,21 @@ class Logger():
         file_hdlr.setLevel(logging.DEBUG)
         console_hdlr = logging.StreamHandler(console_stream)
         console_hdlr.setLevel(logging.INFO)
+        # 过滤器：限制warning以下等级为标准输出打印
+        console_filter = logging.Filter(name)
+        console_filter.filter = lambda record: record.levelno < logging.WARNING
+        console_hdlr.addFilter(console_filter)
+        # warning及以上等级设置为标准错误打印
+        error_hdlr = logging._StderrHandler(level=logging.WARNING)
         # 设置日志格式，并应用到file和console中
 #         formatter = logging.Formatter('%(asctime)s-%(name)s-%(levelname)s-%(module)s-%(lineno)s: %(message)s')
         formatter = logging.Formatter('%(asctime)s-%(levelname)s-%(name)s-%(lineno)s-%(message)s')
         file_hdlr.setFormatter(formatter)
         console_hdlr.setFormatter(formatter)
+        error_hdlr.setFormatter(formatter)
         self.logger.addHandler(file_hdlr)
         self.logger.addHandler(console_hdlr)
+        self.logger.addHandler(error_hdlr)
         self.register()
 
     def get_logger(self):

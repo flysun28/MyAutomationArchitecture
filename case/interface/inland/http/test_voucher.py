@@ -103,7 +103,7 @@ class TestMultiVou():
         
     @pytest.mark.performance
     @pytest.mark.parametrize('tps', [100, 200, 300])
-    def test_performance(self, tps, httpobj, ssoids):
+    def test_performance(self, tps, ssoids):
         all_request_ids = {}
         all_tasks = []
         thr_num = int(tps/len(ssoids))
@@ -130,13 +130,13 @@ class TestMultiVou():
             table_id = SeparateDbTable(ssoid).get_vou_table()
             sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 2 MINUTE ORDER BY id DESC;" %(table_id, ssoid)
             count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
-            with IgnoreException(None) as ign:
+            with IgnoreException(None) as _:
                 assert count == exp_vou_count, \
                     'The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count)
             sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 2 MINUTE ORDER BY id DESC;" %(table_id, ssoid)
             db_request_ids = set(chain(*(d.values() for d in GlobalVar.MYSQL_IN.select(sql))))
             for reqid in all_request_ids[ssoid]:
-                with IgnoreException(None) as ign:
+                with IgnoreException(None) as _:
                     assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
     
 

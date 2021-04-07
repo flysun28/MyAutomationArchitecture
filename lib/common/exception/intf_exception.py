@@ -15,7 +15,7 @@ class ExcelException(Exception):
             return str(arg)
         elif isinstance(arg, str):
             return 'Excel file IOError: ' + arg
-        
+
 
 class CLIError(Exception):
     '''Generic exception to raise and log different fatal errors.'''
