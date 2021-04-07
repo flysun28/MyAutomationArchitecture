@@ -15,12 +15,14 @@ from lib.config.path import common_sql_path
 class Voucher:
     def __init__(self, in_out="inland"):
         self.in_out = in_out
-        dubbo_info = get_dubbo_info("voucher", self.in_out)
-        self.conn = DubRunner(dubbo_info[0], dubbo_info[1])
         if in_out == "inland":
             self.mysql = GlobalVar.MYSQL_IN
+            server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.voucher.api.CouponBatchGrant")
+            self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
         if in_out == "oversea":
             self.mysql_out = GlobalVar.MYSQL_OUT
+            server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.voucher.api.CouponBatchGrant")
+            self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def grantVoucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country="",
                      currency='', ratio=0, maxCutAmount='0'):
