@@ -55,8 +55,14 @@ class HttpJsonSession(metaclass=WithLogger):
             response = self.session.post(url=self.url, data=simplejson.dumps(data))
             self.logger.info("返回状态码：{}".format(response.status_code))
             assert response.status_code == 200, "返回状态码：{} != 200".format(response.status_code)
-            self.logger.info("返回结果：{}".format(response.json()))
-            return response.json()
+            result = response.json()
+            try:
+                if result['code'] != '0000':
+                    result['request'] = data
+            except KeyError:
+                pass
+            self.logger.info("返回结果：{}".format(result))
+            return result
         except RequestException as e:
             raise HttpJsonException(e) from None
         except AssertionError:

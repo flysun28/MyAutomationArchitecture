@@ -3,6 +3,7 @@
 # author:xy
 # datetime:2021/1/19 22:53
 # comment: 查询秘钥相关
+import sys
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.env import get_env_id
 from lib.common.utils.meta import WithLogger
@@ -76,13 +77,17 @@ class GetKey(metaclass=WithLogger):
         `oppopay_voucher`.`vou_appinfo`
         :return:
         """
+        existed = self.__SECRET_KEYS.get(self.partner_id)
+        if existed:
+            return existed
         try:
             sql_key = str(Config(common_sql_path).read_config('voucher', 'voucher_key')).format(self.partner_id)
             KEY = self.mysql.select_one(sql_key)["appkey"]
             self.logger.info("查询到优惠券秘钥信息：{}".format(KEY))
+            self.__SECRET_KEYS.setdefault(self.partner_id, KEY)
             return KEY
-        except Exception as e:
-            self.logger.info(e)
+        except:
+            self.logger.info(sys.exc_info()[1])
 
     def get_key_from_server_info(self):
         """

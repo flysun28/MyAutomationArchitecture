@@ -24,7 +24,7 @@ from lib.common.exception.http_exception import HttpJsonException
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 
 
-def grant_voucher(amount=1, vou_type=1, appId="2031"):
+def grant_voucher(amount=1, count=1, vou_type=1, appId="2031"):
     """
     默认消费券
     :param appId: 
@@ -39,16 +39,16 @@ def grant_voucher(amount=1, vou_type=1, appId="2031"):
         "blackScopeId": "",
         "checkName": "TEST_ACCOUNT",
         "configId": "",
-        "count": 1,
+        "count": count,
         "country": "CN",
         "currency": "CNY",
         "expireTime": end_time,
         "ext1": "",
         "ext2": "",
-        "maxAmount": 1,
+        "maxAmount": random.randint(amount, 10),
         "name": "AUTO_TEST",
         "partnerOrder": RandomOrder(28).business_order("AUTO"),
-        "ratio": "",
+        "ratio": round(random.random(), 2),
         "remark": "",
         "salePrice": 0,
         "scopeId": "7104f7bc23e445daba913a5a96a264ac",
@@ -70,6 +70,54 @@ def grant_voucher(amount=1, vou_type=1, appId="2031"):
     result = GlobalVar.HTTPJSON_IN.post("/voucher/grantSingle", data=req)
     # 返回优惠券id
     return result['vouIdList'][0]
+
+
+def grant_single_voucher(ssoid=GlobalVar.SSOID, vou_type=1, appId="2031", salt_key=''):
+    if vou_type == 5:
+        amount = round(random.uniform(100, 1000), 2)
+    else:
+        amount = round(random.uniform(1, 10), 2)
+    count = random.randint(1, 10)
+    max_amount = round(random.uniform(amount, amount+100), 2)
+    ratio = round(random.random(), 2)
+    req = {
+        "amount": amount,
+        "appId": appId,
+        "appSubName": "AUTO_TEST",
+        "blackScopeId": "",
+        "checkName": "TEST_ACCOUNT",
+        "configId": "",
+        "count": count,
+        "country": "CN",
+        "currency": "CNY",
+        "expireTime": end_time,
+        "ext1": "",
+        "ext2": "",
+        "maxAmount": max_amount,
+        "name": "AUTO_TEST",
+        "partnerOrder": RandomOrder(28).business_order("AUTO"),
+        "ratio": ratio,
+        "remark": "",
+        "salePrice": 0,
+        "scopeId": "7104f7bc23e445daba913a5a96a264ac",
+        "settleType": 1,
+        "sign": "",
+        "ssoid": ssoid,
+        "subScopeId": "",
+        "timezone": "",
+        "type": vou_type,
+        "useableTime": "2021-01-01 00:00:00"
+    }
+    if salt_key:
+        key = salt_key
+    elif is_get_key_from_db:
+        key = GetKey(req['appId']).get_key_from_voucher()
+    else:
+        key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + req['appId']]
+    req['sign'] = md5(Sign(req).join_asc_have_key("&key=") + key)
+    result = GlobalVar.HTTPJSON_IN.post("/voucher/grantSingle", data=req)
+    # 返回优惠券列表
+    return result['vouIdList']
 
 
 class VouInfo(with_metaclass(WithLogger)):
@@ -267,6 +315,9 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             raise HttpJsonException('异常测试期望失败-实际成功：%s' %req)
     
     def common_params_negative_test(self, **neg_kwargs):
+        '''
+        :param neg_kwargs: {k1:[v11,v12,v13...], k2:[v21,v22,v23...], ...}
+        '''
         self.init_req()
         self.logger.info('负向测试开始......')
         for idx, req in enumerate(self._make_neg_data(self.req, **neg_kwargs), 1):
@@ -290,6 +341,73 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             self._do_neg_test(req)
         self.logger.info('负向测试结束......')
 
+
+class HttpGrantSingleVous(HttpGrantMultiVous):
+    
+    def __init__(self, vou_type, ssoid=GlobalVar.SSOID, partner_id="2031"):
+        self.ssoid = ssoid
+        self.vou_type = vou_type
+        self.partner_id = partner_id
+        self.req = None
+        if is_get_key_from_db:
+            self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
+        else:
+            self.salt_key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + self.partner_id]
+    
+    def init_req(self):
+        if self.vou_type == 5:
+            amount = round(random.uniform(100, 1000), 2)
+        else:
+            amount = round(random.uniform(1, 10), 2)
+        count = random.randint(1, 10)
+        max_amount = round(random.uniform(amount, amount+100), 2)
+        ratio = round(random.uniform(0.01, 0.99), 2)
+        end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.req = {
+            "amount": amount,
+            "appId": self.partner_id,
+            "appSubName": "AUTO_TEST",
+            "blackScopeId": "",
+            "checkName": "TEST_ACCOUNT",
+            "configId": "",
+            "count": count,
+            "country": "CN",
+            "currency": "CNY",
+            "expireTime": end_time,
+            "ext1": "",
+            "ext2": "",
+            "maxAmount": max_amount,
+            "name": "AUTO_TEST",
+            "partnerOrder": RandomOrder(28).business_order("AUTO"),
+            "ratio": ratio,
+            "remark": "",
+            "salePrice": 0,
+            "scopeId": "7104f7bc23e445daba913a5a96a264ac",
+            "settleType": random.choice([0, 1]),
+            "sign": "",
+            "ssoid": self.ssoid,
+            "subScopeId": "",
+            "timezone": "",
+            "type": self.vou_type,
+            "useableTime": "2021-01-01 00:00:00"
+        }
+    
+    def make_sign(self, req):
+        req_ = req.copy()
+        orig_sign_str = Sign(req_).join_asc_have_key("&key=") + self.salt_key
+        del req_
+#         print('签名原串:', orig_sign_str)
+        req['sign'] = md5(orig_sign_str, to_upper=True)
+    
+    def post(self, data=None):
+        self.make_sign(self.req)
+        req = data if data else self.req
+        result = GlobalVar.HTTPJSON_IN.post("/voucher/grantSingle", data=req)
+        assert result['code'] == '0000', '返回参数 code != 0000'
+        assert result['msg'] == 'success', '返回参数 msg != success'
+        # 返回优惠券列表
+        return result['vouIdList']
+    
 
 if __name__ == '__main__':
     print(grant_voucher())
