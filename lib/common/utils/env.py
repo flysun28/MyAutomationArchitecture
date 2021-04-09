@@ -22,6 +22,7 @@ def get_env_id():
     env = dict(os.environ)
     env_id = env.get('CASE_ENV')
     if env_id:
+        set_global_env_id(env_id)
         return str(env_id)
     else:
         return glob_env_cfg.read_config('environment', 'value')

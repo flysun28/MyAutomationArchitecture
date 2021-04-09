@@ -55,7 +55,7 @@ class ProtoBuf(metaclass=WithLogger):
         result = getattr(self.file_name, method)()
         try:
             result.ParseFromString(response.content)
-            self.logger.info('返回的参数{}'.format(result))
+            self.logger.info('返回的参数：{}'.format(result))
         except Exception as e:
             self.logger.info("回参异常:{}".format(e))
         return result

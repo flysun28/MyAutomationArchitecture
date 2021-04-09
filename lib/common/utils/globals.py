@@ -32,8 +32,10 @@ class GlobalVar():
     HTTPJSON_GW_IN = GlobalVarDescriptor(HttpJsonSession(URL_GW_IN))
     HTTPJSON_GW_OUT = GlobalVarDescriptor(HttpJsonSession(URL_GW_OUT))
     HTTPJSON_SCARLET = GlobalVarDescriptor(HttpJsonSession(URL_PAY_SCARLETT))
-    ZK_CLIENT_IN = GlobalVarDescriptor(connect_zk())
-    ZK_CLIENT_OUT = GlobalVarDescriptor(connect_zk('oversea'))
+
+    if env_id.isdigit():
+        ZK_CLIENT_IN = GlobalVarDescriptor(connect_zk())
+        ZK_CLIENT_OUT = GlobalVarDescriptor(connect_zk('oversea'))
 
     MYSQL_IN = GlobalVarDescriptor(connect_mysql())
     if env_id == '2':
@@ -48,13 +50,13 @@ class GlobalVar():
     MYSQL_AUTO_TEST = connect_auto_test_special()
 
     SSOID = TOKEN = None
-    if env_id == "1" or env_id == "2" or env_id == "3":
+    if env_id.isdigit():
         # SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '{}'
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account").\
-            format(Config(global_env_path).read_config("test_count", "count"))
+            format(Config(global_env_path).read_config("test_account", "account"))
     if env_id == "grey" or env_id == "product":
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "product_select_account").\
-            format(Config(global_env_path).read_config("test_count", "count"))
+            format(Config(global_env_path).read_config("product_account", "account"))
     TEST_ACCOUNT = MYSQL_AUTO_TEST.select_one(sql_test_account)
     if TEST_ACCOUNT:
         SSOID = TEST_ACCOUNT['ssoid']

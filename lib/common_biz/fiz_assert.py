@@ -34,7 +34,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.assertEqual(order_info['original_amount'], original_amount)
             self.assertEqual(order_info['status'], "OK")
             self.assertEqual(order_info['kebi_spent'], kb_spent)
-            assert order_info['voucher_amount'] == vou_amount
+            assert order_info['voucher_amount'] == vou_amount, '%d != %d' %(order_info['voucher_amount'], vou_amount)
             # 海外与国内订单表不一致，海外无该字段
             if self.in_out == "inland":
                 assert order_info['voucher_id'] == vou_id

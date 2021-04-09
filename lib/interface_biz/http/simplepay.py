@@ -88,8 +88,8 @@ class SimplePay(metaclass=WithLogger):
         if result.payrequestid:
             return {"pay_req_id": result.payrequestid, "partner_order": req['basepay']['partnerorder']}
         else:
-            self.logger.error("接口返回异常")
-            raise HttpJsonException('%s接口返回异常', sys._getframe().f_code.co_name)
+            self.logger.error("接口返回异常：payrequestid为空")
+            raise HttpJsonException('%s接口返回异常：payrequestid为空', sys._getframe().f_code.co_name)
 
     def recharge_spend_amount_is_price(self, price):
         """
