@@ -20,6 +20,7 @@ from lib.common.utils.misc_utils import create_random_str, to_iterable_nested
 from openpyxl.reader.excel import load_workbook 
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.http_exception import HttpJsonException
+from lib.common_biz.find_database_table import SeparateDbTable
 
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -206,6 +207,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
     def __init__(self, vouinfo:VouInfo, ssoid, partner_id):
         self.vouinfo_obj = vouinfo
         self.ssoid = ssoid
+        self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
         self.partner_id = partner_id
         self.salt_key = ''
         self.req = {}
@@ -319,13 +321,15 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
         :param neg_kwargs: {k1:[v11,v12,v13...], k2:[v21,v22,v23...], ...}
         '''
         self.init_req()
+        sql = "SELECT max(id) as lastId FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' ORDER BY id DESC;" %(self.vou_table_id, self.ssoid)
+        max_id = GlobalVar.MYSQL_IN.select_one(sql)['lastId']
         self.logger.info('负向测试开始......')
         for idx, req in enumerate(self._make_neg_data(self.req, **neg_kwargs), 1):
             if idx == 1:
                 continue
             self._do_neg_test(req)
-        # 查询一分钟内是否产生了新记录，期望无
-        sql = "SELECT * FROM oppopay_voucher.vou_info_5 WHERE ssoid='2086100900' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 1 MINUTE ORDER BY id DESC;"
+        # 查询是否产生了新记录，期望无
+        sql = "SELECT * FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND id>%d ORDER BY id DESC;" %(self.vou_table_id, max_id, self.ssoid)
         result = GlobalVar.MYSQL_IN.select(sql)
         assert result == ()
         self.logger.info('负向测试结束......')
@@ -333,12 +337,18 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
     def vouinfolist_negative_test(self, **neg_kwargs):
         self.init_req()
         req = self.req.copy()
+        sql = "SELECT max(id) as lastId FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' ORDER BY id DESC;" %(self.vou_table_id, self.ssoid)
+        max_id = GlobalVar.MYSQL_IN.select_one(sql)['lastId']
         self.logger.info('负向测试开始......')
         for idx, vouinfolist in enumerate(self._make_neg_data(self.req['grantVoucherInfoList'][0], **neg_kwargs), 1):
             if idx == 1:
                 continue
             req['grantVoucherInfoList'][0] = vouinfolist
             self._do_neg_test(req)
+        # 查询是否产生了新记录，期望无
+        sql = "SELECT * FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND id>%d ORDER BY id DESC;" %(self.vou_table_id, max_id, self.ssoid)
+        result = GlobalVar.MYSQL_IN.select(sql)
+        assert result == ()
         self.logger.info('负向测试结束......')
 
 
@@ -346,6 +356,7 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
     
     def __init__(self, vou_type, ssoid=GlobalVar.SSOID, partner_id="2031"):
         self.ssoid = ssoid
+        self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
         self.vou_type = vou_type
         self.partner_id = partner_id
         self.req = None
