@@ -22,7 +22,6 @@ class Order:
         退款审批
         :return:
         """
-
         data_temp_1 = {"fileUrl": "",
                        "applyAccount": "80264408",
                        "batchNo": RandomOrder(32).random_num(),
