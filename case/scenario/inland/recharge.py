@@ -40,7 +40,13 @@ def recharge(amount, notify_amount):
     """
         【3】.调用查询结果接口
     """
-    assert str(queryResult(pay_req_id)) == "2002"
+    while True:
+        try:
+            assert str(queryResult(pay_req_id)) == "2002"
+        except:
+            time.sleep(0.5)
+        else:
+            break
     """
         【4】. 检查充值成功后，可币余额是否正确
     """
