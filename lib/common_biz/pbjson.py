@@ -31,6 +31,8 @@
 
 import simplejson
 from google.protobuf.descriptor import FieldDescriptor as FD
+from itertools import chain
+
 
 class ConvertException(Exception):
     pass
@@ -78,7 +80,7 @@ def dict2pb(cls, adict, strict=False):
 
 def pb2dict(obj):
     """
-    Takes a ProtoBuf Message obj and convertes it to a dict.
+    Takes a ProtoBuf Message obj and converts it to a dict.
     """
     adict = {}
     if not obj.IsInitialized():
@@ -114,5 +116,5 @@ def pb2json(obj):
     """
     Takes a ProtoBuf Message obj and convertes it to a json string.
     """
-    return simplejson.dumps(pb2dict(obj), sort_keys=True, indent=4)
+    return simplejson.dumps(pb2dict(obj), sort_keys=True, indent=2)
 

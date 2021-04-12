@@ -117,7 +117,8 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
         【4】. 检查可币余额是否正确
     """
     time.sleep(2)
-    assert query_account(GlobalVar.SSOID) == round(decimal.Decimal(0), 4)
+    balance = query_account(GlobalVar.SSOID)
+    assert balance == round(decimal.Decimal(0), 4), (balance, round(decimal.Decimal(0), 4))
     """
         【5】.检查订单表记录是否正确
     """
@@ -147,5 +148,5 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
 
 
 if __name__ == '__main__':
-    rs_only_rmb(1, 1)
-    #rs_with_kb_rmb(1, 1, 1)
+#     rs_only_rmb(1, 1)
+    rs_with_kb_rmb(1, 1, 1)

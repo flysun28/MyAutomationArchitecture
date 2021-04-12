@@ -89,27 +89,36 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     diffs = ()
     for k2, v2 in dict2.items():
         v1 = dict1[k2]
-        if k2 == 'payrequestid' and not v1.startswith(v2) or \
-            v1 != v2:
-            diffs += 'Key %s: %s != %s' %(k2, v2, v1)
+        if k2 == 'payrequestid' and not v1.startswith(v2):
+            diffs += 'Key %s: %s != %s' %(k2, v2, v1),
     diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
     if diffs:
         raise AssertionError(diff_value_msg)
     
 
-def make_pbsrc_to_interface_map(region:str='inland'):
-    '''
-    Extract the interface name from PB src file name 
-    :param region:
-    '''
-    region = 'native' if region == 'inland' else region
-    pbsrc_path = os.path.join(lib_dir, 'pb_src', 'python_'+region)    
-#     for file in 
-
-
 def create_random_str(length:int):
     '''
     仅支持字母数字，长度小于等于62（26*2+10）
     '''
-    return ''.join(random.sample(string.ascii_letters + string.digits, length))    
+    return ''.join(random.sample(string.ascii_letters + string.digits, length))
+
+
+def get_letter_seqno(letter):
+    '''
+    sequence No is 1 based
+    '''
+    return string.ascii_uppercase.find(letter) + 1
+
+
+def flatten_nested_dict(dictionary:dict):
+    '''
+    将嵌套字典的values更新到最外层
+    '''
+    res = {}
+    for k, v in dictionary.items():
+        if isinstance(v, dict):
+            res.update(v)
+        else:
+            res[k] = v
+    return res
 

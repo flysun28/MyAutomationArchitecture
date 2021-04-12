@@ -46,7 +46,7 @@ def grant_voucher(amount=1, count=1, vou_type=1, appId="2031"):
         "expireTime": end_time,
         "ext1": "",
         "ext2": "",
-        "maxAmount": random.randint(amount, 10),
+        "maxAmount": int(amount)+1,
         "name": "AUTO_TEST",
         "partnerOrder": RandomOrder(28).business_order("AUTO"),
         "ratio": round(random.random(), 2),
@@ -411,6 +411,7 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
         req['sign'] = md5(orig_sign_str, to_upper=True)
     
     def post(self, data=None):
+        self.init_req()
         self.make_sign(self.req)
         req = data if data else self.req
         result = GlobalVar.HTTPJSON_IN.post("/voucher/grantSingle", data=req)

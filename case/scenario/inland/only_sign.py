@@ -33,7 +33,7 @@ def only_sign():
     """
     【3】. 查询支付结果
     """
-    assert str(queryResult(sign_request_id, "SIGN")) == "0000"
+    assert str(queryResult(sign_request_id, "SIGN", pass_type='direct')) == "0000"
     """
     【4】.检查order表信息，无记录
     """

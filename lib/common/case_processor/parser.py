@@ -73,5 +73,6 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
         for cell in fd_row:
             if cell.value == '实际结果':
                 self._actual_coord = cell.coordinate
+                print('实际结果坐标:', self.actual_coord)
                 break
         

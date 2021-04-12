@@ -39,7 +39,7 @@ def sign_pay(amount, notify_amount):
     """
         【3】. 查询支付结果
     """
-    assert str(queryResult(order_info["pay_req_id"])) == "2002"
+    assert str(queryResult(order_info["pay_req_id"], query_type="PAY", pass_type="direct")) == "2002"
     """
         【4】. 查询order表记录是否正确
     """

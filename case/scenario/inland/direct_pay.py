@@ -31,7 +31,7 @@ def direct_pay(amount, notify_amount):
     """
     【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"], "direct")) == "2002"
+    assert str(queryResult(order["pay_req_id"], pass_type="direct")) == "2002"
     if is_assert():
         """
         【3】. 检查order_info表信息是否正确

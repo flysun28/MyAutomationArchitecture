@@ -31,7 +31,7 @@ def no_login(amount, notify_amount):
     """
         【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"], "no_login")) == "2002"
+    assert str(queryResult(order["pay_req_id"], pass_type="no_login")) == "2002"
     if is_assert():
         """
             【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理

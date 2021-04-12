@@ -108,17 +108,17 @@ class TestMultiVou():
             start = time.perf_counter()
             [all_tasks.append(executor.submit(httpobj.post))
                               for i in range(executor._max_workers)]
-            while time.perf_counter() - start < 10:
-                # 为防止submit中启动线程速度过快，而导致request_ids并未获取到，加此循环校验等待
-                if len(httpobj.request_ids) < executor._max_workers:
-                    time.sleep(0.5)
-                else:
-                    break
-            else:
-                print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
-                raise Exception('Exceed 10s, TIMEOUT!')
-            for reqid in httpobj.request_ids:
-                all_request_ids.setdefault(ssoid, set()).add(reqid)
+#             while time.perf_counter() - start < 10:
+#                 # 为防止submit中启动线程速度过快，而导致request_ids并未获取到，加此循环校验等待
+#                 if len(httpobj.request_ids) < executor._max_workers:
+#                     time.sleep(0.5)
+#                 else:
+#                     break
+#             else:
+#                 print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
+#                 raise Exception('Exceed 10s, TIMEOUT!')
+#             for reqid in httpobj.request_ids:
+#                 all_request_ids.setdefault(ssoid, set()).add(reqid)
         wait(all_tasks, return_when=ALL_COMPLETED)
 #         exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
 #         for ssoid in ssoids:
