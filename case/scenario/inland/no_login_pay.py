@@ -33,8 +33,17 @@ def no_login(amount, notify_amount):
     """
         【2】. 调用查询结果接口
     """
-    with WaitUntilTimeOut('queryResult(order["pay_req_id"], pass_type="no_login") == "2002"', timeout=10, interval=1) as wt:
-        wt.wait()
+    start = time.perf_counter()
+    while time.perf_counter() - start < 5:
+        try:
+            query_res = queryResult(order["pay_req_id"], pass_type="no_login")
+            assert query_res == '2002', '%s != 2002' %query_res
+        except AssertionError as e:
+            time.sleep(0.5)
+        else:
+            break
+    else:
+        raise TimeoutError('%s, exceed 5s!' %e)
 #     assert queryResult(order["pay_req_id"], pass_type="no_login") == "2002"
     if is_assert():
         """

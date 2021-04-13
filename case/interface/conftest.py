@@ -6,7 +6,7 @@ import pytest
 from lib.common.utils.env import set_global_env_id
 
 partner_ids = '2031', '5456925'
-env_id = 3
+env_id = '3'
 
 
 def pytest_configure(config):

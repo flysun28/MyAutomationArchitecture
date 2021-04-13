@@ -87,7 +87,7 @@ class GetKey(metaclass=WithLogger):
             self.__SECRET_KEYS.setdefault(self.partner_id, KEY)
             return KEY
         except:
-            self.logger.info(sys.exc_info()[1])
+            self.logger.error(sys.exc_info()[1])
 
     def get_key_from_server_info(self):
         """

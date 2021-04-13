@@ -58,24 +58,24 @@ if __name__ == '__main__':
 #     refund = GrantRefund("2086100900")
 #     refund.refund_by_pay_req_id('RM202103251132432086100900173732')
 
-    # http自动退款
-    # session = None
-    # env_id = 'product'
-    # if env_id == 'grey':
-    #     session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-    # elif env_id == 'product':
-    #     session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-    # refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-    # per_amount = 0.01
-    # total_amount = 0.01
-    # loop_num = int(total_amount/per_amount)
-    # for i in range(loop_num):
-    #     while True:
-    #         response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
-    #         if response['resMsg'] == '退款失败':
-    #             time.sleep(1)
-    #         else:
-    #             break
+#     # http自动退款
+#     session = None
+#     env_id = 'product'
+#     if env_id == 'grey':
+#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+#     elif env_id == 'product':
+#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
+#     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+#     per_amount = 
+#     total_amount = 
+#     loop_num = int(total_amount/per_amount)
+#     for i in range(loop_num):
+#         while True:
+#             response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
+#             if response['resMsg'] == '退款失败':
+#                 time.sleep(1)
+#             else:
+#                 break
 
 #     flag_coin = "1"
 #     if flag_coin == "1":
@@ -188,18 +188,19 @@ if __name__ == '__main__':
 #                     with IgnoreException(None) as ign:
 #                         assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
         
-#         # grant single voucher
-#         tps = 800
-#         ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
-#         all_tasks = []
-#         thr_num = int(tps/len(ssoids))
-#         executor = ThreadPoolExecutor(max_workers=thr_num)
-#         vou_types = [1, 2, 5, 7, 8]
-#         random.shuffle(vou_types)
-#         for ssoid, voutype in zip(*extend_to_longest([ssoids, vou_types])):
-#             httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id='2031')
-#             [all_tasks.append(executor.submit(httpobj.post))
-#                               for i in range(executor._max_workers)]
-#         wait(all_tasks, return_when=ALL_COMPLETED)
+#     # grant single voucher
+#     tps = 1
+# #     ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
+#     ssoids = '692039187',
+#     all_tasks = []
+#     thr_num = int(tps/len(ssoids))
+#     executor = ThreadPoolExecutor(max_workers=thr_num)
+#     vou_types = [1, 2, 5, 7, 8]
+#     random.shuffle(vou_types)
+#     for ssoid, voutype in zip(*extend_to_longest([ssoids, vou_types])):
+#         httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id='5456925')
+#         [all_tasks.append(executor.submit(httpobj.post))
+#                           for i in range(executor._max_workers)]
+#     wait(all_tasks, return_when=ALL_COMPLETED)
     
 

@@ -11,7 +11,6 @@ import time
 from _functools import partial
 from .http_exception import *
 from .intf_exception import *
-from lib.interface_biz.http.query_result import queryResult
 
 
 class _Anonymous(): pass
@@ -39,12 +38,11 @@ this_package = sys.modules[this_module.__package__]
 
 class WaitUntilTimeOut(metaclass=WithLogger):
     
-    def __init__(self, true_condition:str, timeout=10, interval=1):
-        assert isinstance(true_condition, str), '`true_condition` must be a string'
-        self.condition = true_condition
+    def __init__(self, condition_expr, timeout=10, interval=1):
+        self.condition = condition_expr if isinstance(condition_expr, str) else str(condition_expr)
         self.left, self.right = re.search('(.*?)[<>=!]+(.*)', self.condition).groups()
         self.timeout = timeout
-        self.interval = interval
+        self.interval = interval        
     
     def __enter__(self):
 #         self.wait()

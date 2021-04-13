@@ -13,6 +13,7 @@ from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import expend_pay_sign_string
 from lib.interface_biz.http.pay_pass import Pass
 from lib.pb_src.python_native import ExpendPayPb_pb2
+import time
 
 token = GlobalVar.TOKEN
 key = Config(key_path).read_config("expend_pay", "key_2031")
@@ -137,7 +138,15 @@ class ExpendPay(metaclass=WithLogger):
         req['sign'] = rsa(string_expend_pay, key)
         response = ProtoBuf(ExpendPayPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/expendpay', 'request', req,
                                                     flag=0)
-        result = ProtoBuf(ExpendPayPb_pb2).parser('Result', response)
+        start = time.perf_counter()
+        while time.perf_counter() - start < 5:
+            result = ProtoBuf(ExpendPayPb_pb2).parser('Result', response)
+            if str(result.baseresult.code) in ('2002', '0000'):
+                break
+            else:
+                time.sleep(0.5)
+        else:
+            raise TimeoutError('%s not in [2002, 0000], exceed 5s!' %result.baseresult.code)
         return {"code": result.baseresult.code, "partner_order": req['partnerOrder']}
 
 

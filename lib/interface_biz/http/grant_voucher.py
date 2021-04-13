@@ -21,6 +21,7 @@ from openpyxl.reader.excel import load_workbook
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.http_exception import HttpJsonException
 from lib.common_biz.find_database_table import SeparateDbTable
+from lib.common.db_operation.mysql_operation import is_connect_mysql
 
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -204,18 +205,21 @@ class VouInfo(with_metaclass(WithLogger)):
 
 
 class HttpGrantMultiVous(with_metaclass(WithLogger)):
+    partner_private_key = {'5456925': 'cm7dld743nre523kk439rd4a2f2aw3fku1'}
     
-    def __init__(self, vouinfo:VouInfo, ssoid, partner_id):
+    def __init__(self, vouinfo:VouInfo, ssoid, partner_id='5456925'):
         self.vouinfo_obj = vouinfo
         self.ssoid = ssoid
-        self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
+        if is_connect_mysql:
+            self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
         self.partner_id = partner_id
         self.salt_key = ''
         self.req = {}
-        if is_get_key_from_db:
+        if is_get_key_from_db():
             self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
         else:
-            self.salt_key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + self.partner_id]
+            self.salt_key = self.partner_private_key[self.partner_id]
+            self.logger.info('查询到优惠券秘钥信息: %s' %self.salt_key)
         self.request_ids = set()
         self.lock = threading.Lock()
     
@@ -257,7 +261,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             data = self.req
         with self.lock:
             self.request_ids.add(req_id)
-        result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=data)        
+        result = GlobalVar.HTTPJSON_IN.post("/voucher/grantMultiVoucher", data=data)
         self.validate_response(result)
     
     def init_req(self):
@@ -355,16 +359,18 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
 
 class HttpGrantSingleVous(HttpGrantMultiVous):
     
-    def __init__(self, vou_type, ssoid=GlobalVar.SSOID, partner_id="2031"):
+    def __init__(self, vou_type, ssoid=GlobalVar.SSOID, partner_id="5456925"):
         self.ssoid = ssoid
-        self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
+        if is_connect_mysql:
+            self.vou_table_id = SeparateDbTable(self.ssoid).get_vou_table()
         self.vou_type = vou_type
         self.partner_id = partner_id
         self.req = None
-        if is_get_key_from_db:
+        if is_get_key_from_db():            
             self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
-        else:
-            self.salt_key = Config(key_path).as_dict('oversea_vou_app_info')["key_" + self.partner_id]
+        else:            
+            self.salt_key = self.partner_private_key[self.partner_id]
+            self.logger.info('查询到优惠券秘钥信息: %s' %self.salt_key)
     
     def init_req(self):
         if self.vou_type == 5:

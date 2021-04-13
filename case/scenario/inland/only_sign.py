@@ -1,16 +1,10 @@
-#!/usr/bin/env Python3
-# -*- encoding:utf-8 *-*
-# author:xy
-# datetime:2021/1/19 23:03
-# comment:
+import time
 from case.scenario.common_req import ONLY_SIGN
 from lib.common_biz.biz_db_operate import get_contract_code, update_sign_status
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
-from lib.common.exception import WaitUntilTimeOut
-
 
 req = ONLY_SIGN
 
@@ -34,8 +28,17 @@ def only_sign():
     """
     【3】. 查询支付结果
     """
-    with WaitUntilTimeOut('queryResult(sign_request_id, "SIGN", pass_type="direct") == "0000"', timeout=10, interval=1) as wt:
-        wt.wait()
+    start = time.perf_counter()
+    while time.perf_counter() - start < 5:
+        try:
+            query_res = queryResult(sign_request_id, "SIGN", pass_type="direct")
+            assert query_res == '0000', '%s != 0000' %query_res
+        except AssertionError as e:
+            time.sleep(0.5)
+        else:
+            break
+    else:
+        raise TimeoutError('%s, exceed 5s!' %e)
     """
     【4】.检查order表信息，无记录
     """
