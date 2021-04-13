@@ -174,6 +174,7 @@ class VouInfo(with_metaclass(WithLogger)):
         grantCount: 为0时，会从vou_info中remove
         '''
         self.vou_info = [d for d in self.vou_info if d['grantCount']]
+        print(self.vou_info)
         for d in self.vou_info:
             d['vouType'] = str(d['vouType'])
             if not d['vouName']:

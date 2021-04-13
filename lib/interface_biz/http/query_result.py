@@ -7,8 +7,6 @@ from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.utils.globals import HTTPJSON_IN
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_native import QueryResultPb_pb2
-import sys
-from lib.common.exception import WaitUntilTimeOut
 
 
 def queryResult(request_id, query_type="PAY", pass_type="expend"):
