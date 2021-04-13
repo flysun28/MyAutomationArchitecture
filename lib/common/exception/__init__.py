@@ -6,6 +6,7 @@
 
 import sys
 import os
+import re
 import time
 from _functools import partial
 from .http_exception import *
@@ -41,6 +42,7 @@ class WaitUntilTimeOut(metaclass=WithLogger):
     def __init__(self, true_condition:str, timeout=10, interval=1):
         assert isinstance(true_condition, str), '`true_condition` must be a string'
         self.condition = true_condition
+        self.left, self.right = re.search('(.*?)[<>=!]+(.*)', self.condition).groups()
         self.timeout = timeout
         self.interval = interval
     
@@ -60,6 +62,6 @@ class WaitUntilTimeOut(metaclass=WithLogger):
             else:
                 time.sleep(self.interval)
         else:
-            raise TimeoutError('Exceed %d, timeout occurred!!!' %self.timeout)
+            raise TimeoutError('%s Exceed %d, timeout occurred!!!' %self.timeout)
     
             

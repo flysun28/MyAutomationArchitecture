@@ -13,10 +13,10 @@ from lib.config.path import log_dir
 class Logger():
     logger_names = {}
     
-    def __init__(self, name, console_stream=sys.__stderr__):
+    def __init__(self, name, console_stream=sys.__stdout__):
         """
         :param name: 日志打印名称
-        :param console_stream: 日志输出流文件，默认为标准错误，可以修改为sys.__stdout__
+        :param console_stream: 日志输出流文件，默认为标准输出，可以修改为sys.__stderr__
         """
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)

@@ -12,6 +12,7 @@ from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.expend_pay import ExpendPay
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.grant_voucher import grant_voucher
+from lib.common.exception import WaitUntilTimeOut
 
 req = EXPEND_PAY
 req_vou = VOU_INLAND
@@ -41,7 +42,8 @@ def spend_with_kb_vou(amount):
     result = ExpendPay(int(amount + int(req_vou.vouAmount)), req.partner_id, req.interface_version,
                        req.app_version, req.notify_url).kb_voucher_spend(vou_id, req_vou.vouType,
                                                                          int(req_vou.vouAmount))
-    assert result['code'] == "0000"
+    with WaitUntilTimeOut('result["code"] == "0000"') as wt:
+        wt.wait()
     """
         【4】. 检查可币与优惠券消费信息是否正确
     """

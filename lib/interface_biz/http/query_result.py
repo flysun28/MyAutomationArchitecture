@@ -8,6 +8,7 @@ from lib.common.utils.globals import HTTPJSON_IN
 from lib.common_biz.replace_parameter import ReplaceParams
 from lib.pb_src.python_native import QueryResultPb_pb2
 import sys
+from lib.common.exception import WaitUntilTimeOut
 
 
 def queryResult(request_id, query_type="PAY", pass_type="expend"):
@@ -36,8 +37,7 @@ def queryResult(request_id, query_type="PAY", pass_type="expend"):
     ReplaceParams(req).replace_native(pass_type)
     response = ProtoBuf(QueryResultPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/queryresult', 'Request', req, flag=0)
     result = ProtoBuf(QueryResultPb_pb2).parser('Result', response)
-    print('Query result:', result)
-    return result.baseresult.code
+    return str(result.baseresult.code)
 
 
 if __name__ == '__main__':

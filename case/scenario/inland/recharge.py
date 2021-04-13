@@ -13,6 +13,7 @@ from lib.common_biz.fiz_assert import FizAssert, is_assert
 from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
+from lib.common.exception import WaitUntilTimeOut
 
 logger = Logger('recharge').get_logger()
 
@@ -39,14 +40,9 @@ def recharge(amount, notify_amount):
     choose_scarlett(notify_amount, req.pay_channel, pay_req_id, partner_id=req.partner_id)
     """
         【3】.调用查询结果接口
-    """
-    while True:
-        try:
-            assert str(queryResult(pay_req_id)) == "2002"
-        except:
-            time.sleep(0.5)
-        else:
-            break
+    """    
+    with WaitUntilTimeOut('str(queryResult(pay_req_id)) == "2002"') as wt:
+        wt.wait()
     """
         【4】. 检查充值成功后，可币余额是否正确
     """

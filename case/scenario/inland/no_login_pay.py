@@ -3,12 +3,14 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
+import time
 from case.scenario.common_req import NO_LOGIN_PAY
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.skip_pay import skip_pay
+from lib.common.exception import WaitUntilTimeOut
 
 
 logger = Logger('on_login_pay').get_logger()
@@ -31,7 +33,9 @@ def no_login(amount, notify_amount):
     """
         【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"], pass_type="no_login")) == "2002"
+    with WaitUntilTimeOut('queryResult(order["pay_req_id"], pass_type="no_login") == "2002"', timeout=10, interval=1) as wt:
+        wt.wait()
+#     assert queryResult(order["pay_req_id"], pass_type="no_login") == "2002"
     if is_assert():
         """
             【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理

@@ -16,6 +16,7 @@ from lib.interface_biz.http.gateway_query_account import query_account
 from lib.interface_biz.http.grant_voucher import grant_voucher
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
+from lib.common.exception import WaitUntilTimeOut
 
 logger = Logger('recharge_spend').get_logger()
 req = RECHARGE_SPEND_PAY
@@ -44,7 +45,8 @@ def rs_only_rmb(amount, notify_amount):
     """
         【3】.调用查询结果接口
     """
-    assert str(queryResult(order_info['pay_req_id'])) == "2002"
+    with WaitUntilTimeOut('str(queryResult(order_info["pay_req_id"])) == "2002"') as wt:
+        wt.wait()
     """
         【4】. 检查可币余额是否正确
     """

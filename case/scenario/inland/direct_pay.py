@@ -9,6 +9,7 @@ from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
 from case.scenario.common_req import DIRECT_PAY
+from lib.common.exception import WaitUntilTimeOut
 
 logger = Logger('direct_pay').get_logger()
 
@@ -31,7 +32,8 @@ def direct_pay(amount, notify_amount):
     """
     【2】. 调用查询结果接口
     """
-    assert str(queryResult(order["pay_req_id"], pass_type="direct")) == "2002"
+    with WaitUntilTimeOut('queryResult(order["pay_req_id"], pass_type="direct") == "2002"') as wt:
+        wt.wait()
     if is_assert():
         """
         【3】. 检查order_info表信息是否正确

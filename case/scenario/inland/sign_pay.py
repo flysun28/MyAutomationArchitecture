@@ -9,6 +9,7 @@ from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.interface_biz.http.query_result import queryResult
+from lib.common.exception import WaitUntilTimeOut
 
 
 req = SIGN_PAY
@@ -39,7 +40,8 @@ def sign_pay(amount, notify_amount):
     """
         【3】. 查询支付结果
     """
-    assert str(queryResult(order_info["pay_req_id"], query_type="PAY", pass_type="direct")) == "2002"
+    with WaitUntilTimeOut('queryResult(order_info["pay_req_id"], query_type="PAY", pass_type="direct")) == "2002"') as wt:
+        wt.wait()
     """
         【4】. 查询order表记录是否正确
     """

@@ -26,6 +26,7 @@ class ProtoBuf(metaclass=WithLogger):
         :param flag: 是否需要加随机字节标志位置
         :return:
         """
+        self.logger.info('URL: %s', url)
         NAME = pbjson.dict2pb(getattr(self.file_name, request), case)
         try:
             src_data = NAME.SerializeToString()
