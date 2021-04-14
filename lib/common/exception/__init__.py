@@ -11,7 +11,6 @@ import time
 from _functools import partial
 from .http_exception import *
 from .intf_exception import *
-from lib.interface_biz.http.query_result import queryResult
 
 
 class _Anonymous(): pass
