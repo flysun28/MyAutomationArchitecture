@@ -12,6 +12,7 @@ from lib.common.utils.globals import GlobalVar
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
+import time
 logger = Logger('FizAssert').get_logger()
 
 
@@ -109,7 +110,7 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.logger.error("tb_payment订单表信息记录正确")
             raise e
 
-    def assert_notify(self, request_id):
+    def assert_notify(self, request_id, retry=10):
         """
         :param request_id: 商户订单号
         select * from db_pay_notify_1.notify_info where request_id = `request_id`
@@ -118,14 +119,19 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
         sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)        
         notify_info = self.mysql.select_one(sql_notify)
         self.logger.info("通知表信息详情：{}".format(notify_info))
-        try:
-            self.assertIsNotNone(notify_info)
-            self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
-            if notify_info['notify_response'] == "OK":
-                self.assertEqual(notify_info['notify_count'], 1)
-            self.logger.info("通知成功")
-        except AssertionError as e:
-            self.logger.info("通知异常")
+        while retry > 0:
+            retry -= 1
+            try:
+                self.assertIsNotNone(notify_info)
+                self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
+                if notify_info['notify_response'] == "OK":
+                    self.assertEqual(notify_info['notify_count'], 1)
+                self.logger.info("通知成功")
+                break
+            except AssertionError as e:
+                self.logger.error("通知异常: %s，尝试重试10次，还剩%d次", e, retry)                
+                time.sleep(0.5)
+        else:
             raise e
 
     def assert_auto_renew_sign_info(self, ssoid, pay_type, partner_code="2031", renew_product_code="20310001"):
