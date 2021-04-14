@@ -45,8 +45,17 @@ def rs_only_rmb(amount, notify_amount):
     """
         【3】.调用查询结果接口
     """
-    with WaitUntilTimeOut('str(queryResult(order_info["pay_req_id"])) == "2002"') as wt:
-        wt.wait()
+    start = time.perf_counter()
+    while time.perf_counter() - start < 5:
+        try:
+            query_res = queryResult(order_info["pay_req_id"])
+            assert query_res == '2002', '%s != 2002' %query_res
+        except AssertionError as e:
+            time.sleep(0.5)
+        else:
+            break
+    else:
+        raise TimeoutError('%s, exceed 5s!' %e)
     """
         【4】. 检查可币余额是否正确
     """

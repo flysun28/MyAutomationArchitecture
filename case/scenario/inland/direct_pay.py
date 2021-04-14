@@ -3,6 +3,7 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
+import time
 from lib.common.logger.logging import Logger
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
@@ -32,8 +33,17 @@ def direct_pay(amount, notify_amount):
     """
     【2】. 调用查询结果接口
     """
-    with WaitUntilTimeOut('queryResult(order["pay_req_id"], pass_type="direct") == "2002"') as wt:
-        wt.wait()
+    start = time.perf_counter()
+    while time.perf_counter() - start < 5:
+        try:
+            query_res = queryResult(order["pay_req_id"], pass_type="direct")
+            assert query_res == '2002', '%s != 2002' %query_res
+        except AssertionError as e:
+            time.sleep(0.5)
+        else:
+            break
+    else:
+        raise TimeoutError('%s, exceed 5s!' %e)
     if is_assert():
         """
         【3】. 检查order_info表信息是否正确

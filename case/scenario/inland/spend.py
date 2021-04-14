@@ -3,7 +3,7 @@
 # author:xy
 # datetime:2021/1/19 23:03
 # comment:
-import random
+import time
 from case.scenario.common_req import EXPEND_PAY, VOU_INLAND
 from case.scenario.inland.recharge import recharge
 from lib.common.utils.globals import GlobalVar
@@ -39,11 +39,11 @@ def spend_with_kb_vou(amount):
     """
         【3】. 调用纯消费接口
     """
+    
     result = ExpendPay(int(amount + int(req_vou.vouAmount)), req.partner_id, req.interface_version,
                        req.app_version, req.notify_url).kb_voucher_spend(vou_id, req_vou.vouType,
                                                                          int(req_vou.vouAmount))
-    with WaitUntilTimeOut('result["code"] == "0000"') as wt:
-        wt.wait()
+
     """
         【4】. 检查可币与优惠券消费信息是否正确
     """
