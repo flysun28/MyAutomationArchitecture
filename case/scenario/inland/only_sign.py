@@ -56,7 +56,7 @@ def only_sign():
     """
     【8】.检查表notify_info信息
     """
-    FizAssert().assert_notify(sign_order_info["partner_code"])
+    FizAssert().assert_notify(sign_order_info["partner_code"], 0, pay_type="sign")
 
 
 if __name__ == '__main__':

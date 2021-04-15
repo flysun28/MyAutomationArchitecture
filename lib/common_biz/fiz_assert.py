@@ -110,8 +110,11 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             self.logger.error("tb_payment订单表信息记录正确")
             raise e
 
-    def assert_notify(self, request_id, retry=10):
+    def assert_notify(self, request_id, price, pay_type="pay", retry=10):
         """
+        :param retry:
+        :param price:
+        :param pay_type: 支付类型 ： 支付 签约
         :param request_id: 商户订单号
         select * from db_pay_notify_1.notify_info where request_id = `request_id`
         :return:
@@ -126,6 +129,10 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
                 self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
                 if notify_info['notify_response'] == "OK":
                     self.assertEqual(notify_info['notify_count'], 1)
+                    if pay_type == "pay":
+                        notify_price = int(eval(eval(notify_info['notity_detail'])['reqContent'])['price'])
+                        self.logger.info("通知金额：{}".format(notify_price))
+                        self.assertEqual(notify_price, price)
                 self.logger.info("通知成功")
                 break
             except AssertionError as e:

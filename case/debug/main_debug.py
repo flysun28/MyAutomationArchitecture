@@ -1,4 +1,7 @@
 # coding=utf-8
+from lib.common.db_operation.redis_operation import connect_redis
+from lib.common.utils.descriptors import GlobalVarDescriptor
+
 env_id = 'product'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
@@ -203,4 +206,6 @@ if __name__ == '__main__':
 #                           for i in range(executor._max_workers)]
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
+    rds = GlobalVarDescriptor(connect_redis())
+    rds.set("name","xiaoyao1")
 

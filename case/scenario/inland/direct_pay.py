@@ -37,8 +37,9 @@ def direct_pay(amount, notify_amount):
     while time.perf_counter() - start < 5:
         try:
             query_res = queryResult(order["pay_req_id"], pass_type="direct")
-            assert query_res == '2002', '%s != 2002' %query_res
-        except Exception as e:
+            assert query_res == '2002', '%s != 2002' % query_res
+        except AssertionError as e:
+
             time.sleep(0.5)
         else:
             break
@@ -56,7 +57,7 @@ def direct_pay(amount, notify_amount):
         """
         【5】. 检查通知表信息是否正确
         """
-        ASSERTION_IN.assert_notify(order["partner_order"])
+        ASSERTION_IN.assert_notify(order["partner_order"], amount)
 
 
 if __name__ == '__main__':

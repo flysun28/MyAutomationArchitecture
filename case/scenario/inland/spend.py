@@ -39,11 +39,9 @@ def spend_with_kb_vou(amount):
     """
         【3】. 调用纯消费接口
     """
-    
     result = ExpendPay(int(amount + int(req_vou.vouAmount)), req.partner_id, req.interface_version,
                        req.app_version, req.notify_url).kb_voucher_spend(vou_id, req_vou.vouType,
                                                                          int(req_vou.vouAmount))
-
     """
         【4】. 检查可币与优惠券消费信息是否正确
     """
@@ -63,7 +61,7 @@ def spend_with_kb_vou(amount):
         """
             【7】. 检查通知表信息是否正确
         """
-        FizAssert().assert_notify(result["partner_order"])
+        FizAssert().assert_notify(result["partner_order"], int(amount) + int(req_vou.vouAmount))
         """
             【8】. 检查优惠券信息
         """

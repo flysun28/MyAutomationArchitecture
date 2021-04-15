@@ -86,7 +86,7 @@ def rs_only_rmb(amount, notify_amount):
         """
             【9】. 检查通知表信息是否正确
         """
-        FizAssert().assert_notify(order_info["partner_order"])
+        FizAssert().assert_notify(order_info["partner_order"], amount)
 
 
 def rs_with_kb_rmb(amount, notify_amount, kb_amount):
@@ -151,7 +151,7 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
     """
         【9】. 检查通知表信息是否正确
     """
-    FizAssert().assert_notify(order_info["partner_order"])
+    FizAssert().assert_notify(order_info["partner_order"], price)
     """
         【10】. 检查优惠券状态是否正确
     """
