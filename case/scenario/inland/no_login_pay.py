@@ -44,7 +44,6 @@ def no_login(amount, notify_amount):
             break
     else:
         raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
-#     assert queryResult(order["pay_req_id"], pass_type="no_login") == "2002"
     if is_assert():
         """
             【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理

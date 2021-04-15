@@ -23,7 +23,7 @@ class TestInlandPositive():
     @pytest.mark.parametrize('case', case_file.positive_cases)
     def test_inland_positive(self, case):
         result = simplepay_test_positive(case)
-        # 更新到实际结果对应表格中，必须为字符串
+        # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
     
 
@@ -34,7 +34,7 @@ class TestInlandNegative():
     @pytest.mark.parametrize('case', case_file.negative_cases)
     def test_inland_negative(self, case):
         result = simplepay_test_negative(case)
-        # 更新到实际结果对应表格中，必须为字符串
+        # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
 
 
