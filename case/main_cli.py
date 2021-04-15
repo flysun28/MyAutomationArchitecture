@@ -93,7 +93,7 @@ e.g. python main_cli.py -T interface -R inland -S http -I simplepay
         sys.stderr.write(indent + "  for help use --help")
         return 2
     else:
-        pytest_opts = ['-vs', '--ff', '--cov='+os.getcwd(), '--cov-report=html', 
+        pytest_opts = ['-vs', '--ff', '--cov='+os.getcwd(), '--cov-report=html', '-m', 'positive or smoke',
                        r'--html=%s\report\report_%s.html' %(os.getcwd(), __updated__),
                        '--timeout=300'] #'--lf'
         if instantfail:

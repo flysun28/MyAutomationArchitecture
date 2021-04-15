@@ -39,11 +39,12 @@ def direct_pay(amount, notify_amount):
             query_res = queryResult(order["pay_req_id"], pass_type="direct")
             assert query_res == '2002', '%s != 2002' % query_res
         except AssertionError as e:
+
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('%s, exceed 5s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
     if is_assert():
         """
         【3】. 检查order_info表信息是否正确

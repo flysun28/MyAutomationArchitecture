@@ -35,7 +35,7 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
     
     def __init__(self, ws:Worksheet):
         self.ws = ws
-        self._actual_coord = None
+        self._actual_coord = self._result_coord = None
         self.init()
     
     def parse(self, to_iter=False):
@@ -48,6 +48,7 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
                 self._is_case_started = True
                 self.fields = tuple(cell.value for cell in row)
                 self.actual_coord = row
+                self.running_result_coord = row
                 continue
             if self._is_case_started:
                 _case = ExcelTestCase(self.fields)
@@ -74,5 +75,16 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
             if cell.value == '实际结果':
                 self._actual_coord = cell.coordinate
                 print('实际结果坐标:', self.actual_coord)
+                break
+    @property
+    def running_result_coord(self):
+        return self._result_coord
+    
+    @running_result_coord.setter
+    def running_result_coord(self, fd_row):
+        for cell in fd_row:
+            if cell.value == '用例执行结果':
+                self._result_coord = cell.coordinate
+                print('用例执行结果坐标:', self.running_result_coord)
                 break
         

@@ -38,12 +38,12 @@ def no_login(amount, notify_amount):
         try:
             query_res = queryResult(order["pay_req_id"], pass_type="no_login")
             assert query_res == '2002', '%s != 2002' %query_res
-        except AssertionError as e:
+        except Exception as e:
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('%s, exceed 5s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
 #     assert queryResult(order["pay_req_id"], pass_type="no_login") == "2002"
     if is_assert():
         """

@@ -33,12 +33,12 @@ def only_sign():
         try:
             query_res = queryResult(sign_request_id, "SIGN", pass_type="direct")
             assert query_res == '0000', '%s != 0000' %query_res
-        except AssertionError as e:
+        except Exception as e:
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('%s, exceed 5s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
     """
     【4】.检查order表信息，无记录
     """

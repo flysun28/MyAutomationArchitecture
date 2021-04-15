@@ -6,6 +6,7 @@ from lib.common.utils.meta import WithLogger
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
 from lib.common.utils.misc_utils import to_iterable, get_letter_seqno
+from itertools import chain
 
 
 class CaseFile(with_metaclass(WithLogger)):
@@ -16,6 +17,7 @@ class CaseFile(with_metaclass(WithLogger)):
         self._pos_tc = {}
         self._neg_tc = {}
         self._all_tc = {}
+        self._case_name_to_actual = {}
     
     def __enter__(self):
         return self
@@ -47,7 +49,7 @@ class CaseFile(with_metaclass(WithLogger)):
     def all_cases(self):
         if not self._all_tc:
             self._generate_test_data()
-        return list(self._all_tc.values())
+        return self.positive_cases + self.negative_cases
     
     def one_case(self, case_name):
         if not self._all_tc:
@@ -58,30 +60,56 @@ class CaseFile(with_metaclass(WithLogger)):
     def positive_cases(self):
         if not self._pos_tc:
             self._generate_test_data()
-        return self._pos_tc.values()
+        self.logger.info('正向测试用例数据：')
+        pos_tc = list(self._pos_tc.values())
+        for tc in pos_tc:
+            self.logger.info(dict(tc.data))
+        return pos_tc
     
     @property
     def negative_cases(self):
         if not self._neg_tc:
             self._generate_test_data()
-        return self._neg_tc.values()
+        self.logger.info('负向测试用例数据：')
+        neg_tc = list(self._neg_tc.values())
+        for tc in neg_tc:
+            self.logger.info(dict(tc.data))
+        return neg_tc
     
     def update_actual(self, case_name, actual):
         actual_title_coord = self.parser_ref.actual_coord    # E6
-        start_row = int(actual_title_coord[1]) + 1
+        start_row = int(actual_title_coord[1:]) + 1
         end_column = get_letter_seqno(actual_title_coord[0])
         for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
                                                 self.parser_ref.ws.min_column, end_column,
                                                 values_only=False):
             if row[0].value == case_name:
-                actual_coord = actual_title_coord[0] + row[0].coordinate[1]
+                actual_coord = actual_title_coord[0] + row[0].coordinate[1:]
                 print('"%s"实际结果坐标: %s' %(case_name, actual_coord))
+                self._case_name_to_actual[case_name] = actual_coord
                 break
         else:
             raise LookupError('用例数据查找失败，请确认输入的用例名称。')
         self.parser_ref.ws[actual_coord] = actual
         self.save()
     
+    def update_running_result(self, outcome:str):       
+        result_title_coord = self.parser_ref.running_result_coord
+        if not result_title_coord:
+            return
+        start_row = int(result_title_coord[1:]) + 1
+        end_column = get_letter_seqno(result_title_coord[0])
+        for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
+                                                self.parser_ref.ws.min_column, end_column,
+                                                values_only=False):
+            if row[0].value in self._case_name_to_actual:
+                _name = row[0].value
+                row_num = self._case_name_to_actual[_name][1:]  #获取行号
+                result_coord = result_title_coord[0] + row_num
+                print('"%s"用例执行结果坐标: %s' %(_name, result_coord))
+                self.parser_ref.ws[result_coord] = outcome
+        self.save()
+        
     def save(self):
         self.proxy.fileobj.save()
         

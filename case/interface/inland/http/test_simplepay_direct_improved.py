@@ -17,9 +17,8 @@ if __name__ == '__main__':
 pytestmark = pytest.mark.simplepay
 
 
-# @pytest.fixture(scope='module', autouse=True)
 def case_file():
-    yield from src_case_file(__file__)
+    return src_case_file(__file__)
 
 
 @pytest.mark.smoke
@@ -27,10 +26,8 @@ def case_file():
 @pytest.mark.positive
 class TestInlandPositive():
     
-    @pytest.mark.parametrize('case', next(case_file()).positive_cases)
+    @pytest.mark.parametrize('case', case_file().positive_cases)
     def test_inland_positive(self, case):
-#         for case in case_file.positive_cases:
-            # case: ExcelTestCase obj
         response = http_pb_request(case, SimplePayPb_pb2)
         assert response.status_code == case.status_code
         result = ProtoBuf(SimplePayPb_pb2).parser('Result', response)
@@ -38,7 +35,6 @@ class TestInlandPositive():
         case_file.update_actual(case.name, pb2json(result))
         # 转字典，方便比较
         actual_result = pb2dict(result)
-#             print('actual result:', actual_result)
         res4check = flatten_nested_dict(actual_result)
         dictionary_should_contain_sub_dictionary(res4check, case.expected)
     

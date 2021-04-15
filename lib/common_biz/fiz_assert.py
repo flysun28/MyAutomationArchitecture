@@ -119,12 +119,12 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
         select * from db_pay_notify_1.notify_info where request_id = `request_id`
         :return:
         """
-        sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)        
-        notify_info = self.mysql.select_one(sql_notify)
-        self.logger.info("通知表信息详情：{}".format(notify_info))
         while retry > 0:
             retry -= 1
             try:
+                sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)        
+                notify_info = self.mysql.select_one(sql_notify)
+                self.logger.info("通知表信息详情：{}".format(notify_info))
                 self.assertIsNotNone(notify_info)
                 self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
                 if notify_info['notify_response'] == "OK":

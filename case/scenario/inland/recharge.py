@@ -46,12 +46,12 @@ def recharge(amount, notify_amount):
         try:
             query_res = queryResult(pay_req_id)
             assert query_res == '2002', '%s != 2002' %query_res
-        except AssertionError as e:
+        except Exception as e:
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('%s, exceed 5s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
     """
         【4】. 检查充值成功后，可币余额是否正确
     """
