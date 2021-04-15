@@ -4,9 +4,10 @@
 import time
 import pytest
 from lib.common.utils.env import set_global_env_id
+import sys
 
 partner_ids = '2031', '5456925'
-env_id = '3'
+env_id = '1'
 
 
 def pytest_configure(config):
@@ -30,10 +31,24 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     stats = terminalreporter.stats
     print("total:", terminalreporter._numcollected)
     for kw in 'passed', 'failed', 'error', 'skipped':
-        print('%s: %d' %(kw, len(stats.get(kw, []))))    
+        print('%s: %d' %(kw, len(stats.get(kw, []))))
     # terminalreporter._sessionstarttime 会话开始时间
     duration = time.time() - terminalreporter._sessionstarttime
     print('total times:', round(duration, 2), 'seconds')
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item, call):
+#     print(item, item.__dict__)
+    # 获取钩子方法的调用结果
+    out = yield
+    # 从钩子方法的调用结果中获取测试报告
+    result = out.get_result()
+    if result.when == "call":
+        case_file = item.funcargs['case_file']
+        case_file.update_running_result(result.outcome)
+        print('测试用例%s执行报告: %s' %(item.function.__name__, result))
+        print(('运行结果: %s' %result.outcome))
     
 
 @pytest.fixture(scope='session', autouse=True)

@@ -22,11 +22,11 @@ def sign_pay(amount, notify_amount):
     :return:
     """
     """
-        【1】. 更新数据库状态为UNSIGN
+    【1】. 更新数据库状态为UNSIGN
     """
     update_sign_status(req.ssoid, req.pay_channel)
     """
-        【2】. 调用签约支付下单接口，构造支付与签约回调报文
+    【2】. 调用签约支付下单接口，构造支付与签约回调报文
     """
     order_info = AutoRenew(req.pay_channel, req.partner_id, req.interface_version, str(req.app_version),
                                 req.renewProductCode, req.notify_url).auto_renew(amount=amount)
@@ -37,19 +37,19 @@ def sign_pay(amount, notify_amount):
     # 支付回调
     choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
-        【3】. 查询支付结果
+    【3】. 查询支付结果
     """
     start = time.perf_counter()
     while time.perf_counter() - start < 5:
         try:
             query_res = queryResult(order_info["pay_req_id"], query_type="PAY", pass_type="direct")
             assert query_res == '2002', '%s != 2002' %query_res
-        except AssertionError as e:
+        except Exception as e:
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('%s, exceed 5s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
     """
         【4】. 查询order表记录是否正确
     """
