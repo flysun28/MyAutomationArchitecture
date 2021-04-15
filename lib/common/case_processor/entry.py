@@ -1,12 +1,12 @@
 '''
 @author: 80319739
 '''
+import simplejson
 from six import with_metaclass
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
 from lib.common.utils.misc_utils import to_iterable, get_letter_seqno
-from itertools import chain
 
 
 class CaseFile(with_metaclass(WithLogger)):
@@ -17,7 +17,7 @@ class CaseFile(with_metaclass(WithLogger)):
         self._pos_tc = {}
         self._neg_tc = {}
         self._all_tc = {}
-        self._case_name_to_actual = {}
+        self._case_name_to_actual = {}  # 用例名称：实际结果坐标
     
     def __enter__(self):
         return self
@@ -42,6 +42,7 @@ class CaseFile(with_metaclass(WithLogger)):
                 self._pos_tc[case.name] = case
             elif case.type == '-':
                 self._neg_tc[case.name] = case
+            case.file = self
         self._all_tc.update(self._pos_tc)
         self._all_tc.update(self._neg_tc)
     
@@ -90,7 +91,7 @@ class CaseFile(with_metaclass(WithLogger)):
                 break
         else:
             raise LookupError('用例数据查找失败，请确认输入的用例名称。')
-        self.parser_ref.ws[actual_coord] = actual
+        self.parser_ref.ws[actual_coord] = simplejson.dumps(actual, ensure_ascii=False)
         self.save()
     
     def update_running_result(self, outcome:str):       

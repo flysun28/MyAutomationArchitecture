@@ -45,8 +45,8 @@ def pytest_runtest_makereport(item, call):
     # 从钩子方法的调用结果中获取测试报告
     result = out.get_result()
     if result.when == "call":
-        case_file = item.funcargs['case_file']
-        case_file.update_running_result(result.outcome)
+        case = item.funcargs['case']
+        case.file.update_running_result(result.outcome)
         print('测试用例%s执行报告: %s' %(item.function.__name__, result))
         print(('运行结果: %s' %result.outcome))
     
