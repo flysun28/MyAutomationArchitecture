@@ -57,7 +57,7 @@ def no_login(amount, notify_amount):
         """
             【5】. 检查通知表信息是否正确
         """
-        ASSERTION_IN.assert_notify(order["partner_order"])
+        ASSERTION_IN.assert_notify(order["partner_order"], amount)
 
 
 if __name__ == '__main__':
