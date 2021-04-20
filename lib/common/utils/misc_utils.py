@@ -82,7 +82,7 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     """
     Fails unless all items in `dict2` are found from `dict1`.
     """
-    diffs = [k for k in dict1 if k not in dict1]
+    diffs = [k for k in dict2 if k not in dict1]
     missing_key_msg = "Following keys missing from first dictionary: %s" %', '.join(diffs)
     if diffs:
         raise AssertionError(missing_key_msg)
@@ -94,7 +94,20 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
     if diffs:
         raise AssertionError(diff_value_msg)
+
     
+def run_keyword_and_expect_error(err_key:str, keyword, *args, **kwargs):
+    if isinstance(keyword, str):
+        keyword = eval(keyword)
+    try:
+        keyword(*args, **kwargs)
+    except Exception as e:
+        errmsg = ' '.join(e.args)
+        if err_key in errmsg:
+            print('Expected error "%s" occurred, PASS!')
+        else:
+            raise
+
 
 def create_random_str(length:int):
     '''

@@ -10,7 +10,6 @@ from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
 from case.scenario.common_req import DIRECT_PAY
-from lib.common.exception import WaitUntilTimeOut
 
 logger = Logger('direct_pay').get_logger()
 
@@ -38,8 +37,7 @@ def direct_pay(amount, notify_amount):
         try:
             query_res = queryResult(order["pay_req_id"], pass_type="direct")
             assert query_res == '2002', '%s != 2002' % query_res
-        except AssertionError as e:
-
+        except Exception as e:
             time.sleep(0.5)
         else:
             break

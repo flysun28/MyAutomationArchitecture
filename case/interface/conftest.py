@@ -5,6 +5,7 @@ import time
 import pytest
 from lib.common.utils.env import set_global_env_id
 import sys
+from lib.common.exception.intf_exception import IgnoreException
 
 partner_ids = '2031', '5456925'
 env_id = '1'
@@ -44,12 +45,13 @@ def pytest_runtest_makereport(item, call):
     out = yield
     # 从钩子方法的调用结果中获取测试报告
     result = out.get_result()
-    if result.when == "call":
-        case_file = item.funcargs['case_file']
-        case_file.update_running_result(result.outcome)
+    if result.when == 'call':
+        case = item.funcargs.get('case')
+        if case:
+            case.file.update_running_result(result.outcome)
         print('测试用例%s执行报告: %s' %(item.function.__name__, result))
         print(('运行结果: %s' %result.outcome))
-    
+
 
 @pytest.fixture(scope='session', autouse=True)
 def global_setup_and_teardown():

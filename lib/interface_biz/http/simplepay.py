@@ -13,6 +13,7 @@ from lib.common_biz.order_random import RandomOrder
 from lib.common.session.http.protobuf import ProtoBuf
 from lib.common.file_operation.config_operation import Config
 from lib.common.exception.http_exception import HttpJsonException
+from lib.common_biz.pb_request import http_pb_request, get_check_pb_result_positive, get_check_pb_result_negative
 
 
 class SimplePay(metaclass=WithLogger):
@@ -230,6 +231,16 @@ class SimplePay(metaclass=WithLogger):
         return result
 
 
+def simplepay_test_positive(case)-> dict:
+    http_pb_request(case, SimplePayPb_pb2)
+    return get_check_pb_result_positive(case, SimplePayPb_pb2)
+    
+
+def simplepay_test_negative(case)-> dict:
+    http_pb_request(case, SimplePayPb_pb2)
+    return get_check_pb_result_positive(case, SimplePayPb_pb2)
+
+    
 if __name__ == '__main__':
 #     wxsimplepay = SimplePay("wxpay", "1", '2031', 265)
 #     wxsimplepay.recharge_spend_amount_is_price(1)

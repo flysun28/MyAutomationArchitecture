@@ -17,6 +17,7 @@ class ExcelTestCase():
         cls.__slots__ += ('id', 'ws')
         self = object.__new__(cls)
         self._data = OrderedDict()
+        self.file = None    # will be updated in CaseFile._generate_test_data
         return self
     
     @classmethod
