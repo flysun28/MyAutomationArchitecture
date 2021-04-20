@@ -3,6 +3,8 @@
 # author:xy
 # datetime:2021/1/22 19:11
 # comment:
+import json
+
 import requests
 import simplejson
 import time
@@ -207,22 +209,23 @@ class EncryptJson(HttpJsonSession):
         '''
         self.logger.info('原始header：%s', self.header)
         self.session.headers = self.encrypt_header()
-        self.logger.info('加密header：%s' % self.session.headers)
+        # self.logger.info('加密header：%s' % self.session.headers)
         self.url = self.prefix + url
         data.update(self.common_params)
         data['sign'] = self.make_sign(data)
         aes_body = self.encrypt_body(data)
         self.logger.info("url:%s" % self.url)
         self.logger.info("原始body:%s" % data)
-        self.logger.info("加密body:%s" % aes_body)
+        # self.logger.info("加密body:%s" % aes_body)
         try:
             response = self.session.post(url=self.url, data=aes_body)
             self.logger.info("返回状态码:{}".format(response.status_code))
             resp_text = self.aes_codec.decrypt(response.text)
-            pyobj_resp = simplejson.loads(resp_text, encoding='utf-8')
-            self.logger.info('POST返回结果:{}'.format(
-                simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
-            )
+            pyobj_resp = json.loads(resp_text, encoding='utf-8')
+            self.logger.info("post返回：{}".format(pyobj_resp))
+            # self.logger.info('POST返回结果:{}'.format(
+            #     simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
+            # )
         except:
             raise HttpJsonException('<%s> exception: %s' % (type(self), sys.exc_info()[1]))
         else:
