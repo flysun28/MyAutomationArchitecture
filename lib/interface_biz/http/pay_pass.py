@@ -40,7 +40,7 @@ def get_check_t_p(param):
     else:
         token_new = Account().login()
         env_id = get_env_id()
-        if env_id == "1":
+        if env_id == "1" or env_id == "2" or env_id == "3":
             GlobalVar.MYSQL_AUTO_TEST.execute(
                 Config(common_sql_path).read_config("pay_auto_test_info", "test_update_account").format(
                     token_new, Config(global_env_path).read_config("test_account", "account")))
