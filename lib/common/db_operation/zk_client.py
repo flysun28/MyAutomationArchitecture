@@ -22,14 +22,17 @@ class ZkClient(metaclass=WithLogger):
         # 获取dubbo节点下所有子节点
         node = self.zk.get_children('/dubbo')
         if service in node:
-            providers = urllib.parse.unquote(self.zk.get_children("/dubbo/{}/providers".format(service))[0])
-            self.logger.info("获取到具体的providers信息:{}".format(providers))
-            ip_port_info = re.findall(r"dubbo://(.+?)/", providers)[0]
-            ip_port = ip_port_info.split(":")
-            interface_info = re.findall(r"interface=(.+?)&", providers)
-            method_info = re.findall(r"methods=(.+?)&", providers)
-            self.logger.info(service+"返回的端口和ip：{}".format(ip_port[0]))
-            return {"ip_port": ip_port, "interface": interface_info, "method": method_info}
+            if self.zk.get_children("/dubbo/{}/providers".format(service)):
+                providers = urllib.parse.unquote(self.zk.get_children("/dubbo/{}/providers".format(service))[0])
+                self.logger.info("获取到具体的providers信息:{}".format(providers))
+                ip_port_info = re.findall(r"dubbo://(.+?)/", providers)[0]
+                ip_port = ip_port_info.split(":")
+                interface_info = re.findall(r"interface=(.+?)&", providers)
+                method_info = re.findall(r"methods=(.+?)&", providers)
+                self.logger.info(service+"返回的端口和ip：{}".format(ip_port[0]))
+                return {"ip_port": ip_port, "interface": interface_info, "method": method_info}
+            else:
+                self.logger.info("providers为空")
         else:
             self.logger.info("节点不存在")
         self.zk.stop()
