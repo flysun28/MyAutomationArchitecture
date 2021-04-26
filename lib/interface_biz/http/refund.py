@@ -84,10 +84,10 @@ class Refund():
     def refund_by_pay_req_id(self, pay_req_id, amount):
         for partner_order, partner_code in self.get_sub_partner_orders(pay_req_id):
             while True:
-                if refund.is_on_the_way_refund_existed():
+                if self.is_on_the_way_refund_existed():
                     time.sleep(0.1)
                 else:
-                    refund.httpjson_refund(partner_order, partner_code, amount, pay_req_id=pay_req_id)
+                    self.httpjson_refund(partner_order, partner_code, amount, pay_req_id=pay_req_id)
                     break
 
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     set_global_env_id(3)
     refund = Refund('2086100900')
     # 全额退款
-    refund.refund_by_pay_req_id('KB202103161012050633943089234032', 0.01)
+    refund.refund_by_pay_req_id('RM202104261036302086776969622522', 0.01)
     # 部分退款
     per_amount = 1
     total_amount = 5

@@ -2,7 +2,7 @@
 from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
 
-env_id = 'product'
+env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -61,25 +61,6 @@ if __name__ == '__main__':
 #     refund = GrantRefund("2086100900")
 #     refund.refund_by_pay_req_id('RM202103251132432086100900173732')
 
-#     # http自动退款
-#     session = None
-#     env_id = 'product'
-#     if env_id == 'grey':
-#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-#     elif env_id == 'product':
-#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-#     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     per_amount = 0.01
-#     total_amount = 0.01
-#     loop_num = int(total_amount/per_amount)
-#     for i in range(loop_num):
-#         while True:
-#             response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
-#             if response['resMsg'] == '退款失败':
-#                 time.sleep(1)
-#             else:
-#                 break
-
 #     flag_coin = "1"
 #     if flag_coin == "1":
 #         # 发
@@ -109,22 +90,23 @@ if __name__ == '__main__':
 
     
 #     # http自动退款
-#     session = None
-#     if env_id == 'grey':
-#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-#     elif env_id == 'product':
-#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-#     refund = Refund('2086100900', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     per_amount = 568
-#     total_amount = 568
+    session = None
+    if env_id == 'grey':
+        session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+    elif env_id == 'product':
+        session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
+    refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+#     per_amount =
+#     total_amount = 
 #     loop_num = int(total_amount/per_amount)
 #     for i in range(loop_num): 
 #         while True:
-#             response = refund.httpjson_refund('GC202104111919524670900230000', '5456925', per_amount, pay_req_id='')
+#             response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
 #             if response['resMsg'] == '退款失败':
 #                 time.sleep(1)
 #             else:
 #                 break
+    refund.refund_by_pay_req_id('RM202104261036302086776969622522', 0.01)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
@@ -206,6 +188,7 @@ if __name__ == '__main__':
 #                           for i in range(executor._max_workers)]
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
-#     rds = GlobalVar.REDIS_IN
-#     rds.set("name","xiaoyao1")
+    # 签约并支付测试报文
+#     print(SeparateDbTable('2086776969').get_order_db_table())    db_order_7.order_info_30
+    'gmt_create=2021-04-25 19:31:54, buyer_email=185****3290, notify_time=2021-04-25 19:31:55, gmt_payment=2021-04-25 19:31:54, seller_email=kekezhifu@keke.cn, quantity=1, subject=滚动抽奖商品非签约会员, use_coupon=N, sign=aMlSmXEyOyVI4Cgp+pqpv+HEwQziw/s5tEFqEANBhr+gX8M0HtwdLbZ9ZJAzBJYGNsnff+54aXrTN/9Gpqi0f2NaPKePBJrisiWU8ke0boYfKFiTaZtnJx3JLYf48aq89wbP3YtNmONbVaZiYsYXR+I7wrGSGpYUIYiVnRvJGKY=, discount=0.00, body=滚动抽奖商品非签约会员, buyer_id=2088512280849353, notify_id=2021042500222193154049351415511064, notify_type=trade_status_sync, payment_type=1, out_trade_no=RM202104251931392086781580812602, price=0.01, trade_status=TRADE_SUCCESS, total_fee=0.01, trade_no=2021042522001449351434870905, sign_type=RSA, seller_id=2088311951685799, is_total_fee_adjust=N'
 

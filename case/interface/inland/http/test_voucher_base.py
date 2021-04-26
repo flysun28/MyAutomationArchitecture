@@ -20,6 +20,7 @@ from lib.interface_biz.http.user_account import Account
 
 pytestmark = pytest.mark.voucher
 
+ssoid = ''
 case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
 vouinfo = VouInfo(case_file_path)
 vouinfo.create()
@@ -36,14 +37,15 @@ class TestMultiVou():
    
     @pytest.fixture(scope='class', autouse=True)
     def httpobj(self, ssoids):
-        ssoid = random.choice(ssoids)
+        global ssoid
+        ssoid = ssoid or random.choice(ssoids)
         partner_id = random.choice(partner_ids)
         yield HttpGrantMultiVous(vouinfo, ssoid, partner_id)
     
     @pytest.mark.positive
     def test_positive(self, httpobj):
         # 批量发券正常测试
-        httpobj.post()    
+        httpobj.post()
 
 
 class TestSingleVou():

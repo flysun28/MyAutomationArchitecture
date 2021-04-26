@@ -54,7 +54,7 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture(scope='session', autouse=True)
-def global_setup_and_teardown():
+def login():
     '''
     1. 在自动化专用数据库中保存test_account
     '''
