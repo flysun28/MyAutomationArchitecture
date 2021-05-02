@@ -242,9 +242,30 @@ def szf_pay_sign_string(szf_scarlett):
     :return:
     """
     md5_string = szf_scarlett['version'] + "|" + szf_scarlett['merId'] + "|" + str(szf_scarlett['payMoney']) + "|" + \
-                 szf_scarlett['cardMoney'] + "|" +  szf_scarlett['orderId'] + "|" + szf_scarlett['payResult'] + "|" + \
+                 szf_scarlett['cardMoney'] + "|" + szf_scarlett['orderId'] + "|" + szf_scarlett['payResult'] + "|" + \
                  szf_scarlett['privateField'] + "|" + szf_scarlett['payDetails'] + "|"
     return md5_string
+
+
+def old_wx_auto_renew(renew_data, key):
+    """
+    云服务老的扣费接口签名原串
+    :return:
+    """
+    signString = ""
+    signString = signString + "ssoid=" + renew_data['ssoid'] + "&"
+    signString = signString + "apppackage=" + renew_data['apppackage'] + "&"
+    signString = signString + "amount=" + renew_data['amount'] + "&"
+    signString = signString + "notifyurl=" + renew_data['notifyUrl'] + "&"
+    signString = signString + "requestid=" + renew_data['requestid'] + "&"
+    signString = signString + "subject=" + renew_data['subject'] + "&"
+    signString = signString + "desc=" + renew_data['desc'] + "&"
+    signString = signString + "partnercode=" + renew_data['partnercode'] + "&"
+    signString = signString + "ext2=" + renew_data['ext2'] + "&"
+    signString = signString + "key=" + key
+    print(signString, "!!!!!")
+    return signString
+
 
 
 if __name__ == '__main__':
