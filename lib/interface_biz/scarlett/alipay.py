@@ -97,7 +97,8 @@ def ali_sign_scarlet():
         'buyer_pay_amount': '0.01',
         'app_id': '2016120904060189',
         'sign_type': 'RSA2',
-        'seller_id': '2088021161753879'
+#         'seller_id': '2088021161753879',
+        'seller_id': '2088311951685799'
     }
     scarlett_info['sign'] = md5(Sign(scarlett_info).join_asc_have_key("", "sign_type") +
                                 Config(key_path).read_config("key_private_ali", "value"))

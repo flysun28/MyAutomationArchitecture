@@ -19,7 +19,7 @@ logger = Logger('wxpay-scarlet').get_logger()
 
 def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, md5_key, trade_type="APP", attach="TEST", result_code="SUCCESS", return_code="SUCCESS"):
     """
-    微信普通app支付回调报文构造
+    微信普通app支付回调报文构造 /opaycenter/WxpayNotificationSecondary
     :param mch_id: 商户号 1259634601
     :param out_trade_no: 支付订单号 RM202101131635122076075925041132
     :param appid: appid wx93eea96ecc33f168
@@ -62,7 +62,7 @@ def wx_normal_pay_scarlet(mch_id, out_trade_no, appid, total_fee, md5_key, trade
 
 def wx_sign_scarlet(contract_code, mch_id, plan_id, md5_key, result_cod="SUCCESS", return_code="SUCCESS", return_msg="OK", change_type="ADD"):
     """
-    微信签约回调报文
+    微信签约回调报文 /opaycenter/wxpaysignnotify
     :param change_type: ?
     :param result_cod:
     :param contract_code: 签约订单号 SN202101132002474706373405162488

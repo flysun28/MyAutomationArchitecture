@@ -162,7 +162,7 @@ class VouInfo(with_metaclass(WithLogger)):
     
     @property
     def batchIds(self):
-        return [d['batchId'] for d in self.vou_info]
+        return [d['configId'] for d in self.vou_info]
                 
     def _to_dict(self):
         for idx, info in enumerate(self.vou_info):
@@ -194,7 +194,7 @@ class VouInfo(with_metaclass(WithLogger)):
             d['scopeId'] = '7104f7bc23e445daba913a5a96a264ac'
             d['subScopeId'] = '7104f7bc23e445daba913a5a96a264ac'
             d['blackScopeId'] = '7104f7bc23e445daba913a5a96a264ac'
-            d['batchId'] = create_random_str(32)
+            d['configId'] = create_random_str(32)
     
     def create(self):
         list(self)
@@ -251,7 +251,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             subScopeId    String    子范围ID              N
             blackScopeId    String    黑名单范围ID         N
             settleType    String    结算类型               Y
-            batchId    String    批次号                    N
+            configId    String    批次号                    N
         '''
         if data:
             req_id = data['requestId']
@@ -290,7 +290,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
         assert resp['msg'] == 'success', '返回参数 msg != success'
         resp_vouinfo = resp['simpleVoucherInfoDtoList']
         assert len(resp_vouinfo) == self.vouinfo_obj.count, '返回的优惠券个数 != %d' %self.vouinfo_obj.count
-        resp_batch_ids = set(d['batchId'] for d in resp_vouinfo)
+        resp_batch_ids = set(d['configId'] for d in resp_vouinfo)
         for batchid in resp_batch_ids:
             assert batchid in self.vouinfo_obj.batchIds, '返回的批次号 %s 不在 %s范围内' %(batchid, self.vouinfo_obj.batchIds)        
     

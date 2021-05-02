@@ -1,12 +1,15 @@
 '''
 @author: 80319739
 '''
+import os
+import re
 import simplejson
 from six import with_metaclass
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
 from lib.common.utils.misc_utils import to_iterable, get_letter_seqno
+from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 
 
 class CaseFile(with_metaclass(WithLogger)):
@@ -116,6 +119,13 @@ class CaseFile(with_metaclass(WithLogger)):
         
     def close(self):
         self.proxy.fileobj.close()
+
+
+def src_case_file(test_file_path):
+    case_file_dir = os.path.join(CASE_SRCFILE_ROOTDIR, 'http')
+    basename = os.path.basename(test_file_path)
+    interface_name = re.search('test_(\w+)', basename, re.I).group(1)
+    return CaseFile(os.path.join(case_file_dir, 'inland.xlsx'), interface=interface_name)
 
 
 if __name__ == '__main__':

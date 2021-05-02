@@ -19,17 +19,17 @@ class H5:
     def qr_code_trade(self):
         case_dict = {
             "accessType": "NATIVE",
-            "serviceType": "PAY",
-            # SIGNANDPAY PAY
+            # SIGNANDPAY 或 PAY
+            "serviceType": "SIGNANDPAY",
             "userInfo": {
                 "ssoid": str(2100000000 + random.randint(100, 1000000))
             },
-            "partnerCode": "72724324",
+            "partnerCode": "72724324",  #72724324：保险
             # SIGNANDPAY 需要带上该信息
             "contractInfo": {
                 "contractPartnerOrder": RandomOrder(32).random_num(),
                 "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
-                "renewProductCode": "727243140027"
+                "renewProductCode": "727243240001"
                 # "renewProductCode": "727243240001"
             },
             "sign": "",

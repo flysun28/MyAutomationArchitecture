@@ -4,7 +4,7 @@
 import os
 import time
 import pytest
-from case.interface.inland.http.conftest import src_case_file
+from lib.common.case_processor.entry import src_case_file
 from lib.interface_biz.http.simplepay import simplepay_test_positive, simplepay_test_negative
 if __name__ == '__main__':
     from lib import pardir
