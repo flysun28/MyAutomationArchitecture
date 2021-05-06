@@ -229,7 +229,7 @@ class EncryptJson(HttpJsonSession):
             response = self.session.post(url=self.url, data=aes_body)
             self.logger.info("返回状态码:{}".format(response.status_code))
             resp_text = self.aes_codec.decrypt(response.text)
-            pyobj_resp = json.loads(resp_text, encoding='utf-8')
+            pyobj_resp = json.loads(resp_text)
             self.logger.info("post返回：{}".format(pyobj_resp))
             # self.logger.info('POST返回结果:{}'.format(
             #     simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
