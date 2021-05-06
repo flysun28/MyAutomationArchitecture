@@ -26,7 +26,7 @@ class Logger():
         # 控制台只显示info及以上
         filename = 'securepayment_lib-{}.log'.format(str(date.today()))
         log_path = os.path.join(log_dir, filename)
-        file_hdlr = logging.FileHandler(log_path, encoding='utf-8')
+        file_hdlr = logging.FileHandler(log_path, mode='a+', encoding='utf-8')
         file_hdlr.setLevel(logging.DEBUG)
         console_hdlr = logging.StreamHandler(console_stream)
         console_hdlr.setLevel(logging.INFO)
