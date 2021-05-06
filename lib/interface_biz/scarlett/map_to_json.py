@@ -7,7 +7,7 @@ import json
 import re
 
 
-def _scarlet_map_to_json(req):
+def scarlet_map_to_json_(req):
     b = req.replace("=", '"="')
     c = b.replace(", ", '","')
     e = c.replace("{", '{"')
@@ -17,7 +17,7 @@ def _scarlet_map_to_json(req):
     return eval(h)
 
 
-def scarlet_map_to_json(req):
+def scarlet_map_to_json(req)->dict:
     imatches = re.finditer('(.*?)(,|})\s*', req[1:])
     for m in imatches:
         pair = m.group(1)
@@ -26,7 +26,7 @@ def scarlet_map_to_json(req):
         right = '"' + right.strip() + '"'
         repl = ''.join([left, ': ', right])
         req = req.replace(pair, repl)
-    return req
+    return eval(req)
 
 
 if __name__ == '__main__':

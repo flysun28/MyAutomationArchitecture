@@ -105,6 +105,17 @@ def wx_sign_scarlet(contract_code, mch_id, plan_id, md5_key, result_cod="SUCCESS
         logger.info("回调解析成功")
 
 
+def wx_sign_scarlet_by_raw_xml(raw_xml:str):
+    '''
+    从支付宝回调的原始结果（等号连接格式），重新构造签约回调
+    :param raw_xml: '{gmt_create=2021-04-26 14:34:00, charset=UTF-8, ...}'
+    '''    
+    
+    result = HTTPJSON_SCARLET.post('/opaycenter/alipayavoidnotifynew', data=raw_xml, lib=requests)
+    if "SUCCESS" in str(result):
+        logger.info("回调解析成功")
+
+
 def wx_refund_post():
     """
     非异步，同步回调 https://api.mch.weixin.qq.com/secapi/pay/refund

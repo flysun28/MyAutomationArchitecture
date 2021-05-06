@@ -4,10 +4,8 @@
 import time
 import pytest
 from lib.common.utils.env import set_global_env_id
-import sys
-from lib.common.exception.intf_exception import IgnoreException
 
-partner_ids = '2031', '5456925'
+partner_ids = '5456925', '2031'
 env_id = '1'
 
 
