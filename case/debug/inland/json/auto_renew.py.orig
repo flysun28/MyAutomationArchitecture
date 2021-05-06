@@ -25,6 +25,7 @@ class AutoRenew:
         :return:
         """
         case_dict = {
+<<<<<<< HEAD
             'agreementNo': agreement_no,
             'ssoid': self.ssoid,
             'renewProductCode': self.renew_product_code,
@@ -32,6 +33,16 @@ class AutoRenew:
             'partnerOrder': RandomOrder(32).random_string(),
             'payType': pay_type,
             'amount': '0.01',   #元
+=======
+            'agreementNo': '202105025920622336',
+            'ssoid': '2076075925',
+            'renewProductCode': '727243240001',
+            'partnerCode': '72724324',
+            'partnerOrder': RandomOrder(32).random_num(),
+            'payType': 'wxpay',
+            # 元
+            'amount': '0.01',
+>>>>>>> 37827affca6a7aa0aaef2876b8294fdb2b9dc655
             'currencyName': 'CNY',
             'country': 'CN',
             'subject': '自动续费扣款',
@@ -73,12 +84,21 @@ class AutoRenew:
         :return:
         """
         case_dict = {
+<<<<<<< HEAD
             'agreementNo': agreement_no,
             'ssoid': self.ssoid,
             'renewProductCode': '20310001',
             'partnerCode': self.partner_code,
             'partnerOrder': partner_order,
             'payType': pay_type,
+=======
+            'agreementNo': '202105025977694378',
+            'ssoid': '2076075925',
+            'renewProductCode': '727243240001',
+            'partnerCode': '72724324',
+            'partnerOrder': RandomOrder(18).business_order(""),
+            'payType': 'wxpay',
+>>>>>>> 37827affca6a7aa0aaef2876b8294fdb2b9dc655
             'currencyName': 'CNY',
             'country': 'CN',
             'apppackage': '',

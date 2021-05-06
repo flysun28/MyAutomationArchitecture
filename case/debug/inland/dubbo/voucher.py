@@ -77,6 +77,28 @@ class VoucherInland:
             data
         )
 
+    def CouponExchange(self):
+        """
+        :return:
+        """
+        data = {
+            "appPackage": "com.example.pay_demo",
+            "bizNo": "5456925",
+            "couponCode": "62640426",
+            "cutAmount": 9.99,
+            "expendInfo": "{\"amount\":\"9.99\",\"vouId\":62640426}",
+            "factor": "",
+            "imei": "000000000000000",
+            "orderAmount": 10.0,
+            "requestId": "GC202104221720594800100320000",
+            "ssoid": "2076075925"
+        }
+        result = self.conn.invoke(
+            "com.oppo.voucher.api.CouponExchange",
+            "couponExchange",
+            data
+        )
+
 
 if __name__ == '__main__':
     set_global_env_id(1)
