@@ -11,7 +11,7 @@ from lib.common_biz.replace_parameter import replace_http_json
 
 def http_json_request(case, case_sheet, url):
     sheetname = case.ws.title
-    prefix, pay_method = re.search('(get_link_info|)(\S+)', sheetname, re.I).groups()
+    prefix, pay_method = re.search('({}|)(\S+)'.format(case_sheet), sheetname, re.I).groups()
     if prefix:
         replace_http_json(case)
     raw_response = pyobj_resp.post(url, case.req_params)
