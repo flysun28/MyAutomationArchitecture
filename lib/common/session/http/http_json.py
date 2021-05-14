@@ -34,7 +34,7 @@ class HttpJsonSession(metaclass=WithLogger):
               'User-Agent': 'HttpJson/1.0'
               }
 
-    def __init__(self, url_prefix=None, data: dict = None, **kwargs):
+    def __init__(self, url_prefix=None, data:dict=None, **kwargs):
         """
         :param url: 请求地址
         :param data: 请求参数
@@ -45,25 +45,33 @@ class HttpJsonSession(metaclass=WithLogger):
         self.session = requests.Session()
         self.header.update(kwargs)
         self.session.headers = self.header
+        self.default_post = self.session.post
 
-    #         self.logger.info('HTTP Header: %s', self.session.headers)
 
-    def post(self, url, data: dict = None):
+    def post(self, url, data:dict=None, lib=None):
         self.url = self.prefix + url
+        method = lib.post if lib else self.default_post
         data = data or self.data
         try:
             self.logger.info(self.url)
-            self.logger.info("传入的参数：{}".format(data))
-            response = self.session.post(url=self.url, data=simplejson.dumps(data))
+            self.logger.info("传入的参数：{}, 类型为{}".format(data, type(data)))
+            # requests.post：data为字典
+            # session.post：data为字符串，json为字典
+            data = simplejson.dumps(data) if method == self.default_post else data
+            response = method(url=self.url, data=data)
             self.logger.info("返回状态码：{}".format(response.status_code))
             assert response.status_code == 200, "返回状态码：{} != 200".format(response.status_code)
-            result = response.json()
             try:
-                if result['code'] != '0000':
-                    result['request'] = data
-            except KeyError:
-                pass
-            self.logger.info("返回结果：{}".format(result))
+                result = response.json()
+                try:
+                    if result['code'] != '0000':
+                        result['request'] = data
+                except KeyError:
+                    pass
+            except simplejson.errors.JSONDecodeError:
+                result = response.text
+            finally:
+                self.logger.info("返回结果：{}".format(result))
             return result
         except RequestException as e:
             raise HttpJsonException(e) from None
@@ -72,7 +80,7 @@ class HttpJsonSession(metaclass=WithLogger):
         except:
             raise
 
-    def get(self, url, data: dict = None):
+    def get(self, url, data:dict=None):
         self.url = self.prefix + url
         data = data or self.data
         try:
@@ -184,7 +192,7 @@ class EncryptJson(HttpJsonSession):
             response = self.session.post(url=self.url, data=aes_body)
             self.logger.info("返回状态码:{}".format(response.status_code))
             resp_text = self.aes_codec.decrypt(response.text)
-            pyobj_resp = json.loads(resp_text, encoding='utf-8')
+            pyobj_resp = json.loads(resp_text)
             self.logger.info("post返回：{}".format(pyobj_resp))
             # self.logger.info('POST返回结果:{}'.format(
             #     simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))

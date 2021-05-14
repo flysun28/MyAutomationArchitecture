@@ -23,5 +23,6 @@ def test_service_info(encjson):
 
 def test_wallet_package(encjson):
     result = encjson.post('/api/conf/v1/package-name', {})
-    print(result['data']['walletPackageName'])
-    
+    pkg_name = result['data']['walletPackageName']
+    print('钱包包名:', pkg_name)
+    assert pkg_name == 'com.finshell.wallet', pkg_name

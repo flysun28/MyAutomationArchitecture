@@ -29,7 +29,7 @@ class ZkClient(metaclass=WithLogger):
                 ip_port = ip_port_info.split(":")
                 interface_info = re.findall(r"interface=(.+?)&", providers)
                 method_info = re.findall(r"methods=(.+?)&", providers)
-                self.logger.info(service+"返回的端口和ip：{}".format(ip_port[0]))
+                self.logger.info(service + "的IP和端口:  {}:{}".format(*ip_port))
                 return {"ip_port": ip_port, "interface": interface_info, "method": method_info}
             else:
                 self.logger.info("providers为空")

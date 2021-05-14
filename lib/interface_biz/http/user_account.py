@@ -9,13 +9,14 @@ import hmac
 import hashlib
 import json
 import time
+from itertools import chain
 from lib.common.utils.meta import WithLogger
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.sign import Sign
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.config.path import key_configfile_path
-from itertools import chain
+from lib.common.utils.env import get_env_id
 
 header = {"content-type": "application/json"}
 appKey = "myKey"
@@ -41,6 +42,8 @@ class Account(metaclass=WithLogger):
         value = "{}{}{}".format(appKey, self.account_args['username'], passWord_md5).encode()
         sign = hmac.new(b"mySecret", value, hashlib.md5).hexdigest()
         body = "{{'appKey':'{}','loginName':'{}','passWord':'{}','sign':'{}'}}".format(appKey, self.account_args['username'], passWord_md5, sign)
+        self.logger.info(url)
+        self.logger.info(body)
         response = requests.post(url, data=body, headers=header)
         self.logger.info('返回的登录信息：{}'.format(response.json()))
         if response.json()['resultCode'] == '1700':
@@ -59,8 +62,8 @@ class Account(metaclass=WithLogger):
         body = {"destination": phone_number}
         body = json.dumps(body)
         response = requests.post(url, data=body, headers=type(GlobalVar.HTTPJSON_IN).header)
-        print(response.status_code)
-        print(response.json())
+        assert response.status_code == 200, response.status_code
+        return response.json()
 
     def get_basic_info(self):
         req = {
@@ -83,6 +86,8 @@ class Account(metaclass=WithLogger):
         return result['data']
 
     def get_all_ssoids(self):
+        if get_env_id() in ('grey', 'product'):
+            return
         req = {
             'appKey': self.user_account_key['appkey'],
             'timestamp': int(time.time() * 10**3),
@@ -116,5 +121,6 @@ class Account(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    a = Account().login()
-#     print(Account().get_verification_code('18948606750'))
+    account = Account()
+    account.login()
+    print(account.get_verification_code('14441120298'))

@@ -13,6 +13,9 @@ from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.file_path import key_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
+from lib.interface_biz.scarlett.map_to_json import scarlet_map_to_json,\
+    scarlet_map_to_json_
+from lib.common.utils.globals import HTTPJSON_IN, HTTPJSON_SCARLET
 
 logger = Logger('alipay-scarlet').get_logger()
 
@@ -28,10 +31,10 @@ def ali_normal_pay_scarlet(seller_email, out_trade_no, price, total_fee, seller_
         "trade_no": "2021011422001416601409446457" 支付宝侧订单号
         "seller_id": "2088311951685799" 商户号
     :param seller_email:
-    :param out_trade_no:
+    :param out_trade_no: 支付订单号
     :param price:
     :param total_fee:
-    :param seller_id:
+    :param seller_id: 支付商户号（支付充当卖家）
     :param trade_status:
     :return:
     """
@@ -103,13 +106,22 @@ def ali_sign_scarlet():
     scarlett_info['sign'] = md5(Sign(scarlett_info).join_asc_have_key("", "sign_type") +
                                 Config(key_path).read_config("key_private_ali", "value"))
     logger.info("回调参数：{}".format(scarlett_info))
-    response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/alipayavoidpaynotifynew",
+    response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/alipayavoidnotifynew",
                              data=scarlett_info)
     result = response.content
     logger.info(str(result.decode("utf-8")))
-    result = response.content
-    logger.info(str(result.decode("utf-8")))
     if "SUCCESS" in str(result.decode("utf-8")):
+        logger.info("回调解析成功")
+        
+
+def ali_sign_scarlet_by_raw_resp(raw_map:str):
+    '''
+    将支付宝回调的原始签约报文（等号连接格式），转换成字典格式。重新发给Scarlett
+    :param raw_map: '{gmt_create=2021-04-26 14:34:00, charset=UTF-8, ...}'
+    '''    
+    scarlett_info = scarlet_map_to_json_(raw_map)
+    result = HTTPJSON_SCARLET.post('/opaycenter/alipayavoidnotifynew', data=scarlett_info, lib=requests)
+    if "SUCCESS" in str(result):
         logger.info("回调解析成功")
 
 

@@ -8,11 +8,14 @@ from lib.common.file_operation.config_operation import Config
 glob_env_cfg = Config(global_env_path)
 
 
-def set_global_env_id(env_id):
+def set_global_env_id(env_id):    
     if isinstance(env_id, int):
         env_id = str(env_id)
     elif not env_id.isdigit():
         env_id = re.search('[a-zA-Z]+$', env_id).group()
+    case_env = dict(os.environ).get('CASE_ENV')
+    if case_env:
+        env_id = str(case_env)
     glob_env_cfg.write_config('environment', 'value', env_id)
     assert glob_env_cfg.read_config('environment', 'value') == env_id
 
