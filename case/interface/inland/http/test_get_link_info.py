@@ -23,3 +23,10 @@ class TestInlandPositive():
         result = get_link_info_test_positive(case)
         # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
+        assert eval(case.expected['success']) == result['success']
+        if result['success'] is True:
+            if case.req_params['partnerId'] == "5456925":
+                for item in result['data']['vipRights']:
+                    for dict_key in item:
+                        assert item[dict_key] is not None
+

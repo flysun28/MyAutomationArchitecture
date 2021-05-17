@@ -10,12 +10,11 @@ pyobj_resp.header['X-APP']['appPackage'] = 'com.hnzh.dldlwhjx.nearme.gamecenter'
 pyobj_resp.header['X-APP']['appVersion'] = '260'
 
 case_data = {
-    "processToken": "",
+    "processToken": "Pskac8goWdnJD3Xj4DeSV9",
     "partnerId": "2031",
     "accountExist": "Y",
     "renewal": "N",
     "acrossScreen": "N"
 }
-replace_http_json(case_data)
 result = pyobj_resp.post('/api/pay-flow/v290/list-pay-types', case_data)
 print(result)
