@@ -20,5 +20,7 @@ class TestInlandPositive():
     @pytest.mark.parametrize('case', case_file.positive_cases)
     def test_inland_positive(self, case):
         result = get_process_token_positive(case)
-        # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
+        assert eval(case.expected['success']) == result['success']
+        if result['success'] is True:
+            assert len(result['data']['processToken']) > 0
