@@ -12,8 +12,8 @@ from lib.common_biz.replace_parameter import replace_http_json
 def http_json_request(case, case_sheet, url):
     sheetname = case.ws.title
     prefix, pay_method = re.search('({}|)(\S+)'.format(case_sheet), sheetname, re.I).groups()
-    # if prefix:
-    case = replace_http_json(case.req_params)
-    raw_response = pyobj_resp.post(url, case)
-    case.response = raw_response
-    return case.response
+    if 'processToken' in case.req_params:
+        if 'processToken' == '':
+            case = replace_http_json(case)
+    raw_response = pyobj_resp.post(url, case.req_params)
+    return raw_response

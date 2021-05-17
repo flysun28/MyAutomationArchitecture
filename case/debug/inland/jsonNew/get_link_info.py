@@ -9,9 +9,7 @@ from lib.common_biz.replace_parameter import replace_http_json
 pyobj_resp.header['X-APP']['appPackage'] = 'com.hnzh.dldlwhjx.nearme.gamecenter'
 pyobj_resp.header['X-APP']['appVersion'] = '290'
 
-# JP7XfQNdptBJqxs1N4UeaV
 case_data = {
-    "processToken": "",
     "partnerId": "5456925"
 }
 replace_http_json(case_data)
