@@ -4,7 +4,6 @@
 # datetime:2021/5/17 15:45
 # comment:
 import pytest
-
 from lib.common.case_processor.entry import src_case_file
 from lib.interface_biz.http.get_marketing_info import get_marketing_info_positive
 

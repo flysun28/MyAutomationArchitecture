@@ -1,13 +1,13 @@
 #!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
 # author:xy
-# datetime:2021/5/17 15:52
+# datetime:2021/5/17 16:19
 # comment:
 import pytest
 from lib.common.case_processor.entry import src_case_file
-from lib.interface_biz.http.list_pay_types import get_list_pay_types_positive
+from lib.interface_biz.http.process_token import get_process_token_positive
 
-pytestmark = pytest.mark.list_pay_types
+pytestmark = pytest.mark.process_token
 
 case_file = src_case_file(__file__)
 
@@ -19,6 +19,6 @@ class TestInlandPositive():
 
     @pytest.mark.parametrize('case', case_file.positive_cases)
     def test_inland_positive(self, case):
-        result = get_list_pay_types_positive(case)
+        result = get_process_token_positive(case)
         # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
