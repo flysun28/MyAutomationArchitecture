@@ -166,3 +166,4 @@ def replace_http_json(req):
     """
     if req['processToken'] == "":
         req['processToken'] = get_process_token()
+    return req

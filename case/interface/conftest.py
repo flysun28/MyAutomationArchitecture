@@ -56,7 +56,7 @@ def login():
     '''
     1. 在自动化专用数据库中保存test_account
     '''
-    set_global_env_id(env_id)
+    # set_global_env_id(env_id)
     from lib.interface_biz.http.user_account import Account
     
     account = Account()

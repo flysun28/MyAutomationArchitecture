@@ -7,4 +7,4 @@ from lib.common_biz.json_request import http_json_request
 
 
 def get_link_info_test_positive(case)-> dict:
-    return http_json_request(case, "", "/api/marketing/v290/get-link-info")
+    return http_json_request(case, "get_link_info", "/api/marketing/v290/get-link-info")
