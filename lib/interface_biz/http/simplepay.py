@@ -234,13 +234,13 @@ class SimplePay(metaclass=WithLogger):
 def simplepay_test_positive(case)-> dict:
     http_pb_request(case, SimplePayPb_pb2)
     return get_check_pb_result_positive(case, SimplePayPb_pb2)
-    
+
 
 def simplepay_test_negative(case)-> dict:
     http_pb_request(case, SimplePayPb_pb2)
-    return get_check_pb_result_positive(case, SimplePayPb_pb2)
+    return get_check_pb_result_negative(case, SimplePayPb_pb2)
 
-    
+
 if __name__ == '__main__':
 #     wxsimplepay = SimplePay("wxpay", "1", '2031', 265)
 #     wxsimplepay.recharge_spend_amount_is_price(1)

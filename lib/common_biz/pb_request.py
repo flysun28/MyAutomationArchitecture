@@ -10,6 +10,9 @@ from lib.common.utils.misc_utils import flatten_nested_dict, dictionary_should_c
 
 
 def _qualify_pb_src(func):
+    '''
+    将func传参`pb_src`转为模块类型
+    '''
     @wraps(func)
     def wrapper(case, pb_src):
         if isinstance(pb_src, str):

@@ -1,7 +1,7 @@
 # coding=utf-8
 
 env_id = '1'
-from lib.common.utils.env import set_global_env_id, get_env_config
+from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
 import os
@@ -32,10 +32,12 @@ from lib.interface_biz.scarlett.alipay import ali_sign_scarlet, ali_sign_scarlet
 from lib.interface_biz.scarlett.wxpay import wx_sign_scarlet
 from lib.interface_biz.scarlett.map_to_json import scarlet_map_to_json
 from case.debug.inland.json.auto_renew import AutoRenew
+from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
+from lib.common_biz.choose_scarlett import choose_scarlett
+from lib.interface_biz.http.query_result import queryResult
+from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
 
-
-if __name__ == '__main__':
-    
+if __name__ == '__main__':    
     flag_coin = "0"
     if flag_coin == "1":
         # 发
@@ -61,21 +63,23 @@ if __name__ == '__main__':
         vou_info = Voucher("oversea").grantVoucher("9809089", "KB_COUPON", "DIKOU", "10000", "7500", "2076075925", "VN",
                                                    "VND")
         Voucher("oversea").checkVoucher(vou_info['batchId'])
+    # 查询优惠券
+#     Voucher().query_voucher('2086776969', '62641621')
 
 #     # 审批退款
 #     refund = GrantRefund("2086776969")
 #     refund.refund_by_pay_req_id('KB202105021143102086776969517632')
     
-    # http自动退款
-    session = None
-    if env_id == 'grey':
-        session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-    elif env_id == 'product':
-        session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-    refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+#     # http自动退款
+#     session = None
+#     if env_id == 'grey':
+#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+#     elif env_id == 'product':
+#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
+#     refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
 #     # 根据业务订单号退款
-#     per_amount = 0.01
-#     total_amount = 0.01
+#     per_amount = 0
+#     total_amount = 0
 #     loop_num = int(total_amount/per_amount)
 #     for i in range(loop_num): 
 #         while True:
@@ -168,14 +172,14 @@ if __name__ == '__main__':
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
     # 签约并支付
-    pay_channel = ''
-    if pay_channel == 'ali':
-        raw_resp = '{charset=UTF-8, notify_time=2021-04-27 18:02:26, alipay_user_id=2088202596648570, sign=lNpmgEGYtr1qMYFr2WDwP+sgaSt+tLdtMYwBDTwtQTomtkS1tL9DGDSxrdPfxdfWluWGikCVzVvf3PMIvVU+6vcn0SO1rxLIzkxtflJFa5YBZzC1yF++CJkwGaVZq6j/nh7FrSvpX4DMfOD5txd1PCZKkJmBr6rIMv6BISGsfqHwcZC4WYgqPx9ky0wfjuCyybGzqHrCkPX3syOyzGX13vpLUxMViV6SCwZKKCVD4BV9Kp0zeBQ//UVlshupzOfwdLCN9zw9NIVKm/LqCGp1Hb0+o7Vg7saf5fZ5A1UgRK/AfQhtjI+WSOufsvByrRgSEu+u0+jSF5dVrr0+HUh76w==, external_agreement_no=SN202104271802133716021610682168, version=1.0, sign_time=2021-04-27 18:02:26, notify_id=2021042700222180226038661428420836, notify_type=dut_user_sign, agreement_no=20215227712921458557, auth_app_id=2016120904060189, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-04-27 18:02:26, app_id=2016120904060189, sign_type=RSA2, alipay_logon_id=280***@qq.com, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}'
-        ali_sign_scarlet_by_raw_resp(raw_resp)
-    elif pay_channel == 'wx':
-        raw_xml = ''
-        requests.post(HTTPJSON_SCARLET.prefix + "/opaycenter/wxpaysignnotify", raw_xml)    
-    signpay = AutoRenew('2086776969', '2031')
+#     pay_channel = ''
+#     if pay_channel == 'ali':
+#         raw_resp = '{charset=UTF-8, notify_time=2021-04-27 18:02:26, alipay_user_id=2088202596648570, sign=lNpmgEGYtr1qMYFr2WDwP+sgaSt+tLdtMYwBDTwtQTomtkS1tL9DGDSxrdPfxdfWluWGikCVzVvf3PMIvVU+6vcn0SO1rxLIzkxtflJFa5YBZzC1yF++CJkwGaVZq6j/nh7FrSvpX4DMfOD5txd1PCZKkJmBr6rIMv6BISGsfqHwcZC4WYgqPx9ky0wfjuCyybGzqHrCkPX3syOyzGX13vpLUxMViV6SCwZKKCVD4BV9Kp0zeBQ//UVlshupzOfwdLCN9zw9NIVKm/LqCGp1Hb0+o7Vg7saf5fZ5A1UgRK/AfQhtjI+WSOufsvByrRgSEu+u0+jSF5dVrr0+HUh76w==, external_agreement_no=SN202104271802133716021610682168, version=1.0, sign_time=2021-04-27 18:02:26, notify_id=2021042700222180226038661428420836, notify_type=dut_user_sign, agreement_no=20215227712921458557, auth_app_id=2016120904060189, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-04-27 18:02:26, app_id=2016120904060189, sign_type=RSA2, alipay_logon_id=280***@qq.com, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}'
+#         ali_sign_scarlet_by_raw_resp(raw_resp)
+#     elif pay_channel == 'wx':
+#         raw_xml = ''
+#         requests.post(HTTPJSON_SCARLET.prefix + "/opaycenter/wxpaysignnotify", raw_xml)    
+#     signpay = AutoRenew('2086776969', '2031')
     # 解约
 #     signpay.un_sign('20215302714334851557', 'c7bf8b413ef94834a7e1b65b4106f49e', 'alipay')
 #     # 微信解约回调
@@ -184,3 +188,7 @@ if __name__ == '__main__':
 #     print(resp.content)
     # 自动扣费
 #     signpay.auto_renew_out(agreement_no='202105025876133076', pay_type='wxpay')
+
+#     # 新支付中心单接口调试
+#     paycenter_dubbo = PayCenterDubbo(partner_code='2031')
+#     paycenter_dubbo.create_direct_pay('wxpay', 0.01, 0.01)

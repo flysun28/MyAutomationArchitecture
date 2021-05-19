@@ -1,0 +1,471 @@
+2021-05-08 16:07:27,727-INFO-lib.common.db_operation.mysql_operation-110-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-05-08 16:07:28,025-INFO-lib.common.db_operation.mysql_operation-110-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-05-08 16:07:28,107-INFO-lib.common.db_operation.redis_operation-35-连接redis集群成功:[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-05-08 16:07:28,138-INFO-lib.common.db_operation.redis_operation-41-redis连接:RedisCluster<10.177.85.93:6379, 10.177.85.94:6379, 10.177.85.96:6379>
+2021-05-08 16:07:28,138-INFO-lib.common.db_operation.redis_operation-76-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-05-08 16:07:28,377-INFO-lib.common.db_operation.redis_operation-35-连接redis集群成功:[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-05-08 16:07:28,377-INFO-lib.common.db_operation.redis_operation-41-redis连接:RedisCluster<10.3.1.189:6400, 10.3.1.44:6400, 10.3.1.79:6400>
+2021-05-08 16:07:28,377-INFO-lib.common.db_operation.redis_operation-76-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-05-08 16:07:28,411-INFO-lib.common.db_operation.mysql_operation-129-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-05-08 16:07:28,412-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '14441120298'
+2021-05-08 16:07:28,418-INFO-lib.common.db_operation.mysql_operation-61-select_one查询结果: {'id': 5, 'username': '14441120298', 'pwd': 'yf12345', 'token': 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA', 'ssoid': '2086776969'}
+2021-05-08 16:07:28,803-INFO-lib.common.case_processor.entry-67-正向测试用例数据：
+2021-05-08 16:07:28,803-INFO-lib.common.case_processor.entry-70-{'name': '直扣-支付宝', 'tag': 'smoke', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'alipay', 'amount': '0.01', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '112.97.217.16', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"payType\\":\\"AlipayPlugin\\",\\"mes\\":\\"partner%3D%222088311951685799%22%26seller_id%3D%22kekezhifu%40keke.cn%22%26out_trade_no%3D%22RM202104251016222086776969164442%22%26subject%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26body%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26total_fee%3D%220.01%22%26notify_url%3D%22http%3A%2F%2Fopaycenter-secure-test.wanyol.com%2Fopaycenter%2Fnotifypluginreader%22%26service%3D%22mobile.securitypay.pay%22%26payment_type%3D%221%22%26_input_charset%3D%22utf-8%22%26it_b_pay%3D%2230m%22%26sign%3D%22TsC7T0TLJj9HrqwjVdIS%252BXDctTWo9JZlMqnApD5AsjZCe7sioj31Vz%252Bqg975hCYK8v3qPkx4rtX7cEb2pMmwqZ7P%252BMYis4qwb2RIl3SCT%252Ftk3NxwlP%252FXoMrixv6aEiVrHaKDJ%252BgPtOP3TwThpXldDD3aDtVx5c8DYlbokv1ZxGA%253D%22%26sign_type%3D%22RSA%22\\",\\"system_order\\":\\"RM202104251016222086776969164442\\"}"}, "payrequestid": "RM202104251016222086776969164442"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:28,804-INFO-lib.common.case_processor.entry-70-{'name': '直扣-微信', 'tag': 'smoke', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'wxpay', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.136.248', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appid\\":\\"wx93eea96ecc33f168\\",\\"noncestr\\":\\"a5726a8635f3442aafda5828e38924cc\\",\\"packageNm\\":\\"Sign=WXPay\\",\\"partnerid\\":\\"1259634601\\",\\"prepayid\\":\\"wx2510162291567098a390882fa14b120000\\",\\"sign\\":\\"F86874D5E9A17DF678C87E6DC1F32F5B\\",\\"timestamp\\":\\"1619316982\\"}"}, "payrequestid": "RM202104251016222086776969061032"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:28,804-INFO-lib.common.case_processor.entry-70-{'name': '直扣-qq钱包', 'tag': 'full', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'qqwallet', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.137.193', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appId\\":\\"1104946420\\",\\"bargainorId\\":\\"1282256301\\",\\"nonce\\":\\"b1ef14ba5b462665b4214c936775802f\\",\\"pubAcc\\":\\"\\",\\"sig\\":\\"P7uBnZZDZZA0qdj6win1YD6AziM=\\",\\"tokenId\\":\\"6M901d38b23111778fdbcf8bc2aac06c\\"}"}, "payrequestid": "RM202104251016232086776969537212"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:28,805-INFO-lib.common.case_processor.entry-70-{'name': '直扣-oppopay', 'tag': 'full', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'qqwallet', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.137.193', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appId\\":\\"1104946420\\",\\"bargainorId\\":\\"1282256301\\",\\"nonce\\":\\"b1ef14ba5b462665b4214c936775802f\\",\\"pubAcc\\":\\"\\",\\"sig\\":\\"IYzt/dR5xObGfnTOeTxQrk1wEYo=\\",\\"tokenId\\":\\"6Mabf08c5e44c2da3c3df8f1e0989029\\"}"}, "payrequestid": "RM202104251016232086776969486272"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:28,806-INFO-lib.common.case_processor.entry-77-负向测试用例数据：
+2021-05-08 16:07:28,818-INFO-lib.interface_biz.http.user_account-29-账户信息: {'id': 5, 'username': '14441120298', 'pwd': 'yf12345', 'token': 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA', 'ssoid': '2086776969'}
+2021-05-08 16:07:28,837-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/tksv/post/pass
+2021-05-08 16:07:28,837-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:28,838-INFO-lib.common.session.http.protobuf-42-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "68412768524276"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "KJ4zUmoOXiI6Qxk8VgbHRtaSTNGuAq2W"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-05-08 16:07:28,945-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'PassPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "f924d2900bcd4f4fb710a4f7fc8a20cc"
+s_p: "SDVvVE1oc0dEVEdWS1JHYktMVDM2RnVidWlLOUZaSnl4M3NBOFRsVjRuVnFIWWNBNE8xRWplUVNOUGxOUTNabERVYmtVWWVpQkdKRWMwU0d2MUdBY2l5WDZKUktDeEgxeDNEODBRUGllWVo2R1VFM0hkTlRnRWFmNkplZFI0WGVCOHJEWk1HdFdVNWx6aWZ1ZkJIUW8xQ3lQRmhpTVZ2OE9PNDB4THZpcXdLdUlqZnBzWnVLTTZqTlcxZkVoMnJrWVNveXBCWVZUeGxkOGM2RnlCU2xyZU9pRkp1YnM3WGc3TzRvZHVPVnhVY2k0WmZrVklhWU5Hb3ZtVlZxMWJFUm1rZk10WHJpOVBhV2I0OEdjYjJsVnlXTVg5Q1d6NU9ES3pqUEYyVTJ6cXFpWFB2ZkRoMDVaNlBIU0E2Y2NCZmRUY3BKd0wzYjFreFh6M2oxam1NWDQwNjlBbTRCS2Y0WHA2SW5naHd1c2NBSERGNFZIQ3pFbE1BbTk2amFmVDV1UTdaaGFWRW9QZURUdDFVM00yMHpPbXFvMFBEMjkyZjZkbk9jMVo5RTRyZ0JHeFN3TzM4UFp5c0JPdHJPUFBrTGR4eTRXelJwdVh5N3MxMldFQTd4b1A4T0llR05YUTh2Z3hNaVhVZVR1ZFlVT2FNQm5MQWQzOVdkdkZxS0F0SGJLRWNHOWFTaUgwRkd0UjQ4MjhtZUxNTDI5VkFZSGJScGNMcHZzY1NFQ29XZnhBTE4yb2ZTOG5PUmxudkZ0bDdva1FRd1ViWEdJTlRDR01NSGRFbzRJWk9ZdWp1QXRaUXBYU0xNVjhEdFBJZWdyYndkZ2VZTUppeDZvRHRWWDF3cW9ZeHF2WXNSMm1vYVNQOWxTWTM3UVFsZlNZbVJrcHJxNVF2QlNZQXY2cFJmbkw0QW1kU2RUQkVXQ05zVzRTSkVEbXY0VnpYejJ3enlJUDJwSjR3SDU4N0Y1STFianZzT1pOMlYyY0tabk1DUWZjUm1FdE5QdHlpelRUeGJRMDVZNk9WNU44M0dIWjlWS2d6M2xIeW9hTlZlWlFXUnFCY0M="
+m_p: "414G5948y990h4k1Nr2OKhtDEX44v3A3ea2hk365e5Dy4qr2MObcU52V3a9oYpP2"
+e_t: "1620569249021"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "186******53"
+}
+
+2021-05-08 16:07:28,979-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/plugin/post/simplepay
+2021-05-08 16:07:28,979-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:28,980-INFO-lib.common.session.http.protobuf-42-传入的参数：header {
+  version: "12.0"
+  t_p: "f924d2900bcd4f4fb710a4f7fc8a20cc"
+  imei: ""
+  model: "PBDM00"
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "ZMGtWU5l"
+  ext: ""
+  sdkVer: 209
+  country: "CN"
+  currency: "CNY"
+  brandType: "OPPO"
+  mobileos: "11"
+}
+type: "alipay"
+amount: "0.01"
+cardno: ""
+cardpwd: ""
+ext: ""
+basepay {
+  channelId: "demo"
+  notifyurl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+  productName: "\346\224\257\344\273\230Demo\346\265\213\350\257\225\345\225\206\345\223\201"
+  productDesc: "\345\236\232\345\247\246\351\261\273\347\276\264\347\212\207\347\214\213\351\272\244\351\252\211\346\257\263\350\240\261\346\216\261\350\265\221"
+  partnercode: "2031"
+  appversion: "3.1.5"
+  currencyName: "CNY"
+  rate: 1.0
+  partnerorder: "6BhLdFiyuQvJ8pP9ZS3oIHx5egMVkK2t"
+}
+sign: "SpV1lvnP7KY5FubN4WmqBpKzg63RXAEDOUJcTBxAknlsglU1S5oCq0sqNmMfRQkJb8SYG/nnwzOdKed2oevYNLfqlhcklC/ydTUbj0DvSRKeN6n+sQM8vtRI+65ggvINVAjHaYgXc35i0HMFxEGSCDjkjSZQzQbOjwAtzyRDTpllTAblKuHFZw+cRNbqILbL6t6dxPnrrBIHJXmH3uFO1Pis8uFK9BX7GNcdVz5auoQLN9e0KP+zaYY3OSKfyk50WCkBVGqQXUcDBDRWFyRJD63/6LsnyenTWl6l4T1nuST5ye/KXta0wq5cN5hoCg7Lap97Wl1sHz4XHg2C6ryOtA=="
+ip: "112.97.217.16"
+isNeedExpend: "0"
+appId: ""
+payTypeRMBType: "1"
+tradeType: "common"
+
+2021-05-08 16:07:29,079-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'SimplePayPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "{\"payType\":\"AlipayPlugin\",\"mes\":\"partner%3D%222088311951685799%22%26seller_id%3D%22kekezhifu%40keke.cn%22%26out_trade_no%3D%22RM202105081607292086780423178862%22%26subject%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26body%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26total_fee%3D%220.01%22%26notify_url%3D%22http%3A%2F%2Fopaycenter-secure-test.wanyol.com%2Fopaycenter%2Fnotifypluginreader%22%26service%3D%22mobile.securitypay.pay%22%26payment_type%3D%221%22%26_input_charset%3D%22utf-8%22%26it_b_pay%3D%2230m%22%26sign%3D%22b3P7FzbgQYDhq2lCxjd4qzrN8YB%252BRRKmfimvQ61FNqIv88e3xgGK3IUJsHIGUpuI4%252BcN5MO8NF4u0nlej9EmUx61DW26gLt1zDAUCOly8aVVDK1oyHEZJpjneLyXhZy6e1%252B1a2QxJ3mpoaJXfIcgwqRs0MqRAdWbC7t0Gp%252FE40w%253D%22%26sign_type%3D%22RSA%22\",\"system_order\":\"RM202105081607292086780423178862\"}"
+}
+payrequestid: "RM202105081607292086780423178862"
+model: ""
+
+2021-05-08 16:07:35,740-INFO-lib.common.db_operation.mysql_operation-110-成功连接到测试环境1-MYSQL：{'host': '10.52.44.235', 'user': 'opay', 'pwd': 'opay_test@2020', 'port': '33066'}
+2021-05-08 16:07:36,060-INFO-lib.common.db_operation.mysql_operation-110-成功连接到测试环境1-MYSQL：{'host': '10.3.1.240', 'user': 'opay', 'pwd': 'opay_test@2019', 'port': '3306'}
+2021-05-08 16:07:36,173-INFO-lib.common.db_operation.redis_operation-35-连接redis集群成功:[{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-05-08 16:07:36,173-INFO-lib.common.db_operation.redis_operation-41-redis连接:RedisCluster<10.177.85.93:6379, 10.177.85.94:6379, 10.177.85.96:6379>
+2021-05-08 16:07:36,173-INFO-lib.common.db_operation.redis_operation-76-connection list: [{'host': '10.177.85.94', 'port': '6379', 'name': '10.177.85.94:6379'}, {'host': '10.177.85.93', 'port': '6379', 'name': '10.177.85.93:6379'}, {'host': '10.177.85.96', 'port': '6379', 'name': '10.177.85.96:6379'}]
+2021-05-08 16:07:36,403-INFO-lib.common.db_operation.redis_operation-35-连接redis集群成功:[{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-05-08 16:07:36,403-INFO-lib.common.db_operation.redis_operation-41-redis连接:RedisCluster<10.3.1.189:6400, 10.3.1.44:6400, 10.3.1.79:6400>
+2021-05-08 16:07:36,403-INFO-lib.common.db_operation.redis_operation-76-connection list: [{'host': '10.3.1.44', 'port': '6400', 'name': '10.3.1.44:6400'}, {'host': '10.3.1.189', 'port': '6400', 'name': '10.3.1.189:6400'}, {'host': '10.3.1.79', 'port': '6400', 'name': '10.3.1.79:6400'}]
+2021-05-08 16:07:36,437-INFO-lib.common.db_operation.mysql_operation-129-成功连接到测试专用环境-MYSQL：{'host': '10.52.54.122', 'user': 'opay', 'pwd': '_UI7xHubrhTPIP1J_T4so7SU7ATCrUzm7cAh6TdBLLHWUSQUQqD8p45xVQzV3Czi', 'port': '33066'}
+2021-05-08 16:07:36,438-INFO-lib.common.db_operation.mysql_operation-53-执行sql语句：SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '14441120298'
+2021-05-08 16:07:36,444-INFO-lib.common.db_operation.mysql_operation-61-select_one查询结果: {'id': 5, 'username': '14441120298', 'pwd': 'yf12345', 'token': 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA', 'ssoid': '2086776969'}
+2021-05-08 16:07:36,716-INFO-lib.common.case_processor.entry-67-正向测试用例数据：
+2021-05-08 16:07:36,716-INFO-lib.common.case_processor.entry-70-{'name': '直扣-支付宝', 'tag': 'smoke', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'alipay', 'amount': '0.01', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '112.97.217.16', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"payType\\":\\"AlipayPlugin\\",\\"mes\\":\\"partner%3D%222088311951685799%22%26seller_id%3D%22kekezhifu%40keke.cn%22%26out_trade_no%3D%22RM202104251016222086776969164442%22%26subject%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26body%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26total_fee%3D%220.01%22%26notify_url%3D%22http%3A%2F%2Fopaycenter-secure-test.wanyol.com%2Fopaycenter%2Fnotifypluginreader%22%26service%3D%22mobile.securitypay.pay%22%26payment_type%3D%221%22%26_input_charset%3D%22utf-8%22%26it_b_pay%3D%2230m%22%26sign%3D%22TsC7T0TLJj9HrqwjVdIS%252BXDctTWo9JZlMqnApD5AsjZCe7sioj31Vz%252Bqg975hCYK8v3qPkx4rtX7cEb2pMmwqZ7P%252BMYis4qwb2RIl3SCT%252Ftk3NxwlP%252FXoMrixv6aEiVrHaKDJ%252BgPtOP3TwThpXldDD3aDtVx5c8DYlbokv1ZxGA%253D%22%26sign_type%3D%22RSA%22\\",\\"system_order\\":\\"RM202104251016222086776969164442\\"}"}, "payrequestid": "RM202104251016222086776969164442"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:36,716-INFO-lib.common.case_processor.entry-70-{'name': '直扣-微信', 'tag': 'smoke', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'wxpay', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.136.248', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appid\\":\\"wx93eea96ecc33f168\\",\\"noncestr\\":\\"a5726a8635f3442aafda5828e38924cc\\",\\"packageNm\\":\\"Sign=WXPay\\",\\"partnerid\\":\\"1259634601\\",\\"prepayid\\":\\"wx2510162291567098a390882fa14b120000\\",\\"sign\\":\\"F86874D5E9A17DF678C87E6DC1F32F5B\\",\\"timestamp\\":\\"1619316982\\"}"}, "payrequestid": "RM202104251016222086776969061032"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:36,716-INFO-lib.common.case_processor.entry-70-{'name': '直扣-qq钱包', 'tag': 'full', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'qqwallet', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.137.193', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appId\\":\\"1104946420\\",\\"bargainorId\\":\\"1282256301\\",\\"nonce\\":\\"b1ef14ba5b462665b4214c936775802f\\",\\"pubAcc\\":\\"\\",\\"sig\\":\\"P7uBnZZDZZA0qdj6win1YD6AziM=\\",\\"tokenId\\":\\"6M901d38b23111778fdbcf8bc2aac06c\\"}"}, "payrequestid": "RM202104251016232086776969537212"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:36,717-INFO-lib.common.case_processor.entry-70-{'name': '直扣-oppopay', 'tag': 'full', 'type': '+', 'req_params': {'header': {'version': '12.0', 't_p': '', 'imei': '', 'model': 'PBDM00', 'apntype': '1', 'package': 'com.example.pay_demo', 'r_v': '', 'ext': '', 'sdkVer': 209, 'country': 'CN', 'currency': 'CNY', 'brandType': 'OPPO', 'mobileos': '11'}, 'type': 'qqwallet', 'amount': '100.0', 'cardno': '', 'cardpwd': '', 'ext': '', 'basepay': {'channelId': 'demo', 'notifyurl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver', 'productName': '支付Demo测试商品', 'productDesc': '垚姦鱻羴犇猋麤骉毳蠱掱赑', 'partnercode': '2031', 'appversion': '3.1.5', 'currencyName': 'CNY', 'rate': 1.0, 'partnerorder': ''}, 'sign': '', 'ip': '113.102.137.193', 'isNeedExpend': '0', 'appId': '', 'payTypeRMBType': '1', 'tradeType': 'common'}, 'actual': '{"baseresult": {"code": "0000", "msg": "{\\"appId\\":\\"1104946420\\",\\"bargainorId\\":\\"1282256301\\",\\"nonce\\":\\"b1ef14ba5b462665b4214c936775802f\\",\\"pubAcc\\":\\"\\",\\"sig\\":\\"IYzt/dR5xObGfnTOeTxQrk1wEYo=\\",\\"tokenId\\":\\"6Mabf08c5e44c2da3c3df8f1e0989029\\"}"}, "payrequestid": "RM202104251016232086776969486272"}', 'status_code': 200, 'expected': {'code': '0000', 'payrequestid': 'RM20'}, 'is_passed': 'passed', 'comments': None}
+2021-05-08 16:07:36,717-INFO-lib.common.case_processor.entry-77-负向测试用例数据：
+2021-05-08 16:07:36,728-INFO-lib.interface_biz.http.user_account-29-账户信息: {'id': 5, 'username': '14441120298', 'pwd': 'yf12345', 'token': 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA', 'ssoid': '2086776969'}
+2021-05-08 16:07:36,744-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/tksv/post/pass
+2021-05-08 16:07:36,744-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:36,745-INFO-lib.common.session.http.protobuf-42-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "57098074036794"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "hNy8wAZM2jSbQRO7tEalLG9mPIVYz53s"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-05-08 16:07:36,802-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'PassPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "f4a2b206549a470b874921b20793368f"
+s_p: "NGJnamZTMElqU1UzWUFwS1pCYVdxU3p5cVBRbnh3NDFuY0ZMWWtaZ1dBNWpFRTFRSGZGN0FJTHdLdnRhZnk3cjN5R2JmUUlKVVRINkN3MnlsNW5IVm5GaDRPYzZlaFVlU2h6S01HS3RTOEFLa0p4Nm5Qb01IS0hzUjFBWHUxMk14WndpQVRFaDNOR05wRlBINE5OVTkzYm85a2xjaXB4dklVRGpEaTRURVFEVFJIYTJEN2NuSjNld0JiWUhISUZkWWEzNnZyTWJpRWVESldWb3oxWGlVOTU3WmZNeUxtMW1md3BkQXJqUXNDdWVqbk94VEd5SUN5MnZJaXhpQnlDbWdRcGNNZ0FSejROa1NwVDVMUE1TbHgyZlVZWEMxM3FLWFF4RmpuMWVtaFBsQ1BNMEQ1Y3FOTHY5M3ZrYjNpSm1tam94NXdTQVlMY1pGZ2xsOGNheWl1M2NzM2Z5b3E4dXkxRnR3WjBiNmI5QTVTTThsSGJtQ2R3NXhleGE0T1lWcFpTV3E1dXcyWjFoRFM3eFBFVDBMTHJTdTYwTXlyRzA1Mlg0Qk8wTXhLczBXVDI1V1BzNzFkcDhLdUl4MEhNRWdvZzVKM25sVkpDTGVucGw1U3hTVVdIaXVPUktFam9qczFJWnNTNnFWeThmdlBKeTgzbUR3S2l6ZVNnclNndFBTZ2VuNmxEV2w5WE9qOXdLUk1VWVEwWU53enFhVTRLaWNmZ0VCakU0V3Q3MlN2SnlwUVVqZ0ptMW5wZkxsbWVaZWFNcFVVeXQ1RTZzVk9GNVFESTI3NktlMVZiU3ZldjRqMzc4RFZ5VnI2bk1QYnMxVXZ3Y3hvRm1HVmZIcDNEa3VVdWxoU0tHcE5BQW9tUUh3SGF6ZEd1R1h6cUtEQnhURWpsdUQyRmxTekJoM2ZlV0xjNXZ2VTlMTXRHOE5VdFNsRzZSUDJQanBJbnRBR25uQVVmWnJKU2Rtc0xsV0xDWW9NYjdrQ2ZUTnNWVW9rdElLaVlwM3dRbmhpajFxNEwzdDM3akxIOFVySU52ajRucEtPVVNNcTZTWWNOVFd1dUs="
+m_p: "HW4tG0378ub9O77mF0vvr2s0XfRP228f2Qlno8Exf4Du2mLjtswX6ORs4sM6145T"
+e_t: "1620569256879"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "186******53"
+}
+
+2021-05-08 16:07:36,820-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/plugin/post/simplepay
+2021-05-08 16:07:36,821-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:36,821-INFO-lib.common.session.http.protobuf-42-传入的参数：header {
+  version: "12.0"
+  t_p: "f4a2b206549a470b874921b20793368f"
+  imei: ""
+  model: "PBDM00"
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "PH4NNU93"
+  ext: ""
+  sdkVer: 209
+  country: "CN"
+  currency: "CNY"
+  brandType: "OPPO"
+  mobileos: "11"
+}
+type: "alipay"
+amount: "0.01"
+cardno: ""
+cardpwd: ""
+ext: ""
+basepay {
+  channelId: "demo"
+  notifyurl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+  productName: "\346\224\257\344\273\230Demo\346\265\213\350\257\225\345\225\206\345\223\201"
+  productDesc: "\345\236\232\345\247\246\351\261\273\347\276\264\347\212\207\347\214\213\351\272\244\351\252\211\346\257\263\350\240\261\346\216\261\350\265\221"
+  partnercode: "2031"
+  appversion: "3.1.5"
+  currencyName: "CNY"
+  rate: 1.0
+  partnerorder: "shLCmlA9ByFM4WiU6ovScExKRnXQVTtD"
+}
+sign: "F8T7jpvlX0RlXzWb7/NPKZX3QoZiG38EIQnSPfoVDYI60fD0r0+3wVj6TlNtyMImYRWDt2PrlEiRvmvom3IPN7nMQVToEnurVoXcvjxXi2ZmdxB3a/K/Xj0qQ8rrfwwAtRhWnItsNJmVRQfjsMCjv1Lpnbpyt93lbtNM454/kGt5EdLJ+iUMtvMeXRJ4BHj4EagCIKhZ3awevruyUpGK88nFQ3Q96b4ntatutoz79DVcuvxRzgy5mxaCo0KdBYhHzD8ZXthIbMruxHXXewjcV08qRselIGPYoIp0OM2JIRbYFORQYnYViCl7zHPaSdhSqTNsEpE2S2/q5rDYYI/C4Q=="
+ip: "112.97.217.16"
+isNeedExpend: "0"
+appId: ""
+payTypeRMBType: "1"
+tradeType: "common"
+
+2021-05-08 16:07:36,918-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'SimplePayPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "{\"payType\":\"AlipayPlugin\",\"mes\":\"partner%3D%222088311951685799%22%26seller_id%3D%22kekezhifu%40keke.cn%22%26out_trade_no%3D%22RM202105081607362086780423436812%22%26subject%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26body%3D%22%E6%94%AF%E4%BB%98Demo%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81%22%26total_fee%3D%220.01%22%26notify_url%3D%22http%3A%2F%2Fopaycenter-secure-test.wanyol.com%2Fopaycenter%2Fnotifypluginreader%22%26service%3D%22mobile.securitypay.pay%22%26payment_type%3D%221%22%26_input_charset%3D%22utf-8%22%26it_b_pay%3D%2230m%22%26sign%3D%22rQPTrh%252B%252B9Ek6k9ymEvo%252FRsMAjmHzq5GvUxeASYa5D7NNvi6OGys%252Be7bPy26BFDP7Nu49SBIlqw48RvZoe3bTXOepQ2BENbQ8Bs57g8h43s5YtG%252Fr7BHDHVzFLJrBQFSW%252B%252Bt6PfrLp05fyjvxnGeeMSE283FIksXKuEu%252BKoR1YDc%253D%22%26sign_type%3D%22RSA%22\",\"system_order\":\"RM202105081607362086780423436812\"}"
+}
+payrequestid: "RM202105081607362086780423436812"
+model: ""
+
+2021-05-08 16:07:37,060-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/tksv/post/pass
+2021-05-08 16:07:37,060-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:37,060-INFO-lib.common.session.http.protobuf-42-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "38241016455015"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "Jo3mEFlsVaAzwfRYcLKI1dg9v2bnOTuq"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-05-08 16:07:37,125-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'PassPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "e7185c9ba76e4a8f940768f56ae974aa"
+s_p: "bU5CYm4yYmdvQkducUNUSXN0YUU1Q3VXdWdveXg2N2hoWlBkZ21kMnJuVWczV1VLTEdBSjNCWE5jY3hXbTAyZDhXeHBaRFZESHJmV2N1UkM3b25kV2pMS2ZkQ05hVWx1RmpCSklpUmhSZUpaQ3haQkROVjgyTUdKWXBjRDVBdFN0TW5jYUJvVlZabzVYeklheG04Z0VPa3BaQkRvZDM3MWowNTJWakYyTnhHd2ZadHBZdkZ5ZUJjbnhWblhHN1ljY0J0WFgwSFFsTnJaM2tSa0xXRmpDaHlDTE10ZHozdjJySWNDcnpaSTF2bjFQT0Y4TE9xamZPckd3SkZLOEI0S0dNd25SaTlHNml2OFpIVW9WUEpVejZvZnc5QWFqbjQ0WHVGZGoyYU54S043WDFsMzlDUWhlUlZ6eWZ6Vzdma014am1ZYmJ4Umc0RDRWQ0xwRmZndHQzOUd0NERTZzlKNTNkZ0U4dGRCbTZXWk5ZYzRpbHRvbzVvazk1WmM2OU9tMHd6NlVNblVqUFJKSHAxTHBXUVdybFE4VHVEZHRIU1A0QmVPbEhSb3NrUW9PUzFSdE4yMkJTc29lNklHUWFQSG84RlhzWUN3QWdPTnpZcmV0N3V1MDJ4djAzWXRtQUc5SGxVT1IwSnlhcW5BZlhLRUpqMTRhb0xRRWt2Z3lNTUtKZmk1T1p0OHBuaG5aS0VhVktWbkNNMWZidDlzeUdJUDlpSE9PMlg1ek9MTGlLTUZnbmJLN2hrTzFKM1RaTEQ5UzdXM2RoRHE2MmhUTDdqUlNaUmJvR1JDdDJ2MkFUTERUNmNyQkdPQ2hhNmw5dU1IdlhQNnFIWkNDRnUzanQ1bUVFcjlGSnlobkJkbGhkb2c5Z0ZqNkN0Z2N1OVVtRTB3eWhGWmZpUDd2OGNlSDZCVWhJTnpITHB4MllaT3NTeFZxeW5MUFQ1MFk3akNoRHdYVzI0RHN1R0tWMmh1OFVoN1UwSkdWaVl1Z3pGZ1FXaU9kMjhMN1ZYdHQ5Sk14ellmS3M5d21GdEJ5a3FjdUg2a1M3eHp3Mmh5SktNZUlyTHc="
+m_p: "s3v4t9Vp2jxkZ5ECygx3H815N7a5bI02e7i1u4rfGBU268691iIXsg8a3KcQsYh5"
+e_t: "1620569257206"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "186******53"
+}
+
+2021-05-08 16:07:37,127-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/plugin/post/simplepay
+2021-05-08 16:07:37,127-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:37,127-INFO-lib.common.session.http.protobuf-42-传入的参数：header {
+  version: "12.0"
+  t_p: "e7185c9ba76e4a8f940768f56ae974aa"
+  imei: ""
+  model: "PBDM00"
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "52VjF2Nx"
+  ext: ""
+  sdkVer: 209
+  country: "CN"
+  currency: "CNY"
+  brandType: "OPPO"
+  mobileos: "11"
+}
+type: "wxpay"
+amount: "100.0"
+cardno: ""
+cardpwd: ""
+ext: ""
+basepay {
+  channelId: "demo"
+  notifyurl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+  productName: "\346\224\257\344\273\230Demo\346\265\213\350\257\225\345\225\206\345\223\201"
+  productDesc: "\345\236\232\345\247\246\351\261\273\347\276\264\347\212\207\347\214\213\351\272\244\351\252\211\346\257\263\350\240\261\346\216\261\350\265\221"
+  partnercode: "2031"
+  appversion: "3.1.5"
+  currencyName: "CNY"
+  rate: 1.0
+  partnerorder: "S26QIKGAp9tnPue4sRzyXlgYTwO5mCcN"
+}
+sign: "4GK9kwiBgaoIrUBd7GI0E4mu/OgdQa4P3Cy31lCaerWN4eWaZt52jQ9ydiCzjDCZvVOTLPDGUiBSLgSj/B2rOqR7f0yceZpyAJccpw6DJSLTPwYxPqho+a8sVQ+6af6pTFDeiNFW32JF0ZNgs/lNkRjQQtKbVRdpdXxZlfVX1p7ifCZw9NG/n7h3w2P8Gmjtog57eHbPIRnNmTAyQ6HoPutVbmp2YhaPTbaahx5ZYnHQIaCv/toCK/JDH59v3nMbxXq1tj4MGWQ+4B5xT7q0QbAZxMNeSwFv/wpbgngYQWq3QWCzLDANEW9v9uAbQ/yV53dINbt00QoP6VeLPFOUMA=="
+ip: "113.102.136.248"
+isNeedExpend: "0"
+appId: ""
+payTypeRMBType: "1"
+tradeType: "common"
+
+2021-05-08 16:07:37,517-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'SimplePayPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "{\"appid\":\"wx93eea96ecc33f168\",\"noncestr\":\"ce0add29b2a94ae7b93d13638787e409\",\"packageNm\":\"Sign=WXPay\",\"partnerid\":\"1559247341\",\"prepayid\":\"wx081607375399685afa268f43ae53720000\",\"sign\":\"BDA76E2B716CBB2B26B8B7C5B619FCB0\",\"timestamp\":\"1620461257\"}"
+}
+payrequestid: "RM202105081607372086780423628842"
+model: ""
+
+2021-05-08 16:07:37,638-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/tksv/post/pass
+2021-05-08 16:07:37,639-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:37,639-INFO-lib.common.session.http.protobuf-42-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "60180505120855"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "fOevzUj94AiVdlxWghEDRSBwpT5NyGMb"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-05-08 16:07:37,718-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'PassPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "44f8039564c345f1bf1cb60bae938a00"
+s_p: "Rm1PTXE1ODNjWVZDTDJHU1hqc1FzdWFFS2w5MmpwQXpjRDB5ajFSSzlIUVhZWWdoOFg3NW4zSlZpaU5udlBjS2FyOUIzT2NvY0hsMlFUSjE2RHhDbHl6Y3cxbHVtQ0xuRDZKcUtwSmRveHI4bW45TFB0cmh0MlVZeWFBMmJqdnVkVTFBZ1JLSnJMazBxdG1VVXg3RWlENEZnM3BGRkowYURQRUFsRGpSaDE4QWhSYUNaajluZmtBanhOV1dMWHVyZnBOOHZPNUtWZmpua0l6NVl4U2NLaGlsblhzUkJhWmVUNzVBQTF1Z3RBSE9JTzEwY3plMDhVVmx5aklIUTBmQkFHbGNNaDlwRFl0aHJvMU1ncDJ2YWFCRXZzVndwVEJPSVNEMmR1YjRlNDUxT09ERGwxdHFnUllnMFVjcnVPSkk3dnNDRlZQN2VJR0VZdjdyb2p4SXRibTlwMEVSUU5aYnJCYjE4d3FsTGp6RnhBVEN1dWRIZVAyYVlpUFl1Zjl1elZzVkNTNmRNZmRCNHVodlUwRWNDMDBwa0g2NVNTbjRmSmIzbDVVZ3hZeFgwR0ViWVluY0J1UFpOWDRZVGRJNVBHM3NEb2VYTThqOG5XeXFhZWo1QkZOcFpnNURTOEtoZWU0ZzNSV1hVejhQSzhSNkZCTDlpOGViYjBKcHZBTFFNMG5xOXYyaHgxbnRjbnAzZFJranp2N2ZEcHRUWndsckV3MUhwQW5PZjBOZG16NllEaUNJQTYwcG5KaGdaNVpmVXFuejRwRjlKZTcxR3dVNjl1aWlqZVpNd2VpWXNXQmVvcVhTWGJZQVo5OWJ3cGVQVlluNVZMNmhPcUR0Nk1TaUs4b1A3ekNhOWo0MnNDMDFpMWJDUHlOT2ZqMk9PV2xKUXlFU01hUmk1QzVTVGttZk02RjBtOVNQRTRXa1p4Q0k3bTVrQnVFZk9lbnFmMzBXZllabGl6anE5cmR3emc1VVZZZmlKbHAxRVVkZks3NmlONUhxMlFMT1dGNUcwWVoxSmFuSVlxekFkdUpMVGRENUJ2dFlqWlF1TmFmVVRRSUg="
+m_p: "m942AWXLuPsRi6ndY2kX4Vi76KutTI8654IX280ondy6a603KA1RB4kj4lVX3uEs"
+e_t: "1620569257772"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "186******53"
+}
+
+2021-05-08 16:07:37,719-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/plugin/post/simplepay
+2021-05-08 16:07:37,720-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:37,720-INFO-lib.common.session.http.protobuf-42-传入的参数：header {
+  version: "12.0"
+  t_p: "44f8039564c345f1bf1cb60bae938a00"
+  imei: ""
+  model: "PBDM00"
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "oxr8mn9L"
+  ext: ""
+  sdkVer: 209
+  country: "CN"
+  currency: "CNY"
+  brandType: "OPPO"
+  mobileos: "11"
+}
+type: "qqwallet"
+amount: "100.0"
+cardno: ""
+cardpwd: ""
+ext: ""
+basepay {
+  channelId: "demo"
+  notifyurl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+  productName: "\346\224\257\344\273\230Demo\346\265\213\350\257\225\345\225\206\345\223\201"
+  productDesc: "\345\236\232\345\247\246\351\261\273\347\276\264\347\212\207\347\214\213\351\272\244\351\252\211\346\257\263\350\240\261\346\216\261\350\265\221"
+  partnercode: "2031"
+  appversion: "3.1.5"
+  currencyName: "CNY"
+  rate: 1.0
+  partnerorder: "1c3KtfBnovJhXSWbZw7yx4Im0aYGPMk5"
+}
+sign: "PqaxzqpgL+cspPXUEijSBSdS8GW0iTFwBpnXawxqXLFiJa6iyNQ3ttuH+FXuFi+bvuTq3P1nhgj2lwfBz4oE9ax/Qfs7bKeCAAx9GQlwxozSjR0h7qI++PJI5AUo8Wobm+0bjBHDpZpdD/r1CdSV3aqdIHGmcIe9caBE1QFaqX+IhNtFDzm+HtH5FzTahQWkA3/6fY28a7LoOrZ0UDT9VF44uxpu46r9DYRT+yUCLj4cUbNB+olF2A4IGaROiIWRDWVp3vgg8c98MjWKb3kZMEszTDgh9mJh/gxsNOJHQw+re4I226H2+z6rhb3FLW6hkK+D1gL72vsPXv+x7ZOirw=="
+ip: "113.102.137.193"
+isNeedExpend: "0"
+appId: ""
+payTypeRMBType: "1"
+tradeType: "common"
+
+2021-05-08 16:07:38,889-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'SimplePayPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "{\"appId\":\"1104946420\",\"bargainorId\":\"1282256301\",\"nonce\":\"802c2e989cf93c6cb52b808a3e1c9cee\",\"pubAcc\":\"\",\"sig\":\"K5vmwVnY+DE/2Gd5mlVe25PqFZs=\",\"tokenId\":\"6M3c58144a48c43a1abcc93ae86a8936\"}"
+}
+payrequestid: "RM202105081607372086780423777302"
+model: ""
+
+2021-05-08 16:07:38,982-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/tksv/post/pass
+2021-05-08 16:07:38,982-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:38,982-INFO-lib.common.session.http.protobuf-42-传入的参数：token: "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1Mjk1OTM3NjIsImlkIjoiMjA4Njc4MDQyMyIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiMWxRa0VlNnRGK3pSZVNNZWVrZzBqWElxdy9vSXMvWm5HVlpYQW9kWmdKcHJOd2xYaEt1Q1NqdmQvbk9kQXU1RjNndDF6THU5WUtISHp5RTdhUmxIQ2dRZmN6Z2loRUhLK0Vreis5WnRDMzQ9In0.MEYCIQC4MydXjBMCr-Vyr-WfjYSu_d22li8hOwSsJLJK3QzJ_gIhALsUz69TIUnbbSblh4J6kSKwwFuuUefbqeBCzynOFkdA"
+partner: "2031"
+package: "com.example.pay_demo"
+ext: ""
+version: "6.0"
+appKey: "1234"
+count: 10000
+order: "01176367100779"
+ip: "121.13.218.236"
+type: "1"
+sdkVer: "20602"
+amount: "100000.0"
+gameSdkVer: 0
+partnerOrder: "m05UaZhDoCIp8KrqWvNjF7yJkRVS9gnx"
+notifyUrl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+country: "CN"
+
+2021-05-08 16:07:39,032-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'PassPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "success"
+}
+t_p: "ce20d8f3d4244e3fa34bbdf809d6ecf0"
+s_p: "eXB4WWRwbmN2WkFEY0xqNkNxeE5pazY5amMxeGJrU1J5UVFnVzJjc0dETkE1SUl6T0NVMDhtVkNjalRTb3JDZll5ekxZWnZkeFhpMUlTR0w1WWY3RDFIMXFiOUJvU3ZtcVVDc2NrQmdWUFFFZjJEZVJ6cUZldmRHSmJCYVNmY050TzNsaFZ0YjJDc1MzYXVqT000UkM0SHNNcWd6SHREZjEwdUtCeVdvelJ5SFRIemg5Tk1iMHNvdkZpSmE4b21GbDF0U1g1VkpJaDNzZ2lrYU1qb1dQQ3VYVDhNakJEaXRYQXdnZnZVODRYUzZ6dGVXQTM1cWNLcEwxWkVjNWdkWFpoeTE0bUFRb0pWT25EODlIMmhVQW1TM0xlQlh1NkdWSWNtZXlBWG04cVN6bkJHREtmRjl5TzdsOXN6YW9jSGlrRm05U045cjR1TzN1aHc3WEJZTkIwRjBMb3dGQVVRNzRIbXpQbGJERVJHN05sbkhDb0tqTWNNOTlDZ013MGVwekpHUkdwaHdrcm00eVA1ZjluWEtZZzZobEhURldESWdsRGNiQTdPWXVnTWlTajFHeVFBZEJaWXdyNEdlVFk0bXlIT0MyRGQ0U056dEhNYjRzcjQyS1IzWHZjRWlJWm03a1REZFQxcUI0eUVDc003U0ZxSnNoSUZVbkFqVm1ScHhOczhVbUhmSUE4d3RMRktBN2gwczUxYXVRV3Z4U3RuRlhqcEVPMTJYbm9ueTEzNVdtdUZLZTZyTnp0Z0RXdmdEaWF5Z3FFR2tzVDdGMzlBcEpvWFRuV2VESTR1S1FDSkIxNXppcm9PM2gxUmpzekhXU3l6WVpCZ0QwQTFMemkxVWYxSVRCZjBaMVJ1aGdJSnd6QUJaM0pWVERpd3dOVUdsU1NWR1h0eTBTTFZlOVJreUF1b0xreTlwRGRrV3k3T0M5N3huVG1jNDA3YW1TWjA5cjFlYjN6VEhWRHYwSkUyMFp0U0JPdDlXcWwxZ3dSOHNkMzU3QmVoODl6M1FTdk9ZY0tqenlvcVE0ZVJKQzNiRmdUY2FiMEt3T21DZmd0RTU="
+m_p: "5MbJ63bNIeeLUT0T3SjDzFNBMq4AA1P273RM0Do200y0MAipO20xh6iT45qK36BN"
+e_t: "1620569259112"
+balanceResult {
+  baseresult {
+    code: "0000"
+    msg: ""
+  }
+  balance: "0"
+  vouBalance: "0"
+  vouNum: 0
+}
+userinfo {
+  username: "186******53"
+}
+
+2021-05-08 16:07:39,033-INFO-lib.common.session.http.protobuf-29-URL: http://pay.pay-test.wanyol.com/plugin/post/simplepay
+2021-05-08 16:07:39,034-DEBUG-lib.common.session.http.protobuf-41-需加入随机字节，标志位：0
+2021-05-08 16:07:39,034-INFO-lib.common.session.http.protobuf-42-传入的参数：header {
+  version: "12.0"
+  t_p: "ce20d8f3d4244e3fa34bbdf809d6ecf0"
+  imei: ""
+  model: "PBDM00"
+  apntype: "1"
+  package: "com.example.pay_demo"
+  r_v: "cNtO3lhV"
+  ext: ""
+  sdkVer: 209
+  country: "CN"
+  currency: "CNY"
+  brandType: "OPPO"
+  mobileos: "11"
+}
+type: "qqwallet"
+amount: "100.0"
+cardno: ""
+cardpwd: ""
+ext: ""
+basepay {
+  channelId: "demo"
+  notifyurl: "http://pay.pay-test.wanyol.com/notify/notify/receiver"
+  productName: "\346\224\257\344\273\230Demo\346\265\213\350\257\225\345\225\206\345\223\201"
+  productDesc: "\345\236\232\345\247\246\351\261\273\347\276\264\347\212\207\347\214\213\351\272\244\351\252\211\346\257\263\350\240\261\346\216\261\350\265\221"
+  partnercode: "2031"
+  appversion: "3.1.5"
+  currencyName: "CNY"
+  rate: 1.0
+  partnerorder: "9DetKBr2WQLZuRzqmv7NoTnESY8MiG5I"
+}
+sign: "FgaZ7bU+SdOw/oNnLabxuOtL7FUnGqTY99ZEA717fpVPL4gqSL+dXKPfSeNXkgE4Se998Nau2ZHoVIBREGCu1Fr3q0s4N7xjDQplOfni0dARwCAgEVKrdRQAQm3us3lC3Scd3Mc/NHx66GqDm456bHRcgIa4CGsBEo8AH+sc0awX3gvKXsj5r3klxISt2Zq2uwtxYUoWlc4FidjlvnZeLm4RML38dmk0QnW5ljrhOWTJHd7RM2KITUpCFUGClS+2Bjlbr7HR5oe4oRfWUiUYPDSq48PX++t0cRmcboBJn7hrLa+7qrMoS1ZH3+4LjnSJWVF2SLTJt4/fzOzr8x/cAQ=="
+ip: "113.102.137.193"
+isNeedExpend: "0"
+appId: ""
+payTypeRMBType: "1"
+tradeType: "common"
+
+2021-05-08 16:07:40,405-INFO-lib.common.session.http.protobuf-59-返回的参数：【<class 'SimplePayPb_pb2.Result'>】baseresult {
+  code: "0000"
+  msg: "{\"appId\":\"1104946420\",\"bargainorId\":\"1282256301\",\"nonce\":\"61e26fc612d46bb584a9c25c66d9476d\",\"pubAcc\":\"\",\"sig\":\"BdDlDdRw4oKq+Wu44omG/BaE+pQ=\",\"tokenId\":\"6M85ad9556285189a83d07e6e3bd2f73\"}"
+}
+payrequestid: "RM202105081607392086780423207652"
+model: ""
+

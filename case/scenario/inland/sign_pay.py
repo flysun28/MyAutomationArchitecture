@@ -45,11 +45,12 @@ def sign_pay(amount, notify_amount):
             query_res = queryResult(order_info["pay_req_id"], query_type="PAY", pass_type="direct")
             assert query_res == '2002', '%s != 2002' %query_res
         except Exception as e:
+            exc_value = e
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
     """
         【4】. 查询order表记录是否正确
     """

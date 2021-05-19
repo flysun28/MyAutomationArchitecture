@@ -97,13 +97,18 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
 
     
 def run_keyword_and_expect_error(err_key:str, keyword, *args, **kwargs):
+    '''
+    执行 keyword(*args, **kwargs)，期望报错，且报错信息中必须包含`err_key`
+    :param err_key:
+    :param keyword:
+    '''
     if isinstance(keyword, str):
         keyword = eval(keyword)
     try:
         keyword(*args, **kwargs)
     except Exception as e:
         errmsg = ' '.join(e.args)
-        if err_key in errmsg:
+        if err_key in errmsg or err_key == '*':
             print('Expected error "%s" occurred, PASS!')
         else:
             raise

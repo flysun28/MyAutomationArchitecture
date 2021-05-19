@@ -21,7 +21,7 @@ logger = Logger('鉴权').get_logger()
 def get_t_p(param):
     """
     :return:
-    """
+    """    
     url = get_env_config()["url"]["pay_in"] + "/tksv/post/pass"
     response = ProtoBuf(PassPb_pb2).runner(url, 'Request', param, flag=0)
     result = ProtoBuf(PassPb_pb2).parser('Result', response)

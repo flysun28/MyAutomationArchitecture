@@ -203,9 +203,9 @@ def is_assert():
     :return:
     """
     env = get_env_id()
-    if env == "1" or env == "2" or env == "3":
+    if env.isdigit():
         return True
-    elif env == "grey" or env == "product":
+    elif env in ("grey", "product"):
         return False
 
 

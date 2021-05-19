@@ -25,7 +25,7 @@ class TestInlandPositive():
         result = simplepay_test_positive(case)
         # 更新到实际结果对应表格中
         case_file.update_actual(case.name, result)
-    
+
 
 @pytest.mark.full
 @pytest.mark.negative
@@ -46,5 +46,3 @@ if __name__ == '__main__':
            ]
     print(argv)
     pytest.main(argv)
-    
-

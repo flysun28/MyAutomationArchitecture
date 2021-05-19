@@ -4,6 +4,7 @@
 import time
 import pytest
 from lib.common.utils.env import set_global_env_id
+from lib.common.session.dubbo.dubbo import monitor
 
 partner_ids = '5456925', '2031'
 env_id = '1'
@@ -38,7 +39,6 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call):
-#     print(item, item.__dict__)
     # 获取钩子方法的调用结果
     out = yield
     # 从钩子方法的调用结果中获取测试报告
@@ -46,9 +46,18 @@ def pytest_runtest_makereport(item, call):
     if result.when == 'call':
         case = item.funcargs.get('case')
         if case:
-            case.file.update_running_result(result.outcome)
-        print('测试用例%s执行报告: %s' %(item.function.__name__, result))
-        print(('运行结果: %s' %result.outcome))
+            if case.is_passed:
+                outcome = case.is_passed
+            else:
+                outcome = 'failed' if monitor.obj else 'passed'
+            case.file.update_running_result(case.name, outcome)
+            monitor.obj2exc.pop(monitor.obj, None)
+            monitor.obj = None
+        else:
+            outcome = result.outcome
+#         print('测试用例%s执行报告: %s' %(item.function.__name__, result))
+        print(('运行结果: %s' %outcome))
+        result.outcome = outcome
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -63,7 +72,8 @@ def login():
 #     account.login()
     
     yield
-     
+    
+    monitor.is_terminate_self = True
     print('\nTest Finished...')
 
 

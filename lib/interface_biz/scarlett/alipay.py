@@ -13,14 +13,14 @@ from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.file_path import key_path
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
-from lib.interface_biz.scarlett.map_to_json import scarlet_map_to_json,\
-    scarlet_map_to_json_
-from lib.common.utils.globals import HTTPJSON_IN, HTTPJSON_SCARLET
+from lib.interface_biz.scarlett.map_to_json import scarlet_map_to_json
+from lib.common.utils.globals import HTTPJSON_SCARLET, MYSQL_IN
+from lib.config.path import common_sql_path
 
 logger = Logger('alipay-scarlet').get_logger()
 
 
-def ali_normal_pay_scarlet(seller_email, out_trade_no, price, total_fee, seller_id, trade_status="TRADE_SUCCESS"):
+def ali_normal_pay_scarlet(out_trade_no, price, total_fee, seller_id, trade_status="TRADE_SUCCESS"):
     """
         "seller_email": "kekezhifu@keke.cn"
         "notify_id": "2021011400222173411016601413333125"
@@ -42,7 +42,7 @@ def ali_normal_pay_scarlet(seller_email, out_trade_no, price, total_fee, seller_
         "gmt_create": time.strftime('%Y%m%d%H%M%S', time.localtime()),
         "buyer_email": "157****2782",
         "notify_time": time.strftime('%Y%m%d%H%M%S', time.localtime()),
-        "seller_email": seller_email,
+        "seller_email": 'kekezhifu@keke.cn',
         "quantity": "1",
         "subject": "充值可币",
         "use_coupon": "N",
@@ -66,7 +66,9 @@ def ali_normal_pay_scarlet(seller_email, out_trade_no, price, total_fee, seller_
     # key自行生成，存放在配置文件中
     scarlett_info['sign'] = md5(Sign(scarlett_info).join_asc_have_key("", "sign_type") +
                                 Config(key_path).read_config("key_private_ali", "value"))
-    response = requests.post(get_env_config()['url']['pay_scarlet'] + "/opaycenter/notifypluginreader", data=scarlett_info)
+    url = get_env_config()['url']['pay_scarlet'] + "/opaycenter/notifypluginreader"
+    logger.info(url)
+    response = requests.post(url, data=scarlett_info)
     result = response.content
     logger.info(str(result.decode("utf-8")))
 
@@ -119,7 +121,7 @@ def ali_sign_scarlet_by_raw_resp(raw_map:str):
     将支付宝回调的原始签约报文（等号连接格式），转换成字典格式。重新发给Scarlett
     :param raw_map: '{gmt_create=2021-04-26 14:34:00, charset=UTF-8, ...}'
     '''    
-    scarlett_info = scarlet_map_to_json_(raw_map)
+    scarlett_info = scarlet_map_to_json(raw_map)
     result = HTTPJSON_SCARLET.post('/opaycenter/alipayavoidnotifynew', data=scarlett_info, lib=requests)
     if "SUCCESS" in str(result):
         logger.info("回调解析成功")

@@ -10,11 +10,19 @@ from lib.common_biz import pbjson
 
 
 class ProtoBuf(metaclass=WithLogger):
+    '''
+    baseresult.code：
+    2001：消费失败，但支付成功
+    2004：消费失败，且支付失败或未知
+    2002：消费成功
+    0000：非充值并消费订单，支付成功
+    '''
     def __init__(self, file_name):
         """
         :param file_name: pb-python文件
         """
         self.file_name = file_name
+        self.url = None
 
     def runner(self, url, request, case, header=None, flag=1):
         """
@@ -26,19 +34,20 @@ class ProtoBuf(metaclass=WithLogger):
         :param flag: 是否需要加随机字节标志位置
         :return:
         """
+        self.url = url
         self.logger.info('URL: %s', url)
         NAME = pbjson.dict2pb(getattr(self.file_name, request), case)
         try:
             src_data = NAME.SerializeToString()
         except Exception as e:
-            self.logger.info("序列化异常，{}".format(e))
+            self.logger.info("序列化异常，{}".format(e))        
         if flag:
-            self.logger.debug('无需加入随机字节，标志位：1')
-            self.logger.info('传入的参数：{}'.format(NAME))
+            self.logger.info('无需加入随机字节，标志位：1')
+            self.logger.info('传入的参数：\n{}'.format(NAME))
             response = requests.post(url, src_data, headers=header)
             return response
         elif flag == 0:
-            self.logger.debug('需加入随机字节，标志位：0')
+            self.logger.info('需加入随机字节，标志位：0')
             self. logger.info('传入的参数：{}'.format(NAME))
             des_data = trans_byte(src_data)
             response = requests.post(url, des_data, headers=header)
@@ -56,9 +65,9 @@ class ProtoBuf(metaclass=WithLogger):
         result = getattr(self.file_name, method)()
         try:
             result.ParseFromString(response.content)
-            self.logger.info('返回的参数：【{}】{}'.format(type(result), result))
+            self.logger.info('{}返回的参数：【{}】{}'.format(self.url, type(result), result))
         except Exception as e:
-            self.logger.error("回参异常:{}".format(e))
+            self.logger.error("{}回参异常:{}".format(self.url, e))
         return result
 
 
