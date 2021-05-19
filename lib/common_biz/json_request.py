@@ -5,7 +5,7 @@
 # comment:
 import re
 
-from lib.common.utils.globals import pyobj_resp
+from lib.common.utils.globals import HTTPENCJSON_IN
 from lib.common_biz.replace_parameter import replace_http_json
 
 
@@ -15,5 +15,5 @@ def http_json_request(case, case_sheet, url):
     if 'processToken' in case.req_params:
         if case.req_params['processToken'] == '':
             case = replace_http_json(case)
-    raw_response = pyobj_resp.post(url, case.req_params)
+    raw_response = HTTPENCJSON_IN.post(url, case.req_params)
     return raw_response
