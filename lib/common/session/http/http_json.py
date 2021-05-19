@@ -46,7 +46,7 @@ class HttpJsonSession(metaclass=WithLogger):
         self.header.update(kwargs)
         self.session.headers = self.header
         self.default_post = self.session.post
-#         self.logger.info('HTTP Header: %s', self.session.headers)
+
 
     def post(self, url, data:dict=None, lib=None):
         self.url = self.prefix + url
@@ -119,64 +119,27 @@ class EncryptJson(HttpJsonSession):
                        'sessionTicket': ''
                        },
         'X-SDK': {'sdkBuildTime': '',  # sdk编译时间，实时时间，格式2020-07-29 20:23
-                  'sdkName': '',
-                  'sdkVersionName': '',
-                  'headerRevisedVersion': '',  # sdk内header修订版本，header有改动则+1
-                  },
+                  'sdkName': '', 'sdkVersionName': '',
+                  # sdk内header修订版本，header有改动则+1
+                  'headerRevisedVersion': ''},
         'X-Device-Info': {'model': '',  # 机型
-                          'ht': '',  # 分辨率-高
-                          'wd': '',  # 分辨率-宽
-                          'brand': '',  # 品牌
-                          'hardwareType': ''  # 设备类型：TV,Watch,Mobile(默认值)
-                          },
-        'X-Context': {'country': '',  # 设置国家
-                      'timeZone': '',
-                      'maskRegion': '',
-                      'locale': ''
-                      },
-        'X-Sys': {'romVersion': '',
-                  'osVersion': '',
-                  'osVersionCode': '',
-                  'osBuildTime': '',
-                  'auid': '',
-                  'ouid': '',
-                  'duid': '',
-                  'guid': '',
-                  'apid': '',
-                  'uid': '',
-                  'usn': '',
-                  'utype': '',
-                  'betaEnv': ''
-                  },
-        'X-APP': {'appPackage': '支付测试demo',
-                  'appVersion': '',
-                  'deviceId': '',
-                  'ucVersion': '',
-                  'instantVersion': '',
-                  'ucPackage': '',
-                  'fromHT': '',
-                  'registerId': '',
-                  'overseaClient': '',
-                  'payVersion': '',
-                  'hostPackage': '',
-                  'hostVersion': '',
-                  'dynamicUIVersion2': ''
-                  },
-        'X-Safety': {'imei': '',
-                     'hasPermission': '',
-                     'imei1': '',
-                     'mac': '',
-                     'serialNum': '',
-                     'deviceName': '',
-                     'wifissid': '',
-                     'slot0': '',
-                     'slot1': ''
-                     }
-    }
+                          'ht': '', 'wd': '',
+                          'brand': 'OPPO',  # 品牌
+                          # 设备类型：TV,Watch,Mobile(默认值)
+                          'hardwareType': ''},
+        'X-Context': {'country': '', 'timeZone': '', 'maskRegion': '', 'locale': ''},
+        'X-Sys': {'romVersion': '', 'osVersion': '', 'osVersionCode': '', 'osBuildTime': '', 'auid': '',
+                  'ouid': '', 'duid': '', 'guid': '', 'apid': '', 'uid': '', 'usn': '', 'utype': '', 'betaEnv': ''},
+        'X-APP': {'appPackage': 'com.example.pay_demo',
+                  'appVersion': '', 'deviceId': '', 'ucVersion': '', 'instantVersion': '', 'ucPackage': '',
+                  'fromHT': '', 'registerId': '', 'overseaClient': '', 'payVersion': '', 'hostPackage': '',
+                  'hostVersion': '', 'dynamicUIVersion2': ''},
+        'X-Safety': {'imei': '', 'hasPermission': '', 'imei1': '', 'mac': '', 'serialNum': '', 'deviceName': '',
+                     'wifissid': '', 'slot0': '', 'slot1': ''}}
     common_params = {
         'appKey': '',
         'sign': '',
-        'timestamp': str(int(time.time() * 10**3)),
+        'timestamp': str(int(time.time() * 10 ** 3)),
         'nonce': create_random_str(8)
     }
     resp_params = {'success': None, 'error': {'code': '', 'message': ''}, 'data': {}}
@@ -204,13 +167,13 @@ class EncryptJson(HttpJsonSession):
         print('pub-sessionKey:', self.__pub_sessionKey)
         self.header['X-Protocol']['key'] = self.__pub_sessionKey
         self.header['X-Protocol']['iv'] = self.__iv
-#         self.aes_codec = AES_CBC(self.__sessionKey.decode(), base64.b64decode(self.__iv))
+        #         self.aes_codec = AES_CBC(self.__sessionKey.decode(), base64.b64decode(self.__iv))
         self.aes_codec = AES4J(self.__sessionKey.decode(), base64.b64decode(self.__iv),
                                self.header['X-Protocol-Ver'])
         self.common_params['appKey'] = appkey
         self.appSecret = Config(key_configfile_path).read_config('encrypted_json', 'app_secret')
 
-    def post(self, url, data:dict):
+    def post(self, url, data: dict):
         '''
         :param url:
         :param data: request parameters dict
@@ -237,25 +200,12 @@ class EncryptJson(HttpJsonSession):
         except:
             raise HttpJsonException('<%s> exception: %s' % (type(self), sys.exc_info()[1]))
         else:
-            self.logger.info('Response headers:%s', response.headers)
+            # self.logger.info('Response headers:%s', response.headers)
             self.__sessionTicket = response.headers['X-Session-Ticket']
             self.header['X-Protocol']['sessionTicket'] = self.__sessionTicket
             return pyobj_resp
 
     def make_sign(self, data: dict):
-        '''
-        第一步：对参数按照key=value的格式，并按照参数名ASCII字典序排序如下：
-        stringA="param1=value1&param2=value2&nonce=100001&timestamp=1611647506";
-        特别注意以下重要规则：
-        ◆ 参数名ASCII码从小到大排序（字典序）；
-        ◆ 如果参数的值为空不参与签名；
-        ◆ 参数名区分大小写；
-        ◆ 传送的sign参数不参与签名，将生成的签名与该sign值作校验。
-        第二步：拼接API密钥
-        stringSignTemp="stringA&key=192006250b4c09247ec02edce69f6a2d"
-        sign=MD5(stringSignTemp)="9a0a8659f005d6984697e2ca0a9cf3b7"
-        其中key的值为申请的appSecret，和appKey一起申请。
-        '''
         orig_sign = Sign(data).join_asc_have_key('&key=' + self.appSecret)
         return md5(orig_sign, to_upper=False)
 
@@ -274,14 +224,10 @@ class EncryptJson(HttpJsonSession):
             '''
             aes_x_safety = self.aes_codec.encrypt(str(enc_header['X-Safety']))
             urlencode_x_safety = quote(aes_x_safety, encoding='utf-8')
-#             aes_x_safety = self.aes_codec.encrypt_and_base64(str(enc_header['X-Safety']))
-#             _encoding = chardet.detect(aes_x_safety)['encoding']
-#             urlencode_x_safety = quote(aes_x_safety.decode(_encoding), encoding='utf-8')
             return urlencode_x_safety
 
         enc_header['X-Safety'] = encrypt_x_safety()
         return enc_header
 
     def encrypt_body(self, body):
-#         return self.aes_codec.encrypt_and_base64(str(body))
         return self.aes_codec.encrypt(str(body))

@@ -4,8 +4,8 @@ Created on 2021年2月9日
 @author: 80319739
 '''
 import os
-from lib.common.db_operation.zk_client import ZkClient, connect_zk
-from lib.common.session.http.http_json import HttpJsonSession
+from lib.common.db_operation.zk_client import connect_zk
+from lib.common.session.http.http_json import HttpJsonSession, EncryptJson
 from lib.common.utils.env import get_env_config, get_env_id
 from lib.common.db_operation.mysql_operation import connect_mysql, connect_auto_test_special
 from lib.common.db_operation.redis_operation import connect_redis
@@ -71,7 +71,7 @@ MYSQL_IN = GlobalVar.MYSQL_IN
 MYSQL_OUT = GlobalVar.MYSQL_OUT
 MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(case_dir, 'src')
-
+pyobj_resp = EncryptJson(GlobalVar.URL_PAY_IN, appkey='2033')
 
 
 

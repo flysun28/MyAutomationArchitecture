@@ -10,7 +10,7 @@ from lib.common.algorithm.rsa import rsa
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
-from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in
+from lib.interface_biz.http.pay_pass import Pass, pass_no_login_in, get_process_token
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import do_case_path, key_path
 from lib.common_biz.order_random import RandomOrder
@@ -157,3 +157,13 @@ def replace_gateway(case_req, app_id):
     if case_req['sign'] == '':
         sign_string = Sign(case_req).join_asc_have_key() + key
         case_req['sign'] = md5(sign_string)
+
+
+def replace_http_json(req):
+    """
+    新版本客户端参数替换
+    :return:
+    """
+    if req.req_params['processToken'] == "":
+        req.req_params['processToken'] = get_process_token()
+    return req

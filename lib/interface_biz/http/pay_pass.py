@@ -13,9 +13,27 @@ from lib.config.path import common_sql_path, global_env_path
 from lib.interface_biz.http.user_account import Account
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
-from lib.common.utils.globals import GlobalVar
+from lib.common.utils.globals import GlobalVar, pyobj_resp
 
 logger = Logger('鉴权').get_logger()
+
+
+def get_process_token():
+    """
+    获取流程凭证
+    :return:
+    """
+    case_data = {
+        "token": GlobalVar.TOKEN,
+        # platform==MSP，传该字段
+        "appId": "",
+        "appPackage": "com.oppo.usercenter",
+        "partnerCode": "2031",
+        "platform": "ATLAS"
+    }
+    result = pyobj_resp.post('/api/pay-flow/v290/get-process-token', case_data)
+    logger.info("/get-process-token return: {}".format(result))
+    return result['data']['processToken']
 
 
 def get_t_p(param):
