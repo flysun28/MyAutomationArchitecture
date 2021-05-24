@@ -1,6 +1,6 @@
 # coding=utf-8
 
-env_id = '1'
+env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -37,7 +37,7 @@ from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     flag_coin = "0"
     if flag_coin == "1":
         # 发
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         Voucher().checkVoucher(vou_info['batchId'])
         # 消费
     if flag == "2":
-        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2086776969")
+        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "0.01", "2086776969")
         Voucher().checkVoucher(vou_info['batchId'])
     if flag == "3":
         # 红包券
@@ -70,13 +70,13 @@ if __name__ == '__main__':
 #     refund = GrantRefund("2086776969")
 #     refund.refund_by_pay_req_id('KB202105021143102086776969517632')
     
-#     # http自动退款
-#     session = None
-#     if env_id == 'grey':
-#         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
-#     elif env_id == 'product':
-#         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-#     refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+    # http自动退款
+    session = None
+    if env_id == 'grey':
+        session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
+    elif env_id == 'product':
+        session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
+    refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
 #     # 根据业务订单号退款
 #     per_amount = 0
 #     total_amount = 0
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 #             else:
 #                 break
     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('', 0.01)
+    refund.refund_by_pay_req_id('', 0.01)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='

@@ -34,7 +34,7 @@ class ExcelTestCase():
             if attr in ('req_params', 'expected', 'voucherInfo') and value:
                 try:
                     value = json.loads(value)
-                except json.decoder.JSONDecodeError:
+                except json.decoder.JSONDecodeError:                    
                     # value is not a dictionary, pass directly
                     pass
             exec(f'self.{attr} = value')

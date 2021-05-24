@@ -4,7 +4,7 @@
 # datetime:2021/5/13 18:28
 # comment:
 from lib.common.utils.globals import pyobj_resp
-from lib.common_biz.replace_parameter import replace_http_json
+
 
 pyobj_resp.header['X-APP']['appPackage'] = 'com.hnzh.dldlwhjx.nearme.gamecenter'
 pyobj_resp.header['X-APP']['appVersion'] = '260'

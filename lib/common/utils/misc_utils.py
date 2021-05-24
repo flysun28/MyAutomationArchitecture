@@ -1,11 +1,22 @@
 # coding=utf-8
-
-import os
 import re
 import random
 import string
-from lib import pardir
-from lib.config.path import lib_dir
+import time
+from functools import wraps
+
+
+def timeit(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            end = time.perf_counter()
+            elapsed = round((end - start), 3)
+            print('{} elapsed time: {}'.format(func.__qualname__, elapsed))
+    return wrapper
 
 
 def is_string(item)-> bool:
@@ -78,10 +89,11 @@ def ascii_to_chr_repr(str_with_ascii:str)-> str:
     return str_with_chr
 
 
+@timeit
 def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     """
     Fails unless all items in `dict2` are found from `dict1`.
-    """
+    """    
     diffs = [k for k in dict2 if k not in dict1]
     missing_key_msg = "Following keys missing from first dictionary: %s" %', '.join(diffs)
     if diffs:
@@ -89,9 +101,10 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     diffs = ()
     for k2, v2 in dict2.items():
         v1 = dict1[k2]
-        if k2 == 'payrequestid' and not v1.startswith(v2):
-            diffs += 'Key %s: %s != %s' %(k2, v2, v1),
+        if k2 == 'payrequestid' and not v1.startswith(v2) or v1 != v2:
+            diffs += 'Key "%s": %s != %s' %(k2, v2, v1),
     diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
+    print(diff_value_msg)
     if diffs:
         raise AssertionError(diff_value_msg)
 

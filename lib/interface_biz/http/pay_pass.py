@@ -13,7 +13,7 @@ from lib.config.path import common_sql_path, global_env_path
 from lib.interface_biz.http.user_account import Account
 from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
-from lib.common.utils.globals import GlobalVar, pyobj_resp
+from lib.common.utils.globals import GlobalVar, HTTPENCJSON_IN
 
 logger = Logger('鉴权').get_logger()
 
@@ -31,7 +31,7 @@ def get_process_token():
         "partnerCode": "2031",
         "platform": "ATLAS"
     }
-    result = pyobj_resp.post('/api/pay-flow/v290/get-process-token', case_data)
+    result = HTTPENCJSON_IN.post('/api/pay-flow/v290/get-process-token', case_data)
     logger.info("/get-process-token return: {}".format(result))
     return result['data']['processToken']
 

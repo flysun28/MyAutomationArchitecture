@@ -4,6 +4,7 @@ import ctypes
 from threading import Thread, ThreadError, _active
 from lib.common.utils.meta import WithLogger
 from six import with_metaclass
+from lib.common.utils.misc_utils import timeit
 
 
 class ResultTakenThread(with_metaclass(WithLogger, Thread)):
@@ -36,6 +37,11 @@ class ExceptionMonitorThread(with_metaclass(WithLogger, Thread)):
     :param obj2exc: {obj:obj.errmsg, ...} mapping dictionary
     :param obj: the class instance which raised exception
     '''
+    def __new__(cls, *args, **kwargs):
+        self = object.__new__(cls, *args, **kwargs)
+        if getattr(cls, 'instance', None) is None:
+            cls.instance = self
+        return cls.instance
 
     def __init__(self, interval=0.01, **kwargs):
         self.interval = interval
@@ -48,13 +54,13 @@ class ExceptionMonitorThread(with_metaclass(WithLogger, Thread)):
         super().__init__(kwargs=kwargs)
         self.start()
     
+    @timeit
     def run(self):
         while True:
             if self.obj:
                 errmsg = getattr(self.obj, 'exc', None) or getattr(self.obj, 'errmsg', None)
                 self.obj2exc.setdefault(self.obj, errmsg)
-            else:
-                time.sleep(self.interval)
+            time.sleep(self.interval)
             if _active and self.is_terminate_self:
                 all_active_thrs = list(_active.values())
                 for t in all_active_thrs.copy():
@@ -83,4 +89,7 @@ def kill_thread(thr):
                 # you should call it again with exc=NULL to revert the effect
                 ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
                 raise SystemError("PyThreadState_SetAsyncExc failed")
+
+
+monitor = ExceptionMonitorThread()
 

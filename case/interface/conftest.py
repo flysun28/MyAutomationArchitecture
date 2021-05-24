@@ -4,7 +4,7 @@
 import time
 import pytest
 from lib.common.utils.env import set_global_env_id
-from lib.common.session.dubbo.dubbo import monitor
+from lib.common.concurrent.threading import monitor
 
 partner_ids = '5456925', '2031'
 env_id = '1'
@@ -52,7 +52,9 @@ def pytest_runtest_makereport(item, call):
                 outcome = 'failed' if monitor.obj else 'passed'
             case.file.update_running_result(case.name, outcome)
             monitor.obj2exc.pop(monitor.obj, None)
+            monitor.obj.errmsg = '' 
             monitor.obj = None
+            monitor.is_terminate_self = False
         else:
             outcome = result.outcome
 #         print('测试用例%s执行报告: %s' %(item.function.__name__, result))
@@ -61,11 +63,14 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture(scope='session', autouse=True)
-def login():
+def session_setup_and_teardown():
     '''
-    1. 在自动化专用数据库中保存test_account
+    1. set environment id(unused)
+    2. account login(unused)
+    3. terminate all threads including monitor and other pytest threads, 
+       otherwise python interpreter will never be stopped
     '''
-    # set_global_env_id(env_id)
+    # set_global_env_id(env_id)    
     from lib.interface_biz.http.user_account import Account
     
     account = Account()

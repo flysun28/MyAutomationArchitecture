@@ -164,6 +164,6 @@ def replace_http_json(req):
     新版本客户端参数替换
     :return:
     """
-    if req.req_params['processToken'] == "":
-        req.req_params['processToken'] = get_process_token()
+    if not req['processToken']:
+        req['processToken'] = get_process_token()
     return req

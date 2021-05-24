@@ -10,8 +10,8 @@ from six import with_metaclass
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
-from lib.common.utils.misc_utils import to_iterable, get_letter_seqno
-from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR, GlobalVar
+from lib.common.utils.misc_utils import to_iterable, get_letter_seqno, timeit
+from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
 from lib import pardir
 
 
@@ -88,8 +88,9 @@ class CaseFile(with_metaclass(WithLogger)):
             self.logger.info(dict(tc.data))
         return neg_tc
     
+    @timeit
     def writeback(self, case_name, value, ref_coord):
-        self.logger.debug('开始更新"{}"[{}]={}'.format(case_name, ref_coord, value))
+        self.logger.info('开始更新"{}"[{}]={}'.format(case_name, ref_coord, value))
         start_row = int(ref_coord[1:]) + 1
         end_column = get_letter_seqno(ref_coord[0])
         for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
@@ -130,8 +131,9 @@ def src_case_file(test_file_path):
     case_file_dir = os.path.join(CASE_SRCFILE_ROOTDIR, protocol)
     basename = os.path.basename(test_file_path)
     interface_name = re.search('test_(\w+)', basename, re.I).group(1)
-    path = os.path.join(case_file_dir, 'inland.xlsx')
-    return CaseFile(path, interface=interface_name)
+    case_file = CaseFile(os.path.join(case_file_dir, 'inland.xlsx'), interface=interface_name)
+    print(case_file)
+    return case_file
 
 
 if __name__ == '__main__':

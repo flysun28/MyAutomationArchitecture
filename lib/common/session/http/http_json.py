@@ -7,7 +7,6 @@ import json
 import requests
 import simplejson
 import time
-import chardet
 import base64
 import sys
 from copy import deepcopy
@@ -24,6 +23,7 @@ from lib.common.algorithm.other import str_to_base64
 from lib.common.algorithm.cipher import RSA
 from lib.common_biz.file_path import encjson_rsa_public_key_path
 from lib.common.algorithm.md5 import md5
+from lib.common.concurrent.threading import monitor
 
 
 class HttpJsonSession(metaclass=WithLogger):
@@ -32,21 +32,25 @@ class HttpJsonSession(metaclass=WithLogger):
               'Accept-Encoding': 'gzip, deflate',
               'Accept': '*/*',
               'User-Agent': 'HttpJson/1.0'
-              }
+             }
 
     def __init__(self, url_prefix=None, data:dict=None, **kwargs):
         """
         :param url: 请求地址
         :param data: 请求参数
         """
+        self.init_common()
         self.prefix = url_prefix if url_prefix else ''
-        self.url = ''
-        self.data = data
-        self.session = requests.Session()
+        self.data = data        
         self.header.update(kwargs)
         self.session.headers = self.header
         self.default_post = self.session.post
-
+    
+    def init_common(self):
+        self.url = ''
+        self.errmsg = ''
+        self.response = ''
+        self.session = requests.Session()
 
     def post(self, url, data:dict=None, lib=None):
         self.url = self.prefix + url
@@ -72,11 +76,12 @@ class HttpJsonSession(metaclass=WithLogger):
                 result = response.text
             finally:
                 self.logger.info("返回结果：{}".format(result))
+                self.process_err(result)
             return result
         except RequestException as e:
             raise HttpJsonException(e) from None
         except AssertionError:
-            raise AssertionError('%s POST response:\n%s' % (self.url, response)) from None
+            raise AssertionError('%s POST response:\n%s' %(self.url, response)) from None
         except:
             raise
 
@@ -100,6 +105,11 @@ class HttpJsonSession(metaclass=WithLogger):
 
     def close(self):
         self.session.close()
+        
+    def process_err(self, result:dict):
+        self.errmsg = result.get('error', {}).get('message', '')
+        if self.errmsg:
+            monitor.obj = self
 
 
 HttpJson = HttpJsonSession
@@ -135,7 +145,8 @@ class EncryptJson(HttpJsonSession):
                   'fromHT': '', 'registerId': '', 'overseaClient': '', 'payVersion': '', 'hostPackage': '',
                   'hostVersion': '', 'dynamicUIVersion2': ''},
         'X-Safety': {'imei': '', 'hasPermission': '', 'imei1': '', 'mac': '', 'serialNum': '', 'deviceName': '',
-                     'wifissid': '', 'slot0': '', 'slot1': ''}}
+                     'wifissid': '', 'slot0': '', 'slot1': ''}
+    }
     common_params = {
         'appKey': '',
         'sign': '',
@@ -150,9 +161,8 @@ class EncryptJson(HttpJsonSession):
         :param partner_id: 业务线id
         :param kwargs: 请求参数
         """
+        self.init_common()
         self.prefix = url_prefix if url_prefix else ''
-        self.url = ''
-        self.session = requests.Session()
         self.header = deepcopy(self.req_header)
         self.header.update(kwargs)
         self.__sessionKey = str_to_base64(create_random_str(16))
@@ -173,7 +183,7 @@ class EncryptJson(HttpJsonSession):
         self.common_params['appKey'] = appkey
         self.appSecret = Config(key_configfile_path).read_config('encrypted_json', 'app_secret')
 
-    def post(self, url, data: dict):
+    def post(self, url, data:dict):
         '''
         :param url:
         :param data: request parameters dict
@@ -189,19 +199,19 @@ class EncryptJson(HttpJsonSession):
         self.logger.info("原始body:%s" % data)
         # self.logger.info("加密body:%s" % aes_body)
         try:
-            response = self.session.post(url=self.url, data=aes_body)
-            self.logger.info("返回状态码:{}".format(response.status_code))
-            resp_text = self.aes_codec.decrypt(response.text)
+            self.response = self.session.post(url=self.url, data=aes_body)
+            self.logger.info("返回状态码:{}".format(self.response.status_code))
+            resp_text = self.aes_codec.decrypt(self.response.text)
             pyobj_resp = json.loads(resp_text)
             self.logger.info("post返回：{}".format(pyobj_resp))
+            self.process_err(pyobj_resp)
             # self.logger.info('POST返回结果:{}'.format(
             #     simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
             # )
         except:
             raise HttpJsonException('<%s> exception: %s' % (type(self), sys.exc_info()[1]))
         else:
-            # self.logger.info('Response headers:%s', response.headers)
-            self.__sessionTicket = response.headers['X-Session-Ticket']
+            self.__sessionTicket = self.response.headers['X-Session-Ticket']
             self.header['X-Protocol']['sessionTicket'] = self.__sessionTicket
             return pyobj_resp
 
