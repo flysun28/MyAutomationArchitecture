@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++)
+        filterItems[i].hidden = false;
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>report_2021-05-24.html</h1>
+    <p>Report generated on 24-May-2021 at 13:12:05 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>D:\Java\jdk-15.0.1</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "0.13.1", "py": "1.10.0", "pytest": "6.2.2"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.18362-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"allure-pytest": "2.8.40", "cov": "2.11.1", "html": "3.1.1", "instafail": "0.4.2", "metadata": "1.11.0", "rerunfailures": "9.1.1", "timeout": "1.4.2"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.1</td></tr></table>
+    <h2>Summary</h2>
+    <p>1 tests ran in 2.22 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>, <input checked="true" class="filter" data-test-result="rerun" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="rerun">0 rerun</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_get_pay_result_activity.py::test_inland_positive[case0]</td>
+          <td class="col-duration">1.70</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">case = ExcelTestCaseHttpData: {&#x27;name&#x27;: &#x27;直扣支付结果页&#x27;, &#x27;tag&#x27;: &#x27;smoke&#x27;, &#x27;type&#x27;: &#x27;+&#x27;, &#x27;req_params&#x27;: {&#x27;processToken&#x27;: &#x27;MkgBn5quhkSupF...mpty&quot;}, &quot;success&quot;: false}&#x27;, &#x27;status_code&#x27;: 200, &#x27;expected&#x27;: {&#x27;success&#x27;: True}, &#x27;is_passed&#x27;: &#x27;failed&#x27;, &#x27;comments&#x27;: None}<br/><br/>    @pytest.mark.smoke<br/>    @pytest.mark.full<br/>    @pytest.mark.positive<br/>    @pytest.mark.parametrize(&#x27;case&#x27;, case_file.positive_cases)<br/>    def test_inland_positive(case):<br/>        result = http_json_request(case, &quot;get_pay_result_activity&quot;, &quot;/api/marketing/v290/get-pay-result-activity&quot;)<br/>        case_file.update_actual(case.name, result)<br/>&gt;       get_check_http_json_result_positive(case, result)<br/><br/>test_get_pay_result_activity.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>..\..\..\..\lib\common_biz\json_request.py:33: in get_check_http_json_result_positive<br/>    dictionary_should_contain_sub_dictionary(flatten_result, case.expected)<br/>..\..\..\..\lib\common\utils\misc_utils.py:14: in wrapper<br/>    return func(*args, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>dict1 = {&#x27;code&#x27;: &#x27;101&#x27;, &#x27;message&#x27;: &#x27;partnerCode must not be empty&#x27;, &#x27;success&#x27;: False}<br/>dict2 = {&#x27;success&#x27;: True}<br/><br/>    @timeit<br/>    def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):<br/>        &quot;&quot;&quot;<br/>        Fails unless all items in `dict2` are found from `dict1`.<br/>        &quot;&quot;&quot;<br/>        diffs = [k for k in dict2 if k not in dict1]<br/>        missing_key_msg = &quot;Following keys missing from first dictionary: %s&quot; %&#x27;, &#x27;.join(diffs)<br/>        if diffs:<br/>            raise AssertionError(missing_key_msg)<br/>        diffs = ()<br/>        for k2, v2 in dict2.items():<br/>            v1 = dict1[k2]<br/>            if k2 == &#x27;payrequestid&#x27; and not v1.startswith(v2) or v1 != v2:<br/>                diffs += &#x27;Key &quot;%s&quot;: %s != %s&#x27; %(k2, v2, v1),<br/>        diff_value_msg = &#x27;Following keys have different values:\n&#x27; + &#x27;\n&#x27;.join(diffs)<br/>        print(diff_value_msg)<br/>        if diffs:<br/>&gt;           raise AssertionError(diff_value_msg)<br/><span class="error">E           AssertionError: Following keys have different values:</span><br/><span class="error">E           Key &quot;success&quot;: True != False</span><br/><br/>..\..\..\..\lib\common\utils\misc_utils.py:109: AssertionError<br/> -----------------------------Captured stdout setup------------------------------ <br/>2021-05-24 13:12:03,238-INFO-lib.interface_biz.http.user_account-30-账户信息: {&#x27;id&#x27;: 5, &#x27;username&#x27;: &#x27;14441120298&#x27;, &#x27;pwd&#x27;: &#x27;yf12345&#x27;, &#x27;token&#x27;: &#x27;TOKEN_7t5kusT0owaYVytvYSs24P1SYARqhdd3XUKbxUtfC3TV7vmJ8OoliYh5lgZHhNtr&#x27;, &#x27;ssoid&#x27;: &#x27;2086776969&#x27;}
+manage_case_file elapsed time: 0.0
+2021-05-24 13:12:03,240-INFO-lib.common.session.http.http_json-191-原始header：{&#x27;Content-Type&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;Connection&#x27;: &#x27;keep-alive&#x27;, &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate&#x27;, &#x27;Accept&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;User-Agent&#x27;: &#x27;EncryptJson/1.0&#x27;, &#x27;X-Protocol-Ver&#x27;: &#x27;3.0&#x27;, &#x27;X-Protocol&#x27;: {&#x27;key&#x27;: &#x27;F4BDCJn+yJDOyMMSW+LL9ju3a4vChsQTH4b0BFqOAyk/nPwze/aWEbZNXK2rIAl//jfZ9bYqgiXHy1he8kHCXBvm/tKoGSezjsMCIYayc1GnzaebzWQKVELT1w00OBAzvvc8y5oytoIgj4E6dErvSZPRRF+Et+pXiiE2RlC1ibo=&#x27;, &#x27;iv&#x27;: &#x27;a0VsVlR1cGFQT01CSWVZVw==&#x27;, &#x27;sessionTicket&#x27;: &#x27;&#x27;}, &#x27;X-SDK&#x27;: {&#x27;sdkBuildTime&#x27;: &#x27;&#x27;, &#x27;sdkName&#x27;: &#x27;&#x27;, &#x27;sdkVersionName&#x27;: &#x27;&#x27;, &#x27;headerRevisedVersion&#x27;: &#x27;&#x27;}, &#x27;X-Device-Info&#x27;: {&#x27;model&#x27;: &#x27;&#x27;, &#x27;ht&#x27;: &#x27;&#x27;, &#x27;wd&#x27;: &#x27;&#x27;, &#x27;brand&#x27;: &#x27;OPPO&#x27;, &#x27;hardwareType&#x27;: &#x27;&#x27;}, &#x27;X-Context&#x27;: {&#x27;country&#x27;: &#x27;&#x27;, &#x27;timeZone&#x27;: &#x27;&#x27;, &#x27;maskRegion&#x27;: &#x27;&#x27;, &#x27;locale&#x27;: &#x27;&#x27;}, &#x27;X-Sys&#x27;: {&#x27;romVersion&#x27;: &#x27;&#x27;, &#x27;osVersion&#x27;: &#x27;&#x27;, &#x27;osVersionCode&#x27;: &#x27;&#x27;, &#x27;osBuildTime&#x27;: &#x27;&#x27;, &#x27;auid&#x27;: &#x27;&#x27;, &#x27;ouid&#x27;: &#x27;&#x27;, &#x27;duid&#x27;: &#x27;&#x27;, &#x27;guid&#x27;: &#x27;&#x27;, &#x27;apid&#x27;: &#x27;&#x27;, &#x27;uid&#x27;: &#x27;&#x27;, &#x27;usn&#x27;: &#x27;&#x27;, &#x27;utype&#x27;: &#x27;&#x27;, &#x27;betaEnv&#x27;: &#x27;&#x27;}, &#x27;X-APP&#x27;: {&#x27;appPackage&#x27;: &#x27;com.example.pay_demo&#x27;, &#x27;appVersion&#x27;: &#x27;&#x27;, &#x27;deviceId&#x27;: &#x27;&#x27;, &#x27;ucVersion&#x27;: &#x27;&#x27;, &#x27;instantVersion&#x27;: &#x27;&#x27;, &#x27;ucPackage&#x27;: &#x27;&#x27;, &#x27;fromHT&#x27;: &#x27;&#x27;, &#x27;registerId&#x27;: &#x27;&#x27;, &#x27;overseaClient&#x27;: &#x27;&#x27;, &#x27;payVersion&#x27;: &#x27;&#x27;, &#x27;hostPackage&#x27;: &#x27;&#x27;, &#x27;hostVersion&#x27;: &#x27;&#x27;, &#x27;dynamicUIVersion2&#x27;: &#x27;&#x27;}, &#x27;X-Safety&#x27;: {&#x27;imei&#x27;: &#x27;&#x27;, &#x27;hasPermission&#x27;: &#x27;&#x27;, &#x27;imei1&#x27;: &#x27;&#x27;, &#x27;mac&#x27;: &#x27;&#x27;, &#x27;serialNum&#x27;: &#x27;&#x27;, &#x27;deviceName&#x27;: &#x27;&#x27;, &#x27;wifissid&#x27;: &#x27;&#x27;, &#x27;slot0&#x27;: &#x27;&#x27;, &#x27;slot1&#x27;: &#x27;&#x27;}}
+2021-05-24 13:12:03,337-INFO-lib.common.session.http.http_json-198-url:http://secure.pay-test3.wanyol.com/api/pay-flow/v290/get-process-token
+2021-05-24 13:12:03,337-INFO-lib.common.session.http.http_json-199-原始body:{&#x27;token&#x27;: &#x27;TOKEN_7t5kusT0owaYVytvYSs24P1SYARqhdd3XUKbxUtfC3TV7vmJ8OoliYh5lgZHhNtr&#x27;, &#x27;appId&#x27;: &#x27;&#x27;, &#x27;appPackage&#x27;: &#x27;com.oppo.usercenter&#x27;, &#x27;partnerCode&#x27;: &#x27;2031&#x27;, &#x27;platform&#x27;: &#x27;ATLAS&#x27;, &#x27;appKey&#x27;: &#x27;2033&#x27;, &#x27;sign&#x27;: &#x27;9820c738506fb24c9559c4e0a10fa19f&#x27;, &#x27;timestamp&#x27;: &#x27;1621833121065&#x27;, &#x27;nonce&#x27;: &#x27;cjUvimuR&#x27;}
+2021-05-24 13:12:04,905-INFO-lib.common.session.http.http_json-203-返回状态码:200
+2021-05-24 13:12:04,906-INFO-lib.common.session.http.http_json-206-post返回：{&#x27;data&#x27;: {&#x27;expireTime&#x27;: 1621919524796, &#x27;processToken&#x27;: &#x27;H6ciN6PPvtpnV3Sv3PzhxD&#x27;}, &#x27;success&#x27;: True}
+2021-05-24 13:12:04,906-INFO-鉴权-35-/get-process-token return: {&#x27;data&#x27;: {&#x27;expireTime&#x27;: 1621919524796, &#x27;processToken&#x27;: &#x27;H6ciN6PPvtpnV3Sv3PzhxD&#x27;}, &#x27;success&#x27;: True}
+<br/> -------------------------------Captured log setup------------------------------- <br/>INFO     lib.interface_biz.http.user_account:user_account.py:30 账户信息: {&#x27;id&#x27;: 5, &#x27;username&#x27;: &#x27;14441120298&#x27;, &#x27;pwd&#x27;: &#x27;yf12345&#x27;, &#x27;token&#x27;: &#x27;TOKEN_7t5kusT0owaYVytvYSs24P1SYARqhdd3XUKbxUtfC3TV7vmJ8OoliYh5lgZHhNtr&#x27;, &#x27;ssoid&#x27;: &#x27;2086776969&#x27;}
+INFO     lib.common.session.http.http_json:http_json.py:191 原始header：{&#x27;Content-Type&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;Connection&#x27;: &#x27;keep-alive&#x27;, &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate&#x27;, &#x27;Accept&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;User-Agent&#x27;: &#x27;EncryptJson/1.0&#x27;, &#x27;X-Protocol-Ver&#x27;: &#x27;3.0&#x27;, &#x27;X-Protocol&#x27;: {&#x27;key&#x27;: &#x27;F4BDCJn+yJDOyMMSW+LL9ju3a4vChsQTH4b0BFqOAyk/nPwze/aWEbZNXK2rIAl//jfZ9bYqgiXHy1he8kHCXBvm/tKoGSezjsMCIYayc1GnzaebzWQKVELT1w00OBAzvvc8y5oytoIgj4E6dErvSZPRRF+Et+pXiiE2RlC1ibo=&#x27;, &#x27;iv&#x27;: &#x27;a0VsVlR1cGFQT01CSWVZVw==&#x27;, &#x27;sessionTicket&#x27;: &#x27;&#x27;}, &#x27;X-SDK&#x27;: {&#x27;sdkBuildTime&#x27;: &#x27;&#x27;, &#x27;sdkName&#x27;: &#x27;&#x27;, &#x27;sdkVersionName&#x27;: &#x27;&#x27;, &#x27;headerRevisedVersion&#x27;: &#x27;&#x27;}, &#x27;X-Device-Info&#x27;: {&#x27;model&#x27;: &#x27;&#x27;, &#x27;ht&#x27;: &#x27;&#x27;, &#x27;wd&#x27;: &#x27;&#x27;, &#x27;brand&#x27;: &#x27;OPPO&#x27;, &#x27;hardwareType&#x27;: &#x27;&#x27;}, &#x27;X-Context&#x27;: {&#x27;country&#x27;: &#x27;&#x27;, &#x27;timeZone&#x27;: &#x27;&#x27;, &#x27;maskRegion&#x27;: &#x27;&#x27;, &#x27;locale&#x27;: &#x27;&#x27;}, &#x27;X-Sys&#x27;: {&#x27;romVersion&#x27;: &#x27;&#x27;, &#x27;osVersion&#x27;: &#x27;&#x27;, &#x27;osVersionCode&#x27;: &#x27;&#x27;, &#x27;osBuildTime&#x27;: &#x27;&#x27;, &#x27;auid&#x27;: &#x27;&#x27;, &#x27;ouid&#x27;: &#x27;&#x27;, &#x27;duid&#x27;: &#x27;&#x27;, &#x27;guid&#x27;: &#x27;&#x27;, &#x27;apid&#x27;: &#x27;&#x27;, &#x27;uid&#x27;: &#x27;&#x27;, &#x27;usn&#x27;: &#x27;&#x27;, &#x27;utype&#x27;: &#x27;&#x27;, &#x27;betaEnv&#x27;: &#x27;&#x27;}, &#x27;X-APP&#x27;: {&#x27;appPackage&#x27;: &#x27;com.example.pay_demo&#x27;, &#x27;appVersion&#x27;: &#x27;&#x27;, &#x27;deviceId&#x27;: &#x27;&#x27;, &#x27;ucVersion&#x27;: &#x27;&#x27;, &#x27;instantVersion&#x27;: &#x27;&#x27;, &#x27;ucPackage&#x27;: &#x27;&#x27;, &#x27;fromHT&#x27;: &#x27;&#x27;, &#x27;registerId&#x27;: &#x27;&#x27;, &#x27;overseaClient&#x27;: &#x27;&#x27;, &#x27;payVersion&#x27;: &#x27;&#x27;, &#x27;hostPackage&#x27;: &#x27;&#x27;, &#x27;hostVersion&#x27;: &#x27;&#x27;, &#x27;dynamicUIVersion2&#x27;: &#x27;&#x27;}, &#x27;X-Safety&#x27;: {&#x27;imei&#x27;: &#x27;&#x27;, &#x27;hasPermission&#x27;: &#x27;&#x27;, &#x27;imei1&#x27;: &#x27;&#x27;, &#x27;mac&#x27;: &#x27;&#x27;, &#x27;serialNum&#x27;: &#x27;&#x27;, &#x27;deviceName&#x27;: &#x27;&#x27;, &#x27;wifissid&#x27;: &#x27;&#x27;, &#x27;slot0&#x27;: &#x27;&#x27;, &#x27;slot1&#x27;: &#x27;&#x27;}}
+INFO     lib.common.session.http.http_json:http_json.py:198 url:http://secure.pay-test3.wanyol.com/api/pay-flow/v290/get-process-token
+INFO     lib.common.session.http.http_json:http_json.py:199 原始body:{&#x27;token&#x27;: &#x27;TOKEN_7t5kusT0owaYVytvYSs24P1SYARqhdd3XUKbxUtfC3TV7vmJ8OoliYh5lgZHhNtr&#x27;, &#x27;appId&#x27;: &#x27;&#x27;, &#x27;appPackage&#x27;: &#x27;com.oppo.usercenter&#x27;, &#x27;partnerCode&#x27;: &#x27;2031&#x27;, &#x27;platform&#x27;: &#x27;ATLAS&#x27;, &#x27;appKey&#x27;: &#x27;2033&#x27;, &#x27;sign&#x27;: &#x27;9820c738506fb24c9559c4e0a10fa19f&#x27;, &#x27;timestamp&#x27;: &#x27;1621833121065&#x27;, &#x27;nonce&#x27;: &#x27;cjUvimuR&#x27;}
+INFO     lib.common.session.http.http_json:http_json.py:203 返回状态码:200
+INFO     lib.common.session.http.http_json:http_json.py:206 post返回：{&#x27;data&#x27;: {&#x27;expireTime&#x27;: 1621919524796, &#x27;processToken&#x27;: &#x27;H6ciN6PPvtpnV3Sv3PzhxD&#x27;}, &#x27;success&#x27;: True}
+INFO     鉴权:pay_pass.py:35 /get-process-token return: {&#x27;data&#x27;: {&#x27;expireTime&#x27;: 1621919524796, &#x27;processToken&#x27;: &#x27;H6ciN6PPvtpnV3Sv3PzhxD&#x27;}, &#x27;success&#x27;: True}<br/> ------------------------------Captured stdout call------------------------------ <br/>2021-05-24 13:12:04,907-INFO-lib.common.session.http.http_json-191-原始header：{&#x27;Content-Type&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;Connection&#x27;: &#x27;keep-alive&#x27;, &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate&#x27;, &#x27;Accept&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;User-Agent&#x27;: &#x27;EncryptJson/1.0&#x27;, &#x27;X-Protocol-Ver&#x27;: &#x27;3.0&#x27;, &#x27;X-Protocol&#x27;: {&#x27;key&#x27;: &#x27;F4BDCJn+yJDOyMMSW+LL9ju3a4vChsQTH4b0BFqOAyk/nPwze/aWEbZNXK2rIAl//jfZ9bYqgiXHy1he8kHCXBvm/tKoGSezjsMCIYayc1GnzaebzWQKVELT1w00OBAzvvc8y5oytoIgj4E6dErvSZPRRF+Et+pXiiE2RlC1ibo=&#x27;, &#x27;iv&#x27;: &#x27;a0VsVlR1cGFQT01CSWVZVw==&#x27;, &#x27;sessionTicket&#x27;: &#x27;FB6ny7rruoRf/hw5hYdDzBEjiuWdN2FP&#x27;}, &#x27;X-SDK&#x27;: {&#x27;sdkBuildTime&#x27;: &#x27;&#x27;, &#x27;sdkName&#x27;: &#x27;&#x27;, &#x27;sdkVersionName&#x27;: &#x27;&#x27;, &#x27;headerRevisedVersion&#x27;: &#x27;&#x27;}, &#x27;X-Device-Info&#x27;: {&#x27;model&#x27;: &#x27;&#x27;, &#x27;ht&#x27;: &#x27;&#x27;, &#x27;wd&#x27;: &#x27;&#x27;, &#x27;brand&#x27;: &#x27;OPPO&#x27;, &#x27;hardwareType&#x27;: &#x27;&#x27;}, &#x27;X-Context&#x27;: {&#x27;country&#x27;: &#x27;&#x27;, &#x27;timeZone&#x27;: &#x27;&#x27;, &#x27;maskRegion&#x27;: &#x27;&#x27;, &#x27;locale&#x27;: &#x27;&#x27;}, &#x27;X-Sys&#x27;: {&#x27;romVersion&#x27;: &#x27;&#x27;, &#x27;osVersion&#x27;: &#x27;&#x27;, &#x27;osVersionCode&#x27;: &#x27;&#x27;, &#x27;osBuildTime&#x27;: &#x27;&#x27;, &#x27;auid&#x27;: &#x27;&#x27;, &#x27;ouid&#x27;: &#x27;&#x27;, &#x27;duid&#x27;: &#x27;&#x27;, &#x27;guid&#x27;: &#x27;&#x27;, &#x27;apid&#x27;: &#x27;&#x27;, &#x27;uid&#x27;: &#x27;&#x27;, &#x27;usn&#x27;: &#x27;&#x27;, &#x27;utype&#x27;: &#x27;&#x27;, &#x27;betaEnv&#x27;: &#x27;&#x27;}, &#x27;X-APP&#x27;: {&#x27;appPackage&#x27;: &#x27;com.example.pay_demo&#x27;, &#x27;appVersion&#x27;: &#x27;&#x27;, &#x27;deviceId&#x27;: &#x27;&#x27;, &#x27;ucVersion&#x27;: &#x27;&#x27;, &#x27;instantVersion&#x27;: &#x27;&#x27;, &#x27;ucPackage&#x27;: &#x27;&#x27;, &#x27;fromHT&#x27;: &#x27;&#x27;, &#x27;registerId&#x27;: &#x27;&#x27;, &#x27;overseaClient&#x27;: &#x27;&#x27;, &#x27;payVersion&#x27;: &#x27;&#x27;, &#x27;hostPackage&#x27;: &#x27;&#x27;, &#x27;hostVersion&#x27;: &#x27;&#x27;, &#x27;dynamicUIVersion2&#x27;: &#x27;&#x27;}, &#x27;X-Safety&#x27;: {&#x27;imei&#x27;: &#x27;&#x27;, &#x27;hasPermission&#x27;: &#x27;&#x27;, &#x27;imei1&#x27;: &#x27;&#x27;, &#x27;mac&#x27;: &#x27;&#x27;, &#x27;serialNum&#x27;: &#x27;&#x27;, &#x27;deviceName&#x27;: &#x27;&#x27;, &#x27;wifissid&#x27;: &#x27;&#x27;, &#x27;slot0&#x27;: &#x27;&#x27;, &#x27;slot1&#x27;: &#x27;&#x27;}}
+2021-05-24 13:12:04,908-INFO-lib.common.session.http.http_json-198-url:http://secure.pay-test3.wanyol.com/api/marketing/v290/get-pay-result-activity
+2021-05-24 13:12:04,908-INFO-lib.common.session.http.http_json-199-原始body:{&#x27;processToken&#x27;: &#x27;MkgBn5quhkSupFQXQAv8SE&#x27;, &#x27;partnerId&#x27;: &#x27;2031&#x27;, &#x27;rechargeType&#x27;: &#x27;DIRECT&#x27;, &#x27;activityInfo&#x27;: [], &#x27;appKey&#x27;: &#x27;2033&#x27;, &#x27;sign&#x27;: &#x27;e1bbd568af317844975eeb9dd83c9ec8&#x27;, &#x27;timestamp&#x27;: &#x27;1621833121065&#x27;, &#x27;nonce&#x27;: &#x27;cjUvimuR&#x27;}
+2021-05-24 13:12:04,942-INFO-lib.common.session.http.http_json-203-返回状态码:200
+2021-05-24 13:12:04,942-INFO-lib.common.session.http.http_json-206-post返回：{&#x27;error&#x27;: {&#x27;code&#x27;: &#x27;101&#x27;, &#x27;message&#x27;: &#x27;partnerCode must not be empty&#x27;}, &#x27;success&#x27;: False}
+2021-05-24 13:12:04,942-INFO-lib.common.case_processor.entry-93-开始更新&quot;直扣支付结果页&quot;[E6]={&#x27;error&#x27;: {&#x27;code&#x27;: &#x27;101&#x27;, &#x27;message&#x27;: &#x27;partnerCode must not be empty&#x27;}, &#x27;success&#x27;: False}
+CaseFile.writeback elapsed time: 0.0
+Following keys have different values:
+Key &quot;success&quot;: True != False
+dictionary_should_contain_sub_dictionary elapsed time: 0.0
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     lib.common.session.http.http_json:http_json.py:191 原始header：{&#x27;Content-Type&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;Connection&#x27;: &#x27;keep-alive&#x27;, &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate&#x27;, &#x27;Accept&#x27;: &#x27;application/encrypted-json;charset=utf-8&#x27;, &#x27;User-Agent&#x27;: &#x27;EncryptJson/1.0&#x27;, &#x27;X-Protocol-Ver&#x27;: &#x27;3.0&#x27;, &#x27;X-Protocol&#x27;: {&#x27;key&#x27;: &#x27;F4BDCJn+yJDOyMMSW+LL9ju3a4vChsQTH4b0BFqOAyk/nPwze/aWEbZNXK2rIAl//jfZ9bYqgiXHy1he8kHCXBvm/tKoGSezjsMCIYayc1GnzaebzWQKVELT1w00OBAzvvc8y5oytoIgj4E6dErvSZPRRF+Et+pXiiE2RlC1ibo=&#x27;, &#x27;iv&#x27;: &#x27;a0VsVlR1cGFQT01CSWVZVw==&#x27;, &#x27;sessionTicket&#x27;: &#x27;FB6ny7rruoRf/hw5hYdDzBEjiuWdN2FP&#x27;}, &#x27;X-SDK&#x27;: {&#x27;sdkBuildTime&#x27;: &#x27;&#x27;, &#x27;sdkName&#x27;: &#x27;&#x27;, &#x27;sdkVersionName&#x27;: &#x27;&#x27;, &#x27;headerRevisedVersion&#x27;: &#x27;&#x27;}, &#x27;X-Device-Info&#x27;: {&#x27;model&#x27;: &#x27;&#x27;, &#x27;ht&#x27;: &#x27;&#x27;, &#x27;wd&#x27;: &#x27;&#x27;, &#x27;brand&#x27;: &#x27;OPPO&#x27;, &#x27;hardwareType&#x27;: &#x27;&#x27;}, &#x27;X-Context&#x27;: {&#x27;country&#x27;: &#x27;&#x27;, &#x27;timeZone&#x27;: &#x27;&#x27;, &#x27;maskRegion&#x27;: &#x27;&#x27;, &#x27;locale&#x27;: &#x27;&#x27;}, &#x27;X-Sys&#x27;: {&#x27;romVersion&#x27;: &#x27;&#x27;, &#x27;osVersion&#x27;: &#x27;&#x27;, &#x27;osVersionCode&#x27;: &#x27;&#x27;, &#x27;osBuildTime&#x27;: &#x27;&#x27;, &#x27;auid&#x27;: &#x27;&#x27;, &#x27;ouid&#x27;: &#x27;&#x27;, &#x27;duid&#x27;: &#x27;&#x27;, &#x27;guid&#x27;: &#x27;&#x27;, &#x27;apid&#x27;: &#x27;&#x27;, &#x27;uid&#x27;: &#x27;&#x27;, &#x27;usn&#x27;: &#x27;&#x27;, &#x27;utype&#x27;: &#x27;&#x27;, &#x27;betaEnv&#x27;: &#x27;&#x27;}, &#x27;X-APP&#x27;: {&#x27;appPackage&#x27;: &#x27;com.example.pay_demo&#x27;, &#x27;appVersion&#x27;: &#x27;&#x27;, &#x27;deviceId&#x27;: &#x27;&#x27;, &#x27;ucVersion&#x27;: &#x27;&#x27;, &#x27;instantVersion&#x27;: &#x27;&#x27;, &#x27;ucPackage&#x27;: &#x27;&#x27;, &#x27;fromHT&#x27;: &#x27;&#x27;, &#x27;registerId&#x27;: &#x27;&#x27;, &#x27;overseaClient&#x27;: &#x27;&#x27;, &#x27;payVersion&#x27;: &#x27;&#x27;, &#x27;hostPackage&#x27;: &#x27;&#x27;, &#x27;hostVersion&#x27;: &#x27;&#x27;, &#x27;dynamicUIVersion2&#x27;: &#x27;&#x27;}, &#x27;X-Safety&#x27;: {&#x27;imei&#x27;: &#x27;&#x27;, &#x27;hasPermission&#x27;: &#x27;&#x27;, &#x27;imei1&#x27;: &#x27;&#x27;, &#x27;mac&#x27;: &#x27;&#x27;, &#x27;serialNum&#x27;: &#x27;&#x27;, &#x27;deviceName&#x27;: &#x27;&#x27;, &#x27;wifissid&#x27;: &#x27;&#x27;, &#x27;slot0&#x27;: &#x27;&#x27;, &#x27;slot1&#x27;: &#x27;&#x27;}}
+INFO     lib.common.session.http.http_json:http_json.py:198 url:http://secure.pay-test3.wanyol.com/api/marketing/v290/get-pay-result-activity
+INFO     lib.common.session.http.http_json:http_json.py:199 原始body:{&#x27;processToken&#x27;: &#x27;MkgBn5quhkSupFQXQAv8SE&#x27;, &#x27;partnerId&#x27;: &#x27;2031&#x27;, &#x27;rechargeType&#x27;: &#x27;DIRECT&#x27;, &#x27;activityInfo&#x27;: [], &#x27;appKey&#x27;: &#x27;2033&#x27;, &#x27;sign&#x27;: &#x27;e1bbd568af317844975eeb9dd83c9ec8&#x27;, &#x27;timestamp&#x27;: &#x27;1621833121065&#x27;, &#x27;nonce&#x27;: &#x27;cjUvimuR&#x27;}
+INFO     lib.common.session.http.http_json:http_json.py:203 返回状态码:200
+INFO     lib.common.session.http.http_json:http_json.py:206 post返回：{&#x27;error&#x27;: {&#x27;code&#x27;: &#x27;101&#x27;, &#x27;message&#x27;: &#x27;partnerCode must not be empty&#x27;}, &#x27;success&#x27;: False}
+INFO     lib.common.case_processor.entry:entry.py:93 开始更新&quot;直扣支付结果页&quot;[E6]={&#x27;error&#x27;: {&#x27;code&#x27;: &#x27;101&#x27;, &#x27;message&#x27;: &#x27;partnerCode must not be empty&#x27;}, &#x27;success&#x27;: False}<br/></div></td></tr></tbody>
+      <tbody class="skipped results-table-row">
+        <tr>
+          <td class="col-result">Skipped</td>
+          <td class="col-name">test_get_pay_result_activity.py::test_inland_negative[case0]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">(&#x27;E:\\SecurePaymentsAutomation\\case\\interface\\inland\\http\\test_get_pay_result_activity.py&#x27;, 41, &quot;Skipped: got empty parameter set [&#x27;case&#x27;], function test_inland_negative at E:\\SecurePaymentsAutomation\\case\\interface\\inland\\http\\test_get_pay_result_activity.py:40&quot;)<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+Test Finished...
+<br/></div></td></tr></tbody></table></body></html>

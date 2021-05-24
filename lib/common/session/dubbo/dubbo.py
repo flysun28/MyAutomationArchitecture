@@ -9,7 +9,7 @@ import telnetlib
 from lib.common.utils.meta import WithLogger
 from six import with_metaclass
 from lib.common.utils.misc_utils import ascii_to_chr_repr
-from lib.common.utils.globals import MONITOR
+from lib.common.concurrent.threading import monitor
 
 
 class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
@@ -82,7 +82,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
             else:
 #                 raise AttributeError('Dubbo返回异常：'+errmsg)
                 self.logger.error('Dubbo返回异常：'+self.errmsg)
-                MONITOR.obj = self
+                monitor.obj = self
                 return self.errmsg
     
     def process_result(self, jsondata):

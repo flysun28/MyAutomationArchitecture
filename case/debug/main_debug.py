@@ -38,7 +38,7 @@ from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
 
 if __name__ == '__main__':
-    flag_coin = "0"
+    flag_coin = "1"
     if flag_coin == "1":
         # 发
         Nearme().nearme_add_subtract("0.01", "2086776969", 0)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 #             else:
 #                 break
     # 根据支付订单号退款
-    refund.refund_by_pay_req_id('', 0.01)
+#     refund.refund_by_pay_req_id('', 0.01)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='

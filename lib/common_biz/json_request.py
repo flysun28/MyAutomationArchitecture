@@ -4,10 +4,10 @@
 # datetime:2021/5/14 11:26
 # comment:
 import re
-from lib.common.utils.globals import HTTPENCJSON_IN
 from lib.common_biz.replace_parameter import replace_http_json
 from lib.common.utils.misc_utils import (flatten_nested_dict, dictionary_should_contain_sub_dictionary,
                                          run_keyword_and_expect_error)
+from lib.common.utils.globals import HTTPENCJSON_IN
 
 
 def http_json_request(case, case_sheet, url):

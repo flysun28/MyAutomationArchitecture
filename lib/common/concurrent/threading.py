@@ -30,7 +30,7 @@ class ResultTakenThread(with_metaclass(WithLogger, Thread)):
                 self.logger.info(e)
         finally:
             del self._target, self._args, self._kwargs
-            
+
 
 class ExceptionMonitorThread(with_metaclass(WithLogger, Thread)):
     '''
@@ -67,6 +67,8 @@ class ExceptionMonitorThread(with_metaclass(WithLogger, Thread)):
                     kill_thread(t)
                     all_active_thrs.remove(t)
                 assert not all_active_thrs, [t._target for t in all_active_thrs]
+                # _active可能并未清空，还剩有None，原因未知，这里强制清空 ------ 坑-_-#
+                _active.clear()
                 break
 
             
@@ -82,6 +84,7 @@ def kill_thread(thr):
             res = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(tid), ctypes.py_object(SystemExit))
         finally:
             print('Thread {} is successfully killed with retcode={}'.format(thr._target, res))
+            del _active[tid]
             if res == 0:
                 raise ValueError("invalid thread id")
             elif res != 1:

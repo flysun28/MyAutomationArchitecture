@@ -12,7 +12,6 @@ from lib.common.db_operation.redis_operation import connect_redis
 from lib.common.utils.descriptors import GlobalVarDescriptor
 from lib.config.path import do_case_path, common_sql_path, global_env_path, case_dir
 from lib.common.file_operation.config_operation import Config
-from lib.common.concurrent.threading import ExceptionMonitorThread
 
 
 class GlobalVar():
@@ -73,5 +72,5 @@ MYSQL_OUT = GlobalVar.MYSQL_OUT
 MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(case_dir, 'src')
 HTTPENCJSON_IN = pyobj_resp = EncryptJson(GlobalVar.URL_PAY_IN, appkey='2033')
-MONITOR = ExceptionMonitorThread()
+
 

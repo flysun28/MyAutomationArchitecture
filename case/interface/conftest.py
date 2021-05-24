@@ -5,6 +5,8 @@ import time
 import pytest
 from lib.common.utils.env import set_global_env_id
 from lib.common.concurrent.threading import monitor
+from lib.common.session.http.http_json import EncryptJson
+from lib.common.utils.globals import GlobalVar
 
 partner_ids = '5456925', '2031'
 env_id = '1'
@@ -51,9 +53,10 @@ def pytest_runtest_makereport(item, call):
             else:
                 outcome = 'failed' if monitor.obj else 'passed'
             case.file.update_running_result(case.name, outcome)
-            monitor.obj2exc.pop(monitor.obj, None)
-            monitor.obj.errmsg = '' 
-            monitor.obj = None
+            if monitor.obj:
+                monitor.obj2exc.pop(monitor.obj, None)
+                monitor.obj.errmsg = '' 
+                monitor.obj = None
             monitor.is_terminate_self = False
         else:
             outcome = result.outcome
@@ -80,5 +83,6 @@ def session_setup_and_teardown():
     
     monitor.is_terminate_self = True
     print('\nTest Finished...')
+
 
 

@@ -4,6 +4,7 @@ Created on 2021年3月16日
 '''
 import os
 import base64
+import time
 import jnius_config
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex

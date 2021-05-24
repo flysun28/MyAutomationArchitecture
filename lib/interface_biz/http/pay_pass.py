@@ -15,6 +15,7 @@ from lib.common_biz.order_random import RandomOrder
 from lib.pb_src.python_native import PassPb_pb2
 from lib.common.utils.globals import GlobalVar, HTTPENCJSON_IN
 
+
 logger = Logger('鉴权').get_logger()
 
 

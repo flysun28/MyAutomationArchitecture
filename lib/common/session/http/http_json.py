@@ -116,6 +116,7 @@ HttpJson = HttpJsonSession
 
 
 class EncryptJson(HttpJsonSession):
+    singleton = True
     req_header = {
         'Content-Type': 'application/encrypted-json;charset=utf-8',
         'Connection': 'keep-alive',
@@ -154,7 +155,7 @@ class EncryptJson(HttpJsonSession):
         'nonce': create_random_str(8)
     }
     resp_params = {'success': None, 'error': {'code': '', 'message': ''}, 'data': {}}
-
+    
     def __init__(self, url_prefix=None, appkey='2033', **kwargs):
         """
         :param url_prefix: 域名

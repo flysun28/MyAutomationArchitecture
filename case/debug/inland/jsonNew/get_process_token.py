@@ -7,6 +7,7 @@
 
 from lib.common.utils.globals import HTTPENCJSON_IN
 
+
 # case_data = {
 #     "token": "TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MjA1NDM4MDkzMjMsImlkIjoiMjA3NjA3NTkyNSIsImlkYyI6InNob3VtaW5nIiwidGlkIjoiZGZmcm05L1hRQzhkRmVBL0R1aFI4azVKTG45Z3lLK2RPTVh6RnJVZys1ekdNNGdCQ0JzMlpBVmxldE0yUmd2K3EwOVNLbzIwcjI1Ymk3S2gyMEpiRjR3RDNVc3EvODZpcnNSOGlaUm5kdzQ9In0.MEUCIEUd99uIVdBvuz73Qt_MbqUVHotDdAsxkbtuCCORqs00AiEAjnZp2KhF2Njc8ZvrGXwYPwWG3b-_z3zRhQsLYYOVEso",
 #     "appId": "2033",

@@ -19,29 +19,35 @@ class TestScenarioInland():
     @pytest.mark.parametrize('amt,callback_amt', test_data_wo_kb)
     def test_no_login(self, amt, callback_amt):
         no_login(amt, callback_amt)
-        
+ 
     def test_only_sign(self):
         only_sign()
-        
-    @pytest.mark.parametrize('amt,callback_amt,kb_amt', test_data_with_kb)    
+ 
+    @pytest.mark.parametrize('amt,callback_amt,kb_amt', test_data_with_kb)
     def test_recharge_spend_rmb_and_kb(self, amt, callback_amt, kb_amt):
         '''
         默认携带了优惠券 0.01元
         '''
         rs_with_kb_rmb(amt, callback_amt, kb_amt)
-    
+     
     @pytest.mark.parametrize('amt,callback_amt', test_data_wo_kb)    
     def test_recharge_spend_only_rmb(self, amt, callback_amt):
         rs_only_rmb(amt, callback_amt)
-        
+     
     @pytest.mark.parametrize('amt,callback_amt', test_data_wo_kb)
     def test_sign_pay(self, amt, callback_amt):
         sign_pay(amt, callback_amt)
-        
+     
     @pytest.mark.parametrize('amt', (data[0] for data in test_data_wo_kb))
     def test_spend_kb_and_voucher(self, amt):
         spend_with_kb_vou(amt)
-    
+     
     @pytest.mark.parametrize('amt', (data[0] for data in test_data_wo_kb))
     def test_spend_only_kb(self, amt):
         spend_only_kb(amt)
+
+
+if __name__ == '__main__':
+    pytest.main(['-vsx', 'test_scenario_inland.py'])
+    
+
