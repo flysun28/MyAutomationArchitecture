@@ -57,9 +57,9 @@ class AutoRenew:
         :return:
         """
         case_dict = {
-            "ssoid": "2000071235",
-            "renewProductCode": "727243140011",
-            "partnerCode": "72724314",
+            "ssoid": self.ssoid,
+            "renewProductCode": self.renew_product_code,
+            "partnerCode": self.partner_code,
             "currencyName": "CNY",
             "country": "CN",
             "sign": "efe9a9b2d3b058789cdd51ed007e5860"
@@ -91,7 +91,7 @@ class AutoRenew:
 
     def old_unsign(self):
         req = {
-            "ssoid": "2076064003",
+            "ssoid": self.ssoid,
             "country": "CN",
             "partnerOrder": "OCLOUD-UNSIGN" + RandomOrder(20).random_num(),
             "payType": "alipay",
@@ -144,14 +144,4 @@ class AutoRenew:
 
 
 if __name__ == '__main__':
-    flag = "2"
-    if flag == "1":
-        AutoRenew().auto_renew_out()
-    if flag == "2":
-        AutoRenew().un_sign()
-    if flag == "3":
-        AutoRenew().old_unsign()
-    if flag == "4":
-        AutoRenew().wxpayavoidpay()
-    if flag == "5":
-        AutoRenew().alipayavoidpay()
+    pass
