@@ -11,6 +11,7 @@ from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.http.simplepay import SimplePay
 from case.scenario.common_req import DIRECT_PAY
 
+
 logger = Logger('direct_pay').get_logger()
 
 req = DIRECT_PAY
@@ -38,11 +39,12 @@ def direct_pay(amount, notify_amount):
             query_res = queryResult(order["pay_req_id"], pass_type="direct")
             assert query_res == '2002', '%s != 2002' % query_res
         except Exception as e:
+            exc_value = e
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
     if is_assert():
         """
         【3】. 检查order_info表信息是否正确
@@ -58,6 +60,7 @@ def direct_pay(amount, notify_amount):
         ASSERTION_IN.assert_notify(order["partner_order"], amount)
 
 
+
 if __name__ == '__main__':
     direct_pay(1, 1)
-    # direct_pay(2, 1)
+#     paycenter_direct_pay()

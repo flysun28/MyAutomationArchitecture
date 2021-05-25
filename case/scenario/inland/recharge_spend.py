@@ -51,11 +51,12 @@ def rs_only_rmb(amount, notify_amount):
             query_res = queryResult(order_info["pay_req_id"])
             assert query_res == '2002', '%s != 2002' %query_res
         except Exception as e:
+            exc_value = e
             time.sleep(0.5)
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %e)
+        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
     """
         【4】. 检查可币余额是否正确
     """

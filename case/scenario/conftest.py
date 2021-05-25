@@ -3,6 +3,10 @@
 '''
 import time
 import pytest
+from lib.common.utils.env import set_global_env_id
+from lib.common.concurrent.threading import monitor
+
+env_id = 1
 
 
 def pytest_configure(config):
@@ -11,7 +15,6 @@ def pytest_configure(config):
     config.addinivalue_line('markers', 'positive')
     config.addinivalue_line('markers', 'negative')
     config.addinivalue_line('markers', 'inland')
-
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
@@ -28,3 +31,19 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     # terminalreporter._sessionstarttime 会话开始时间
     duration = time.time() - terminalreporter._sessionstarttime
     print('total times:', round(duration, 2), 'seconds')
+    
+    
+@pytest.fixture(scope='session', autouse=True)
+def session_setup_and_teardown():
+    '''
+    1. set environment id(unused)
+    2. account login(unused)
+    3. terminate all threads including monitor and other pytest threads, 
+       otherwise python interpreter will never be stopped
+    '''
+    set_global_env_id(env_id)
+   
+    yield
+    
+    monitor.is_terminate_self = True
+    print('\nTest Finished...')

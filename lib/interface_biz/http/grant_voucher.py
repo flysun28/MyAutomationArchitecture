@@ -372,12 +372,12 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
             self.salt_key = self.partner_private_key[self.partner_id]
             self.logger.info('查询到优惠券秘钥信息: %s' %self.salt_key)
     
-    def init_req(self):
+    def init_req(self, count=None):
         if self.vou_type == 5:
             amount = round(random.uniform(100, 1000), 2)
         else:
             amount = round(random.uniform(1, 10), 2)
-        count = random.randint(1, 10)
+        count = count or random.randint(1, 10)
         max_amount = round(random.uniform(amount, amount+100), 2)
         ratio = round(random.uniform(0.01, 0.99), 2)
         end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
@@ -417,14 +417,15 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
 #         print('签名原串:', orig_sign_str)
         req['sign'] = md5(orig_sign_str, to_upper=True)
     
-    def post(self, data=None):
-        self.init_req()
+    def post(self, count=None, data=None):
+        self.init_req(count)
         self.make_sign(self.req)
         req = data if data else self.req
         result = GlobalVar.HTTPJSON_IN.post("/voucher/grantSingle", data=req)
         assert result['code'] == '0000', '返回参数 code != 0000'
         assert result['msg'] == 'success', '返回参数 msg != success'
         # 返回优惠券列表
+        self.logger.info('优惠券id列表：%s' %result['vouIdList'])
         return result['vouIdList']
     
 

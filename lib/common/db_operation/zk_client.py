@@ -1,13 +1,41 @@
-#!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
-# author:xy
+# author:yf
 # datetime:2021/4/7 10:40
 # comment:
-from kazoo.client import KazooClient
-import urllib.parse
+import kazoo
+import urllib
 import re
-from lib.common.utils.env import get_env_config, get_env_id
 from lib.common.utils.meta import WithLogger
+from six import with_metaclass
+from kazoo.handlers.threading import SequentialThreadingHandler
+
+class SequentialThreadingHandlerExt(with_metaclass(WithLogger, SequentialThreadingHandler)):
+    def _create_thread_worker(self, queue):
+        def _thread_worker():  # pragma: nocover
+            while True:
+                try:
+                    func = queue.get()
+                    try:
+                        if func is object():
+                            break
+                        func()
+                    except TypeError:
+                        continue
+                    except Exception:
+                        self.logger.exception("Exception in worker queue thread")
+                    finally:
+                        queue.task_done()
+                        del func  # release before possible idle
+                except (self.queue_empty, RuntimeError):
+                    continue
+        type(self)._thread_worker = _thread_worker
+        t = self.spawn(type(self)._thread_worker)
+        return t
+
+kazoo.handlers.threading.SequentialThreadingHandler = SequentialThreadingHandlerExt
+ 
+from kazoo.client import KazooClient
+from lib.common.utils.env import get_env_config
 
 
 class ZkClient(metaclass=WithLogger):

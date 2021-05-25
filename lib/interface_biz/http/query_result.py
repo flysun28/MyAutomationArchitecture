@@ -32,9 +32,11 @@ def queryResult(request_id, query_type="PAY", pass_type="expend"):
         # "queryType": "SIGN"
         "queryType": query_type
     }
+    # 鉴权，获取t_p、r_v更新到req中
     ReplaceParams(req).replace_native(pass_type)
-    response = ProtoBuf(QueryResultPb_pb2).runner(HTTPJSON_IN.prefix + '/plugin/post/queryresult', 'Request', req, flag=0)
-    result = ProtoBuf(QueryResultPb_pb2).parser('Result', response)
+    pb = ProtoBuf(QueryResultPb_pb2)
+    response = pb.runner(HTTPJSON_IN.prefix + '/plugin/post/queryresult', 'Request', req, flag=0)
+    result = pb.parser('Result', response)
     return str(result.baseresult.code)
 
 

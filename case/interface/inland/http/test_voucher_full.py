@@ -141,7 +141,8 @@ class TestSingleVou():
     def httpobj(self, ssoids):
         ssoid = random.choice(ssoids)
         partner_id = random.choice(partner_ids)
-        yield HttpGrantSingleVous(ssoid, partner_id)
+        vou_type = random.choice([1, 2, 5, 7, 8])
+        yield HttpGrantSingleVous(vou_type, ssoid, partner_id)
         
     @pytest.mark.positive
     def test_positive(self, httpobj):

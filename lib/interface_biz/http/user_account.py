@@ -17,6 +17,7 @@ from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.config.path import key_configfile_path
 from lib.common.utils.env import get_env_id
+from lib.common.exception.http_exception import LoginError
 
 header = {"content-type": "application/json"}
 appKey = "myKey"
@@ -45,11 +46,14 @@ class Account(metaclass=WithLogger):
         self.logger.info(url)
         self.logger.info(body)
         response = requests.post(url, data=body, headers=header)
-        self.logger.info('返回的登录信息：{}'.format(response.json()))
-        if response.json()['resultCode'] == '1700':
+        jsonresp = response.json()
+        self.logger.info('返回的登录信息：{}'.format(jsonresp))
+        if jsonresp['resultCode'] == '1700': #操作频繁
             self.logger.error('返回的异常登录信息：{}'.format(response.text))
+            raise LoginError(response.text)
         else:
-            return response.json()['token']
+            assert jsonresp['token'], 'token is %s' %jsonresp['token']
+            return jsonresp['token']
     
     @staticmethod
     def get_verification_code(phone_number):

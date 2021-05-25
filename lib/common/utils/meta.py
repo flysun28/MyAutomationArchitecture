@@ -8,7 +8,7 @@ from abc import ABCMeta
 
 class WithLogger(ABCMeta):
     
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args, **kwargs):        
         module = sys.modules[cls.__module__]
         if cls.__module__ == '__main__':
             module_name = re.search('(securepayments|)(_|)lib(\S+).py', module.__file__, re.I).group(2)
@@ -17,10 +17,23 @@ class WithLogger(ABCMeta):
             module_name = module.__name__
         logger = getattr(module, 'logger', None)
         if logger:
-            cls.logger = logger            
+            cls.logger = logger
         else:
-            module.logger = cls.logger = Logger(module_name, sys.__stdout__).get_logger()
-        return type.__call__(cls, *args, **kwargs)
+            module.logger = cls.logger = Logger(module_name, sys.__stdout__).get_logger()        
+        # 处理是否单例
+        for k, v in cls.__dict__.items():
+            if re.search('single', k, re.I):
+                is_singleton = v
+                break
+        else:
+            is_singleton = False
+        if is_singleton:
+            instance = getattr(cls, 'instance', None)
+            if instance is None:
+                cls.instance = type.__call__(cls, *args, **kwargs)
+            return cls.instance
+        else:
+            return type.__call__(cls, *args, **kwargs)
     
 
 __builtins__.update(WithLogger=WithLogger)

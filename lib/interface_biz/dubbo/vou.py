@@ -98,25 +98,71 @@ class Voucher:
             "operate",
             data
         )
+    
+    def query_voucher_by_id(self, ssoid, vou_id):
+        data = ssoid, vou_id
+        return self.conn.invoke(
+            "com.oppo.voucher.api.CouponQuery",
+            "queryVoucherById",
+            data,
+            flag='STRING'
+        )
+    
+    def query_all_useable(self, ssoid, order_amount=0, discount_type='', partner_id='2031'):
+        '''
+        :param ssoid:
+        :param order_amount: 订单金额，为0不校验
+        :param discount_type: one choice of [DAZHE, XIAOFEI, DIKOU]
+        :param partner_id:
+        '''
+        req = {
+            'country': 'CN',
+            'currency': 'CNY',
+            'ssoid': ssoid,
+            'orderAmount': order_amount or 0,
+            'couponType': 'KB_COUPON',
+            'couponDiscountType': '',   # DAZHE, XIAOFEI, DIKOU
+            'couponName': '',
+            'couponStatus': '',    # NORMAL, WAIT, ABANDON, REJECT, EXPIRED, USED
+            'grantTimeFrom': '',    # yyyy-MM-dd HH:mm:ss
+            'grantTimeTo': '',      # yyyy-MM-dd HH:mm:ss
+            'couponCode': '',
+            'bizNo': partner_id,
+            'appPackage': 'com.example.pay_demo',
+            'factor': '',
+            'showUnuseable': 'false',
+            'bizNoList': []
+        }
+        if not discount_type:
+            req.pop('couponDiscountType')
+        return self.conn.invoke(
+            'com.oppo.voucher.api.CouponQuery',
+            'useableKbCoupons',
+            req,
+            flag='JSON'
+        )
 
 
 if __name__ == '__main__':
-    flag = "4"
+    flag = "0"
+    vou = Voucher()
+    vou.query_voucher('2086776969', '62641621')
     if flag == "1":
         # 满减
-        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
+        vou_info = vou.grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")
+        vou.checkVoucher(vou_info['batchId'])
         # 消费
     if flag == "2":
-        vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
+        vou_info = vou.grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "10", "2076075925")
+        vou.checkVoucher(vou_info['batchId'])
     if flag == "3":
         # 红包券
-        vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
-        Voucher().checkVoucher(vou_info['batchId'])
+        vou_info = vou.grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2076075925")
+        vou.checkVoucher(vou_info['batchId'])
     if flag == "4":
         # 海外满减
         vou_info = Voucher("oversea").grantVoucher("9809089", "KB_COUPON", "DIKOU", "10000", "7500", "2076075925", "VN",
                                                    "VND")
         Voucher("oversea").checkVoucher(vou_info['batchId'])
-
+    
+    

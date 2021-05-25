@@ -10,7 +10,7 @@ from lib.interface_biz.scarlett.oversea_upay import upay_pay_scarlet
 from lib.interface_biz.scarlett.qq_pay import qq_pay_scarlet
 from lib.interface_biz.scarlett.szf_pay import szf_pay
 from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet, wx_sign_scarlet
-from lib.common.utils.env import set_global_env_id
+from lib.interface_biz.scarlett.alipay import ali_normal_pay_scarlet
 
 
 def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=None, partner_id=None):
@@ -31,6 +31,10 @@ def choose_scarlett(amount, pay_type, pay_req_id, sign_type=None, contract_code=
         if pay_type == "wxpay":            
             wx_normal_pay_scarlet(wx_pay_merchant["merchant_no"], pay_req_id, wx_pay_merchant["app_id"], amount,
                                   wx_pay_merchant['md5_key'])
+        if pay_type == "alipay":
+            '''ali渠道秘钥无法获取，验签会失败，不适用'''
+            ali_merchant = find_merchant_info('alipay', partner_id)
+            ali_normal_pay_scarlet(pay_req_id, amount, amount, ali_merchant['merchant_no'])
         if pay_type == "heepay":
             hee_pay_notify(pay_req_id, amount, md5_key=find_merchant_info("heepay", partner_id)['md5_key'])
         if pay_type == "qqwallet":

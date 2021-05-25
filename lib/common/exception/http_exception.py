@@ -22,3 +22,6 @@ class HttpJsonException(Exception):
         return args
 
 
+class LoginError(Exception):
+    pass
+        

@@ -18,8 +18,9 @@ class ExcelProxy():
         '''
         self._fileobj = Excel(path, read_only=False)
         assert interface, f"Invalid interface name: {interface}, should be one of the worksheet names"
-        ws = self._fileobj.open_worksheet(interface)
-        self._parser = ExcelParser(ws)
+#         ws = self._fileobj.open_worksheet(interface)
+#         self._parser = ExcelParser(ws)
+        self._parser = ExcelParser(self._fileobj, interface)
     
     @property
     def fileobj(self):
@@ -50,9 +51,3 @@ class Distributor():
             sys.exit(-1)
         else:
             self.proxy = proxy_cls(path, *args, **kwargs)
-
-    
-    
-
-
-

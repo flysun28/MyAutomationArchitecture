@@ -3,11 +3,14 @@ main.py
 __pycache__
 .idea
 test/
-log/
 case/report/
 case/htmlcov/
 case/.coverage
 case/.pytest_cache
 case/debug/main_debug.py
 case/interface/inland/dubbo/dubbo_info.xlsx
+<<<<<<< HEAD
 case/test/
+=======
+log/
+>>>>>>> dde2bc4740da05588fc5d1469c99255483374e2d

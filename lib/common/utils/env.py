@@ -8,7 +8,12 @@ from lib.common.file_operation.config_operation import Config
 glob_env_cfg = Config(global_env_path)
 
 
-def set_global_env_id(env_id):    
+def set_global_env_id(env_id):
+    '''
+    1. 设置测试环境id，会优先获取系统环境变量中的`CASE_ENV`
+    2. 更新至lib\config\environment.ini
+    :param env_id: [1, 2, 3, grey, product]
+    '''
     if isinstance(env_id, int):
         env_id = str(env_id)
     elif not env_id.isdigit():
@@ -21,6 +26,10 @@ def set_global_env_id(env_id):
 
 
 def get_env_id():
+    '''    
+    1. 优先获取系统环境变量中的`CASE_ENV`，并更新至lib\config\environment.ini
+    2. 从lib\config\environment.ini 读取测试环境id
+    '''
     # 默认走itest平台环境变量，若无，则读取本地环境变量
     env = dict(os.environ)
 #     print('所有环境变量:', env)

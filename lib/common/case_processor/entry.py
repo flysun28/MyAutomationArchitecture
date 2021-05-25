@@ -3,24 +3,30 @@
 '''
 import os
 import re
+import time
 import simplejson
+from itertools import chain
 from six import with_metaclass
 from lib.common.utils.meta import WithLogger
 from lib.common.exception.intf_exception import ExcelException
 from lib.common.case_processor.proxy import Distributor
-from lib.common.utils.misc_utils import to_iterable, get_letter_seqno
+from lib.common.utils.misc_utils import to_iterable, get_letter_seqno, timeit
 from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR
+from lib import pardir
 
 
 class CaseFile(with_metaclass(WithLogger)):
     
     def __init__(self, path, *args, **kwargs):
+        self.path = path
+        self.sheetname = kwargs.get('interface', '')
         self.proxy = Distributor(path, *args, **kwargs).proxy
         self.parser_ref = self.proxy.parser
+        self.parser_ref.protocol = os.path.basename(pardir(path))
         self._pos_tc = {}
         self._neg_tc = {}
         self._all_tc = {}
-        self._case_name_to_actual = {}  # 用例名称：实际结果坐标
+        self._case_to_coord = {}  # 用例名称：坐标
     
     def __enter__(self):
         return self
@@ -31,7 +37,10 @@ class CaseFile(with_metaclass(WithLogger)):
             raise ExcelException(exc_val)
         else:
             self.proxy.fileobj.close()
-            
+    
+    def __str__(self):
+        return 'CaseFile: '+self.path
+    
     def parse(self):
         yield from self.parser_ref.parse(to_iter=True)
     
@@ -39,6 +48,8 @@ class CaseFile(with_metaclass(WithLogger)):
         yield from self.parse()
 
     def _generate_test_data(self):
+        if self._all_tc:
+            return
         to_iterable(self.parser_ref.parse(), tuple)
         for case in self.parser_ref.cases:
             if case.type == '+':
@@ -51,19 +62,17 @@ class CaseFile(with_metaclass(WithLogger)):
     
     @property
     def all_cases(self):
-        if not self._all_tc:
-            self._generate_test_data()
-        return self.positive_cases + self.negative_cases
+        self._generate_test_data()
+#         return self.positive_cases + self.negative_cases
+        return list(chain(self._pos_tc.values(), self._neg_tc.values()))
     
     def one_case(self, case_name):
-        if not self._all_tc:
-            self._generate_test_data()
+        self._generate_test_data()
         return self._all_tc[case_name]
-    
+
     @property
     def positive_cases(self):
-        if not self._pos_tc:
-            self._generate_test_data()
+        self._generate_test_data()
         self.logger.info('正向测试用例数据：')
         pos_tc = list(self._pos_tc.values())
         for tc in pos_tc:
@@ -72,60 +81,59 @@ class CaseFile(with_metaclass(WithLogger)):
     
     @property
     def negative_cases(self):
-        if not self._neg_tc:
-            self._generate_test_data()
+        self._generate_test_data()
         self.logger.info('负向测试用例数据：')
         neg_tc = list(self._neg_tc.values())
         for tc in neg_tc:
             self.logger.info(dict(tc.data))
         return neg_tc
     
-    def update_actual(self, case_name, actual):
-        actual_title_coord = self.parser_ref.actual_coord    # E6
-        start_row = int(actual_title_coord[1:]) + 1
-        end_column = get_letter_seqno(actual_title_coord[0])
+    @timeit
+    def writeback(self, case_name, value, ref_coord):
+        self.logger.info('开始更新"{}"[{}]={}'.format(case_name, ref_coord, value))
+        start_row = int(ref_coord[1:]) + 1
+        end_column = get_letter_seqno(ref_coord[0])
         for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
                                                 self.parser_ref.ws.min_column, end_column,
                                                 values_only=False):
             if row[0].value == case_name:
-                actual_coord = actual_title_coord[0] + row[0].coordinate[1:]
-                print('"%s"实际结果坐标: %s' %(case_name, actual_coord))
-                self._case_name_to_actual[case_name] = actual_coord
+                upd_coord = ref_coord[0] + row[0].coordinate[1:]
+                self._case_to_coord.setdefault(case_name, upd_coord)
                 break
         else:
             raise LookupError('用例数据查找失败，请确认输入的用例名称。')
-        self.parser_ref.ws[actual_coord] = simplejson.dumps(actual, ensure_ascii=False)
-        self.save()
+        value = simplejson.dumps(value, ensure_ascii=False).strip('"')
+        self.parser_ref.ws[upd_coord] = value
+#         self.save()
     
-    def update_running_result(self, outcome:str):       
-        result_title_coord = self.parser_ref.running_result_coord
-        if not result_title_coord:
-            return
-        start_row = int(result_title_coord[1:]) + 1
-        end_column = get_letter_seqno(result_title_coord[0])
-        for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
-                                                self.parser_ref.ws.min_column, end_column,
-                                                values_only=False):
-            if row[0].value in self._case_name_to_actual:
-                _name = row[0].value
-                row_num = self._case_name_to_actual[_name][1:]  #获取行号
-                result_coord = result_title_coord[0] + row_num
-                print('"%s"用例执行结果坐标: %s' %(_name, result_coord))
-                self.parser_ref.ws[result_coord] = outcome
-        self.save()
-        
+    def update_actual(self, case_name, actual):
+        self.writeback(case_name, actual, self.parser_ref.actual_coord)
+
+    def update_req(self, case_name, req):
+        self.writeback(case_name, req, self.parser_ref.req_coord)
+    
+    def update_running_result(self, case_name, outcome:str):       
+        self.writeback(case_name, outcome, self.parser_ref.running_result_coord)
+     
+    def update_voucher_info(self, case_name, vouinfo):
+        self.writeback(case_name, vouinfo, self.parser_ref.voucher_coord)
+
     def save(self):
         self.proxy.fileobj.save()
-        
+        time.sleep(1)
+
     def close(self):
         self.proxy.fileobj.close()
 
 
 def src_case_file(test_file_path):
-    case_file_dir = os.path.join(CASE_SRCFILE_ROOTDIR, 'http')
+    protocol = re.search('http|dubbo|protobuf', test_file_path, re.I).group()
+    case_file_dir = os.path.join(CASE_SRCFILE_ROOTDIR, protocol)
     basename = os.path.basename(test_file_path)
     interface_name = re.search('test_(\w+)', basename, re.I).group(1)
-    return CaseFile(os.path.join(case_file_dir, 'inland.xlsx'), interface=interface_name)
+    case_file = CaseFile(os.path.join(case_file_dir, 'inland.xlsx'), interface=interface_name)
+    print(case_file)
+    return case_file
 
 
 if __name__ == '__main__':
@@ -141,7 +149,7 @@ if __name__ == '__main__':
         2）直接打印ExcelTestCase实例
     '''
 #     with CaseFile(r'E:\SecurePaymentsAutomation\case\src\case_excel\http_json.xlsx', interface='simplepay') as src:
-    src = CaseFile(r'E:\SecurePaymentsAutomation\case\src\http\inland.xlsx', interface='simplepay')    
+    src = CaseFile(r'E:\SecurePaymentsAutomation\case\src\http\inland.xlsx', interface='simplepay')
     for case in src:
         print(case)
 
