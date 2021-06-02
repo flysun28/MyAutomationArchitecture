@@ -68,7 +68,7 @@ class CaseFile(with_metaclass(WithLogger)):
     
     def one_case(self, case_name):
         self._generate_test_data()
-        return self._all_tc[case_name]
+        return self._all_tc[case_name]        
 
     @property
     def positive_cases(self):
@@ -88,9 +88,13 @@ class CaseFile(with_metaclass(WithLogger)):
             self.logger.info(dict(tc.data))
         return neg_tc
     
+    @property
+    def url(self):
+        self._generate_test_data()
+        return self.parser_ref.interface_url
+    
     @timeit
     def writeback(self, case_name, value, ref_coord):
-        self.logger.info('开始更新"{}"[{}]={}'.format(case_name, ref_coord, value))
         start_row = int(ref_coord[1:]) + 1
         end_column = get_letter_seqno(ref_coord[0])
         for row in self.parser_ref.ws.iter_rows(start_row, self.parser_ref.ws.max_row,
@@ -103,6 +107,7 @@ class CaseFile(with_metaclass(WithLogger)):
         else:
             raise LookupError('用例数据查找失败，请确认输入的用例名称。')
         value = simplejson.dumps(value, ensure_ascii=False).strip('"')
+        self.logger.info('开始更新"{}"[{}]={}'.format(case_name, upd_coord, value))
         self.parser_ref.ws[upd_coord] = value
 #         self.save()
     

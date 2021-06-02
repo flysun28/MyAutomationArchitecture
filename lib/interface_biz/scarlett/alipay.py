@@ -120,7 +120,7 @@ def ali_sign_scarlet_by_raw_resp(raw_map:str):
     '''
     将支付宝回调的原始签约报文（等号连接格式），转换成字典格式。重新发给Scarlett
     :param raw_map: '{gmt_create=2021-04-26 14:34:00, charset=UTF-8, ...}'
-    '''    
+    '''
     scarlett_info = scarlet_map_to_json(raw_map)
     result = HTTPJSON_SCARLET.post('/opaycenter/alipayavoidnotifynew', data=scarlett_info, lib=requests)
     if "SUCCESS" in str(result):

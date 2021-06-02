@@ -4,7 +4,8 @@
 # datetime:2021/5/14 15:20
 # comment:
 import time
-
+import os
+import re
 import pytest
 from lib.common.case_processor.entry import src_case_file
 from lib.common.file_operation.config_operation import Config
@@ -16,6 +17,12 @@ pytestmark = pytest.mark.get_link_info
 
 case_file = src_case_file(__file__)
 
+@pytest.fixture(scope='module', autouse=True, name='sheetname')
+def manage_case_file():
+    yield re.match('test_(\S+).py', os.path.basename(__file__), re.I).group(1)
+    case_file.save()
+    case_file.close()
+    
 mysql = GlobalVar.MYSQL_IN
 
 @pytest.mark.smoke

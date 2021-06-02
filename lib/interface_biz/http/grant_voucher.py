@@ -366,7 +366,7 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
         self.vou_type = vou_type
         self.partner_id = partner_id
         self.req = None
-        if is_get_key_from_db():            
+        if is_get_key_from_db():
             self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
         else:            
             self.salt_key = self.partner_private_key[self.partner_id]

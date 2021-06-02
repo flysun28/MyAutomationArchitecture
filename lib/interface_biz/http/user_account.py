@@ -92,6 +92,14 @@ class Account(metaclass=WithLogger):
     def get_all_ssoids(self):
         if get_env_id() in ('grey', 'product'):
             return
+        mobiles = GlobalVar.MYSQL_AUTO_TEST.select('SELECT username FROM `pay_auto_test_info`.`test_env_account`')
+        mobiles = tuple(chain(*[d.values() for d in mobiles]))
+        for mobile in mobiles:
+            ssoid = self.get_ssoid_by_phone(mobile)
+            self._ssoids.append(ssoid)
+        print('所有ssoids:', self._ssoids)
+    
+    def get_ssoid_by_phone(self, mobile):
         req = {
             'appKey': self.user_account_key['appkey'],
             'timestamp': int(time.time() * 10**3),
@@ -103,21 +111,17 @@ class Account(metaclass=WithLogger):
             'countryCallingCode': '',
             'email': ''
         }
-        mobiles = GlobalVar.MYSQL_AUTO_TEST.select('SELECT username FROM `pay_auto_test_info`.`test_env_account`')
-        mobiles = tuple(chain(*[d.values() for d in mobiles]))
-        for mobile in mobiles:
-            req['mobile'] = mobile
-            orig_sign_str = Sign(req).join_asc_have_key('&key=') + self.user_account_key['priv_key']
-            req['sign'] = md5(orig_sign_str, to_upper=False)
-            result = GlobalVar.HTTPJSON_ACCOUNT_IN.post('/user/basic-info', data=req)
-            try:
-                assert result['success'] is True
-                assert result['error'] is None
-            except:
-                pass
-            else:
-                self._ssoids.append(result['data']['userId'])
-        print('所有ssoids:', self._ssoids)
+        req['mobile'] = mobile
+        orig_sign_str = Sign(req).join_asc_have_key('&key=') + self.user_account_key['priv_key']
+        req['sign'] = md5(orig_sign_str, to_upper=False)
+        result = GlobalVar.HTTPJSON_ACCOUNT_IN.post('/user/basic-info', data=req)
+        try:
+            assert result['success'] is True
+            assert result['error'] is None
+        except:
+            pass
+        else:
+            return result['data']['userId']
     
     @property
     def all_test_ssoids(self):
@@ -126,5 +130,6 @@ class Account(metaclass=WithLogger):
 
 if __name__ == '__main__':
     account = Account()
-    account.login()
-    print(account.get_verification_code('14441120298'))
+#     print(account.get_ssoid_by_phone('18688994250'))
+#     account.login()
+#     print(account.get_verification_code('14441120298'))

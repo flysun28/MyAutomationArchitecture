@@ -67,7 +67,7 @@ class Voucher:
             "cutAmount": str(cutAmount),
             # 折扣券打折
             "ratio": ratio,
-            # 折扣券高低消费金额
+            # 折扣券最高抵扣金额
             "maxCutAmount": maxCutAmount,
             "applyCount": "1",
             "ssoidList": [ssoid],
@@ -93,7 +93,7 @@ class Voucher:
         :return:
         """
         data = {"couponBatchId": couponBatchId, "batchOperateType": "PASS"}
-        result = self.conn.invoke(
+        self.conn.invoke(
             "com.oppo.voucher.api.admin.CouponBatchInfoAdmin",
             "operate",
             data
@@ -101,7 +101,7 @@ class Voucher:
     
     def query_voucher_by_id(self, ssoid, vou_id):
         data = ssoid, vou_id
-        return self.conn.invoke(
+        self.conn.invoke(
             "com.oppo.voucher.api.CouponQuery",
             "queryVoucherById",
             data,

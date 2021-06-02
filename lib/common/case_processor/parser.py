@@ -74,6 +74,9 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
                                      self.ws.min_column, self.ws.max_column,
                                      values_only=False):
             # row is a tuple
+            if row[0].value.upper() == 'URL':
+                self.interface_url = row[1].value
+                continue
             if row[0].value == '用例名称':
                 self._is_case_started = True
 #                 self.fields = tuple(cell.value for cell in row)

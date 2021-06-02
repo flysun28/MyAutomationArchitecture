@@ -15,12 +15,13 @@ from lib.common.utils.globals import HTTPENCJSON_IN
 #     "partnerCode": "80009",
 #     "platform": "ATLAS"
 # }
-case_data = {
-    "token": "TOKEN_7t5kusT0owaYVytvYSs24P1SYARqhdd3XUKbxUtfC3TV7vmJ8OoliYh5lgZHhNtr",
-    "appId": "2033",
-    "appPackage": "com.oppo.usercenter",
-    "partnerCode": "2031",
-    "platform": "ATLAS"
+case_data = {'token': '',
+             'appId': '',
+             'appPackage': 'com.oppo.usercenter',
+             'partnerCode': '2031',
+             'platform': 'ATLAS'
 }
-result = HTTPENCJSON_IN.post('/api/pay-flow/v290/get-process-token', case_data)
-print(result)
+
+if __name__ == '__main__':
+    result = HTTPENCJSON_IN.post('/api/pay-flow/v290/get-process-token', case_data)
+    print(result)

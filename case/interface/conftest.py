@@ -5,8 +5,7 @@ import time
 import pytest
 from lib.common.utils.env import set_global_env_id
 from lib.common.concurrent.threading import monitor
-from lib.common.session.http.http_json import EncryptJson
-from lib.common.utils.globals import GlobalVar
+from lib.interface_biz.http.pay_pass import get_process_token
 
 partner_ids = '5456925', '2031'
 env_id = '1'
@@ -53,11 +52,7 @@ def pytest_runtest_makereport(item, call):
             else:
                 outcome = 'failed' if monitor.obj else 'passed'
             case.file.update_running_result(case.name, outcome)
-            if monitor.obj:
-                monitor.obj2exc.pop(monitor.obj, None)
-                monitor.obj.errmsg = '' 
-                monitor.obj = None
-            monitor.is_terminate_self = False
+            monitor.reset(monitor.obj)
         else:
             outcome = result.outcome
 #         print('测试用例%s执行报告: %s' %(item.function.__name__, result))
@@ -73,7 +68,7 @@ def session_setup_and_teardown():
     3. terminate all threads including monitor and other pytest threads, 
        otherwise python interpreter will never be stopped
     '''
-    # set_global_env_id(env_id)    
+    # set_global_env_id(env_id)
     from lib.interface_biz.http.user_account import Account
     
     account = Account()
@@ -81,8 +76,11 @@ def session_setup_and_teardown():
     
     yield
     
-    monitor.is_terminate_self = True
+#     monitor.is_terminate_self = True
+#     kill_all_active_threads()
     print('\nTest Finished...')
 
 
-
+@pytest.fixture(scope='module', autouse=True)
+def process_token():
+    return get_process_token()

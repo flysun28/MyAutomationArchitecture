@@ -3,6 +3,8 @@
 # author:xy
 # datetime:2021/5/17 15:45
 # comment:
+import os
+import re
 import pytest
 from lib.common.case_processor.entry import src_case_file
 from lib.interface_biz.http.get_marketing_info import get_marketing_info_positive
@@ -10,6 +12,12 @@ from lib.interface_biz.http.get_marketing_info import get_marketing_info_positiv
 pytestmark = pytest.mark.get_marketing_info
 
 case_file = src_case_file(__file__)
+
+@pytest.fixture(scope='module', autouse=True, name='sheetname')
+def manage_case_file():
+    yield re.match('test_(\S+).py', os.path.basename(__file__), re.I).group(1)
+    case_file.save()
+    case_file.close()
 
 
 @pytest.mark.smoke

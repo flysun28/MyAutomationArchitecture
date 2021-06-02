@@ -9,9 +9,10 @@ import telnetlib
 from lib.common.utils.meta import WithLogger
 from six import with_metaclass
 from lib.common.utils.misc_utils import ascii_to_chr_repr
-from lib.common.concurrent.threading import monitor
+from lib.common.utils.decorator import monitoring
 
 
+@monitoring
 class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
     prompt = 'dubbo>'
     coding = 'utf-8'
@@ -49,7 +50,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
         # self.logger.info("dubbo传参：{}".format(simplejson.dumps(arg, ensure_ascii=False, indent=2)))
         self.logger.info("dubbo invoke语句：{}".format(command_str))
         data = self.command(DubRunner.prompt, "")
-        resp = data.decode(encoding='utf-8', errors='ignore').split('elapsed')[0].strip('\n')
+        resp = data.decode(encoding='GBK', errors='ignore').split('elapsed')[0].strip('\n')
         self.logger.info('Dubbo Response: \n%s', resp)
         result = self.extract_result(resp)
         # 如果result为空，则用原始response
@@ -82,8 +83,12 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
             else:
 #                 raise AttributeError('Dubbo返回异常：'+errmsg)
                 self.logger.error('Dubbo返回异常：'+self.errmsg)
-                monitor.obj = self
+                self.process_err()
                 return self.errmsg
+    
+    def process_err(self):
+        if self.errmsg:
+            self.monitor.obj = self
     
     def process_result(self, jsondata):
         authHint = jsondata.get('authHint')
@@ -95,7 +100,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
             authHint = ascii_to_chr_repr(authHint)
         self.logger.info("dubbo回参：{}".format(jsondata))
         return jsondata
-    
+
 
 if __name__ == '__main__':
     conn = DubRunner('10.3.1.79', 2181)

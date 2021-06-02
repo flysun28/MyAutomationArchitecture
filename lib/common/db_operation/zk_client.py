@@ -5,22 +5,23 @@
 import kazoo
 import urllib
 import re
+import threading
 from lib.common.utils.meta import WithLogger
 from six import with_metaclass
-from kazoo.handlers.threading import SequentialThreadingHandler
+from kazoo.handlers.threading import SequentialThreadingHandler, _STOP
+
 
 class SequentialThreadingHandlerExt(with_metaclass(WithLogger, SequentialThreadingHandler)):
+     
     def _create_thread_worker(self, queue):
         def _thread_worker():  # pragma: nocover
             while True:
                 try:
                     func = queue.get()
                     try:
-                        if func is object():
+                        if func is _STOP:
                             break
                         func()
-                    except TypeError:
-                        continue
                     except Exception:
                         self.logger.exception("Exception in worker queue thread")
                     finally:
@@ -29,9 +30,17 @@ class SequentialThreadingHandlerExt(with_metaclass(WithLogger, SequentialThreadi
                 except (self.queue_empty, RuntimeError):
                     continue
         type(self)._thread_worker = _thread_worker
-        t = self.spawn(type(self)._thread_worker)
+        t = self.spawn(type(self)._thread_worker, daemon=True)
         return t
-
+     
+    def spawn(self, func, *args, **kwargs):
+        daemonic = kwargs.pop('daemon', True)
+        t = threading.Thread(target=func, args=args, kwargs=kwargs)
+        t.daemon = daemonic
+        t.start()
+        return t
+ 
+ 
 kazoo.handlers.threading.SequentialThreadingHandler = SequentialThreadingHandlerExt
  
 from kazoo.client import KazooClient
@@ -43,6 +52,7 @@ class ZkClient(metaclass=WithLogger):
         self.ip = ip
         self.port = port
         self.time_out = time_out
+        print('ZK ip+port: {}:{}'.format(ip, port))
         self.zk = KazooClient(hosts='{}:{}'.format(self.ip, self.port), timeout=self.time_out)
         self.zk.start()
 

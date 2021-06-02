@@ -93,7 +93,9 @@ def ascii_to_chr_repr(str_with_ascii:str)-> str:
 def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     """
     Fails unless all items in `dict2` are found from `dict1`.
-    """    
+    """
+    assert isinstance(dict1, dict), type(dict1)
+    assert isinstance(dict2, dict), type(dict2)
     diffs = [k for k in dict2 if k not in dict1]
     missing_key_msg = "Following keys missing from first dictionary: %s" %', '.join(diffs)
     if diffs:
@@ -122,7 +124,7 @@ def run_keyword_and_expect_error(err_key:str, keyword, *args, **kwargs):
     except Exception as e:
         errmsg = ' '.join(e.args)
         if err_key in errmsg or err_key == '*':
-            print('Expected error "%s" occurred, PASS!')
+            print('Expected error "%s" occurred, PASS!' %err_key)
         else:
             raise
 

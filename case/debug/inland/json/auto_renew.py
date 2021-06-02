@@ -8,6 +8,7 @@ from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign, old_wx_auto_renew
+from lib.config.country_currency import currency as country_currency
 
 
 class AutoRenew:
@@ -19,7 +20,7 @@ class AutoRenew:
         if partner_code == '2031':
             self.renew_product_code = '20310001'
 
-    def auto_renew_out(self, agreement_no, pay_type):
+    def auto_renew_out(self, agreement_no, pay_type, third_part_id):
         """
         向渠道发起扣费接口
         :return:
@@ -38,14 +39,14 @@ class AutoRenew:
             'desc': 'Default product desc...',
             'notifyUrl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
             'apppackage': 'com.coloros.cloud',
-            'thirdPartId': '2088112811111403',
+            'thirdPartId': third_part_id,
             'imei': '',
             'model': '',
             'ip': '',
             'ext': '',
-            'subUserId': '00002',
+            'subUserId': '',
             # 签名未校验
-            'sign': '54e272460778bb54ea470c7a3ad60531'
+            'sign': ''
         }
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
         case_dict['sign'] = md5(temp_string)
@@ -68,7 +69,7 @@ class AutoRenew:
 
     def un_sign(self, agreement_no, partner_order, pay_type):
         """
-        解约。微信需手动，因测试环境的解约回调都去了生产。支付宝仅可在第一套环境，回调地址在支付宝配置死了。
+        解约。不适合微信，需手动，因测试环境的解约回调都去了生产。支付宝仅可在第一套环境，回调地址在支付宝配置死了。
         支付宝:调用接口解约，支付宝会回调到对应的地址。手动解约，是写死在支付宝侧的
         :return:
         """
@@ -88,6 +89,28 @@ class AutoRenew:
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
         case_dict['sign'] = md5(temp_string)
         GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/unsign", data=case_dict)
+    
+    def wx_unsign(self, xml):
+        '''
+        从首鸣获取微信解约回调原始xml报文
+        e.g.
+        '<xml>
+            <change_type>DELETE</change_type>
+            <contract_code>SN202106021010201133284552181126</contract_code>
+            <contract_id>202106025390914093</contract_id>
+            <contract_termination_mode>2</contract_termination_mode>
+            <mch_id>1259634601</mch_id>
+            <openid>oCg6Xt-0s4ns6EZ8ym0kW_JzUeps</openid>
+            <operate_time>2021-06-02 11:14:53</operate_time>
+            <plan_id>131584</plan_id>
+            <request_serial>162259982077137627</request_serial>
+            <result_code>SUCCESS</result_code>
+            <return_code>SUCCESS</return_code>
+            <return_msg>OK</return_msg>
+            <sign>687F1195D53CECDB3D98E59E5B91C479</sign>
+        </xml>'
+        '''
+        return GlobalVar.HTTPJSON_SCARLET.post('/opaycenter/wxpaysignnotify', data=xml)
 
     def old_unsign(self):
         req = {
@@ -143,12 +166,59 @@ class AutoRenew:
         GlobalVar.HTTPJSON_IN.post("/plugin/post/alipayavoidpay", data="hai"+str(req)+"g")
 
 
+class AutoRenewOverseas():
+    
+    def __init__(self, ssoid, country, partner_code='2031'):
+        self.ssoid = ssoid
+        self.country = country
+        self.currency = country_currency[self.country]
+        self.partner_code = partner_code
+
+    def avoidpay(self, amount, pay_req_id=''):
+        '''
+        自动续费
+        e.g. {"ssoid":"621730086","amount":"1.28",
+              "notifyUrl":"https://album-sg01a.ocloud.oppomobile.com/pay/v1/payNotify.json",
+              "desc":"云服务空间购买","rate":"1","imei":"","model":"",
+              "expectPayDate":"2021-05-31 08:10:22","lastPayDate":"2021-05-01 08:01:50",
+              "country":"SG","currency":"SGD","sign":"f26796fd6550770553ee35657b322d9b",
+              "apppackage":"com.coloros.cloud","requestid":"OCLOUD1622419222464K5262K621730086K128",
+              "ext2":"B-4U833904UE160342K","subject":"云服务空间购买","partnercode":"247628518"
+            }
+        '''
+        req = {"ssoid": self.ssoid,
+               "amount": amount,
+               "notifyUrl": "https://album-sg01a.ocloud.oppomobile.com/pay/v1/payNotify.json",
+               "desc": "海外自动续费接口",
+               "rate": "1",
+               "imei": "",
+               "model": "",
+               "expectPayDate": "2021-06-02 15:00:00",
+               "lastPayDate": "2021-05-01 08:01:50",
+               "country": self.country,
+               "currency": self.currency,
+               "sign": "",
+               "apppackage": "com.coloros.cloud",
+               "requestid": pay_req_id,
+               "ext2": "B-6EA09242CR088031X",
+               "subject": "海外自动续费接口",
+               "partnercode": self.partner_code
+        }
+        app_priv_key = 'dfatd14s12830saw3jfmer9we0qk'   # 写死在海外pay-info的配置文件中，仅给云服务用
+        orig_string = Sign(req).join_asc_have_key('&key='+app_priv_key)
+        print('签名原串：', orig_string)
+        req['sign'] = md5(orig_string, to_upper=False)
+        GlobalVar.HTTPJSON_OUT.post('/avoid/avoidpay', data=req)
+
+
 if __name__ == '__main__':
-    flag = "2"
+    flag = "1"
     if flag == "1":
-        AutoRenew().auto_renew_out()
+        AutoRenewOverseas('2000060346', 'MY').avoidpay('100', 'ID202105310911192000060346543243')
+#         AutoRenew('2000060346').auto_renew_out('202106025390914093', 'wxpay')
+#         AutoRenew('2000060346').auto_renew_out('20215402735272819337', 'alipay', '2088522284017371')
     if flag == "2":
-        AutoRenew().un_sign()
+        AutoRenew('2000060346').un_sign('') # agreement_no, partner_order, pay_type
     if flag == "3":
         AutoRenew().old_unsign()
     if flag == "4":
