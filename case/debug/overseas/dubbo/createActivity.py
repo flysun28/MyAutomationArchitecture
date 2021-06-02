@@ -5,24 +5,26 @@
 # comment:
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.globals import GlobalVar
+from lib.common_biz.order_random import RandomOrder
+
 server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.payactivity.api.facade.ActivityWhiteService")
 conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
 
-def create(flag):
+def create(flag, isLimit = "Y"):
     data = {}
     if flag == "1":
         # 满减
         data = {
-            "activityId": 0, "bizNo": 5456925, "activityName": "auto_create_MANJIAN", "startTime": "2021-03-27 21:30:00",
-            "endTime": "2021-04-09 21:30:00",
+            "activityId": 0, "bizNo": 5456925, "activityName": "auto_create_MANJIAN" + RandomOrder(3).random_string(), "startTime": "2021-03-27 21:30:00",
+            "endTime": "2023-04-09 21:30:00",
             "discountType": "MANJIAN", "totalAmount": 100000, "totalNum": 5,
             "creater": "80264408", "operateType": "CREATE", "currency": "INR", "country": "IN",
             "allowTimes": 1,
             "mono": "auto_create_mo", "channelType": "codapay_paytm", "amountType": "ACTIVITY", "activityType": "YOUHUI",
             "userType": "ALL_USERS",
             "totalAttendTimes": 1,
-            "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": "Y", "hasUserLimit": "Y",
+            "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": isLimit,
             "discountInfo": {"cutAmount": 500, "fullAmount": 1000, "discountType": "MANJIAN"},
             "cutAmount": 500,
             "full_amount": 1000,
@@ -30,7 +32,7 @@ def create(flag):
         }
     if flag == "2":
         data = {"activityId": 0, "bizNo": 5456925, "activityName": "auto_create_DAZHE", "startTime":"2021-03-27 21:30:00",
-                "endTime": "2021-04-09 21:30:00",
+                "endTime": "2023-04-09 21:30:00",
                 "discountType": "DAZHE", "totalAmount": 1000, "totalNum": 5,
                 "creater": "80264408", "operateType": "CREATE", "currency": "INR", "country": "IN",
                 # 是否允许多次使用
@@ -38,9 +40,10 @@ def create(flag):
                 "mono": "gddsgdsgdsgds", "channelType": "codapay_paytm", "amountType":  "ACTIVITY",
                 "activityType": "YOUHUI","userType": "ALL_USERS",
                 "totalAttendTimes": 1,
-                "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": "Y", "hasUserLimit": "Y",
+                "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": isLimit,
                 "discountInfo": {"rate": 80, "maxCutAmount": 400, "minConsAmount": 500, "discountType": "DAZHE"},
                 "class": "com.oppo.payactivity.api.dto.ActivityOperateReq"}
+
     result = conn.invoke(
         "com.oppo.payactivity.api.facade.ActivityOperate",
         "createActivity",
@@ -49,17 +52,27 @@ def create(flag):
     return result['object']['activityId']
 
 
-def create_white_list(activityId):
+"""
+"activityId": activityId,
+# "com.example.pay_demo"
+"packageList": ["com.example.pay_demo"],
+# "2076075925", "2086628989"
+"ssoidList": ["2076075925"],
+# "000000000000000"
+"imeiList": ["000000000000000"],
+# "FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836"
+"openIdList": ["FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836"]
+"""
+
+
+def create_white_list(activityId, packageList, ssoidList, imeiList, openIdList):
     data = {
         "activityId": activityId,
-        # "com.example.pay_demo"
-        "packageList": ["com.example.pay_demo"],
-        # "2076075925", "2086628989"
-        "ssoidList": ["2076075925"],
-        # "000000000000000"
-        "imeiList": ["000000000000000"],
-        # "FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836"
-        "openIdList": ["FBC4E853B36C40C8A2AC61D127D85C9E23fe8cbbef964f0009fa0ac296d07836"]
+        "packageList": packageList,
+        "ssoidList": ssoidList,
+        "imeiList": imeiList,
+        "openIdList": openIdList
+
     }
     result = conn.invoke(
         "com.oppo.payactivity.api.facade.ActivityWhiteService",
