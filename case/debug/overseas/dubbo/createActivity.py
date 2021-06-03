@@ -11,7 +11,7 @@ server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.payactivity.api.fa
 conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
 
-def create(flag, isLimit = "Y"):
+def create(flag, isLimit="Y", userLimit="Y"):
     data = {}
     if flag == "1":
         # 满减
@@ -24,7 +24,7 @@ def create(flag, isLimit = "Y"):
             "mono": "auto_create_mo", "channelType": "codapay_paytm", "amountType": "ACTIVITY", "activityType": "YOUHUI",
             "userType": "ALL_USERS",
             "totalAttendTimes": 1,
-            "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": isLimit,
+            "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": userLimit,
             "discountInfo": {"cutAmount": 500, "fullAmount": 1000, "discountType": "MANJIAN"},
             "cutAmount": 500,
             "full_amount": 1000,
@@ -40,7 +40,7 @@ def create(flag, isLimit = "Y"):
                 "mono": "gddsgdsgdsgds", "channelType": "codapay_paytm", "amountType":  "ACTIVITY",
                 "activityType": "YOUHUI","userType": "ALL_USERS",
                 "totalAttendTimes": 1,
-                "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": isLimit,
+                "payActionType": "ALL", "createJson": "{}", "hasPackageLimit": isLimit, "hasUserLimit": userLimit,
                 "discountInfo": {"rate": 80, "maxCutAmount": 400, "minConsAmount": 500, "discountType": "DAZHE"},
                 "class": "com.oppo.payactivity.api.dto.ActivityOperateReq"}
 
@@ -80,6 +80,23 @@ def create_white_list(activityId, packageList, ssoidList, imeiList, openIdList):
         data)
 
 
+def create_black_list(activityId, b_ssoid, b_imei, b_openid):
+    data = {"list": [
+        {"activityId": activityId,
+         "packageName": "",
+         "ssoid": b_ssoid,
+         "imei": b_imei,
+         "openid": b_openid,
+         "limitType": "BLACK"
+         }
+    ]}
+    result = conn.invoke(
+        "com.oppo.payactivity.api.facade.ActivityAdminService",
+        "createActivityBlankList",
+        str(data)
+    )
+
+
 def activity_pass(activityId):
     ID = GlobalVar.MYSQL_OUT.select_one(
         "select id from `opay_activity`.`activity_info` where activityId = {}".format(activityId))
@@ -109,9 +126,11 @@ def activity_off(activityId):
 
 
 if __name__ == '__main__':
-    list_id = [192]
-    for item in list_id:
-        activity_off(item)
-    activity_id = create("1")
-    create_white_list(activity_id)
-    activity_pass(activity_id)
+
+    create_black_list(21, "2076075926", "0000000000000000001", "1111111111111111")
+    # list_id = [22, 21, 17]
+    # for item in list_id:
+    #     activity_off(item)
+    # activity_id = create("1")
+    # create_white_list(activity_id)
+    # activity_pass(activity_id)
