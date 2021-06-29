@@ -8,6 +8,7 @@ from lib.common.concurrent.threading import monitor
 from lib.interface_biz.http.pay_pass import get_process_token
 
 partner_ids = '5456925', '2031'
+partner_id = '2031'
 env_id = '1'
 
 

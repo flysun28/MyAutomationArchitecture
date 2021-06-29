@@ -3,6 +3,7 @@ import re
 import random
 import string
 import time
+import pypinyin
 from functools import wraps
 
 
@@ -103,7 +104,9 @@ def dictionary_should_contain_sub_dictionary(dict1:dict, dict2:dict):
     diffs = ()
     for k2, v2 in dict2.items():
         v1 = dict1[k2]
-        if k2 == 'payrequestid' and not v1.startswith(v2) or v1 != v2:
+        if v1 == v2 or k2.lower() == 'payrequestid' and v1.startswith(v2):
+            continue
+        else:
             diffs += 'Key "%s": %s != %s' %(k2, v2, v1),
     diff_value_msg = 'Following keys have different values:\n' + '\n'.join(diffs)
     print(diff_value_msg)
@@ -150,8 +153,32 @@ def flatten_nested_dict(dictionary:dict):
     res = {}
     for k, v in dictionary.items():
         if isinstance(v, dict):
-            res.update(v)
+            res.update(flatten_nested_dict(v))
+#             res.update(v)
         else:
             res[k] = v
     return res
+ 
+ 
+def to_pinyin(word, heteronym=False, separator=''):
+    '''
+    汉字转拼音，支持多音字和音调显示
+    :param word:
+    :param heteronym: 是否开启多音字
+    :param separator: 拼音之间的分隔符，默认为空
+    '''
+    l = []
+    style = pypinyin.TONE if heteronym else pypinyin.NORMAL
+    # heteronym=True开启多音字
+    for i in pypinyin.pinyin(word, style=style, heteronym=heteronym):
+        l.append(''.join(i))
+    return separator.join(l)
+
+
+def is_all_chinese(string)-> bool:
+    # 检查是否全中文
+    for c in string:
+        if not '\u4e00' <= c <= '\u9fa5':
+            return False
+    return True
 

@@ -7,6 +7,8 @@ from lib.common.file_operation.config_operation import Config
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import join_sign_path
 from lib.common.algorithm.md5 import md5
+import json
+from lib.common.utils.misc_utils import is_sequence
 
 
 class Sign(metaclass=WithLogger):
@@ -45,8 +47,8 @@ class Sign(metaclass=WithLogger):
         dataList = []
         for key in sorted(self.original_dict):
             if key in args or key == "sign" or self.original_dict[key] == '':
-                continue
-            dataList.append(("%s=%s" % (key, self.original_dict[key])))
+                continue  
+            dataList.append("%s=%s" %(key, self.original_dict[key]))
         return "&".join(dataList) + salt
 
     def join_fixed_param(self, section, salt=""):

@@ -28,8 +28,8 @@ def get_process_token():
         "token": GlobalVar.TOKEN,
         # platform==MSP，传该字段
         "appId": "",
-        "appPackage": "com.oppo.usercenter",
-        "partnerCode": "2031",
+        "appPackage": 'com.example.pay_demo',
+        "partnerCode": '2031',
         "platform": "ATLAS"
     }
     result = HTTPENCJSON_IN.post('/api/pay-flow/v290/get-process-token', case_data)

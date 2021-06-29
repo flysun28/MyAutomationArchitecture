@@ -12,8 +12,9 @@ from lib.common.utils.meta import WithLogger
 
 
 class Nearme(metaclass=WithLogger):
+    
     def __init__(self, ssoid=''):
-        self.ssoid = ssoid
+        self.ssoid = ssoid or GlobalVar.SSOID
         server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.pay.nearme.facade.NearmeAccountOperate")
         self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
@@ -49,6 +50,9 @@ class Nearme(metaclass=WithLogger):
         self.nearme_add_subtract(amount, self.ssoid, operate_type)
     
     def query_balance(self, ssoid=''):
+        '''
+        dubbo查询 pay_cocoin_3.pay_user_info_158
+        '''
         data = {'ssoid': ssoid or self.ssoid}
         result = self.conn.invoke('NearmeAccountQuery', 'queryAccountBalance', data, flag='JSON')
         self.logger.info('可币余额: %s', result['data']['balance'])

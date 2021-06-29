@@ -114,7 +114,7 @@ def ali_sign_scarlet():
     logger.info(str(result.decode("utf-8")))
     if "SUCCESS" in str(result.decode("utf-8")):
         logger.info("回调解析成功")
-        
+
 
 def ali_sign_scarlet_by_raw_resp(raw_map:str):
     '''

@@ -2,71 +2,66 @@
 Created on 2021年5月31日
 @author: 80319739
 '''
-import random
-from lib.interface_biz.http.pay_pass import get_process_token
-from lib.common.utils.globals import GlobalVar, HTTPENCJSON_IN
-from lib.common_biz.order_random import RandomOrder
 
-# 所有金额的单位均为分
+from lib.interface_biz.http.refactor.pay import Pay
 
-goodsType = 'COMMON'
-screenInfo = random.choice(['FULL', 'HALF', 'ACROSS_SCREEN'])
-req = {
-    # mandatory
-    "processToken": get_process_token(),
-    'payType': 'VIRTUAL_ASSETS',  # 支付渠道, 银行卡支付 BANK_CARD, 虚拟支付 VIRTUAL_ASSETS 
-    'goodsType': goodsType,    # 商品类型 COCOIN/COMMON
-    'platform': 'ATLAS',       # SDK类型: MSP ATLAS(安全支付)
-    "partnerCode": "2031",
-    'partnerOrder': RandomOrder(32).random_string() if goodsType == 'COMMON' else '',
-    'amount': 1,    # 原始金额
-    'productName': 'test direct pay',    # 商品名称
-    'productDesc': 'test direct pay',    # 商品描述
-    'notifyUrl': GlobalVar.URL_PAY_IN+"/notify/receiver",    #支付结果通知地址
-    'clientCallbackUrl': '1',  #客户端回调地址
-    'price': 1,    # number    价格    
-    'count': 1,    # number    数量    
-    'screenInfo': screenInfo,    # FULL, HALF, ACROSS_SCREEN
-    # optional
-    'currencyCode': '',    # 货币编码
-    'currencyName': '',    # 货币名称
-    'source': '',
-    'appPackage': '',    # 业务包名
-    'appVersion': '',    # 业务版本号
-    'appId': '',         # MSP需要传递 APPID
-    'partnerSign':'',    # 业务方签名
-    'channelId': '', 
-    'factor': '',
-    'discountCode': '',
-    'acqAddnData': '',
-    'attach': '',   # 业务透传扩展字段
-    'ext': '',      # 支付扩展字段
-    # 可币、可币券
-#     'virtualAssets': {
-#         'cocoinDeductAmount': 0,    # number  可币抵扣金额
-#         'voucherId': '',            # 可币券ID
-#         'voucherType': 0,           # number  可币券类型
-#         'voucherDeductAmount': 0,   # number  可币券抵扣金额
-#         'virtualVoucher': '',       # 取值 Y/N, 是否为虚拟券
-#         'cocoinCount': '',          # 可币数量, 支持小数
-#         'creditCount': 0,           # number
-#         'creditDeductAmount': 0     # number  积分抵扣金额
-#     },
-#     # 加购商品
-#     'combineOrder': {
-#         'buyPlaceId': '',   # 加购位ID
-#         'amount': 0         # number  加购商品金额
-#     },
-    'token': '',    # 用户Token
-    'currencySystem': 'CASH',    # 枚举值 COCOIN, CASH
-    # 充值卡信息 
-#     'rechargeCard': {
-#         'cardNo': '',
-#         'cardPwd': '',
-#         'cardAmount': ''
-#     }
-}
 
-result = HTTPENCJSON_IN.post('/api/pay-flow/v290/pay', req)
-print(result)
+if __name__ == '__main__':
+    pay = Pay()
+    flag = 3
+    if flag == 1:
+        # 直扣
+#         pay.direct_pay(1, 'wxpay')
+#         pay.direct_pay(999999999, 'alipay')
+#         pay.direct_pay(9999999999999999999999999999, 'alipay')  #解密请求失败
+#         pay.direct_pay(1.2, 'wxpay')    #验签失败，amount被转成了1
+#         pay.direct_pay(0, 'wxpay')    #商品原价要大于0
+        pay.direct_pay_with_kb_negative(10, 'wxpay', '消费')  #直冲不能有优惠券和可币金额
+#         pay.direct_pay_with_kb_negative(101, 'alipay', vou_key='抵扣', kb_spent=1)    #直冲不能有优惠券和可币金额
+    if flag == 2:
+        # 纯可币
+        pay.only_kb_spend(1)
+#         pay.only_kb_spend(2)    #余额不足
+    if flag == 3:
+        # 纯可币券
+        pay.only_voucher_spend(2, '消费', voucherCount=1, voucherDeductAmount=2)
+#         pay.only_voucher_spend(1, '消费', voucherCount=4, voucherDeductAmount=2)  #支付金额不能为负数
+    if flag == 4:
+        # 纯可币+可币券
+        pay.only_kb_voucher_spend(100, '折扣')
+    if flag == 5:
+        # 可币+渠道
+        pay.channel_kb_pay(10, 'wxpay')
+    if flag == 6:
+        # 可币券+渠道
+        pay.channel_voucher_pay(10, 'wxpay', '消费')
+#         pay.channel_voucher_pay(101, 'alipay', '抵扣')
+#         pay.channel_voucher_pay(10, 'alipay', '抵扣')  #券未达到条件金额
+#         pay.channel_voucher_pay(101, 'wxpay', '折扣')
+#         pay.channel_voucher_pay(100, 'alipay', '消费折扣')
+#         pay.channel_voucher_pay(1001, 'wxpay', '红包')
+#         pay.channel_voucher_pay(10, 'alipay', '红包')    #券未达到条件金额
+    if flag == 7:
+        # 可币+可币券+渠道
+#         pay.channel_kb_voucher_pay(10, 'wxpay', '消费')
+        pay.channel_kb_voucher_pay(10, 'wxpay', '消费')
+#         pay.channel_kb_voucher_pay(101, 'alipay', '抵扣', kb_spent=1)
+#         pay.channel_kb_voucher_pay(10, 'alipay', '抵扣', kb_spent=1)  #支付金额不能为负数（正向下单不核销券）
+#         result = pay.channel_kb_voucher_pay(101, 'wxpay', '折扣', kb_spent=1)
+#         result = pay.channel_kb_voucher_pay(90, 'wxpay', vou_key=100935200, kb_spent=1) #正向下单不核销券
+#         choose_scarlett(1, 'wxpay', result['data']['payRequestId'], partner_id=pay.partner_id)  #微信回调，期望支付中心核销券失败，走自动退款流程
+#         pay.channel_kb_voucher_pay(1000, 'alipay', '消费折扣')
+#         result = pay.channel_kb_voucher_pay(2000, 'wxpay', '红包', kb_spent=0)
+#         choose_scarlett(996, 'wxpay', result['data']['payRequestId'], partner_id=pay.partner_id)
+    if flag == 8:
+#         result = pay.recharge(1, 'wxpay')
+#         choose_scarlett(1, 'wxpay', result['data']['payRequestId'], partner_id=pay.partner_id)
+#         pay.recharge(999999999, 'alipay')
+#         pay.recharge_with_kb_negative(1, 'alipay', vou_key='消费')    #SYSTEM_ERROR
+#         pay.recharge_with_kb_negative(1, 'alipay', vou_key='消费', currencySystem='COCOIN_ALLOWED')    #可币充值仅限渠道支付
+        pay.recharge_with_kb_negative(1, 'wxpay', kb_spent=1)
+    if flag == 9:
+        # 银行卡支付
+        
+
 

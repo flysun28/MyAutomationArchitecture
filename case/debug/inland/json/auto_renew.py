@@ -8,23 +8,31 @@ from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign, old_wx_auto_renew
-from lib.config.country_currency import currency as country_currency
+from lib.common.utils.constants import currency as country_currency
 
 
 class AutoRenew:
+    vip_renew_product_code = {
+        'wxpay': '727243140023',
+        'alipay': '727243140022'
+    }
+    partner_renew_product_code = {
+        '2031': '20310001',
+        '72724314': vip_renew_product_code
+    }
     
     def __init__(self, ssoid, partner_code='2031'):
         self.ssoid = ssoid
         self.partner_code = partner_code
-        self.renew_product_code = ''
-        if partner_code == '2031':
-            self.renew_product_code = '20310001'
+        self.renew_product_code = self.partner_renew_product_code[partner_code]
 
-    def auto_renew_out(self, agreement_no, pay_type, third_part_id):
+    def auto_renew_out(self, agreement_no, pay_type, third_part_id, amount=0.01):
         """
         向渠道发起扣费接口
         :return:
         """
+        if isinstance(self.renew_product_code, dict):
+            self.renew_product_code = self.renew_product_code[pay_type]
         case_dict = {
             'agreementNo': agreement_no,
             'ssoid': self.ssoid,
@@ -32,7 +40,7 @@ class AutoRenew:
             'partnerCode': self.partner_code,
             'partnerOrder': RandomOrder(32).random_string(),
             'payType': pay_type,
-            'amount': '0.01',   #元
+            'amount': amount,   #元
             'currencyName': 'CNY',
             'country': 'CN',
             'subject': '自动续费扣款',
@@ -73,17 +81,19 @@ class AutoRenew:
         支付宝:调用接口解约，支付宝会回调到对应的地址。手动解约，是写死在支付宝侧的
         :return:
         """
+        if isinstance(self.renew_product_code, dict):
+            self.renew_product_code = self.renew_product_code[pay_type]
         case_dict = {
             'agreementNo': agreement_no,
             'ssoid': self.ssoid,
-            'renewProductCode': '20310001',
+            'renewProductCode': self.renew_product_code,
             'partnerCode': self.partner_code,
             'partnerOrder': partner_order,
             'payType': pay_type,
             'currencyName': 'CNY',
             'country': 'CN',
             'apppackage': '',
-            'subUserId': '00001',
+#             'subUserId': '00001',    # 仅保险
             'sign': ''
         }
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
@@ -174,7 +184,7 @@ class AutoRenewOverseas():
         self.currency = country_currency[self.country]
         self.partner_code = partner_code
 
-    def avoidpay(self, amount, pay_req_id=''):
+    def avoidpay(self, amount):
         '''
         自动续费
         e.g. {"ssoid":"621730086","amount":"1.28",
@@ -193,13 +203,14 @@ class AutoRenewOverseas():
                "rate": "1",
                "imei": "",
                "model": "",
-               "expectPayDate": "2021-06-02 15:00:00",
+               "expectPayDate": "2021-06-02 17:30:00",
                "lastPayDate": "2021-05-01 08:01:50",
                "country": self.country,
                "currency": self.currency,
                "sign": "",
                "apppackage": "com.coloros.cloud",
-               "requestid": pay_req_id,
+#                "apppackage": "com.example.pay_demo",
+               "requestid": RandomOrder(32).random_string(),    # partner_order
                "ext2": "B-6EA09242CR088031X",
                "subject": "海外自动续费接口",
                "partnercode": self.partner_code
@@ -214,7 +225,7 @@ class AutoRenewOverseas():
 if __name__ == '__main__':
     flag = "1"
     if flag == "1":
-        AutoRenewOverseas('2000060346', 'MY').avoidpay('100', 'ID202105310911192000060346543243')
+        AutoRenewOverseas('2000060346', 'IN').avoidpay('100', )
 #         AutoRenew('2000060346').auto_renew_out('202106025390914093', 'wxpay')
 #         AutoRenew('2000060346').auto_renew_out('20215402735272819337', 'alipay', '2088522284017371')
     if flag == "2":

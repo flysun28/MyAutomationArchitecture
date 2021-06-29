@@ -3,12 +3,11 @@
 # author:xy
 # datetime:2021/2/19 17:08
 # comment:
+import time
+import simplejson
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
-from lib.common.utils.env import get_dubbo_info
 from lib.common.utils.globals import GlobalVar
-import time
-
 from lib.config.path import common_sql_path
 
 
@@ -99,6 +98,11 @@ class Voucher:
             data
         )
     
+    def grant_check_voucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country="",
+                                currency='', ratio=0, maxCutAmount='0'):
+        vou_info = self.grantVoucher(bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country, currency, ratio, maxCutAmount)
+        self.checkVoucher(vou_info['batchId'])
+    
     def query_voucher_by_id(self, ssoid, vou_id):
         data = ssoid, vou_id
         self.conn.invoke(
@@ -121,7 +125,7 @@ class Voucher:
             'ssoid': ssoid,
             'orderAmount': order_amount or 0,
             'couponType': 'KB_COUPON',
-            'couponDiscountType': '',   # DAZHE, XIAOFEI, DIKOU
+            'couponDiscountType': '',   # DAZHE, XIAOFEI, DIKOU, XIAOFEI_DAZHE
             'couponName': '',
             'couponStatus': '',    # NORMAL, WAIT, ABANDON, REJECT, EXPIRED, USED
             'grantTimeFrom': '',    # yyyy-MM-dd HH:mm:ss
@@ -135,12 +139,16 @@ class Voucher:
         }
         if not discount_type:
             req.pop('couponDiscountType')
-        return self.conn.invoke(
+        result = self.conn.invoke(
             'com.oppo.voucher.api.CouponQuery',
             'useableKbCoupons',
             req,
             flag='JSON'
         )
+        for vou in result['data']:
+            print(vou)
+#             print(simplejson.dumps(vou, indent=3, ensure_ascii=False))
+        return result
 
 
 if __name__ == '__main__':

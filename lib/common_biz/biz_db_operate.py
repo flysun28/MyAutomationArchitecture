@@ -3,12 +3,17 @@
 # author:xy
 # datetime:2021/2/22 10:20
 # comment:
+import random
 from itertools import product
+from pymysql.err import MySQLError
 from lib.common.file_operation.config_operation import Config
 from lib.common.logger.logging import Logger
 from lib.common_biz.find_database_table import SeparateDbTable
 from lib.common.utils.globals import GlobalVar
 from lib.config.path import common_sql_path
+from lib.common.utils.constants import voucher_type_enum
+from lib.common.utils.misc_utils import to_pinyin
+
 
 mysql = GlobalVar.MYSQL_IN
 mysql_out = GlobalVar.MYSQL_OUT
@@ -144,6 +149,41 @@ def _add_columns_on_all_order_tables(*args):
             GlobalVar.MYSQL_IN.execute(sql_)
         except:
             raise
+
+
+def get_available_voucher(ssoid, vou_key):
+    '''
+    根据ssoid和类型查询可用的优惠券
+    :param ssoid:
+    :param vou_key: 代表查找优惠券的key值，可以为券id或券类型
+                    券类型支持数字或拼音, 1消费 2抵扣 5折扣 7消费折扣 8红包
+    '''
+    table_id = SeparateDbTable(ssoid).get_vou_table()
+    vou_key = str(vou_key)
+    if vou_key.isdigit():
+        if len(vou_key) > 2:            
+            vou_id = vou_key    #vou_key是vouId
+        else:            
+            vou_type = vou_key  #vou_key是数字形式的vou_type
+    else:        
+        vou_type = voucher_type_enum[vou_key]   #vou_key是中文、英文形式的vou_type
+    sql = "SELECT * FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND expireTime>=CURRENT_TIMESTAMP AND `status`=0 {} {} ORDER BY id DESC"\
+          .format(table_id, ssoid,
+                  'AND type='+vou_type if locals().get('vou_type') else '',
+                  "AND vouId='{}'".format(vou_id) if locals().get('vou_id') else '')
+    result = GlobalVar.MYSQL_IN.select(sql)
+    if len(result) > 1:
+        return random.choice(result)
+    return result[0]
+
+
+def get_renew_product_code(partner_id):
+    sql = 'SELECT autorenew_product_code FROM platform_opay.autorenew_merchant_info WHERE partner_code="{}"'.format(partner_id)
+    result = GlobalVar.MYSQL_IN.select_one(sql)
+    if result:
+        return result['autorenew_product_code']
+    else:
+        raise MySQLError('{} related renew_product_code is not configured'.format(partner_id))
 
 
 if __name__ == '__main__':
