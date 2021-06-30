@@ -86,11 +86,6 @@ if __name__ == '__main__':
     # 查询优惠券
 #     Voucher().query_voucher_by_id('2086776969', '62641621')
 #     Voucher().query_all_useable('2086776969', partner_id='2031')
-
-#     # 审批退款：order审批，dispatcher退款
-    refund = GrantRefund("2086776969")
-    refund.refund_by_pay_req_id('')
-    refund.refund_by_amount('', amount=0.02)
     
     # http自动退款
     session = None
@@ -112,7 +107,12 @@ if __name__ == '__main__':
                 break
 
     # 根据支付订单号退款
-    refund.refund_by_pay_req_id('', 0.01)
+    refund.refund_by_pay_req_id('KB20210629154608208677696920171t', 0.01)
+
+#     # 审批退款：order审批，dispatcher退款
+#     refund = GrantRefund("2086776969")
+#     refund.refund_by_pay_req_id('')
+#     refund.refund_by_amount('', amount=0.02)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
@@ -204,8 +204,8 @@ if __name__ == '__main__':
 #     signpay.un_sign('20215426731000052557', '7d40f413cebf4fa7bf729803eb579662', 'alipay')   #支付宝
 #     signpay.un_sign('2017957262', '0CDOsHN5EGqLSBK1og2j7laZu3Qvmi9T', 'wxpay')   #微信
     # 微信解约回调
-    raw_xml = ''
-    signpay.wx_unsign(raw_xml)
+#     raw_xml = ''
+#     signpay.wx_unsign(raw_xml)
     # 自动扣费
 #     signpay.auto_renew_out(agreement_no='2017957262', pay_type='wxpay', third_part_id='0s4ns6EZ8ym0kW_JzUeps')
 #     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
