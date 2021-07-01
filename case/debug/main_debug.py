@@ -1,5 +1,5 @@
 # coding=utf-8
-env_id = 'product'
+env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
