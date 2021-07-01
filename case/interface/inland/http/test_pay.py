@@ -18,6 +18,7 @@ from case.interface.conftest import partner_id
 
 case_file = src_case_file(__file__)
 url = case_file.url
+all_vou_types = 'XIAOFEI', 'DIKOU', 'DAZHE', 'XIAOFEI_DAZHE', 'RED_PACKET_COUPON'
 
 
 @timeit
@@ -25,7 +26,11 @@ url = case_file.url
 def grant_vouchers_if_empty():
     result = Voucher().query_all_useable(GlobalVar.SSOID, partner_id=partner_id)
     vouchers = result['data']
-    if not vouchers:
+    # 判断可用的可币券类型是否包含所有
+    vou_types = set(vou['couponDiscountType'] for vou in vouchers)
+    if vou_types == set(all_vou_types):
+        return
+    else:
         voucher = Voucher()
         # 消费
         for _ in range(5):
@@ -62,9 +67,10 @@ def manage_case_file():
 @pytest.mark.full
 @pytest.mark.positive
 @pytest.mark.parametrize('case', case_file.positive_cases)
-def test_inland_positive(case, sheetname):
+def test_inland_positive(case, sheetname, process_token):
+    print('当前正向测试用例数据:', case.name)
     try:
-        result = http_encjson_request(case, sheetname, url)
+        result = http_encjson_request(case, sheetname, url, process_token=process_token)
         get_check_http_json_result_positive(case, result)
         case.is_passed = 'passed'
     finally:
@@ -75,9 +81,10 @@ def test_inland_positive(case, sheetname):
 @pytest.mark.full
 @pytest.mark.negative    
 @pytest.mark.parametrize('case', case_file.negative_cases)
-def test_inland_negative(case, sheetname):
+def test_inland_negative(case, sheetname, process_token):
+    print('当前负向测试用例数据:', case.name)
     try:
-        result = http_encjson_request(case, sheetname, url)
+        result = http_encjson_request(case, sheetname, url, process_token=process_token)
         get_check_http_json_result_negative(case, result)
         case.is_passed = 'passed'
     finally:

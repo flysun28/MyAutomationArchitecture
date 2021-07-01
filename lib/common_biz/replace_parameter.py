@@ -159,11 +159,10 @@ def replace_gateway(case_req, app_id):
         case_req['sign'] = md5(sign_string)
 
 
-def replace_http_json(req):
+def replace_http_json(req, process_token=None):
     """
     新版本客户端参数替换
     :return:
     """
-    if not req['processToken']:
-        req['processToken'] = get_process_token()
+    req['processToken'] = process_token or GlobalVar.PROCESSTOKEN or get_process_token()
     return req

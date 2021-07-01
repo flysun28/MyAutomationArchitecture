@@ -56,6 +56,7 @@ class Pay():
             'ext': '',      # 支付扩展字段
             'token': '',    # 用户Token
             'currencySystem': '',    # 枚举值 COCOIN_ALLOWED, CASH（直扣）
+            'country': 'CN',
             # 可币、可币券
             'virtualAssets': {
                 'cocoinCount': '',          # 可币数量, 支持小数。原始可币扣减额
@@ -294,7 +295,8 @@ class Pay():
         req['virtualAssets']['cocoinDeductAmount'] = kb_spent
         req['virtualAssets']['cocoinCount'] = kb_spent
     
-    def _to_vou_type(self, vou_key:(str, int), db_vou_info:dict):
+    @staticmethod
+    def _to_vou_type(vou_key:(str, int), db_vou_info:dict):
         vou_key = str(vou_key)  
         if vou_key.isdigit():
             if len(vou_key) > 2:
@@ -306,4 +308,16 @@ class Pay():
         return vou_type
 
 
+def update_voucher_args(req, vou_key):
+    db_vou_info = get_available_voucher(GlobalVar.SSOID, vou_key)    
+    vou_type = Pay._to_vou_type(vou_key, db_vou_info)
+    print('本次支付将使用的可币券:', db_vou_info)
+    req['virtualAssets']['voucherType'] = voucher_type_mapping[db_vou_info['type']]
+    if to_pinyin(vou_type) == 'xiaofei':
+#         if vou_kw.get('voucherCount') is None:
+#             req['virtualAssets']['voucherCount'] = int(orig_amount / vou_deduct_amount)
+        req['virtualAssets']['voucherId'] = '0'
+    else:
+#         req['virtualAssets']['voucherCount'] = 1
+        req['virtualAssets']['voucherId'] = db_vou_info['vouId']
 

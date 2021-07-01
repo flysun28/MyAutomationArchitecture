@@ -151,7 +151,7 @@ def _add_columns_on_all_order_tables(*args):
             raise
 
 
-def get_available_voucher(ssoid, vou_key):
+def get_available_voucher(ssoid, vou_key, partner_id='2031'):
     '''
     根据ssoid和类型查询可用的优惠券
     :param ssoid:
@@ -167,14 +167,25 @@ def get_available_voucher(ssoid, vou_key):
             vou_type = vou_key  #vou_key是数字形式的vou_type
     else:        
         vou_type = voucher_type_enum[vou_key]   #vou_key是中文、英文形式的vou_type
-    sql = "SELECT * FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND expireTime>=CURRENT_TIMESTAMP AND `status`=0 {} {} ORDER BY id DESC"\
-          .format(table_id, ssoid,
+    sql = "SELECT * FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND expireTime>=CURRENT_TIMESTAMP AND `status`=0 AND appId={} {} {} ORDER BY id DESC"\
+          .format(table_id, ssoid, partner_id,
                   'AND type='+vou_type if locals().get('vou_type') else '',
                   "AND vouId='{}'".format(vou_id) if locals().get('vou_id') else '')
     result = GlobalVar.MYSQL_IN.select(sql)
     if len(result) > 1:
         return random.choice(result)
     return result[0]
+
+
+def clear_all_unuseable_vou(ssoid, partner_id='2031'):
+    '''
+    清除所有失效的券
+    :param ssoid:
+    :param partner_id:
+    '''
+    table_id = SeparateDbTable(ssoid).get_vou_table()
+    sql = "DELETE FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND appId='{}' AND `status`!=0".format(table_id, ssoid, partner_id)
+    result = GlobalVar.MYSQL_IN.select(sql)
 
 
 def get_renew_product_code(partner_id):

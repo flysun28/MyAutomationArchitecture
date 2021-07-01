@@ -3,6 +3,7 @@ Created on 2021年6月4日
 @author: 80319739
 '''
 from .misc_utils import to_pinyin
+from bidict import bidict
 
 
 currency = {
@@ -48,12 +49,13 @@ voucher_enum_to_type = {
 for k, v in voucher_enum_to_type.copy().items():
     voucher_enum_to_type.setdefault(int(k), v)
     
-voucher_type_mapping = {
+voucher_type_mapping = bidict({
     '1': '1',
     '2': '2',
     '5': '3',
     '7': '4',
     '8': '8'
-}
+})
+
 
 app_packages = 'com.example.pay_demo', 'com.oppo.usercenter'

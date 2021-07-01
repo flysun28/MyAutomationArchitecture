@@ -6,9 +6,11 @@ from lib.common_biz.replace_parameter import replace_http_json
 from lib.common.utils.misc_utils import (flatten_nested_dict, dictionary_should_contain_sub_dictionary,
                                          run_keyword_and_expect_error)
 from lib.common.utils.globals import HTTPENCJSON_IN, HTTPJSON_IN
+from lib.interface_biz.http.refactor.pay import update_voucher_args
+from lib.common.utils.constants import voucher_type_mapping
 
 
-def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN):
+def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN, process_token=None):
     '''
     1. 发送normal http请求，返回反序列化之后的response内容（jsoned）
     2. 会设置case.response为http原始response object
@@ -18,8 +20,13 @@ def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN):
     '''
     sheetname = case.ws.title
     assert sheetname == case_sheet, 'CaseFile sheetname: {} != expected: {}'.format(sheetname, case_sheet)
-    if 'processToken' in case.req_params:     
-        case.req_params = replace_http_json(case.req_params)
+    # 替换case.req_params中的processToken
+    if 'processToken' in case.req_params:
+        case.req_params = replace_http_json(case.req_params, process_token=process_token)
+    # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
+    if '券' in case.name:
+        vou_type = case.req_params['virtualAssets']['voucherType']
+        update_voucher_args(case.req_params, voucher_type_mapping.inverse[vou_type])
     json_resp = session.post(url, case.req_params)
     case.response = session.response     # http.response object
     return json_resp

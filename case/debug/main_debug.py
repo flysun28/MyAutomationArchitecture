@@ -107,12 +107,12 @@ if __name__ == '__main__':
                 break
 
     # 根据支付订单号退款
-    refund.refund_by_pay_req_id('KB20210629154608208677696920171t', 0.01)
+#     refund.refund_by_pay_req_id('', 1000)
 
 #     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
 #     refund.refund_by_pay_req_id('')
-#     refund.refund_by_amount('', amount=0.02)
+#     refund.refund_by_amount('', amount=0.01)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
@@ -196,13 +196,13 @@ if __name__ == '__main__':
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
     # 签约并支付，alipay签解约回调
-#     raw_resp = '{charset=UTF-8, notify_time=2021-06-26 18:03:48, alipay_user_id=2088202596648570, sign=FD8KP85KdUlAWXRw4bXx0kKUkeBo1gbSR36bjLzoPs/yie4NF/JbOdhEmZoC+0iNbWnFUo7yKu0k5D8NuF7p+iKH2UfAbcW3WuO+j6pFPdyZwFTsFlLLvw63z5iWYXH0nSaD+qbI/mai9vFA/Vv3xbDFbyU/uqdNg4+7cqZ7N5KCMwMg3APjGJRKb3SOfZXUYHSe+QaBVDKPj/CY5lJr1F1Lub/M/b/nbAi2+84dr6OxKlcCOo6QIgCnM1j3lIPAH0fNI9LKmhnUfQJqO1UNPI6MtTWQgppQPzuPM4PjuZyBlOCUBBlzAbWojZNVE1RgTtxAcZIWNyE8G1iB9QA/Tw==, external_agreement_no=SN202106261803291250166665280727, version=1.0, sign_time=2021-06-26 18:03:47, notify_id=2021062600222180348058541442634678, notify_type=dut_user_sign, agreement_no=20215426731249915557, auth_app_id=2016120904060189, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-06-26 18:03:47, app_id=2016120904060189, sign_type=RSA2, alipay_logon_id=280***@qq.com, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}'
+#     raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
     signpay = AutoRenewDebug('2086776969', '2031')
     # 解约
-#     signpay.un_sign('20215426731000052557', '7d40f413cebf4fa7bf729803eb579662', 'alipay')   #支付宝
-#     signpay.un_sign('2017957262', '0CDOsHN5EGqLSBK1og2j7laZu3Qvmi9T', 'wxpay')   #微信
+#     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
+#     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
     # 微信解约回调
 #     raw_xml = ''
 #     signpay.wx_unsign(raw_xml)

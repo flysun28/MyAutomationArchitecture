@@ -60,8 +60,9 @@ class ZkClient(metaclass=WithLogger):
         # 获取dubbo节点下所有子节点
         node = self.zk.get_children('/dubbo')
         if service in node:
-            if self.zk.get_children("/dubbo/{}/providers".format(service)):
-                providers = urllib.parse.unquote(self.zk.get_children("/dubbo/{}/providers".format(service))[0])
+            providers = self.zk.get_children("/dubbo/{}/providers".format(service))
+            if providers:
+                providers = urllib.parse.unquote(providers[0])
                 self.logger.info("获取到具体的providers信息:{}".format(providers))
                 ip_port_info = re.findall(r"dubbo://(.+?)/", providers)[0]
                 ip_port = ip_port_info.split(":")
