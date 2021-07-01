@@ -1,5 +1,5 @@
 # coding=utf-8
-env_id = '3'
+env_id = 'product'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
     refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
     # 根据业务订单号退款
-    per_amount = 0.01
+    per_amount = 1
     total_amount = 0
     loop_num = int(total_amount/per_amount)
     for i in range(loop_num):
