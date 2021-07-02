@@ -199,7 +199,7 @@ if __name__ == '__main__':
 #     raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
-    signpay = AutoRenewDebug('2086776969', '2031')
+    signpay = AutoRenewDebug('692039187', '2031')
     # 解约
 #     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
 #     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
@@ -209,6 +209,7 @@ if __name__ == '__main__':
     # 自动扣费
 #     signpay.auto_renew_out(agreement_no='2017957262', pay_type='wxpay', third_part_id='0s4ns6EZ8ym0kW_JzUeps')
 #     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
+#     signpay.auto_renew_out(agreement_no='20215502732852094557', pay_type='alipay', third_part_id='2088202596648570', amount=100)
     # 签约并支付下单接口
 #     signpay = AutoRenew('wxpay', '2031', '280', '280')
 #     signpay.auto_renew(1)

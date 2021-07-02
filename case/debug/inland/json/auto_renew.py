@@ -5,7 +5,7 @@
 # comment:
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.globals import GlobalVar
-from lib.common_biz.find_key import GetKey
+from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign, old_wx_auto_renew
 from lib.common.utils.constants import currency as country_currency
@@ -56,7 +56,12 @@ class AutoRenew:
             # 签名未校验
             'sign': ''
         }
-        temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
+        # 业务方秘钥
+        if is_get_key_from_db():
+            merchant_key = GetKey(case_dict['partnerCode']).get_key_from_merchant()
+        else:
+            merchant_key = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCMVhIN5xQPRdmo1fmm0HBOlRk2XnJsuKgOBi6b1IFAUWtROpm6lRnw45M83a/XiHEZv5FOp+rssGlgwcWeLuexI6kCF5hFT6gsEYy9XRfpSBOUA2UwcajPRsMoEKRmEIm+NpmwnGAeeZK2Y7Xwr3imHdLJ86VgJ5zMedqd4IfXWQIDAQAB'        
+        temp_string = Sign(case_dict).join_asc_have_key() + merchant_key
         case_dict['sign'] = md5(temp_string)
         GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/autorenewpay", data=case_dict)
 
