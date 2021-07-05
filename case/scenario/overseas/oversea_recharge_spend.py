@@ -9,7 +9,7 @@ from lib.common.utils.globals import GlobalVar
 from lib.common_biz.biz_db_operate import get_balance, oversea_get_coin_rate
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
-from lib.config.country_currency import currency, rate_coin
+from lib.common.utils.constants import currency, rate_coin
 from lib.interface_biz.dubbo.oversea_coin import Coin
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.http.oversea_grant_voucher import oversea_grant_voucher

@@ -30,14 +30,18 @@ from lib.common.utils.descriptors import GlobalVarDescriptor
 from lib.interface_biz.scarlett.alipay import ali_sign_scarlet, ali_sign_scarlet_by_raw_resp
 from lib.interface_biz.scarlett.wxpay import wx_sign_scarlet
 from lib.interface_biz.scarlett.map_to_json import scarlet_map_to_json
-from case.debug.inland.json.auto_renew import AutoRenew
+from case.debug.inland.json.auto_renew import AutoRenew as AutoRenewDebug
 from lib.common_biz.fiz_assert import is_assert, ASSERTION_IN
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.interface_biz.http.query_result import queryResult
 from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
+from case.debug.inland.dubbo.voucher import VoucherInland
+from lib.common_biz.biz_db_operate import get_available_voucher, get_renew_product_code
+from lib.interface_biz.http.auto_re_new import AutoRenew
 
 
 if __name__ == '__main__':
+#     Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
     flag_coin = "0"
     if flag_coin == "1":
         # 发
@@ -45,39 +49,43 @@ if __name__ == '__main__':
     if flag_coin == "2":
         # 扣
         Nearme().nearme_add_subtract("0.01", "2086776969", 1)
-    
-    for flag in range(1, 1):
-        if flag == 1:
-            # 满减(抵扣)
-            vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DIKOU", "1", "0.99", "2086776969")
-            Voucher().checkVoucher(vou_info['batchId'])
-        if flag == 2:
-            # 消费
-            vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI", "0", "0.01", "2086776969")
-            Voucher().checkVoucher(vou_info['batchId'])        
-        if flag == 3:
-            # 折扣
-            vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "DAZHE", "1", "0", "2086776969", ratio=0.01, maxCutAmount='1')
-            Voucher().checkVoucher(vou_info['batchId'])
-        if flag == 4:
-            # 消费折扣
-            vou_info = Voucher().grantVoucher("2031", "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", "2086776969", ratio=0.01, maxCutAmount='10')
-            Voucher().checkVoucher(vou_info['batchId'])
-        if flag == 5:
-            # 红包券
-            vou_info = Voucher().grantVoucher("5456925", "KB_COUPON", "RED_PACKET_COUPON", "0", "10", "2086776969")
-            Voucher().checkVoucher(vou_info['batchId'])
-        if flag == 6:
-            # 海外满减
-            vou_info = Voucher("oversea").grantVoucher("5456925", "KB_COUPON", "DIKOU", "10000", "7500", "2076074648", "MY", "MYR")
-            Voucher("oversea").checkVoucher(vou_info['batchId'])
+#     ssoid = '2086788561'    #黄勇翔
+#     ssoid = '2076074648'    #黄小静
+#     ssoid = '2076079836'    #陈华平
+#     ssoid = '2086631885'    #彭哲
+    partner_id = '2031'     #主题9809089
+    ssoid = '2086776969'
+    if env_id.isdigit():
+        voucher = Voucher()
+        for flag in range(2, 2):
+            if flag == 1:
+                # 满减(抵扣)
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
+            if flag == 2:
+                # 消费
+                for _ in range(10):
+                    voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", ssoid)
+            if flag == 3:
+                # 折扣
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", ssoid, ratio=0.68, maxCutAmount='1')
+#                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", ssoid, ratio=0.1, maxCutAmount='1')
+            if flag == 4:
+                # 消费折扣
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.01, maxCutAmount='10')
+            if flag == 5:
+                # 红包券
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1", ssoid)
+            if flag == 6:
+                # 海外满减
+                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DIKOU", "10000", "7500", "2076074648", "ID", "IDR")
+                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DAZHE", "10000", "0", "2076074648", "ID", "IDR", ratio=0.1, maxCutAmount='10000')
+                Voucher("oversea").grant_check_voucher('5456925', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", '2076074648', "ID", "IDR", ratio=0.2, maxCutAmount='10000')
+    # 通过批次号审核券
+#     VoucherInland().checkVoucher('a39a8a029ebc4055bdc9a489d9a765d5')
 
     # 查询优惠券
-#     Voucher().query_voucher('2086776969', '62641621')
-
-#     # 审批退款：order审批，dispatcher退款
-#     refund = GrantRefund("2086776969")
-#     refund.refund_by_pay_req_id('')
+#     Voucher().query_voucher_by_id('2086776969', '62641621')
+#     Voucher().query_all_useable('2086776969', partner_id='2031')
     
     # http自动退款
     session = None
@@ -86,19 +94,25 @@ if __name__ == '__main__':
     elif env_id == 'product':
         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
     refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
-#     # 根据业务订单号退款
-#     per_amount = 0.01
-#     total_amount = 0.01
-#     loop_num = int(total_amount/per_amount)
-#     for i in range(loop_num): 
-#         while True:
-#             response = refund.httpjson_refund('', '2031', per_amount, pay_req_id='')
-#             if response['resMsg'] == '退款失败':
-#                 time.sleep(1)
-#             else:
-#                 break
-#     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('KB20210601165653208677696933246t', 0.01)
+    # 根据业务订单号退款
+    per_amount = 1
+    total_amount = 0
+    loop_num = int(total_amount/per_amount)
+    for i in range(loop_num):
+        while True:
+            response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
+            if response['resMsg'] == '退款失败':
+                time.sleep(1)
+            else:
+                break
+
+    # 根据支付订单号退款
+#     refund.refund_by_pay_req_id('', 1000)
+
+#     # 审批退款：order审批，dispatcher退款
+#     refund = GrantRefund("2086776969")
+#     refund.refund_by_pay_req_id('')
+#     refund.refund_by_amount('', amount=0.01)
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
@@ -168,36 +182,40 @@ if __name__ == '__main__':
 #     # grant single voucher
 #     tps = 1
 # #     ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
-#     ssoids = '2076079836',
+#     ssoids = '2076074648',
+#     partner_id = '5456925'
 #     all_tasks = []
 #     thr_num = int(tps/len(ssoids))
 #     executor = ThreadPoolExecutor(max_workers=thr_num)
 #     vou_types = [1, 2, 5, 7, 8]
 #     random.shuffle(vou_types)
 #     for ssoid, voutype in zip(*extend_to_longest([ssoids, vou_types])):
-#         httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id='2031')
+#         httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id=partner_id)
 #         [all_tasks.append(executor.submit(httpobj.post))
 #                           for i in range(executor._max_workers)]
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
-    # 签约并支付
-#     pay_channel = 'ali'
-#     if pay_channel == 'ali':
-#         raw_resp = '{charset=UTF-8, notify_time=2021-06-02 10:09:15, alipay_user_id=2088522284017371, sign=aZ4aQt2p7wIqHMws11FIjuWwTMDZyYbG3pQVziWVe1JPLbp1EQlR54us36qOaoPrc0igiD83YzA6QQhpqndXvwEGWOSQfnLwmi0FXZhhjiie/ypD91GqXcJnfCifBqQkPjUuqDNli0vPO3hfsg698arkhWEKNq6cEwiX9tQ2JLJwGi8GnjvNyjTvMqdqgiRkBcOZKvm890lkLjC9UgmnlLpQop46Txzs/81gZwsmh6zEU9C+gBFTYiiZswgQTcIka2mrYKS6BK9D9faKpiDBnzfJff7HxKqDadR/Z071ue8pG908/dWAp0dBoedJV9xSfYbo7JTujpucYI/Eeh4PEQ==, external_agreement_no=SN202106021008297733836011710818, version=1.0, sign_time=2021-06-02 10:09:15, notify_id=2021060200222100915053401400948350, notify_type=dut_user_sign, agreement_no=20215402735272819337, auth_app_id=2016120904060189, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-06-02 10:09:15, app_id=2016120904060189, sign_type=RSA2, alipay_logon_id=189******31, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}'
-#         ali_sign_scarlet_by_raw_resp(raw_resp)
-#     elif pay_channel == 'wx':
-#         raw_xml = ''
-#         requests.post(HTTPJSON_SCARLET.prefix + "/opaycenter/wxpaysignnotify", raw_xml)    
-#     signpay = AutoRenew('2086776969', '2031')
-    # 支付宝解约
-#     signpay.un_sign('20215302714334851557', 'c7bf8b413ef94834a7e1b65b4106f49e', 'alipay')
-#     # 微信解约回调
+    # 签约并支付，alipay签解约回调
+#     raw_resp = ''
+#     ali_sign_scarlet_by_raw_resp(raw_resp)
+
+    signpay = AutoRenewDebug('692039187', '2031')
+    # 解约
+#     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
+#     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
+    # 微信解约回调
 #     raw_xml = ''
-#     resp = requests.post(HTTPJSON_SCARLET.prefix + "/opaycenter/wxpaysignnotify", raw_xml)
-#     print(resp.content)
+#     signpay.wx_unsign(raw_xml)
     # 自动扣费
-#     signpay.auto_renew_out(agreement_no='202105025876133076', pay_type='wxpay')
+#     signpay.auto_renew_out(agreement_no='2017957262', pay_type='wxpay', third_part_id='0s4ns6EZ8ym0kW_JzUeps')
+#     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
+#     signpay.auto_renew_out(agreement_no='20215502732852094557', pay_type='alipay', third_part_id='2088202596648570', amount=100)
+    # 签约并支付下单接口
+#     signpay = AutoRenew('wxpay', '2031', '280', '280')
+#     signpay.auto_renew(1)
 
 #     # 新支付中心单接口调试
 #     paycenter_dubbo = PayCenterDubbo(partner_code='2031')
 #     paycenter_dubbo.create_direct_pay('wxpay', 0.01, 0.01)
+
+#     get_available_voucher_by_type('2086776969', '消费折扣')

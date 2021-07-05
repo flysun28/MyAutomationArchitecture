@@ -4,8 +4,8 @@ Created on 2021年2月8日
 '''
 import json
 import sys
+import re
 from collections import OrderedDict
-from lib.common.exception.intf_exception import IgnoreException
 
 
 class ExcelTestCase():
@@ -27,7 +27,11 @@ class ExcelTestCase():
     
     @classmethod
     def _validate_fields(cls, fields:tuple):
-        assert fields == cls.CN_FDs, ('\n', fields, '\n', cls.CN_FDs)
+        try:
+            assert fields == cls.CN_FDs, (fields, cls.CN_FDs)
+        except:
+            for act, exp in zip(fields, cls.CN_FDs):
+                assert re.search(exp, act, re.I)
 
     def fill(self, values:tuple):
         for attr, value in zip(self.EN_FDs, values):
@@ -35,6 +39,7 @@ class ExcelTestCase():
                 try:
                     value = json.loads(value)
                 except json.decoder.JSONDecodeError:
+                    print(attr, value)
                     # value is not a dictionary, pass directly
                     raise
             exec(f'self.{attr} = value')

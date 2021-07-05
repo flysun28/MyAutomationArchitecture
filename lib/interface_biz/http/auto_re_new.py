@@ -11,16 +11,17 @@ from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import auto_renew_sign_string
 from lib.interface_biz.http.pay_pass import Pass
 from lib.pb_src.python_native import AutoRenewPb_pb2
+from lib.common_biz.biz_db_operate import get_renew_product_code
 
 
 class AutoRenew:
-    def __init__(self, pay_type, partner_code, version, app_version, renewProductCode, notify_url):
+    def __init__(self, pay_type, partner_code, version, app_version, renewProductCode=None, notify_url=None):
         self.version = version
-        self.renewProductCode = renewProductCode
+        self.renewProductCode = renewProductCode or get_renew_product_code('2031')
         self.partner_code = partner_code
         self.app_version = app_version
         self.type = pay_type
-        self.notify_url = notify_url
+        self.notify_url = notify_url or GlobalVar.URL_PAY_IN+"/notify/receiver"
 
     def auto_renew(self, amount):
         """

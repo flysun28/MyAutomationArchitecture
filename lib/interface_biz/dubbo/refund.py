@@ -63,7 +63,8 @@ class Refund:
         results = GlobalVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
-            self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), res['pay_type'], res["pay_req_id"])
+            self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), 
+                                             res['pay_type'], res["pay_req_id"])
             self.refund_single(res['partner_order'], res['partner_code'], str(res['amount']/100), payReqId=res["pay_req_id"])
 
     def refund_by_amount(self, partner_order_id, amount=''):
@@ -74,7 +75,7 @@ class Refund:
         results = GlobalVar.MYSQL_IN.select(sql)
         print(results)
         for res in results:
-            refund_amount = amount if amount else str(res['amount']/100)
+            refund_amount = str(amount) if amount else str(res['amount']/100)
             self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], refund_amount, res['pay_type'], res["pay_req_id"])
             self.refund_single(res['partner_order'], res['partner_code'], refund_amount, payReqId=res["pay_req_id"])
 

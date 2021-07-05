@@ -219,7 +219,7 @@ class HttpGrantMultiVous(with_metaclass(WithLogger)):
             self.salt_key = GetKey(self.partner_id).get_key_from_voucher()
         else:
             self.salt_key = self.partner_private_key[self.partner_id]
-            self.logger.info('查询到优惠券秘钥信息: %s' %self.salt_key)
+            self.logger.info('查询到业务线%s的优惠券秘钥信息: %s' %(self.partner_id, self.salt_key))
         self.request_ids = set()
         self.lock = threading.Lock()
     

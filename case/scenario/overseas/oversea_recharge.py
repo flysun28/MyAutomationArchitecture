@@ -10,7 +10,7 @@ from lib.common.logger.logging import Logger
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.choose_scarlett import choose_scarlett
 from lib.common_biz.fiz_assert import FizAssert, is_assert
-from lib.config.country_currency import rate_coin
+from lib.common.utils.constants import rate_coin
 from lib.interface_biz.http.oversea_query_account import oversea_query_account
 from lib.interface_biz.http.oversea_recharge import Recharge
 req = OVERSEA_RECHARGE

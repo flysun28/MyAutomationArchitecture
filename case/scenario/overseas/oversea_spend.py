@@ -12,7 +12,7 @@ from lib.interface_biz.http.oversea_grant_coin import oversea_grant_coin
 from lib.interface_biz.http.oversea_grant_voucher import oversea_grant_voucher
 from lib.interface_biz.http.oversea_query_account import oversea_query_account
 from lib.interface_biz.http.oversea_spend import Spend
-from lib.config.country_currency import currency, rate_coin
+from lib.common.utils.constants import currency, rate_coin
 from lib.interface_biz.http.query_voucher import query_vou_by_id
 
 req = OVERSEA_SPEND

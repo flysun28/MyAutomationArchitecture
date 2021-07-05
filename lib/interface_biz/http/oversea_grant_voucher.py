@@ -11,7 +11,7 @@ from lib.common_biz.file_path import key_path
 from lib.common_biz.find_key import is_get_key_from_db, GetKey
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
-from lib.config.country_currency import currency
+from lib.common.utils.constants import currency
 
 end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
 

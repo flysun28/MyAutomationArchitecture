@@ -98,7 +98,7 @@ class DubRunner(with_metaclass(WithLogger, telnetlib.Telnet)):
                 authHint['mes'] = ascii_to_chr_repr(mes)
         elif authHint:
             authHint = ascii_to_chr_repr(authHint)
-        self.logger.info("dubbo回参：{}".format(jsondata))
+        self.logger.info("最终dubbo回参：{}".format(jsondata))
         return jsondata
 
 

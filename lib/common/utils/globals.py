@@ -49,7 +49,7 @@ class GlobalVar():
 
     MYSQL_AUTO_TEST = connect_auto_test_special()
 
-    SSOID = TOKEN = None
+    SSOID = TOKEN = PROCESSTOKEN = None
     if env_id.isdigit():
         # SELECT * FROM `pay_auto_test_info`.`test_env_account` WHERE username = '{}'
         sql_test_account = Config(common_sql_path).read_config("pay_auto_test_info", "test_select_account").\
@@ -65,6 +65,8 @@ class GlobalVar():
 
 HTTPJSON_IN = GlobalVar.HTTPJSON_IN
 HTTPJSON_OUT = GlobalVar.HTTPJSON_OUT
+HTTPJSON_API_IN = GlobalVar.HTTPJSON_GW_IN
+HTTPJSON_API_OUT = GlobalVar.HTTPJSON_GW_OUT
 redis = REDIS = GlobalVar.REDIS_IN
 HTTPJSON_SCARLET = GlobalVar.HTTPJSON_SCARLET
 MYSQL_IN = GlobalVar.MYSQL_IN
@@ -72,5 +74,3 @@ MYSQL_OUT = GlobalVar.MYSQL_OUT
 MYSQL_AUTO_TEST = GlobalVar.MYSQL_AUTO_TEST
 CASE_SRCFILE_ROOTDIR = os.path.join(case_dir, 'src')
 HTTPENCJSON_IN = pyobj_resp = EncryptJson(GlobalVar.URL_PAY_IN, appkey='2033')
-
-

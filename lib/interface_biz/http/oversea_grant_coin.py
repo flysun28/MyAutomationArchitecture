@@ -11,7 +11,7 @@ from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.order_random import RandomOrder
 from lib.common_biz.sign import Sign
-from lib.config.country_currency import currency
+from lib.common.utils.constants import currency
 
 
 def oversea_grant_coin(app_key, partner_id, country, ssoid, amount):

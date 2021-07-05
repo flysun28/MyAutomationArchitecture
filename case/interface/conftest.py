@@ -6,9 +6,12 @@ import pytest
 from lib.common.utils.env import set_global_env_id
 from lib.common.concurrent.threading import monitor
 from lib.interface_biz.http.pay_pass import get_process_token
+from lib.common_biz.biz_db_operate import clear_all_unuseable_vou
+from lib.common.utils.globals import GlobalVar
 
 partner_ids = '5456925', '2031'
-env_id = '1'
+partner_id = '2031'
+env_id = '3'
 
 
 def pytest_configure(config):
@@ -73,7 +76,7 @@ def session_setup_and_teardown():
     
     account = Account()
 #     account.login()
-    
+    clear_all_unuseable_vou(GlobalVar.SSOID, partner_id)
     yield
     
 #     monitor.is_terminate_self = True

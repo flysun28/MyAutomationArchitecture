@@ -64,9 +64,11 @@ class HttpJsonSession(metaclass=WithLogger):
         try:
             self.logger.info(self.url)
             self.logger.info("传入的参数：{}, 类型为{}".format(data, type(data)))
+            self.logger.info("传入的参数：{}, 类型为{}".format(simplejson.dumps(data, ensure_ascii=False, indent=3), type(data)))
             # requests.post：data为字典
             # session.post：data为字符串，json为字典
-            data = simplejson.dumps(data) if method == self.default_post else data
+            if isinstance(data, dict):
+                data = simplejson.dumps(data) if method == self.default_post else data
             self.response = method(url=self.url, data=data)
             self.logger.info("返回状态码：{}".format(self.response.status_code))
             assert self.response.status_code == 200, "返回状态码：{} != 200".format(self.response.status_code)
@@ -81,7 +83,8 @@ class HttpJsonSession(metaclass=WithLogger):
                 result = self.response.text
             finally:
                 self.logger.info("post返回：{}".format(result))
-                self.process_result(result)
+                if isinstance(result, dict):
+                    self.process_result(result)
             return result
         except RequestException as e:
             raise HttpJsonException(e) from None
@@ -206,7 +209,8 @@ class EncryptJson(HttpJsonSession):
         data['sign'] = self.make_sign(data)
         aes_body = self.encrypt_body(data)
         self.logger.info("url:%s" % self.url)
-        self.logger.info("原始body:%s" % data)
+        self.logger.info("原始body:%s" %data)
+        self.logger.info("原始body:%s" %simplejson.dumps(data, ensure_ascii=False, indent=3))
         # self.logger.info("加密body:%s" % aes_body)
         try:
             self.response = self.session.post(url=self.url, data=aes_body)
@@ -214,7 +218,7 @@ class EncryptJson(HttpJsonSession):
             resp_text = self.aes_codec.decrypt(self.response.text)
             try:
                 redec_resp_text = resp_text.encode('utf-8').decode('gbk')
-                self.logger.info('UTF-8——>GBK response: %s' %redec_resp_text)                
+                self.logger.info('UTF-8——>GBK response: %s' %redec_resp_text)
             except:
                 try:
                     # resp_text是经服务端utf-8编码后，到windows本地再经默认gbk解码
@@ -226,19 +230,15 @@ class EncryptJson(HttpJsonSession):
             pyobj_resp = json.loads(redec_resp_text)
             self.logger.info("post返回：{}".format(pyobj_resp))
             self.process_result(pyobj_resp)
-            # self.logger.info('POST返回结果:{}'.format(
-            #     simplejson.dumps(pyobj_resp, ensure_ascii=False, encoding='utf-8', indent=2))
-            # )
         except Exception as e:
-            print(e)
-            raise HttpJsonException('<%s> exception: %s' % (type(self), e))
+            raise HttpJsonException('%s exception: %s' % (type(self), e))
         else:
             self.__sessionTicket = self.response.headers['X-Session-Ticket']
             self.header['X-Protocol']['sessionTicket'] = self.__sessionTicket
             return pyobj_resp
 
     def make_sign(self, data: dict):
-        orig_sign = Sign(data).join_asc_have_key('&key=' + self.appSecret)
+        orig_sign = Sign(data).join_asc_have_key('&key=' + self.appSecret, 'virtualAssets', 'combineOrder', 'rechargeCard')
         print('签名原串：', orig_sign)
         return md5(orig_sign, to_upper=False)
     
