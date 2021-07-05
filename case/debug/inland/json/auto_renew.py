@@ -13,10 +13,10 @@ from lib.config.country_currency import currency as country_currency
 
 class AutoRenew:
     
-    def __init__(self, ssoid, partner_code='2031'):
+    def __init__(self, ssoid, partner_code='2031', renew_product_code=""):
         self.ssoid = ssoid
         self.partner_code = partner_code
-        self.renew_product_code = ''
+        self.renew_product_code = renew_product_code
         if partner_code == '2031':
             self.renew_product_code = '20310001'
 
@@ -214,9 +214,10 @@ class AutoRenewOverseas():
 if __name__ == '__main__':
     flag = "1"
     if flag == "1":
-        AutoRenewOverseas('2000060346', 'MY').avoidpay('100', 'ID202105310911192000060346543243')
+        # AutoRenewOverseas('2000060346', 'MY').avoidpay('100', 'ID202105310911192000060346543243')
 #         AutoRenew('2000060346').auto_renew_out('202106025390914093', 'wxpay')
-#         AutoRenew('2000060346').auto_renew_out('20215402735272819337', 'alipay', '2088522284017371')
+        AutoRenew('2086791398',"247628518","2476285180010").auto_renew_out('202106225829709435', 'wxpay', 'oCg6Xt8NvRi7jGuap_5B6XdY4oYk')
+
     if flag == "2":
         AutoRenew('2000060346').un_sign('') # agreement_no, partner_order, pay_type
     if flag == "3":
