@@ -52,7 +52,7 @@ def recharge(amount, notify_amount):
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
+        raise TimeoutError('查询充值结果超时5s: %s!' %exc_value)
     """
         【4】. 检查充值成功后，可币余额是否正确
     """

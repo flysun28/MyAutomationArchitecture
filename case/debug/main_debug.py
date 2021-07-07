@@ -107,7 +107,7 @@ if __name__ == '__main__':
                 break
 
     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('', 1000)
+#     refund.refund_by_pay_req_id('', 0.01)
 
 #     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
@@ -199,7 +199,7 @@ if __name__ == '__main__':
 #     raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
-    signpay = AutoRenewDebug('692039187', '2031')
+    signpay = AutoRenewDebug('2086776969', '2031')
     # 解约
 #     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
 #     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信

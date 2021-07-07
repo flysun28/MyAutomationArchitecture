@@ -39,7 +39,7 @@ def only_sign():
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
+        raise TimeoutError('查询签约结果超时5s: %s!' %exc_value)
     """
     【4】.检查order表信息，无记录
     """

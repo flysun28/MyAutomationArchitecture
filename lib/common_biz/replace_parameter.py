@@ -167,3 +167,6 @@ def replace_http_json(req, **kwargs):
     req.update(kwargs)
     req['processToken'] = kwargs.get('processToken') or GlobalVar.PROCESSTOKEN or get_process_token()
     return req
+
+
+replace_http_json_req = replace_http_json

@@ -11,7 +11,7 @@ from lib.common.utils.constants import voucher_type_mapping
 from lib.common_biz.order_random import RandomOrder
 
 
-def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN, **kwargs):
+def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN, process_token=None):
     '''
     1. 发送normal http请求，返回反序列化之后的response内容（jsoned）
     2. 会设置case.response为http原始response object
@@ -21,11 +21,11 @@ def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN, **kwargs
     '''
     sheetname = case.ws.title
     assert sheetname == case_sheet, 'CaseFile sheetname: {} != expected: {}'.format(sheetname, case_sheet)
-    # 替换case.req_params中的processToken
+    # 替换case.req_params中的processToken    
     if 'processToken' in case.req_params:
-        case.req_params = replace_http_json(case.req_params,
-                                            processToken=kwargs.get('processToken'),
-                                            partnerOrder=RandomOrder(32).random_string())   
+        case.req_params = replace_http_json(case.req_params, processToken=process_token)
+    if case.req_params['goodsType'] == 'COMMON':    # 非纯充值
+        case.req_params = replace_http_json(case.req_params, partnerOrder=RandomOrder(32).random_string())
     # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
     if '券' in case.name:
         vou_type = case.req_params['virtualAssets']['voucherType']

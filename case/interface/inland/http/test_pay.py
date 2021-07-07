@@ -53,6 +53,7 @@ def add_cocoin():
     balance = nearme.query_balance()
     if balance == 0:
         nearme.nearme_add_subtract("0.02", GlobalVar.SSOID, 0)
+        assert nearme.query_balance(GlobalVar.SSOID) == 0.02
 
 
 @timeit
@@ -79,7 +80,7 @@ def test_inland_positive(case, sheetname, process_token):
 
 
 @pytest.mark.full
-@pytest.mark.negative    
+@pytest.mark.negative
 @pytest.mark.parametrize('case', case_file.negative_cases)
 def test_inland_negative(case, sheetname, process_token):
     print('当前负向测试用例数据:', case.name)
