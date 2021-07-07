@@ -41,14 +41,16 @@ from lib.interface_biz.http.auto_re_new import AutoRenew
 
 
 if __name__ == '__main__':
-#     Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
+    Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
     flag_coin = "0"
     if flag_coin == "1":
         # 发
-        Nearme().nearme_add_subtract("0.01", "2086776969", 0)
+        Nearme().nearme_add_subtract("0.02", "2086776969", 0)
+        Nearme().query_balance('2086776969')
     if flag_coin == "2":
         # 扣
         Nearme().nearme_add_subtract("0.01", "2086776969", 1)
+        Nearme().query_balance('2086776969')
 #     ssoid = '2086788561'    #黄勇翔
 #     ssoid = '2076074648'    #黄小静
 #     ssoid = '2076079836'    #陈华平
