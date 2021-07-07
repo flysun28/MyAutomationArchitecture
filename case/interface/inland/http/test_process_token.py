@@ -56,7 +56,7 @@ class TestInlandNegative():
 
 
 if __name__ == '__main__':
-    argv = ['-vsx', '-m negative', '--timeout=300', '--ff', 
+    argv = ['-vs', '--timeout=300', '--ff', 
 #             '--cov='+os.getcwd(), '--cov-report=html', 
             r'--html=%s\report\report_%s.html' %(os.getcwd(), time.strftime('%Y-%m-%d', time.localtime())),
             __file__

@@ -33,12 +33,9 @@ def manage_case_file():
 @pytest.mark.positive
 @pytest.mark.parametrize('case', case_file.positive_cases)
 def test_inland_positive(case, sheetname):
-    if case.req_params['goodsType'] == 'COMMON':    # 非纯充值
-        case.req_params = replace_http_json_req(case.req_params, partnerOrder=RandomOrder(32).random_string())
-    # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
-    if '券' in case.name:
-        vou_type = case.req_params['virtualAssets']['voucherType']
-        update_voucher_args(case.req_params, voucher_type_mapping.inverse[vou_type])
+    case.req_params = replace_http_json_req(case.req_params, 
+                                            signPartnerOrder=RandomOrder(32).random_string(),
+                                            partnerOrder=RandomOrder(32).random_string())
     try:
         result = http_encjson_request(case, sheetname, url)
         get_check_http_json_result_positive(case, result)
@@ -52,12 +49,9 @@ def test_inland_positive(case, sheetname):
 @pytest.mark.negative    
 @pytest.mark.parametrize('case', case_file.negative_cases)
 def test_inland_negative(case, sheetname):
-    if case.req_params['goodsType'] == 'COMMON':    # 非纯充值
-        case.req_params = replace_http_json_req(case.req_params, partnerOrder=RandomOrder(32).random_string())
-    # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
-    if '券' in case.name:
-        vou_type = case.req_params['virtualAssets']['voucherType']
-        update_voucher_args(case.req_params, voucher_type_mapping.inverse[vou_type])
+    case.req_params = replace_http_json_req(case.req_params, 
+                                            signPartnerOrder=RandomOrder(32).random_string(),
+                                            partnerOrder=RandomOrder(32).random_string())    
     try:
         result = http_encjson_request(case, sheetname, url)
         get_check_http_json_result_negative(case, result)

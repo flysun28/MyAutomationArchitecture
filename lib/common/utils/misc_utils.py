@@ -154,7 +154,6 @@ def flatten_nested_dict(dictionary:dict):
     for k, v in dictionary.items():
         if isinstance(v, dict):
             res.update(flatten_nested_dict(v))
-#             res.update(v)
         else:
             res[k] = v
     return res
