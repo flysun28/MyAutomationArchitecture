@@ -98,8 +98,9 @@ class HttpJsonSession(metaclass=WithLogger):
         data = data or self.data
         try:
             self.logger.info(self.url)
-            self.logger.info("传入的参数：{}".format(data))
-            response = self.session.get(url=self.url, **data)
+#             self.logger.info("传入的参数：{}".format(data))
+#             self.logger.info("传入的参数：{}, 类型为{}".format(simplejson.dumps(data, ensure_ascii=False, indent=3), type(data)))
+            response = self.session.get(url=self.url)
             self.logger.info("返回状态码：{}".format(response.status_code))
             assert response.status_code == 200, "返回状态码：{} != 200".format(response.status_code)
             self.logger.info("返回结果：{}".format(response.json()))

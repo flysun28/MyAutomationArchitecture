@@ -38,10 +38,11 @@ from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
 from case.debug.inland.dubbo.voucher import VoucherInland
 from lib.common_biz.biz_db_operate import get_available_voucher, get_renew_product_code
 from lib.interface_biz.http.auto_re_new import AutoRenew
+from lib.common_biz.oppo_cloud import HttpOPPOCloud
 
 
 if __name__ == '__main__':
-    Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
+#     Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
     flag_coin = "0"
     if flag_coin == "1":
         # 发
@@ -59,13 +60,13 @@ if __name__ == '__main__':
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(2, 2):
+        for flag in range(1, 6):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
             if flag == 2:
                 # 消费
-                for _ in range(10):
+                for _ in range(5):
                     voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", ssoid)
             if flag == 3:
                 # 折扣
@@ -221,3 +222,6 @@ if __name__ == '__main__':
 #     paycenter_dubbo.create_direct_pay('wxpay', 0.01, 0.01)
 
 #     get_available_voucher_by_type('2086776969', '消费折扣')
+
+    oppo_cloud = HttpOPPOCloud()
+#     print(oppo_cloud.get_sla_interface('fspay', is_dash=True))

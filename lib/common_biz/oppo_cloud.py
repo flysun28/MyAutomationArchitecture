@@ -16,10 +16,13 @@ class HttpOPPOCloud(HttpJsonSession):
     psa_name_to_id = {'fspay': '50280'}
     product_domain = 'http://prod-console.cloud.oppoer.me'
     test_domain = ''
-    
+    '''
+    刘成(W9007972) 申请的appkey+secret
+    '''
     def __init__(self, **kwargs):
-        prefix = self.test_domain if get_env_id().isdigit() else self.product_domain
-        super().__init__(url_prefix=prefix, **kwargs)
+#         self.prefix = self.test_domain if get_env_id().isdigit() else self.product_domain
+        self.prefix = self.product_domain
+        super().__init__(url_prefix=self.prefix, **kwargs)
 
     def get_sla_interface(self, psa, is_dash=True):
         req = {
@@ -31,5 +34,11 @@ class HttpOPPOCloud(HttpJsonSession):
         }
         orig_sign_str = Sign(req).join_asc_have_key('&appSecret=') + '7cdb3bf0150c4fbf9a29df17b9eeda4a'
         req['sign'] = md5(orig_sign_str, to_upper=False)
-        result = super().get(self.prefix + '/monitor_api/sla/sla/interface', params=req)
+        suffix = '&'.join(['{}={}'.format(k, v) for k, v in req.items()])
+        result = self.get('/monitor_api/sla/sla/interface?' + suffix)
         return [d['path'] for d in result['data'][0]['items']]
+
+
+if __name__ == '__main__':
+    oppo_cloud = HttpOPPOCloud()
+    print(oppo_cloud.get_sla_interface('fspay', is_dash=True))

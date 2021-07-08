@@ -185,7 +185,18 @@ def clear_all_unuseable_vou(ssoid, partner_id='2031'):
     '''
     table_id = SeparateDbTable(ssoid).get_vou_table()
     sql = "DELETE FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND appId='{}' AND `status`!=0".format(table_id, ssoid, partner_id)
-    result = GlobalVar.MYSQL_IN.select(sql)
+    GlobalVar.MYSQL_IN.execute(sql)
+
+
+def clear_all_vou(ssoid, partner_id='2031'):
+    '''
+    清除所有失效的券
+    :param ssoid:
+    :param partner_id:
+    '''
+    table_id = SeparateDbTable(ssoid).get_vou_table()
+    sql = "DELETE FROM oppopay_voucher.vou_info_{} WHERE ssoid='{}' AND appId='{}'".format(table_id, ssoid, partner_id)
+    GlobalVar.MYSQL_IN.execute(sql)
 
 
 def get_renew_product_code(partner_id):

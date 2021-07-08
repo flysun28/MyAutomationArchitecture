@@ -19,6 +19,7 @@ from lib.common_biz.replace_parameter import replace_http_json_req
 from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.http.refactor.pay import update_voucher_args
 from lib.common.utils.constants import voucher_type_mapping
+from lib.common_biz.biz_db_operate import clear_all_vou
 
 case_file = src_case_file(__file__)
 url = case_file.url
@@ -29,6 +30,7 @@ nearme = Nearme(GlobalVar.SSOID)
 @timeit
 @pytest.fixture(scope='module', autouse=True)
 def grant_vouchers_if_empty():
+    clear_all_vou(GlobalVar.SSOID, partner_id)
     result = Voucher().query_all_useable(GlobalVar.SSOID, partner_id=partner_id)
     vouchers = result['data']
     # 判断可用的可币券类型是否包含所有

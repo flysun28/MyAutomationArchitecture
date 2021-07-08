@@ -13,8 +13,6 @@ from lib.common_biz.json_request import (http_encjson_request,
 from lib.common.utils.misc_utils import timeit
 from lib.common_biz.replace_parameter import replace_http_json_req
 from lib.common_biz.order_random import RandomOrder
-from lib.interface_biz.http.refactor.pay import update_voucher_args
-from lib.common.utils.constants import voucher_type_mapping
 
 case_file = src_case_file(__file__)
 url = case_file.url
