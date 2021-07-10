@@ -12,10 +12,11 @@ from lib.common_biz.json_request import (http_encjson_request,
                                          get_check_http_json_result_negative)
 from lib.common.utils.misc_utils import timeit
 from lib.common.utils.globals import HTTPENCJSON_IN, GlobalVar
-from case.interface.conftest import partner_id
+from case.interface.conftest import partner_ids
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.common_biz.biz_db_operate import clear_all_vou
 from lib.interface_biz.dubbo.vou import Voucher
+import random
 
 
 HTTPENCJSON_IN.header['X-APP']['appPackage'] = 'com.oppo.usercenter'
@@ -28,28 +29,31 @@ nearme = Nearme(GlobalVar.SSOID)
 
 @timeit
 @pytest.fixture(scope='module', autouse=True)
-def grant_vouchers_if_empty():
-    clear_all_vou(GlobalVar.SSOID, partner_id)
-    result = Voucher().query_all_useable(GlobalVar.SSOID, partner_id=partner_id)
-    vouchers = result['data']
-    # 判断可用的可币券类型是否包含所有
-    vou_types = set(vou['couponDiscountType'] for vou in vouchers)
-    if vou_types == set(all_vou_types):
+def grant_vouchers_if_empty(run=False):
+    if not run:
         return
-    else:
-        voucher = Voucher()
-        # 消费
-        for _ in range(5):
-            voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", GlobalVar.SSOID)
-        # 抵扣
-        voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", GlobalVar.SSOID)
-        # 折扣
-        voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", GlobalVar.SSOID, ratio=0.01, maxCutAmount='1')
-#         voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", GlobalVar.SSOID, ratio=0.1, maxCutAmount='1')
-        # 消费折扣
-        voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", GlobalVar.SSOID, ratio=0.01, maxCutAmount='10')
-        # 红包券
-        voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1", GlobalVar.SSOID)
+    for partner_id in partner_ids:
+        clear_all_vou(GlobalVar.SSOID, partner_id)
+        result = Voucher().query_all_useable(GlobalVar.SSOID, partner_id=partner_id)
+        vouchers = result['data']
+        # 判断可用的可币券类型是否包含所有
+        vou_types = set(vou['couponDiscountType'] for vou in vouchers)
+        if vou_types == set(all_vou_types):
+            return
+        else:
+            voucher = Voucher()
+            # 消费
+            for _ in range(random.choice(range(1, 6))):
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", GlobalVar.SSOID)
+            # 抵扣
+            voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", GlobalVar.SSOID)
+            # 折扣
+            voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", GlobalVar.SSOID, ratio=0.01, maxCutAmount='1')
+    #         voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", GlobalVar.SSOID, ratio=0.1, maxCutAmount='1')
+            # 消费折扣
+            voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "2", "0", GlobalVar.SSOID, ratio=0.01, maxCutAmount='10')
+            # 红包券
+            voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1", GlobalVar.SSOID)
 
 
 @timeit
@@ -59,8 +63,8 @@ def add_cocoin():
     if balance == 0:
         nearme.nearme_add_subtract("0.02", GlobalVar.SSOID, 0)
         assert nearme.query_balance() == 0.02
-        
-        
+
+
 @timeit
 @pytest.fixture(scope='module', autouse=True, name='sheetname')
 def manage_case_file():

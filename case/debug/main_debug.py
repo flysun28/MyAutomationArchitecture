@@ -60,7 +60,7 @@ if __name__ == '__main__':
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(1, 6):
+        for flag in range(1, 1):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
