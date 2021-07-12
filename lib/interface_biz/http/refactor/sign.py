@@ -21,18 +21,19 @@ class SignPayGWClient():
         partnerCode        string             必须            业务线id    
         signPartnerOrder    string            必须            签约订单号    
         appPackage        string              必须            业务方包名    
-        appVersion        string              非必须            业务方版本号    
+        appVersion        string              非必须          业务方版本号
         payType            string             必须            支付方式 alipay wxpay    
-        notifyUrl        string               必须            支付结果通知地址    
-        country            string             必须            国家 CN    
-        currency        string                必须            货币编码 CNY    
+        notifyUrl        string               必须            支付结果通知地址
+        country            string             必须            国家 CN
+        currency        string                必须            货币编码 CNY
         transType        string               必须            签约SIGN 签约并支付SIGNANDPAY
-        subUserId        string               非必须            子用户id    
-        subUserName       string             非必须            子用户姓名    
-        amount            integer            非必须            金额，单位分（签约并支付必须）                
-        subject            string            非必须            商品名称（签约并支付必须）    
-        desc            string               非必须            商品描述（签约并支付必须）    
-        screenInfo    string                 非必须            屏幕信息 FULL, HALF, ACROSS
+        subUserId        string               非必须            子用户id
+        subUserName       string             非必须            子用户姓名
+        amount            integer            非必须            金额，单位分（签约并支付必须）
+        subject            string            非必须            商品名称（签约并支付必须）
+        desc                string           非必须            商品描述（签约并支付必须）
+        partnerOrder        string           非必须            业务订单号（签约并支付必须）
+        screenInfo        string             非必须            屏幕信息 FULL, HALF, ACROSS
         '''    
         self.post_req = {
             # mandatory
@@ -54,6 +55,7 @@ class SignPayGWClient():
             'amount': 0,
             'subject': '',
             'desc': '',
+            'partnerOrder': '',
             'screenInfo': random.choice(['FULL', 'HALF', 'ACROSS']),    # FULL, HALF, ACROSS
         }
         self.query_req = {

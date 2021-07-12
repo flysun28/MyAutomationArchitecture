@@ -11,6 +11,8 @@ from lib.common_biz.json_request import (http_encjson_request,
                                          get_check_http_json_result_positive,
                                          get_check_http_json_result_negative)
 from lib.common.utils.misc_utils import timeit
+from lib.common_biz.replace_parameter import replace_http_json_req
+from lib.common_biz.order_random import RandomOrder
 
 case_file = src_case_file(__file__)
 url = case_file.url
@@ -29,6 +31,9 @@ def manage_case_file():
 @pytest.mark.positive
 @pytest.mark.parametrize('case', case_file.positive_cases)
 def test_inland_positive(case, sheetname):
+    case.req_params = replace_http_json_req(case.req_params, 
+                                            signPartnerOrder=RandomOrder(32).random_string(),
+                                            partnerOrder=RandomOrder(32).random_string())
     try:
         result = http_encjson_request(case, sheetname, url)
         get_check_http_json_result_positive(case, result)
@@ -42,6 +47,9 @@ def test_inland_positive(case, sheetname):
 @pytest.mark.negative    
 @pytest.mark.parametrize('case', case_file.negative_cases)
 def test_inland_negative(case, sheetname):
+    case.req_params = replace_http_json_req(case.req_params, 
+                                            signPartnerOrder=RandomOrder(32).random_string(),
+                                            partnerOrder=RandomOrder(32).random_string())    
     try:
         result = http_encjson_request(case, sheetname, url)
         get_check_http_json_result_negative(case, result)
@@ -52,7 +60,7 @@ def test_inland_negative(case, sheetname):
 
 
 if __name__ == '__main__':
-    argv = ['-vs', '--timeout=300', '--ff', 
+    argv = ['-vsx', '--timeout=300', '--ff', #'--fixtures-per-test',
 #             '--cov='+os.getcwd(), '--cov-report=html', 
             r'--html=%s\report\report_%s.html' %(os.getcwd(), time.strftime('%Y-%m-%d', time.localtime())),
             __file__

@@ -19,17 +19,17 @@ from lib.common.utils.globals import GlobalVar, HTTPENCJSON_IN
 logger = Logger('鉴权').get_logger()
 
 
-def get_process_token():
+def get_process_token(partner_id='2031', token=None):
     """
     获取流程凭证
     :return:
     """
     case_data = {
-        "token": GlobalVar.TOKEN,
+        "token": token or GlobalVar.TOKEN,
         # platform==MSP，传该字段
         "appId": "",
         "appPackage": 'com.example.pay_demo',
-        "partnerCode": '2031',
+        "partnerCode": partner_id,
         "platform": "ATLAS"
     }
     result = HTTPENCJSON_IN.post('/api/pay-flow/v290/get-process-token', case_data)

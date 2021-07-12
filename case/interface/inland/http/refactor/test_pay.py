@@ -15,15 +15,22 @@ from lib.interface_biz.dubbo.vou import Voucher
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.common.utils.globals import GlobalVar
 from case.interface.conftest import partner_id
+from lib.common_biz.replace_parameter import replace_http_json_req
+from lib.common_biz.order_random import RandomOrder
+from lib.interface_biz.http.refactor.pay import update_voucher_args
+from lib.common.utils.constants import voucher_type_mapping
+from lib.common_biz.biz_db_operate import clear_all_vou
 
 case_file = src_case_file(__file__)
 url = case_file.url
 all_vou_types = 'XIAOFEI', 'DIKOU', 'DAZHE', 'XIAOFEI_DAZHE', 'RED_PACKET_COUPON'
+nearme = Nearme(GlobalVar.SSOID)
 
 
 @timeit
 @pytest.fixture(scope='module', autouse=True)
 def grant_vouchers_if_empty():
+    clear_all_vou(GlobalVar.SSOID, partner_id)
     result = Voucher().query_all_useable(GlobalVar.SSOID, partner_id=partner_id)
     vouchers = result['data']
     # 判断可用的可币券类型是否包含所有
@@ -49,10 +56,10 @@ def grant_vouchers_if_empty():
 @timeit
 @pytest.fixture(scope='module', autouse=True)
 def add_cocoin():
-    nearme = Nearme(GlobalVar.SSOID)
     balance = nearme.query_balance()
     if balance == 0:
         nearme.nearme_add_subtract("0.02", GlobalVar.SSOID, 0)
+        assert nearme.query_balance() == 0.02
 
 
 @timeit
@@ -69,6 +76,13 @@ def manage_case_file():
 @pytest.mark.parametrize('case', case_file.positive_cases)
 def test_inland_positive(case, sheetname, process_token):
     print('当前正向测试用例数据:', case.name)
+    print(nearme.query_balance())
+    if case.req_params.get('goodsType') == 'COMMON':    # 非纯充值
+        case.req_params = replace_http_json_req(case.req_params, partnerOrder=RandomOrder(32).random_string())
+    # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
+    if '券' in case.name:
+        vou_type = case.req_params['virtualAssets']['voucherType']
+        update_voucher_args(case.req_params, voucher_type_mapping.inverse[vou_type])
     try:
         result = http_encjson_request(case, sheetname, url, process_token=process_token)
         get_check_http_json_result_positive(case, result)
@@ -79,10 +93,16 @@ def test_inland_positive(case, sheetname, process_token):
 
 
 @pytest.mark.full
-@pytest.mark.negative    
+@pytest.mark.negative
 @pytest.mark.parametrize('case', case_file.negative_cases)
 def test_inland_negative(case, sheetname, process_token):
     print('当前负向测试用例数据:', case.name)
+    if case.req_params.get('goodsType') == 'COMMON':    # 非纯充值
+        case.req_params = replace_http_json_req(case.req_params, partnerOrder=RandomOrder(32).random_string())
+    # 带券的用例，自动挑选出一个符合类型的券，替换case.req_params中的virtualAssets
+    if '券' in case.name:
+        vou_type = case.req_params['virtualAssets']['voucherType']
+        update_voucher_args(case.req_params, voucher_type_mapping.inverse[vou_type])
     try:
         result = http_encjson_request(case, sheetname, url, process_token=process_token)
         get_check_http_json_result_negative(case, result)

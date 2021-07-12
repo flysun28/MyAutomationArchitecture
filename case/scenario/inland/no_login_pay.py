@@ -44,7 +44,7 @@ def no_login(amount, notify_amount):
         else:
             break
     else:
-        raise TimeoutError('查询签约支付结果超时5s: %s!' %exc_value)
+        raise TimeoutError('查询支付结果超时5s: %s!' %exc_value)
     if is_assert():
         """
             【3】. 检查order_info表信息是否正确 无账号订单分库分表规则未梳理

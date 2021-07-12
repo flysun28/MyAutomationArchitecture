@@ -38,6 +38,7 @@ from lib.interface_biz.dubbo.refactor.paycenter import PayCenterDubbo
 from case.debug.inland.dubbo.voucher import VoucherInland
 from lib.common_biz.biz_db_operate import get_available_voucher, get_renew_product_code
 from lib.interface_biz.http.auto_re_new import AutoRenew
+from lib.common_biz.oppo_cloud import HttpOPPOCloud
 
 
 if __name__ == '__main__':
@@ -45,10 +46,12 @@ if __name__ == '__main__':
     flag_coin = "0"
     if flag_coin == "1":
         # 发
-        Nearme().nearme_add_subtract("0.01", "2086776969", 0)
+        Nearme().nearme_add_subtract("0.02", "2086776969", 0)
+        Nearme().query_balance('2086776969')
     if flag_coin == "2":
         # 扣
         Nearme().nearme_add_subtract("0.01", "2086776969", 1)
+        Nearme().query_balance('2086776969')
 #     ssoid = '2086788561'    #黄勇翔
 #     ssoid = '2076074648'    #黄小静
 #     ssoid = '2076079836'    #陈华平
@@ -57,13 +60,13 @@ if __name__ == '__main__':
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(2, 2):
+        for flag in range(1, 1):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
             if flag == 2:
                 # 消费
-                for _ in range(10):
+                for _ in range(5):
                     voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", ssoid)
             if flag == 3:
                 # 折扣
@@ -107,7 +110,7 @@ if __name__ == '__main__':
                 break
 
     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('', 1000)
+#     refund.refund_by_pay_req_id('', 0.01)
 
 #     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
@@ -199,7 +202,7 @@ if __name__ == '__main__':
 #     raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
-    signpay = AutoRenewDebug('692039187', '2031')
+    signpay = AutoRenewDebug('2086776969', '2031')
     # 解约
 #     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
 #     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
@@ -219,3 +222,6 @@ if __name__ == '__main__':
 #     paycenter_dubbo.create_direct_pay('wxpay', 0.01, 0.01)
 
 #     get_available_voucher_by_type('2086776969', '消费折扣')
+
+    oppo_cloud = HttpOPPOCloud()
+#     print(oppo_cloud.get_sla_interface('fspay', is_dash=True))
