@@ -8,7 +8,7 @@ import os
 import time
 import pytest
 from lib.common.case_processor.entry import src_case_file
-from lib.common.utils.globals import HTTPENCJSON_IN, GlobalVar
+from lib.common.utils.globals import HTTPENCJSON_IN
 from lib.common.utils.misc_utils import timeit
 from lib.common_biz.json_request import http_encjson_request, get_check_http_json_result_positive, get_check_http_json_result_negative
 from lib.common_biz.replace_parameter import replace_http_json_req
