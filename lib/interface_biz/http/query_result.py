@@ -41,4 +41,4 @@ def queryResult(request_id, query_type="PAY", pass_type="expend"):
 
 
 if __name__ == '__main__':
-    queryResult("KB202102231406382076075925558062")
+    queryResult("KB202107151525122086776969116272")
