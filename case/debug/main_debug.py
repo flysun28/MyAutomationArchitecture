@@ -1,4 +1,5 @@
 # coding=utf-8
+from lib.interface_biz.http.user_account import Account
 env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
@@ -110,11 +111,11 @@ if __name__ == '__main__':
                 break
 
     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('', 0.01)
+    refund.refund_by_pay_req_id('', 0.01)
 
-#     # 审批退款：order审批，dispatcher退款
+    # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
-#     refund.refund_by_pay_req_id('')
+#     refund.refund_by_pay_req_id('', 0.01)
 #     refund.refund_by_amount('', amount=0.01)
 
 #     # pb2json
@@ -223,5 +224,10 @@ if __name__ == '__main__':
 
 #     get_available_voucher_by_type('2086776969', '消费折扣')
 
-    oppo_cloud = HttpOPPOCloud()
+    # 云平台查询SLA接口
+#     oppo_cloud = HttpOPPOCloud()
 #     print(oppo_cloud.get_sla_interface('fspay', is_dash=True))
+
+    # 查询验证码
+#     account = Account()
+#     print(account.get_verification_code('14441120298'))
