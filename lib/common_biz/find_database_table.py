@@ -22,6 +22,9 @@ def get_route_ssoid(ssoid):
         ssoid = (10 - len(ssoid)) * str(0) + ssoid
     return ssoid
 
+def get_ssoid_by_pay_req_id(pay_req_id):
+    return str(pay_req_id)[16: 26]
+
 
 class SeparateDbTable(metaclass=WithLogger):
     def __init__(self, ssoid):
@@ -36,7 +39,7 @@ class SeparateDbTable(metaclass=WithLogger):
         hash_code = abs(GetHashCode.getHashCode(self.ssoid))
         db = int(hash_code / 128 % 8)
         table = hash_code % 128
-        # logger.info("`db_order_{}`.`order_info_{}`".format(db, table))
+        # self.logger.info("`db_order_{}`.`order_info_{}`".format(db, table))
         return db, table
 
     def get_coin_db_table(self):

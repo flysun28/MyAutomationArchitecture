@@ -22,14 +22,14 @@ class NewTv:
             'countryCode': 'CN',
             'currency': 'CNY',
             'payType': 'newtv',
-            # 'payType': 'wxpay',
+            # 'payType': 'wxpay', newtv
             'channel': 'newtv-qrcode',
             'payAmount': '1',
             'requestTime': '202006101810',
             'productName': 'test',
             'productDesc': 'TEST',
             'count': '1',
-            'notifyUrl': 'www.baidu.com',
+            'notifyUrl': 'http://pay.pay-test.wanyol.com/notify/receiver',
             'attach': '1',
             'extendParams': '',
             'sign': ''
@@ -44,7 +44,8 @@ class NewTv:
         http://gw-opay.oppomobile.com/gateway/payOrder
         MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB
         """
-        GlobalVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
+        result = GlobalVar.HTTPJSON_GW_IN.post("/gateway/payOrder", data=case_data)
+        print("pay url: " + result['codeUrl'])
 
     def sign_order(self):
         case_data = {
@@ -53,7 +54,7 @@ class NewTv:
             # 'payType': 'wxpay',
             'payType': 'newtv',
             'orderName': '1个月',
-            'userId': '2000001',
+            'userId': '123456',
             'productId': '666666885',
             'countryCode': 'CN',
             'currency': 'CNY',
@@ -70,10 +71,33 @@ class NewTv:
             'aheadOfTime': 86300,
             'sign': ''
         }
-        temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
-            case_data['partnerId']).get_key_from_merchant()
+        temp_string = ''
+        if is_get_key_from_db():
+            temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
+                case_data['partnerId']).get_key_from_merchant()
+        else:
+            temp_string = Sign(case_data).join_asc_have_key(
+                "&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB"
         case_data['sign'] = sha_256(temp_string)
         GlobalVar.HTTPJSON_GW_IN.post("/gateway/wxpay/qrcode/signAndPay", data=case_data)
+
+    def un_sign(self, partnerOrder):
+        case_data = {
+            'partnerOrder': partnerOrder,
+            'payType': "newtv",
+            "notifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
+            "partnerId": "72727676"
+        }
+        temp_string = ''
+        if is_get_key_from_db():
+            temp_string = Sign(case_data).join_asc_have_key("&key=") + GetKey(
+                case_data['partnerId']).get_key_from_merchant()
+        else:
+            temp_string = Sign(case_data).join_asc_have_key(
+                "&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJOiGsoifR0qAwpb72gbbDonYgJ973LBOzSa+SGccbl9Hyv/7Rnkoet015dieP5lTHbQiUcWrX3DVhLUM+9q8loTYETVvBjYi+fDtOIbUUdmaObCKmdHl1SSZlMHVGkbQ8yys8bqkw0DbBQuqN6WdYexcyFfrh1EvDol0c9o1l/wIDAQAB"
+        case_data['sign'] = sha_256(temp_string)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/sign/cancel", data=case_data)
+
 
     def query_order(self):
         pass
@@ -83,4 +107,6 @@ class NewTv:
 
 
 if __name__ == '__main__':
-    NewTv().pay_order()
+    # NewTv().pay_order()
+    NewTv().sign_order()
+    # NewTv().un_sign("TV20210720191649080471059811104648565582732212")
