@@ -124,11 +124,11 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
     """
         【3】.调用查询结果接口
     """
-    assert str(queryResult(order_info['pay_req_id'])) == "2002" or "2001"
+    time.sleep(2)
+    assert str(queryResult(order_info['pay_req_id'])) == "2002", queryResult(order_info['pay_req_id'])
     """
         【4】. 检查可币余额是否正确
     """
-    time.sleep(2)
     balance = query_account(GlobalVar.SSOID)
     assert balance == round(decimal.Decimal(0), 4), (balance, round(decimal.Decimal(0), 4))
     """

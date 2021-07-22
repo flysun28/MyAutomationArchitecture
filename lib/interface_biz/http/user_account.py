@@ -55,8 +55,7 @@ class Account(metaclass=WithLogger):
             assert jsonresp['token'], 'token is %s' %jsonresp['token']
             return jsonresp['token']
     
-    @staticmethod
-    def get_verification_code(phone_number):
+    def get_verification_code(self, phone_number):
         """
         获取验证码
         :param phone_number:
@@ -65,6 +64,8 @@ class Account(metaclass=WithLogger):
         url = 'http://ucadmin.ucnewtest.wanyol.com/api/admin/account/autotest/query-latest-code'
         body = {"destination": phone_number}
         body = json.dumps(body)
+        self.logger.info(url)
+        self.logger.info(body)
         response = requests.post(url, data=body, headers=type(GlobalVar.HTTPJSON_IN).header)
         assert response.status_code == 200, response.status_code
         return response.json()
@@ -132,4 +133,4 @@ if __name__ == '__main__':
     account = Account()
 #     print(account.get_ssoid_by_phone('18688994250'))
 #     account.login()
-#     print(account.get_verification_code('14441120298'))
+#     print(account.get_verification_code('14213467928'))
