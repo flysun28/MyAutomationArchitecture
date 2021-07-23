@@ -63,7 +63,8 @@ class NewTv:
             'notifyUrl': 'http://account-television-test.wanyol.com/v1/account/order/payment/notify/mgtv',
             'returnUrl': 'https://opaycenter-gw.nearme.com.cn/opaycenter/newtvAutoRenewSignNotify',
             'ip': '210.22.6.84',
-            'planId': '122222',
+            # 生产 148751 测试 122222
+            'planId': '148751',
             'interval': 1,
             'intervalType': 1,
             'contractNotifyUrl': 'http://account-television-test.wanyol.com/v1/account/order/sign/notify/mgtv',
@@ -108,5 +109,5 @@ class NewTv:
 
 if __name__ == '__main__':
     # NewTv().pay_order()
-    NewTv().sign_order()
-    # NewTv().un_sign("TV20210720191649080471059811104648565582732212")
+    # NewTv().sign_order()
+    NewTv().un_sign("TV20210723151734176669443484511704512194610341")
