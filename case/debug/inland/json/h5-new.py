@@ -24,7 +24,8 @@ class H5:
             "serviceType": self.serviceType,
             "payType": self.payType,
             "userInfo": {
-                "ssoid": str(2100000000 + random.randint(100, 1000000))
+                # "ssoid": str(2100000000 + random.randint(100, 1000000))
+                "thirdPartId": str(2100000000 + random.randint(100, 1000000))
             },
             "partnerCode": "72724324",
             "sign": "",
@@ -103,7 +104,7 @@ if __name__ == '__main__':
     # H5("PAY").qr_code_trade()
     # H5("SIGNANDPAY").qr_code_trade()
     #
-    H5("PAY", "wxpay").qr_code_trade()
+    # H5("PAY", "wxpay").qr_code_trade()
     # H5("PAY", "alipay").qr_code_trade()
     #
     # H5("SIGN", "wxpay").qr_code_trade()
@@ -112,5 +113,5 @@ if __name__ == '__main__':
     # H5("SIGNANDPAY", "wxpay").qr_code_trade()
     # H5("SIGNANDPAY", "alipay").qr_code_trade()
     #
-    # H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
+    H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     # H5("SIGNANDPAY", "alipay", True).qr_code_trade()
