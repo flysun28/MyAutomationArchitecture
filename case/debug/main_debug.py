@@ -1,5 +1,4 @@
 # coding=utf-8
-from lib.interface_biz.http.user_account import Account
 env_id = '3'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
@@ -40,6 +39,8 @@ from case.debug.inland.dubbo.voucher import VoucherInland
 from lib.common_biz.biz_db_operate import get_available_voucher, get_renew_product_code
 from lib.interface_biz.http.auto_re_new import AutoRenew
 from lib.common_biz.oppo_cloud import HttpOPPOCloud
+from lib.common_biz.user_account import Account
+from lib.common_biz.ocloud import Ocloud
 
 
 if __name__ == '__main__':
@@ -67,7 +68,7 @@ if __name__ == '__main__':
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
             if flag == 2:
                 # 消费
-                for _ in range(5):
+                for _ in range(random.choice(range(1, 11))):
                     voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI", "0", "0.01", ssoid)
             if flag == 3:
                 # 折扣
@@ -75,7 +76,7 @@ if __name__ == '__main__':
 #                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", ssoid, ratio=0.1, maxCutAmount='1')
             if flag == 4:
                 # 消费折扣
-                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.01, maxCutAmount='10')
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.85, maxCutAmount='10')
             if flag == 5:
                 # 红包券
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1", ssoid)
@@ -97,7 +98,7 @@ if __name__ == '__main__':
         session = HttpJsonSession('https://pre-nativepay.keke.cn')  # 灰度域名
     elif env_id == 'product':
         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
-    refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
+    refund = Refund('2086776969', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928    
     # 根据业务订单号退款
     per_amount = 1
     total_amount = 0
@@ -109,9 +110,9 @@ if __name__ == '__main__':
                 time.sleep(1)
             else:
                 break
-
     # 根据支付订单号退款
     refund.refund_by_pay_req_id('', 0.01)
+
 
     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
@@ -200,18 +201,18 @@ if __name__ == '__main__':
 #     wait(all_tasks, return_when=ALL_COMPLETED)
     
     # 签约并支付，alipay签解约回调
-#     raw_resp = ''
+    raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
     signpay = AutoRenewDebug('2086776969', '2031')
     # 解约
-#     signpay.un_sign('20215430732146297557', '38190d533ee64ce98af9b26e368faf3b', 'alipay')   #支付宝
-#     signpay.un_sign('202106305257005091', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
+#     signpay.un_sign('20215515736993718557', 'f527192f075343da87d8abec98e90cf9', 'alipay')   #支付宝
+#     signpay.un_sign('202107155112340672', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
     # 微信解约回调
 #     raw_xml = ''
 #     signpay.wx_unsign(raw_xml)
     # 自动扣费
-#     signpay.auto_renew_out(agreement_no='2017957262', pay_type='wxpay', third_part_id='0s4ns6EZ8ym0kW_JzUeps')
+#     signpay.auto_renew_out(agreement_no='202107275146977399', pay_type='wxpay', third_part_id='oCg6XtzlFHnk5pMtopm_7-S9SpIs')
 #     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
 #     signpay.auto_renew_out(agreement_no='20215502732852094557', pay_type='alipay', third_part_id='2088202596648570', amount=100)
     # 签约并支付下单接口
@@ -231,3 +232,7 @@ if __name__ == '__main__':
     # 查询验证码
 #     account = Account()
 #     print(account.get_verification_code('14441120298'))
+    
+    # 云服务接口
+    ocloud = Ocloud()
+#     ocloud.update_expire_time()

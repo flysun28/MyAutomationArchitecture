@@ -70,9 +70,9 @@ def session_setup_and_teardown():
        otherwise python interpreter will never be stopped
     '''
     # set_global_env_id(env_id)
-    from lib.interface_biz.http.user_account import Account
+    from lib.common_biz.user_account import Account
     
-    account = Account()
+#     account = Account()
 #     account.login()
     yield
     
