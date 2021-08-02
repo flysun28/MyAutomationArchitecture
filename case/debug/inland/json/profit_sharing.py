@@ -16,13 +16,13 @@ def profit_sharding():
         "appKey": "9809089",
         "nonce": RandomOrder(32).random_string(),
         # 业务线
-        "partnerCode": "2031",
+        "partnerCode": "7272431304",
         # 商户订单号
-        "partnerOrder": "fd32b8fd71c649f08053eb5a9bca07c3",
+        "partnerOrder": "12de50e89eca4ab8be203977e5df4bfa",
         "partnerProfitSharingId": RandomOrder(32).random_string(),
         # 支付订单号
-        "payReqId": "RM202104091813282076075925744132",
-        "receivers": "{\"amount\":\"90\",\"remark\":\"用户分账\"}",
+        "payReqId": "",
+        "receivers": "{\"amount\":\"1\",\"remark\":\"用户分账\"}",
         "sign": "",
         "timestamp": str(int(time.time() * 10 ** 3))
     }
@@ -47,4 +47,4 @@ def query_profit_sharding():
 
 
 if __name__ == '__main__':
-    query_profit_sharding()
+    profit_sharding()
