@@ -18,7 +18,8 @@ class AutoRenew:
     }
     partner_renew_product_code = {
         '2031': '20310001',
-        '72724314': vip_renew_product_code
+        '72724314': vip_renew_product_code,
+        '247628518': '2476285180010'
     }
     
     def __init__(self, ssoid, partner_code='2031', renew_product_code=""):
