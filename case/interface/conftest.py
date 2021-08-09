@@ -3,7 +3,7 @@
 '''
 import time
 import pytest
-from lib.common.utils.env import set_global_env_id
+from lib.common.utils.env import set_global_env_id, get_env_id
 from lib.common.concurrent.threading import monitor
 from lib.interface_biz.http.pay_pass import get_process_token
 
@@ -70,9 +70,9 @@ def session_setup_and_teardown():
        otherwise python interpreter will never be stopped
     '''
     # set_global_env_id(env_id)
-    from lib.interface_biz.http.user_account import Account
+    from lib.common_biz.user_account import Account
     
-    account = Account()
+#     account = Account()
 #     account.login()
     yield
     
@@ -83,4 +83,5 @@ def session_setup_and_teardown():
 
 @pytest.fixture(scope='module', autouse=True)
 def process_token():
-    return get_process_token()
+    if get_env_id().isdigit():
+        return get_process_token()

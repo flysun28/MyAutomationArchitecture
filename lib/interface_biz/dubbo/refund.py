@@ -56,16 +56,16 @@ class Refund:
             self.order_dubbo.refund_approval(item['partner_code'], item['partner_order'], str(item['amount']/100), item['pay_type'], item["pay_req_id"])
             self.refund_single(item['partner_order'], item['partner_code'], str(item['amount']/100), payReqId=item["pay_req_id"])
     
-    def refund_by_partner_order(self, partner_order_id):
+    def refund_by_partner_order(self, partner_order_id, amount=''):
         sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM pay_tradeorder_{}.trade_order_info_{} WHERE '\
               'STATUS="OK" AND refund=0 AND request_time>"2021-01-01 00:00:00" AND partner_order="{}"'.format(
                   *self.db_order_info, partner_order_id) #+ ' AND refund=0 AND amount!="0"'
         results = GlobalVar.MYSQL_IN.select(sql)
-        print(results)
         for res in results:
-            self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], str(res['amount']/100), 
+            refund_amount = str(amount) if amount else str(res['amount']/100)
+            self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], refund_amount, 
                                              res['pay_type'], res["pay_req_id"])
-            self.refund_single(res['partner_order'], res['partner_code'], str(res['amount']/100), payReqId=res["pay_req_id"])
+            self.refund_single(res['partner_order'], res['partner_code'], refund_amount, payReqId=res["pay_req_id"])
 
     def refund_by_amount(self, partner_order_id, amount=''):
         sql = 'SELECT pay_req_id, amount, partner_order, partner_code, pay_type FROM pay_tradeorder_{}.trade_order_info_{} WHERE '\
@@ -73,7 +73,6 @@ class Refund:
                   *self.db_order_info, partner_order_id) #+ ' AND amount!="0"'
                 #((STATUS="OK" AND refund=0) OR (STATUS="REFUNDED" AND refund!=0)) AND 
         results = GlobalVar.MYSQL_IN.select(sql)
-        print(results)
         for res in results:
             refund_amount = str(amount) if amount else str(res['amount']/100)
             self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], refund_amount, res['pay_type'], res["pay_req_id"])
@@ -94,13 +93,13 @@ class Refund:
         results = GlobalVar.MYSQL_IN.select(sql)
         return list(chain(*[res.values() for res in results]))
     
-    def refund_by_pay_req_id(self, pay_req_id):
+    def refund_by_pay_req_id(self, pay_req_id, amount=''):
         for partner_order in self.get_sub_partner_orders(pay_req_id):
             while True:
                 if self.is_on_the_way_refund_existed():
                     time.sleep(0.1)
                 else:
-                    self.refund_by_partner_order(partner_order)
+                    self.refund_by_partner_order(partner_order, amount)
                     break
 
 

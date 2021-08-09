@@ -4,6 +4,7 @@ Created on 2021年3月22日
 '''
 import pytest
 from case.scenario.inland import direct_pay, no_login, only_sign, rs_only_rmb, rs_with_kb_rmb, sign_pay, spend_only_kb, spend_with_kb_vou
+from case.scenario.inland.recharge import recharge
 
 pytestmark = pytest.mark.inland
 
@@ -22,6 +23,10 @@ class TestScenarioInland():
  
     def test_only_sign(self):
         only_sign()
+    
+    @pytest.mark.parametrize('amt,callback_amt', test_data_wo_kb)
+    def test_recharge(self, amt, callback_amt):
+        recharge(amt, callback_amt)
  
     @pytest.mark.parametrize('amt,callback_amt,kb_amt', test_data_with_kb)
     def test_recharge_spend_rmb_and_kb(self, amt, callback_amt, kb_amt):
@@ -29,7 +34,7 @@ class TestScenarioInland():
         默认携带了优惠券 0.01元
         '''
         rs_with_kb_rmb(amt, callback_amt, kb_amt)
-     
+
     @pytest.mark.parametrize('amt,callback_amt', test_data_wo_kb)    
     def test_recharge_spend_only_rmb(self, amt, callback_amt):
         rs_only_rmb(amt, callback_amt)

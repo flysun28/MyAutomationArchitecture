@@ -123,12 +123,22 @@ def rs_with_kb_rmb(amount, notify_amount, kb_amount):
     choose_scarlett(notify_amount, req.pay_channel, order_info['pay_req_id'], partner_id=req.partner_id)
     """
         【3】.调用查询结果接口
-    """
-    assert str(queryResult(order_info['pay_req_id'])) == "2002" or "2001"
+    """    
+    start = time.perf_counter()
+    while time.perf_counter() - start < 5:
+        try:
+            query_res = queryResult(order_info["pay_req_id"])
+            assert query_res == '2002', '%s != 2002' % query_res
+        except Exception as e:
+            exc_value = e
+            time.sleep(0.5)
+        else:
+            break
+    else:
+        raise TimeoutError('查询支付结果超时5s: %s!' %exc_value)
     """
         【4】. 检查可币余额是否正确
     """
-    time.sleep(2)
     balance = query_account(GlobalVar.SSOID)
     assert balance == round(decimal.Decimal(0), 4), (balance, round(decimal.Decimal(0), 4))
     """
