@@ -242,10 +242,10 @@ def simplepay_test_negative(case)-> dict:
 
 
 if __name__ == '__main__':
-#     wxsimplepay = SimplePay("wxpay", "1", '2031', 265)
+    wxsimplepay = SimplePay("wxpay", "1", '2031', 265)
 #     wxsimplepay.recharge_spend_amount_is_price(1)
-    qqsimplepay = SimplePay("qqwallet", "1", '2031', 265, partner_order='d33038d830864f6d903e94ff2d0129ac')
-    print(qqsimplepay.recharge_spend_kb_and_voucher(11, 64234480, 2, 999))
+#     qqsimplepay = SimplePay("qqwallet", "1", '2031', 265, partner_order='d33038d830864f6d903e94ff2d0129ac')
+#     print(qqsimplepay.recharge_spend_kb_and_voucher(11, 64234480, 2, 999))
     
     #SimplePay("wxpay", "10").recharge_spend_kb_and_voucher(1, 10001, 2, 22)
     # SimplePay("wxpay", "10").recharge_spend_kb_buy_place(1)
