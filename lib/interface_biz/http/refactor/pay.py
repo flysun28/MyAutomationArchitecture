@@ -69,11 +69,16 @@ class Pay():
                 'creditCount': 0,           # number
                 'creditDeductAmount': 0     # number  积分抵扣金额
             },
-#             # 加购商品
-#             'combineOrder': {
-#                 'buyPlaceId': '',   # 加购位ID
-#                 'amount': 0         # number  加购商品金额
-#             },
+            # 加购商品
+            'combineOrder': {
+                'buyPlaceId': '',   # string，加购位ID，非必须
+                'amount': 0,         # number  加购商品金额，非必须
+                'renewProductCode': '', # string，非必须
+                'signNotifyUrl': '',    # string，非必须
+                'transType': '',    # string，支付类型，非必须
+                'desc': '',         # string，商品名称，非必须
+                'subject': ''       # string，商品描述，非必须
+            },
 #             # 充值卡信息 
 #             'rechargeCard': {
 #                 'cardNo': '',
@@ -81,8 +86,11 @@ class Pay():
 #                 'cardAmount': 0
 #             }
         }
+        
+    def combine_pay(self, amount, buy_place_id=''):
+        
 
-    def direct_pay(self, orig_amount, pay_type):
+    def direct_pay(self, orig_amount, pay_type, partner_order=''):
         '''
         直扣，当前渠道仅支持微信、支付宝
         :param orig_amount: 单位分
@@ -91,7 +99,7 @@ class Pay():
         req = deepcopy(self.req)
         req['goodsType'] = 'COMMON'
         req['payType'] = pay_type
-        req['partnerOrder'] = RandomOrder(32).random_string() if req['goodsType'] == 'COMMON' else ''
+        req['partnerOrder'] = partner_order or (RandomOrder(32).random_string() if req['goodsType'] == 'COMMON' else '')
         req['currencySystem'] = random.choice(['CASH', 'COCOIN_ALLOWED'])
         req['amount'] = req['price'] = orig_amount
 #         req['productDesc'] += '直扣-'+pay_type
@@ -176,8 +184,8 @@ class Pay():
         del req
         return result
 
-    def channel_kb_voucher_pay(self, orig_amount, pay_type, vou_key, vou_deduct_amount=None, kb_spent=None):
-        req = self._create_req_with_channel_common(orig_amount, pay_type)
+    def channel_kb_voucher_pay(self, orig_amount, pay_type, vou_key, vou_deduct_amount=None, kb_spent=None, partner_order=''):
+        req = self._create_req_with_channel_common(orig_amount, pay_type, partner_order)
         vou_deduct_amount = self._make_voucher_args(req, orig_amount, vou_key, vou_deduct_amount)
         if kb_spent is None:
             kb_spent = int(self.nearme.query_balance() * 100)
@@ -221,7 +229,7 @@ class Pay():
         req['amount'] = req['price'] = orig_amount
         return req
     
-    def _create_req_with_channel_common(self, orig_amount, pay_type, is_recharge=False, **neg_kw):
+    def _create_req_with_channel_common(self, orig_amount, pay_type, partner_order='', is_recharge=False, **neg_kw):
         req = deepcopy(self.req)
         if is_recharge:
             req['goodsType'] = 'COCOIN'
@@ -230,7 +238,7 @@ class Pay():
             req['goodsType'] = 'COMMON'
             req['currencySystem'] = 'COCOIN_ALLOWED'
         req['payType'] = pay_type
-        req['partnerOrder'] = RandomOrder(32).random_string() if req['goodsType'] == 'COMMON' else ''
+        req['partnerOrder'] = partner_order or RandomOrder(32).random_string() if req['goodsType'] == 'COMMON' else ''
         req['amount'] = req['price'] = orig_amount
         req.update(neg_kw)
         return req

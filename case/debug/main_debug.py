@@ -48,7 +48,7 @@ if __name__ == '__main__':
     flag_coin = "0"
     if flag_coin == "1":
         # 发
-        Nearme().nearme_add_subtract("0.02", "2086776969", 0)
+        Nearme().nearme_add_subtract("1", "2086776969", 0)
         Nearme().query_balance('2086776969')
     if flag_coin == "2":
         # 扣
@@ -58,11 +58,11 @@ if __name__ == '__main__':
 #     ssoid = '2076074648'    #黄小静
 #     ssoid = '2076079836'    #陈华平
 #     ssoid = '2086631885'    #彭哲
-    partner_id = '2031'     #主题9809089
+    partner_id = '5456925'     #主题9809089
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(1, 1):
+        for flag in range(1, 6):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
@@ -79,12 +79,12 @@ if __name__ == '__main__':
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.85, maxCutAmount='10')
             if flag == 5:
                 # 红包券
-                voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1", ssoid)
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1.23", ssoid)
             if flag == 6:
                 # 海外满减
-                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DIKOU", "10000", "7500", "2076074648", "ID", "IDR")
-                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DAZHE", "10000", "0", "2076074648", "ID", "IDR", ratio=0.1, maxCutAmount='10000')
-                Voucher("oversea").grant_check_voucher('5456925', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", '2076074648', "ID", "IDR", ratio=0.2, maxCutAmount='10000')
+                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DIKOU", "10000", "7500", ssoid, "ID", "IDR")
+                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.1, maxCutAmount='10000')
+                Voucher("oversea").grant_check_voucher('5456925', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.2, maxCutAmount='10000')
     # 通过批次号审核券
 #     VoucherInland().checkVoucher('a39a8a029ebc4055bdc9a489d9a765d5')
 
@@ -112,12 +112,13 @@ if __name__ == '__main__':
                 break
     # 根据支付订单号退款
     refund.refund_by_pay_req_id('', 0.01)
-
+    
 
     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
-#     refund.refund_by_pay_req_id('', 0.01)
+#     refund.refund_by_pay_req_id('', 0.67)
 #     refund.refund_by_amount('', amount=0.01)
+#     refund.refund_by_partner_order('')
 
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
@@ -205,16 +206,17 @@ if __name__ == '__main__':
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
     signpay = AutoRenewDebug('2086776969', '2031')
+#     signpay = AutoRenewDebug('2086776969', '247628518', '2476285180012')
     # 解约
-#     signpay.un_sign('20215515736993718557', 'f527192f075343da87d8abec98e90cf9', 'alipay')   #支付宝
-#     signpay.un_sign('202107155112340672', 'e2d6def7c312433088ef46539715d14b', 'wxpay')   #微信
+#     signpay.un_sign('20215602741666675557', 'OCLOUD-SIGN1627912834197K2086776969K24410K0', 'alipay')   #支付宝
+#     signpay.un_sign('202108025035790734', '6ddfdd9cbf1445f68835cad8d52a59aa', 'wxpay')   #微信
     # 微信解约回调
-#     raw_xml = ''
+    raw_xml = ''
 #     signpay.wx_unsign(raw_xml)
     # 自动扣费
-#     signpay.auto_renew_out(agreement_no='202107275146977399', pay_type='wxpay', third_part_id='oCg6XtzlFHnk5pMtopm_7-S9SpIs')
+#     signpay.auto_renew_out(agreement_no='202108025035790734', pay_type='wxpay', third_part_id='oCg6Xt7eyxUA67wAAKdXgC3l3WG0')
 #     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
-#     signpay.auto_renew_out(agreement_no='20215502732852094557', pay_type='alipay', third_part_id='2088202596648570', amount=100)
+
     # 签约并支付下单接口
 #     signpay = AutoRenew('wxpay', '2031', '280', '280')
 #     signpay.auto_renew(1)
@@ -231,7 +233,7 @@ if __name__ == '__main__':
 
     # 查询验证码
 #     account = Account()
-#     print(account.get_verification_code('14441120298'))
+#     print(account.get_verification_code('14213467928', 'http://auto.uc.oppoer.me'))
     
     # 云服务接口
     ocloud = Ocloud()

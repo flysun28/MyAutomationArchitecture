@@ -29,6 +29,7 @@ def http_encjson_request(case, case_sheet, url, session=HTTPENCJSON_IN, process_
 def get_check_http_json_result_positive(case, result):
     assert case.response.status_code == case.status_code
     flatten_result = flatten_nested_dict(result)
+    print('flatten_result:', flatten_result)
     dictionary_should_contain_sub_dictionary(flatten_result, case.expected)
     case.is_passed = 'passed'
 

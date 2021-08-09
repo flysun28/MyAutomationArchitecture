@@ -30,6 +30,10 @@ class Account(metaclass=WithLogger):
         self.logger.info('账户信息: %s', self.account_args)
         self.user_account_key = Config(key_configfile_path).as_dict('user_account_key')
         self._ssoids = []
+        if GlobalVar.env_id in ('grey', 'product'):
+            self.prefix = 'http://auto.uc.oppoer.me'
+        elif GlobalVar.env_id.isdigit():
+            self.prefix = 'http://ucadmin.ucnewtest.wanyol.com'
 
     def login(self):
         """
@@ -55,13 +59,13 @@ class Account(metaclass=WithLogger):
             assert jsonresp['token'], 'token is %s' %jsonresp['token']
             return jsonresp['token']
     
-    def get_verification_code(self, phone_number):
+    def get_verification_code(self, phone_number, prefix=None):
         """
         获取验证码
         :param phone_number:
         :return:
         """
-        url = 'http://ucadmin.ucnewtest.wanyol.com/api/admin/account/autotest/query-latest-code'
+        url = (prefix or self.prefix) + '/api/admin/account/autotest/query-latest-code'
         body = {"destination": phone_number}
         body = json.dumps(body)
         self.logger.info(url)

@@ -4,19 +4,22 @@ Created on 2021年5月31日
 '''
 
 from lib.interface_biz.http.refactor.pay import Pay
+from lib.interface_biz.scarlett.wxpay import wx_normal_pay_scarlet
+from lib.interface_biz.scarlett.alipay import ali_normal_pay_scarlet
 
 
 if __name__ == '__main__':
     pay = Pay()
-    flag = 3
+    flag = 7
     if flag == 1:
         # 直扣
-#         pay.direct_pay(1, 'wxpay')
+        pay.direct_pay(1, 'wxpay', '6f56507328e84b38a392e2b199f69a6b')
+#         wx_normal_pay_scarlet('1559247341', 'KB20210804165505208677696975525t', 'wx93eea96ecc33f168', 0.01, 'Aeg1v83hmuA7urPJFwbjFUHFH7EPJaGb')
 #         pay.direct_pay(999999999, 'alipay')
 #         pay.direct_pay(9999999999999999999999999999, 'alipay')  #解密请求失败
 #         pay.direct_pay(1.2, 'wxpay')    #验签失败，amount被转成了1
 #         pay.direct_pay(0, 'wxpay')    #商品原价要大于0
-        pay.direct_pay_with_kb_negative(10, 'wxpay', '消费')  #直冲不能有优惠券和可币金额
+#         pay.direct_pay_with_kb_negative(10, 'wxpay', '消费')  #直冲不能有优惠券和可币金额
 #         pay.direct_pay_with_kb_negative(101, 'alipay', vou_key='抵扣', kb_spent=1)    #直冲不能有优惠券和可币金额
     if flag == 2:
         # 纯可币
@@ -34,23 +37,23 @@ if __name__ == '__main__':
         pay.channel_kb_pay(10, 'wxpay')
     if flag == 6:
         # 可币券+渠道
-        pay.channel_voucher_pay(10, 'wxpay', '消费')
+#         pay.channel_voucher_pay(10, 'wxpay', '消费')
 #         pay.channel_voucher_pay(101, 'alipay', '抵扣')
 #         pay.channel_voucher_pay(10, 'alipay', '抵扣')  #券未达到条件金额
 #         pay.channel_voucher_pay(101, 'wxpay', '折扣')
-#         pay.channel_voucher_pay(100, 'alipay', '消费折扣')
+        pay.channel_voucher_pay(100, 'alipay', '消费折扣')
 #         pay.channel_voucher_pay(1001, 'wxpay', '红包')
 #         pay.channel_voucher_pay(10, 'alipay', '红包')    #券未达到条件金额
     if flag == 7:
         # 可币+可币券+渠道
 #         pay.channel_kb_voucher_pay(10, 'wxpay', '消费')
-        pay.channel_kb_voucher_pay(10, 'wxpay', '消费')
-#         pay.channel_kb_voucher_pay(101, 'alipay', '抵扣', kb_spent=1)
+#         pay.channel_kb_voucher_pay(10, 'wxpay', '消费')
+#         pay.channel_kb_voucher_pay(100, 'alipay', '抵扣', kb_spent=1)
 #         pay.channel_kb_voucher_pay(10, 'alipay', '抵扣', kb_spent=1)  #支付金额不能为负数（正向下单不核销券）
 #         result = pay.channel_kb_voucher_pay(101, 'wxpay', '折扣', kb_spent=1)
 #         result = pay.channel_kb_voucher_pay(90, 'wxpay', vou_key=100935200, kb_spent=1) #正向下单不核销券
 #         choose_scarlett(1, 'wxpay', result['data']['payRequestId'], partner_id=pay.partner_id)  #微信回调，期望支付中心核销券失败，走自动退款流程
-#         pay.channel_kb_voucher_pay(1000, 'alipay', '消费折扣')
+        pay.channel_kb_voucher_pay(100, 'wxpay', '消费折扣', partner_order='GC202108041718117970700530000')        
 #         result = pay.channel_kb_voucher_pay(2000, 'wxpay', '红包', kb_spent=0)
 #         choose_scarlett(996, 'wxpay', result['data']['payRequestId'], partner_id=pay.partner_id)
     if flag == 8:
@@ -62,6 +65,7 @@ if __name__ == '__main__':
         pay.recharge_with_kb_negative(1, 'wxpay', kb_spent=1)
     if flag == 9:
         # 银行卡支付
+        pass
         
 
 

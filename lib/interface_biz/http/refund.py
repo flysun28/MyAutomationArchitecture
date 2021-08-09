@@ -82,6 +82,8 @@ class Refund():
         return ret
     
     def refund_by_pay_req_id(self, pay_req_id, amount):
+        if not pay_req_id:
+            return
         for partner_order, partner_code in self.get_sub_partner_orders(pay_req_id):
             while True:
                 if self.is_on_the_way_refund_existed():

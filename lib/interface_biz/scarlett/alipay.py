@@ -21,6 +21,9 @@ logger = Logger('alipay-scarlet').get_logger()
 
 
 def ali_normal_pay_scarlet(out_trade_no, price, total_fee, seller_id, trade_status="TRADE_SUCCESS"):
+    '''
+    支付宝回调验签失败，没有真实的私钥
+    '''
     """
         "seller_email": "kekezhifu@keke.cn"
         "notify_id": "2021011400222173411016601413333125"
@@ -156,6 +159,7 @@ def ali_pay_refund(amount, pay_req_id):
 
 
 if __name__ == '__main__':
-    ali_sign_scarlet()
+#     ali_sign_scarlet()
+    ali_normal_pay_scarlet('')
     #ali_normal_pay_scarlet("kekezhifu@keke.cn", "RM202102091449342076075925647732", "0.01", "0.01", "2088311951685799")
 #     ali_pay_refund(0.01, "RM202103031056412076075925884122")

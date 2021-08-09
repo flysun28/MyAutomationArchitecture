@@ -32,7 +32,8 @@ class Refund:
         """
         data = {
             'partnerOrderId': partnerOrderId,
-            'notifyUrl': 'www.baidu.com',
+            'notifyUrl': 'http://www.baidu.com',
+            'notifyUrl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
             'partnerCode': partnerCode,
             # APPROVE_PROCESS
             'refundType': 'APPROVE_PROCESS',
