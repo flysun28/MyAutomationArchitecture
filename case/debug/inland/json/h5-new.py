@@ -24,13 +24,17 @@ class H5:
             "serviceType": self.serviceType,
             "payType": self.payType,
             "userInfo": {
-                # "ssoid": str(2100000000 + random.randint(100, 1000000))
-                "thirdPartId": str(2100000000 + random.randint(100, 1000000))
+                "ssoid": str(2100000000 + random.randint(100, 1000000))
+                # "ssoid":"1234567890"
+                # "thirdPartId": "2086788561"
             },
+            # 云服务：
+            # "partnerCode": "247628518",
             "partnerCode": "72724324",
             "sign": "",
             "attach": "attachtest",
-            "returnUrl": "https://i-insurance-test.wanyol.com/insurance/product/details/resultCommon/?orderNo=" + order,
+                # "returnUrl": "https://baidu.com",
+            "returnUrl": "https://i-insurance-test3.wanyol.com/insurance/product/details/resultCommon/?orderNo=20210806095006055050179000079180",
             "payInfo": {
                 "country": "CN",
                 "amount": 1,
@@ -51,6 +55,9 @@ class H5:
                 "currency": "CNY",
                 "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
                 "renewProductCode": "727243240001"
+                # 云服务
+                # "renewProductCode": "2476285180033"
+
             }
             if self.isSub:
                 case_dict['contractInfo'] = {
@@ -100,18 +107,24 @@ class H5:
 
 
 if __name__ == '__main__':
-
+    # PAY SIGN SIGNANDPAY
     # H5("PAY").qr_code_trade()
+    # H5("SIGN").qr_code_trade()
     # H5("SIGNANDPAY").qr_code_trade()
+<<<<<<< HEAD
+
+    # # 制定支付方式
+=======
     #
     # H5("PAY", "wxpay").qr_code_trade()
     # H5("PAY", "alipay").qr_code_trade()
-    #
+
     # H5("SIGN", "wxpay").qr_code_trade()
     # H5("SIGN", "alipay").qr_code_trade()
-    #
+
     # H5("SIGNANDPAY", "wxpay").qr_code_trade()
-    # H5("SIGNANDPAY", "alipay").qr_code_trade()
-    #
+    H5("SIGNANDPAY", "alipay").qr_code_trade()
+
+    # H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     # H5("SIGNANDPAY", "alipay", True).qr_code_trade()
