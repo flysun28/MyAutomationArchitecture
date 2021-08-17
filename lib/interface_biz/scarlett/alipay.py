@@ -156,6 +156,8 @@ def ali_pay_refund(amount, pay_req_id):
 
 
 if __name__ == '__main__':
-    ali_sign_scarlet()
+    # ali_sign_scarlet()
+
+    ali_sign_scarlet_by_raw_resp("{charset=UTF-8, notify_time=2021-08-07 15:08:11, alipay_user_id=2088112811111403, sign=eNIekOabUlLoislnJHxn3mmUv/VGyxhWZRDv9HXl+3vhCx3njahn0aOUOdY8ZBKu7IW+nkubznC98sqj2Zg8N42WuMLHiq/rO3kim6erCRKmGXNc6CmjsOMD1zPfZMHa7AWMdXp7nizbbCPpKIEMLbHxn4unWsmvmxgmlkywpGvDE0Yi7QMuuygT8fARHvw9AJCObe8DY3SSaVVOQBsoRJUyAqB9HRTcYLdGS1/L7lEzSJCbhVxIrMgQ14xApCCgmaJNBHR6yGIQWs0FXWgBnekbNgjH33GKA2RipMdCHakAotSI/FD+dfWM1oFLqnklcfgQkvCZNmN8xoNR87xG3A==, external_agreement_no=SN202108071507493132734376823351, version=1.0, sign_time=2021-08-07 15:08:11, notify_id=2021080700222150811023361457182243, notify_type=dut_user_sign, agreement_no=20215607750930630440, auth_app_id=2021001186651417, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-08-07 15:08:11, app_id=2021001186651417, sign_type=RSA2, alipay_logon_id=156******06, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}")
     #ali_normal_pay_scarlet("kekezhifu@keke.cn", "RM202102091449342076075925647732", "0.01", "0.01", "2088311951685799")
 #     ali_pay_refund(0.01, "RM202103031056412076075925884122")

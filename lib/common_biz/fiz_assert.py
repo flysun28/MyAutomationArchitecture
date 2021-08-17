@@ -123,16 +123,22 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
             retry -= 1
             try:
                 sql_notify = str(Config(common_sql_path).read_config("notify", "notify_info")).format(request_id)        
-                notify_info = self.mysql.select_one(sql_notify)
-                self.logger.info("通知表信息详情：{}".format(notify_info))
-                self.assertIsNotNone(notify_info)
-                self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
-                if notify_info['notify_response'] == "OK":
-                    self.assertEqual(notify_info['notify_count'], 1)
-                    if pay_type == "pay":
-                        notify_price = int(eval(eval(notify_info['notity_detail'])['reqContent'])['price'])
-                        self.logger.info("通知金额：{}".format(notify_price))
-                        self.assertEqual(notify_price, price)
+                notify_list_info = self.mysql.select(sql_notify)
+                self.logger.info("通知表信息详情：{}".format(notify_list_info))
+                self.assertIsNotNone(notify_list_info)
+                for notify_info in notify_list_info:
+                    self.assertIn(notify_info['notify_response'], "OK", "ABANDON")
+                    if notify_info['notify_response'] == "OK":
+                        self.assertEqual(notify_info['notify_count'], 1)
+                        if pay_type == "pay":
+                            if 'price' in (eval(notify_info['notity_detail'])['reqContent']):
+                                notify_price = int(eval(eval(notify_info['notity_detail'])['reqContent'])['price'])
+                                self.logger.info("通知金额：{}".format(notify_price))
+                                self.assertEqual(notify_price, price)
+                            if 'amount' in (eval(notify_info['notity_detail'])['reqContent']):
+                                notify_price = int(eval(eval(notify_info['notity_detail'])['reqContent'])['amount'])
+                                self.logger.info("成长值通知金额：{}".format(notify_price))
+                                self.assertEqual(notify_price, price)
                 self.logger.info("通知成功")
                 break
             except AssertionError as e:

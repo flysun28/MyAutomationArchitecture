@@ -30,7 +30,7 @@ class AutoRenew:
             self.renew_product_code = '20310001'
         self.renew_product_code = self.renew_product_code
 
-    def auto_renew_out(self, agreement_no, pay_type, third_part_id, amount=0.01):
+    def auto_renew_out(self, agreement_no, pay_type, third_part_id, amount=0.01, subUserId=""):
         """
         向渠道发起扣费接口
         :return:
@@ -56,7 +56,7 @@ class AutoRenew:
             'model': '',
             'ip': '',
             'ext': '',
-            'subUserId': '',
+            'subUserId': subUserId,
             # 签名未校验
             'sign': ''
         }
@@ -84,7 +84,7 @@ class AutoRenew:
         }
         GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/querysign", data=case_dict)
 
-    def un_sign(self, agreement_no, partner_order, pay_type):
+    def un_sign(self, agreement_no, pay_type, subUserId):
         """
         解约。不适合微信，需手动，因测试环境的解约回调都去了生产。支付宝仅可在第一套环境，回调地址在支付宝配置死了。
         支付宝:调用接口解约，支付宝会回调到对应的地址。手动解约，是写死在支付宝侧的
@@ -97,12 +97,12 @@ class AutoRenew:
             'ssoid': self.ssoid,
             'renewProductCode': self.renew_product_code,
             'partnerCode': self.partner_code,
-            'partnerOrder': partner_order,
+            'partnerOrder': RandomOrder(32).random_string(),
             'payType': pay_type,
             'currencyName': 'CNY',
             'country': 'CN',
             'apppackage': '',
-#             'subUserId': '00001',    # 仅保险
+            'subUserId': subUserId,    # 仅保险
             'sign': ''
         }
         temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
@@ -245,4 +245,3 @@ if __name__ == '__main__':
         AutoRenew().wxpayavoidpay()
     if flag == "5":
         AutoRenew().alipayavoidpay()
-
