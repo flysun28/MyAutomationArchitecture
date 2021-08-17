@@ -41,7 +41,7 @@ class GlobalVar():
     if env_id == '2':
         MYSQL_OUT = REDIS_IN = REDIS_OUT = None
     else:
-        # MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
+        MYSQL_OUT = GlobalVarDescriptor(connect_mysql('oversea'))
         REDIS_IN = GlobalVarDescriptor(connect_redis())
         REDIS_OUT = GlobalVarDescriptor(connect_redis('oversea'))
     SDK_VER_IN = Config(do_case_path).read_config("sdk_ver", "version")
