@@ -8,6 +8,7 @@ import time
 import requests
 from lib.common.logger.logging import Logger
 from lib.common.utils.env import get_env_config, set_global_env_id
+from lib.common.utils.globals import HTTPJSON_SCARLET
 from lib.common_biz.biz_db_operate import get_notify_id_by_request_id
 from lib.common_biz.order_random import RandomOrder
 from lib.interface_biz.scarlett.json_to_xml import wx_normal_pay_to_xml, wx_sign_to_xml, wx_mock_refund_to_xml
@@ -206,6 +207,13 @@ def wx_refund_mock_scarlett(pay_req_id, refund_fee, total_fee, cash_fee, cash_re
         return wx_mock_refund_to_xml(wx_refund_info, "3007b2945cab4fd994341dc6edb65f33")
 
 
+def wx_un_sign(params):
+    result = HTTPJSON_SCARLET.post('/opaycenter/wxpaysignnotify', data=params)
+    if "SUCCESS" in str(result):
+        logger.info("回调解析成功")
+
+
+
 class WxPayScarlett():
     
     def __init__(self, partner_code):
@@ -257,9 +265,10 @@ class WxPayScarlett():
         
 
 if __name__ == '__main__':
-    set_global_env_id(1)
+    # set_global_env_id(1)
     #wx_refund_mock_scarlett("", "1", "1", "1", "1")
 #     wx_normal_pay_scarlet("1259634601", "RM20210303222400207607592553078t", "wx93eea96ecc33f168", "1", "g4rTCeoBJFG4KyWCjTQCqltfEDma3yxR")
-    wx_scarlett = WxPayScarlett('5456925')
-    wx_scarlett.normal_pay_scarlett("KB202103111519232086100900845042", "3")
-    
+#     wx_scarlett = WxPayScarlett('5456925')
+#     wx_scarlett.normal_pay_scarlett("KB202103111519232086100900845042", "3")
+    wx_xml = "{charset=UTF-8, notify_time=2021-08-07 15:08:11, alipay_user_id=2088112811111403, sign=eNIekOabUlLoislnJHxn3mmUv/VGyxhWZRDv9HXl+3vhCx3njahn0aOUOdY8ZBKu7IW+nkubznC98sqj2Zg8N42WuMLHiq/rO3kim6erCRKmGXNc6CmjsOMD1zPfZMHa7AWMdXp7nizbbCPpKIEMLbHxn4unWsmvmxgmlkywpGvDE0Yi7QMuuygT8fARHvw9AJCObe8DY3SSaVVOQBsoRJUyAqB9HRTcYLdGS1/L7lEzSJCbhVxIrMgQ14xApCCgmaJNBHR6yGIQWs0FXWgBnekbNgjH33GKA2RipMdCHakAotSI/FD+dfWM1oFLqnklcfgQkvCZNmN8xoNR87xG3A==, external_agreement_no=SN202108071507493132734376823351, version=1.0, sign_time=2021-08-07 15:08:11, notify_id=2021080700222150811023361457182243, notify_type=dut_user_sign, agreement_no=20215607750930630440, auth_app_id=2021001186651417, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-08-07 15:08:11, app_id=2021001186651417, sign_type=RSA2, alipay_logon_id=156******06, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}"
+    wx_un_sign(wx_xml)

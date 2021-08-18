@@ -161,5 +161,6 @@ def ali_pay_refund(amount, pay_req_id):
 if __name__ == '__main__':
 #     ali_sign_scarlet()
     ali_normal_pay_scarlet('')
+    ali_sign_scarlet_by_raw_resp("")
     #ali_normal_pay_scarlet("kekezhifu@keke.cn", "RM202102091449342076075925647732", "0.01", "0.01", "2088311951685799")
 #     ali_pay_refund(0.01, "RM202103031056412076075925884122")
