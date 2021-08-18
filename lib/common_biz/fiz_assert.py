@@ -136,10 +136,11 @@ class FizAssert(unittest.TestCase, metaclass=WithLogger):
                 self.logger.info("通知成功")
                 break
             except AssertionError as e:
+                exception = e
                 self.logger.error("通知异常: %s，尝试重试10次，还剩%d次", e, retry)                
                 time.sleep(0.5)
         else:
-            raise e
+            raise exception
 
     def assert_auto_renew_sign_info(self, ssoid, pay_type, partner_code="2031", renew_product_code="20310001"):
         """

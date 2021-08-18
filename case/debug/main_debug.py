@@ -62,7 +62,7 @@ if __name__ == '__main__':
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(1, 6):
+        for flag in range(5, 6):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
@@ -76,15 +76,18 @@ if __name__ == '__main__':
 #                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DAZHE", "1", "0", ssoid, ratio=0.1, maxCutAmount='1')
             if flag == 4:
                 # 消费折扣
-                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.85, maxCutAmount='10')
+                voucher.grant_check_voucher(partner_id, "KB_COUPON", "XIAOFEI_DAZHE", "1", "0", ssoid, ratio=0.01, maxCutAmount='10')
             if flag == 5:
                 # 红包券
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "RED_PACKET_COUPON", "0", "1.23", ssoid)
             if flag == 6:
                 # 海外满减
-                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DIKOU", "10000", "7500", ssoid, "ID", "IDR")
-                Voucher("oversea").grant_check_voucher("5456925", "KB_COUPON", "DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.1, maxCutAmount='10000')
-                Voucher("oversea").grant_check_voucher('5456925', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.2, maxCutAmount='10000')
+                Voucher("oversea").grant_check_voucher("9809089", "KB_COUPON", "DIKOU", "10000", "7500", ssoid, "ID", "IDR")
+#                 Voucher("oversea").grant_check_voucher("9809089", "KB_COUPON", "DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.1, maxCutAmount='10000')
+#                 Voucher("oversea").grant_check_voucher('9809089', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.2, maxCutAmount='10000')
+#                 Voucher("oversea").grant_check_voucher("980908902", "KB_COUPON", "DIKOU", "10000", "7500", ssoid, "ID", "IDR")
+#                 Voucher("oversea").grant_check_voucher("980908902", "KB_COUPON", "DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.1, maxCutAmount='10000')
+#                 Voucher("oversea").grant_check_voucher('980908902', "KB_COUPON", "XIAOFEI_DAZHE", "10000", "0", ssoid, "ID", "IDR", ratio=0.2, maxCutAmount='10000')
     # 通过批次号审核券
 #     VoucherInland().checkVoucher('a39a8a029ebc4055bdc9a489d9a765d5')
 
@@ -111,15 +114,16 @@ if __name__ == '__main__':
             else:
                 break
     # 根据支付订单号退款
-    refund.refund_by_pay_req_id('', 0.01)
-    
+#     refund.refund_by_pay_req_id('', 0.01)
 
     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
-#     refund.refund_by_pay_req_id('', 0.67)
+#     refund.refund_by_pay_req_id('', 0.01)
 #     refund.refund_by_amount('', amount=0.01)
 #     refund.refund_by_partner_order('')
-
+#     refund.refund_by_ssoid()
+#     refund.refund_by_partner_code_in_timerange('72724324', start_time='2021-07-01 00:00:00')
+    
 #     # pb2json
 #     base64_iv = 'V2NNQ2J2NUdGenV3TGFyNw=='
 #     bytes_iv = base64.b64decode(base64_iv)

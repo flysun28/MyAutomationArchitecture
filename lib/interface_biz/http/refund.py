@@ -25,6 +25,12 @@ class Refund():
         '2031': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCMVhIN5xQPRdmo1fmm0HBOlRk2XnJsuKgOBi6b1IFAUWtROpm6lRnw45M83a/XiHEZv5FOp+rssGlgwcWeLuexI6kCF5hFT6gsEYy9XRfpSBOUA2UwcajPRsMoEKRmEIm+NpmwnGAeeZK2Y7Xwr3imHdLJ86VgJ5zMedqd4IfXWQIDAQAB',
         '72724314': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB'
     }
+    partner_notify_url = {
+        '2031': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
+        '72724314': 'http://cn-vip-open.uc.oppo.local/api/pay/purchase-refund-result-notify',
+        '5456925': 'http://cnzx-game-test.wanyol.com/sdklocal/pay/refund',
+        '9809089': 'http://dgzx-theme-test.wanyol.com/themepay/order/refund'
+    }
 
     def __init__(self, ssoid, http_session=GlobalVar.HTTPJSON_IN):
         self.ssoid = ssoid
@@ -40,8 +46,7 @@ class Refund():
         req_kwargs = {'partnerOrder': partner_order,
                       'partnerCode': partner_code,
                       'sign': '',
-                      'notifyUrl': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
-#                     'notifyUrl': 'http://cn-vip-open.uc.oppo.local/api/pay/purchase-refund-result-notify',    # 通知会员地址
+                      'notifyUrl': self.partner_notify_url.get(partner_code, 'http://pay.pay-test.wanyol.com/notify/notify/receiver'),
                       'payReqId': pay_req_id,
                       'refundAmount': amount,
                       'clientIp': ''}

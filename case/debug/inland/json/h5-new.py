@@ -111,11 +111,8 @@ if __name__ == '__main__':
     # H5("PAY").qr_code_trade()
     # H5("SIGN").qr_code_trade()
     # H5("SIGNANDPAY").qr_code_trade()
-<<<<<<< HEAD
 
     # # 制定支付方式
-=======
-    #
     # H5("PAY", "wxpay").qr_code_trade()
     # H5("PAY", "alipay").qr_code_trade()
 
@@ -126,5 +123,5 @@ if __name__ == '__main__':
     H5("SIGNANDPAY", "alipay").qr_code_trade()
 
     # H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
-    H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     # H5("SIGNANDPAY", "alipay", True).qr_code_trade()
+    

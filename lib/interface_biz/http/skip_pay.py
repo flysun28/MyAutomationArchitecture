@@ -63,4 +63,4 @@ def skip_pay(payType, payAmount, partnerId, app_version, notifyUrl):
 
 if __name__ == '__main__':
     pass
-    #skip_pay("wxpay", 1)
+    skip_pay("wxpay", 1, '2031', '300', GlobalVar.URL_PAY_IN+"/notify/receiver")
