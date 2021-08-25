@@ -1,5 +1,5 @@
 # coding=utf-8
-env_id = '3'
+env_id = '1'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -19,7 +19,7 @@ from lib.common_biz.find_database_table import SeparateDbTable
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
-from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET
+from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET, redis
 from lib.interface_biz.http.refund import Refund
 from lib.interface_biz.dubbo.refund import Refund as GrantRefund
 from lib.common.algorithm.aes import AES4J
@@ -44,6 +44,8 @@ from lib.common_biz.ocloud import Ocloud
 
 
 if __name__ == '__main__':
+    # Redis操作
+#     print(redis.get('pay_biz_paycenter:credit_day_limit:20210824:2086776969'))
 #     Nearme().query_balance('2086776969')    #pay_cocoin_3.pay_user_info_158
     flag_coin = "0"
     if flag_coin == "1":
@@ -62,7 +64,7 @@ if __name__ == '__main__':
     ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
-        for flag in range(5, 6):
+        for flag in range(1, 1):
             if flag == 1:
                 # 满减(抵扣)
                 voucher.grant_check_voucher(partner_id, "KB_COUPON", "DIKOU", "1", "0.99", ssoid)
@@ -114,7 +116,7 @@ if __name__ == '__main__':
             else:
                 break
     # 根据支付订单号退款
-#     refund.refund_by_pay_req_id('', 0.01)
+    refund.refund_by_pay_req_id('', 0.01)
 
     # 审批退款：order审批，dispatcher退款
 #     refund = GrantRefund("2086776969")
@@ -209,16 +211,17 @@ if __name__ == '__main__':
     raw_resp = ''
 #     ali_sign_scarlet_by_raw_resp(raw_resp)
 
-    signpay = AutoRenewDebug('2086776969', '2031')
-#     signpay = AutoRenewDebug('2086776969', '247628518', '2476285180012')
+#     signpay = AutoRenewDebug('2086776969', '247628518')
+#     signpay = AutoRenewDebug('2000060346', '247628518', '2476285180012')
     # 解约
 #     signpay.un_sign('20215602741666675557', 'OCLOUD-SIGN1627912834197K2086776969K24410K0', 'alipay')   #支付宝
 #     signpay.un_sign('202108025035790734', '6ddfdd9cbf1445f68835cad8d52a59aa', 'wxpay')   #微信
     # 微信解约回调
     raw_xml = ''
 #     signpay.wx_unsign(raw_xml)
+    
     # 自动扣费
-#     signpay.auto_renew_out(agreement_no='202108025035790734', pay_type='wxpay', third_part_id='oCg6Xt7eyxUA67wAAKdXgC3l3WG0')
+#     signpay.auto_renew_out(agreement_no='202108205923224378', pay_type='wxpay', third_part_id='oCg6Xt-0s4ns6EZ8ym0kW_JzUeps')
 #     signpay.auto_renew_out(agreement_no='20215426731000052557', pay_type='alipay', third_part_id='2088202596648570', amount=0.01)
 
     # 签约并支付下单接口
@@ -242,3 +245,4 @@ if __name__ == '__main__':
     # 云服务接口
     ocloud = Ocloud()
 #     ocloud.update_expire_time()
+    
