@@ -148,12 +148,15 @@ def get_letter_seqno(letter):
 
 def flatten_nested_dict(dictionary:dict):
     '''
-    将嵌套字典的values更新到最外层
+    将嵌套字典或列表的values更新到最外层
     '''
     res = {}
     for k, v in dictionary.items():
         if isinstance(v, dict):
             res.update(flatten_nested_dict(v))
+        elif isinstance(v, list):
+            for vv in v:
+                res.update(flatten_nested_dict(vv))
         else:
             res[k] = v
     return res

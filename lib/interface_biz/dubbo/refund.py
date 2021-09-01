@@ -16,6 +16,12 @@ from case.debug.inland.dubbo.order import Order as OrderDubbo
         
 
 class Refund:
+    partner_notify_url = {
+        '2031': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
+        '72724314': 'http://cn-vip-open.uc.oppo.local/api/pay/purchase-refund-result-notify',
+        '5456925': 'http://cnzx-game-test.wanyol.com/sdklocal/pay/refund',
+        '9809089': 'http://dgzx-theme-test.wanyol.com/themepay/order/refund'
+    }
     
     def __init__(self, ssoid):
         self.ssoid = ssoid
@@ -32,7 +38,7 @@ class Refund:
         """
         data = {
             'partnerOrderId': partnerOrderId,
-            'notifyUrl': 'www.baidu.com',
+            'notifyUrl': self.partner_notify_url.get(partnerCode, 'http://pay.pay-test.wanyol.com/notify/notify/receiver'),
             'partnerCode': partnerCode,
             # APPROVE_PROCESS
             'refundType': 'APPROVE_PROCESS',
@@ -101,6 +107,29 @@ class Refund:
                 else:
                     self.refund_by_partner_order(partner_order, amount)
                     break
+    
+    def refund_by_partner_code_in_timerange(self, partner_code, start_time:'YYYY-mm-dd HH:MM:SS', end_time:'YYYY-mm-dd HH:MM:SS'=''):
+        '''
+        将一个时间段内的所有业务线`partner_code`的订单退款
+        :param partner_code:
+        :param start_time: YYYY-mm-dd HH:MM:SS
+        :param end_time: YYYY-mm-dd HH:MM:SS
+        '''
+        try:
+            print(time.strptime(start_time, '%Y-%m-%d %H:%M:%S'))
+        except:
+            raise ValueError('Invalid `start_time`:{}, should be formatted as YYYY-mm-dd HH:MM:SS'.format(start_time))
+        if not end_time:
+            end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) or 'CURRENT_TIMESTAMP'
+        for db_id in range(8):
+            for tbl_id in range(128):
+                sql = 'SELECT partner_order,amount,pay_type,pay_req_id FROM pay_tradeorder_{}.trade_order_info_{} WHERE partner_code="{}" AND success_time>="{}" AND success_time<="{}"'.format(db_id, tbl_id, partner_code, start_time, end_time)
+                results = GlobalVar.MYSQL_IN.select(sql)
+                for res in results:
+                    refund_amount = str(res['amount']/100)
+                    self.order_dubbo.refund_approval(partner_code, res['partner_order'], refund_amount, 
+                                                     res['pay_type'], res["pay_req_id"])
+                    self.refund_single(res['partner_order'], partner_code, refund_amount, payReqId=res["pay_req_id"])
 
 
 if __name__ == '__main__':
@@ -109,3 +138,5 @@ if __name__ == '__main__':
 #     Refund().refund_by_ssoid("2086100900")
     Refund().refund_by_partner_order("2086100900", 'fa2ddc9c4c334f1ba58c9e544ac74f5e')
     # Refund().refund_single("GC202101241407088040100320000", "5456925", "0.01")
+
+    

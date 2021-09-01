@@ -379,7 +379,7 @@ class HttpGrantSingleVous(HttpGrantMultiVous):
             amount = round(random.uniform(1, 10), 2)
         count = count or random.randint(1, 10)
         max_amount = round(random.uniform(amount, amount+100), 2)
-        ratio = round(random.uniform(0.01, 0.99), 2)
+        ratio = round(random.uniform(0.01, 0.99), 3)
         end_time = str((datetime.datetime.now() + datetime.timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'))
         self.req = {
             "amount": amount,

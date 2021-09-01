@@ -7,7 +7,9 @@ from lib.common.utils.globals import HTTPENCJSON_IN
 
 
 case_data = {
-    'partnerCode': '2031'
+    'partnerCode': '2031',
+    'bizId': '',
+    'country': 'CN'
 }
 
-result = HTTPENCJSON_IN.post('/api/conf/v290/get-biz-config', case_data)
+result = HTTPENCJSON_IN.post('/api/conf/v290/get-speaker-info', case_data)

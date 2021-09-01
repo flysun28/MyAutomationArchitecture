@@ -56,6 +56,6 @@ def hee_pay_notify(bill_id, card_real_amt, md5_key, bill_status="1"):
 
 if __name__ == '__main__':
     set_global_env_id(3)
-    hee_pay_notify("KB20210720110013208677696966752t", 5000, "574A4702E0644DA29E827E05")
+    hee_pay_notify("KB20210802185348208677696941233t", 500, "574A4702E0644DA29E827E05")
 
 

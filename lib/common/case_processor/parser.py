@@ -14,6 +14,7 @@ from lib.common.utils.meta import WithLogger
 from lib.common.file_operation.excel_operation import Excel
 from .case import ExcelTestCaseHttp, ExcelTestCaseDubbo
 from lib.common.utils.descriptors import CoordinateDescriptor
+from lib.common.exception.intf_exception import IgnoreException
 
 
 class Parser(metaclass=ABCMeta):
@@ -73,6 +74,8 @@ class ExcelParser(with_metaclass(WithLogger, Parser)):
         for row in self.ws.iter_rows(self.ws.min_row, self.ws.max_row,
                                      self.ws.min_column, self.ws.max_column,
                                      values_only=False):
+            if not row[0].value:
+                continue
             # row is a tuple
             if row[0].value.upper() == 'URL':
                 self.interface_url = row[1].value

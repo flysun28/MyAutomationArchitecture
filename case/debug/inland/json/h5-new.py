@@ -116,15 +116,17 @@ if __name__ == '__main__':
     # H5("SIGNANDPAY").qr_code_trade()
 
     # # 制定支付方式
-    #
-   # H5("PAY", "wxpay").qr_code_trade()M
+
+   # H5("PAY", "wxpay").qr_code_trade()
    #  H5("PAY", "alipay").qr_code_trade()
+
 
     #H5("SIGN", "wxpay").qr_code_trade()
      # H5("SIGN", "alipay").qr_code_trade()
 
      # H5("SIGNANDPAY", "wxpay").qr_code_trade()
-       H5("SIGNANDPAY", "alipay").qr_code_trade()
+    H5("SIGNANDPAY", "alipay").qr_code_trade()
 
     # H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     # H5("SIGNANDPAY", "alipay", True).qr_code_trade()
+
