@@ -25,20 +25,21 @@ class H5:
             "payType": self.payType,
             "userInfo": {
                 "ssoid": str(2100000000 + random.randint(100, 1000000))
-                # "ssoid":"1234567890"
+                  # "ssoid":"1234567890"
                 # "thirdPartId": "2086788561"
             },
             # 云服务：
-            # "partnerCode": "247628518",
-            "partnerCode": "72724324",
+            "partnerCode": "247628518",
+            #"partnerCode": "72724324",
             "sign": "",
             "attach": "attachtest",
-                # "returnUrl": "https://baidu.com",
-            "returnUrl": "https://i-insurance-test3.wanyol.com/insurance/product/details/resultCommon/?orderNo=20210806095006055050179000079180",
+            "returnUrl": "https://baidu.com",
+            #"returnUrl": "https://opdwz.cn/RJzyAj7",
             "payInfo": {
                 "country": "CN",
                 "amount": 1,
-                "partnerOrder": order,
+                #"partnerOrder": "BX2021081717235071728563861832823866109184170175",
+                "partnerOrder":order,
                 "notifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
                 "currency": "CNY"
             },
@@ -54,9 +55,9 @@ class H5:
                 "country": "CN",
                 "currency": "CNY",
                 "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
-                "renewProductCode": "727243240001"
+                #"renewProductCode": "727243240001"
                 # 云服务
-                # "renewProductCode": "2476285180033"
+                 "renewProductCode": "2476285180033"
 
             }
             if self.isSub:
@@ -67,7 +68,7 @@ class H5:
                     "currency": "CNY",
                     "subUserId": RandomOrder(6).random_num(),
                     "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
-                    "renewProductCode": "727243240001"
+                    "renewProductCode": "2476285180033"
                 }
         if self.serviceType == "SIGN":
             case_dict.pop("payInfo")
@@ -76,7 +77,7 @@ class H5:
                 "country": "CN",
                 "currency": "CNY",
                 "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
-                "renewProductCode": "727243240001"
+                "renewProductCode": "2476285180033"
             }
             if self.isSub:
                 case_dict['contractInfo'] = {
@@ -86,13 +87,15 @@ class H5:
                     "currency": "CNY",
                     "subUserId": RandomOrder(6).random_num(),
                     "contractNotifyUrl": "http://pay.pay-test.wanyol.com/notify/receiver",
-                    "renewProductCode": "727243240001"
+                    "renewProductCode": "2476285180033"
                 }
         temp_string = ''
         if is_get_key_from_db():
             temp_string = Sign(case_dict).join_asc_have_key("&key=") + GetKey(case_dict['partnerCode']).get_key_from_merchant()
         else:
-            temp_string = Sign(case_dict).join_asc_have_key("&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv0nFeJSOxOGxAv10mSpipOQ6iyhHt0udwuuU9QQdIHtAZlcECWKcb8iu3AHYSEyOaVgm30afXNNVZzP2lAxaaP74vFospYB1RpMwgLnzD4aoWwNOM9CjOLm84xVLndgP/pRJrcMjSoQoE0x6kMEqE5p91SusWWOdODxATavHDYwIDAQAB"
+            #temp_string = Sign(case_dict).join_asc_have_key("&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv0nFeJSOxOGxAv10mSpipOQ6iyhHt0udwuuU9QQdIHtAZlcECWKcb8iu3AHYSEyOaVgm30afXNNVZzP2lAxaaP74vFospYB1RpMwgLnzD4aoWwNOM9CjOLm84xVLndgP/pRJrcMjSoQoE0x6kMEqE5p91SusWWOdODxATavHDYwIDAQAB"
+        #云服务
+            temp_string = Sign(case_dict).join_asc_have_key("&key=") + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdSq+Wq4WfdLpyM7gVwNOXNXFYSSACoHGzcQ/h5G1ElnL/T4gNCauL2GDMrNvCE6FCOLqI/+Pkewx/1yydvtvaUhCVzqt7zU2CAL35cgx7dicAHhBGTkU6OLLMG1DrETbOsJFUSDpKaMnqjRmtXPH18fWY8I1ExfrZoRtcrQ4yDQIDAQAB"
         temp_string = temp_string.replace("'", '"')
         temp_string = temp_string.replace(" ", '')
         print(temp_string)
@@ -111,20 +114,17 @@ if __name__ == '__main__':
     # H5("PAY").qr_code_trade()
     # H5("SIGN").qr_code_trade()
     # H5("SIGNANDPAY").qr_code_trade()
-<<<<<<< HEAD
 
     # # 制定支付方式
-=======
     #
-    # H5("PAY", "wxpay").qr_code_trade()
-    # H5("PAY", "alipay").qr_code_trade()
+   # H5("PAY", "wxpay").qr_code_trade()M
+   #  H5("PAY", "alipay").qr_code_trade()
 
-    # H5("SIGN", "wxpay").qr_code_trade()
-    # H5("SIGN", "alipay").qr_code_trade()
+    #H5("SIGN", "wxpay").qr_code_trade()
+     # H5("SIGN", "alipay").qr_code_trade()
 
-    # H5("SIGNANDPAY", "wxpay").qr_code_trade()
-    H5("SIGNANDPAY", "alipay").qr_code_trade()
+     # H5("SIGNANDPAY", "wxpay").qr_code_trade()
+       H5("SIGNANDPAY", "alipay").qr_code_trade()
 
     # H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
-    H5("SIGNANDPAY", "wxpay", True).qr_code_trade()
     # H5("SIGNANDPAY", "alipay", True).qr_code_trade()
