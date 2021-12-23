@@ -4,6 +4,7 @@
 # datetime:2021/2/8 17:52
 # comment:
 from lib.common.algorithm.md5 import md5
+from lib.common.algorithm.sha_256 import sha_256
 from lib.common.utils.globals import GlobalVar
 from lib.common_biz.find_key import GetKey, is_get_key_from_db
 from lib.common_biz.order_random import RandomOrder
@@ -19,7 +20,8 @@ class AutoRenew:
     partner_renew_product_code = {
         '2031': '20310001',
         '72724314': vip_renew_product_code,
-        '247628518': '2476285180010'
+        '247628518': '2476285180010',
+        '72727676': '334084867195408384'
     }
     
     def __init__(self, ssoid, partner_code='2031', renew_product_code=""):
@@ -28,7 +30,6 @@ class AutoRenew:
         self.renew_product_code = renew_product_code
         if partner_code == '2031':
             self.renew_product_code = '20310001'
-        self.renew_product_code = self.renew_product_code
 
     def auto_renew_out(self, agreement_no, pay_type, third_part_id, amount=0.01, subUserId=""):
         """
@@ -84,9 +85,9 @@ class AutoRenew:
         }
         GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/querysign", data=case_dict)
 
-    def un_sign(self, agreement_no, pay_type, subUserId):
+    def un_sign(self, agreement_no, pay_type, subUserId='', crypto=md5):
         """
-        解约。不适合微信，需手动，因测试环境的解约回调都去了生产。支付宝仅可在第一套环境，回调地址在支付宝配置死了。
+        业务方调接口解约。不适合微信，需手动，因测试环境的解约回调都去了生产。支付宝仅可在第一套环境，回调地址在支付宝配置死了。
         支付宝:调用接口解约，支付宝会回调到对应的地址。手动解约，是写死在支付宝侧的
         :return:
         """
@@ -105,8 +106,12 @@ class AutoRenew:
             'subUserId': subUserId,    # 仅保险
             'sign': ''
         }
-        temp_string = Sign(case_dict).join_asc_have_key() + GetKey(case_dict['partnerCode']).get_key_from_merchant()
-        case_dict['sign'] = md5(temp_string)
+        temp_string = Sign(case_dict).join_asc_have_key('&key=') + GetKey(case_dict['partnerCode']).get_key_from_merchant()
+        if isinstance(crypto, str):
+            crypto = eval(crypto)
+        print('业务方发起解约，签名算法：{}'.format(crypto.__qualname__))
+        print('签名原串：'+temp_string)
+        case_dict['sign'] = crypto(temp_string)
         GlobalVar.HTTPJSON_IN.post("/plugin/autorenew/unsign", data=case_dict)
     
     def wx_unsign(self, xml):
@@ -183,6 +188,21 @@ class AutoRenew:
         }
         req['sign'] = md5(old_wx_auto_renew(req, "8m7djj32948d4ad6d822dxda12"), to_upper=False)
         GlobalVar.HTTPJSON_IN.post("/plugin/post/alipayavoidpay", data="hai"+str(req)+"g")
+
+    def newtv_unsign(self, partner_order):
+        if isinstance(self.renew_product_code, dict):
+            self.renew_product_code = self.renew_product_code['newtv']
+        case_dict = {
+            'partnerId': self.partner_code,
+            'partnerOrder': partner_order,
+            'payType': 'newtv',
+            'notifyUrl': '',
+            'sign': ''
+        }
+        temp_string = Sign(case_dict).join_asc_have_key('&key=') + GetKey(case_dict['partnerId']).get_key_from_merchant()
+        print('签名原串：'+temp_string)
+        case_dict['sign'] = sha_256(temp_string)
+        GlobalVar.HTTPJSON_GW_IN.post("/gateway/sign/cancel", data=case_dict)
 
 
 class AutoRenewOverseas():

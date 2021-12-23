@@ -9,10 +9,10 @@ from case.debug.inland.dubbo.order import Order
 from lib.common.file_operation.config_operation import Config
 from lib.common.session.dubbo.dubbo import DubRunner
 from lib.common.utils.env import get_dubbo_info, set_global_env_id
-from lib.common_biz.find_database_table import SeparateDbTable
 from lib.config.path import common_sql_path
 from lib.common.utils.globals import GlobalVar
 from case.debug.inland.dubbo.order import Order as OrderDubbo
+from lib.common_biz.find_database_table import SeparateDbTable
         
 
 class Refund:
@@ -130,6 +130,22 @@ class Refund:
                     self.order_dubbo.refund_approval(partner_code, res['partner_order'], refund_amount, 
                                                      res['pay_type'], res["pay_req_id"])
                     self.refund_single(res['partner_order'], partner_code, refund_amount, payReqId=res["pay_req_id"])
+    
+    def refund_by_ssoid_in_timerange(self, start_time:'YYYY-mm-dd HH:MM:SS', end_time:'YYYY-mm-dd HH:MM:SS'='', ssoid=None):
+        db_order_info = SeparateDbTable(ssoid).get_order_db_table() if ssoid else self.db_order_info
+        try:
+            print(time.strptime(start_time, '%Y-%m-%d %H:%M:%S'))
+        except:
+            raise ValueError('Invalid `start_time`:{}, should be formatted as YYYY-mm-dd HH:MM:SS'.format(start_time))
+        if not end_time:
+            end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) or 'CURRENT_TIMESTAMP'
+        sql = 'SELECT partner_code,partner_order,amount,pay_type,pay_req_id FROM pay_tradeorder_{}.trade_order_info_{} WHERE success_time>="{}" AND success_time<="{}"'.format(*db_order_info, start_time, end_time)
+        results = GlobalVar.MYSQL_IN.select(sql)
+        for res in results:
+            refund_amount = str(res['amount']/100)
+            self.order_dubbo.refund_approval(res['partner_code'], res['partner_order'], refund_amount, 
+                                             res['pay_type'], res["pay_req_id"])
+            self.refund_single(res['partner_order'], res['partner_code'], refund_amount, payReqId=res["pay_req_id"])
 
 
 if __name__ == '__main__':

@@ -93,8 +93,8 @@ class SeparateDbTable(metaclass=WithLogger):
 
 
 if __name__ == '__main__':
-    print(SeparateDbTable("2000060346").get_order_db_table())
+    # print(SeparateDbTable("2000060346").get_order_db_table())
 #     print(SeparateDbTable("2076075925").get_user_type_db_table())
-#     print(SeparateDbTable("2000075546").get_vou_table())
-#     print(SeparateDbTable("2076074648").get_coin_db_table())
+    print(SeparateDbTable("2086776969").get_vou_table())
+#     print(SeparateDbTable("2000060346").get_coin_db_table())
 #     print(SeparateDbTable("2086788561").get_vou_table())

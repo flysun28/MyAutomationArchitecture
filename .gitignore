@@ -14,3 +14,4 @@ case/test/
 =======
 log/
 >>>>>>> dde2bc4740da05588fc5d1469c99255483374e2d
+/.pytest_cache/

@@ -20,10 +20,18 @@ logger = Logger('退款接口', sys.__stdout__).get_logger()
 
 
 class Refund():
+    '''查找方法：
+    pay-info-dubbo-provider, platform_opay.merchant_info, merchant_id=xxx, system_public_key
+    2030业务线是merchant_key
+    '''
     partner_private_key = {
         '5456925': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmreYIkPwVovKR8rLHWlFVw7YDfm9uQOJKL89Smt6ypXGVdrAKKl0wNYc3/jecAoPi2ylChfa2iRu5gunJyNmpWZzlCNRIau55fxGW0XEu553IiprOZcaw5OuYGlf60ga8QT6qToP0/dpiL/ZbmNUO9kUhosIjEu22uFgR+5cYyQIDAQAB',
         '2031': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCMVhIN5xQPRdmo1fmm0HBOlRk2XnJsuKgOBi6b1IFAUWtROpm6lRnw45M83a/XiHEZv5FOp+rssGlgwcWeLuexI6kCF5hFT6gsEYy9XRfpSBOUA2UwcajPRsMoEKRmEIm+NpmwnGAeeZK2Y7Xwr3imHdLJ86VgJ5zMedqd4IfXWQIDAQAB',
-        '72724314': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB'
+        '72724314': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB',
+        '7272431402': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiRRSla2TmY9lVSOa23ab7g61q1LP6wu5j5RiLhnPcaa/cfQncoOo6zflL60AiSCPkWxTWr6aNsvrSQorR3jRDcloqpcgNxVPnrTziZgQiVhWYBgVljbAQAB',
+        '247628518': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdSq+Wq4WfdLpyM7gVwNOXNXFYSSACoHGzcQ/h5G1ElnL/T4gNCauL2GDMrNvCE6FCOLqI/+Pkewx/1yydvtvaUhCVzqt7zU2CAL35cgx7dicAHhBGTkU6OLLMG1DrETbOsJFUSDpKaMnqjRmtXPH18fWY8I1ExfrZoRtcrQ4yDQIDAQAB',
+        '231810428': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdSq+Wq4WfdLpyM7gVwNOXNXFYSSACoHGzcQ/h5G1ElnL/T4gNCauL2GDMrNvCE6FCOLqI/+Pkewx/1yydvtvaUhCVzqt7zU2CAL35cgx7dicAHhBGTkU6OLLMG1DrETbOsJFUSDpKaMnqjRmtXPH18fWY8I1ExfrZoRtcrQ4yDQIDAQAB',
+        '2030': 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCq7fpWpuV7a4aaORo7Bbs73YZVm+gu2oFwj1lUaHMpXbyFpUPV5tckp/gKRZPkRZ/Wk8Hp/FjpjlG5DRqpMBnlM4CturD26VMOcFudyt6wlbh90glAz0fgaha3gO9Axt2e8gEn7DZw/5ed25HrPLtgaBopnxc9L+yHPqq9Q3v8YwIDAQAB'
     }
     partner_notify_url = {
         '2031': 'http://pay.pay-test.wanyol.com/notify/notify/receiver',
@@ -96,6 +104,20 @@ class Refund():
                 else:
                     self.httpjson_refund(partner_order, partner_code, amount, pay_req_id=pay_req_id)
                     break
+    
+    def refund_by_ssoid_in_timerange(self, start_time:'YYYY-mm-dd HH:MM:SS', end_time:'YYYY-mm-dd HH:MM:SS'='', ssoid=None):
+        db_order_info = SeparateDbTable(ssoid).get_order_db_table() if ssoid else self.db_order_info
+        try:
+            print(time.strptime(start_time, '%Y-%m-%d %H:%M:%S'))
+        except:
+            raise ValueError('Invalid `start_time`:{}, should be formatted as YYYY-mm-dd HH:MM:SS'.format(start_time))
+        if not end_time:
+            end_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) or 'CURRENT_TIMESTAMP'
+        sql = 'SELECT partner_code,partner_order,amount,pay_type,pay_req_id FROM pay_tradeorder_{}.trade_order_info_{} WHERE status="OK" AND refund=0 AND success_time>="{}" AND success_time<="{}"'.format(*db_order_info, start_time, end_time)
+        results = GlobalVar.MYSQL_IN.select(sql)
+        for res in results:
+            refund_amount = str(res['amount']/100)
+            self.httpjson_refund(res['partner_order'], res['partner_code'], refund_amount)
 
 
 if __name__ == '__main__':

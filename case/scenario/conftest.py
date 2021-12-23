@@ -5,6 +5,7 @@ import time
 import pytest
 from lib.common.utils.env import set_global_env_id
 from lib.common.concurrent.threading import monitor
+from _pytest.reports import TestReport
 
 env_id = 1
 
@@ -25,9 +26,14 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     :param config: <_pytest.config.Config object>
     '''
     stats = terminalreporter.stats
+#     print(stats)
     print("total:", terminalreporter._numcollected)
     for kw in 'passed', 'failed', 'error', 'skipped':
-        print('%s: %d' %(kw, len(stats.get(kw, []))))    
+        print('%s: %d ' %(kw, len(stats.get(kw, []))), end='')
+        if kw in ['failed', 'error'] and stats.get(kw):
+            print([testrep.nodeid for testrep in stats[kw]])    #nodeid是case路径
+        else:
+            print('')   #换行
     # terminalreporter._sessionstarttime 会话开始时间
     duration = time.time() - terminalreporter._sessionstarttime
     print('total times:', round(duration, 2), 'seconds')

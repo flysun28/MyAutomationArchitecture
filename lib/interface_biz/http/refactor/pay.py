@@ -88,7 +88,7 @@ class Pay():
         }
         
     def combine_pay(self, amount, buy_place_id=''):
-        
+        pass
 
     def direct_pay(self, orig_amount, pay_type, partner_order=''):
         '''

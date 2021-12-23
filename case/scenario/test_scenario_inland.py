@@ -53,6 +53,4 @@ class TestScenarioInland():
 
 
 if __name__ == '__main__':
-    pytest.main(['-vsx', 'test_scenario_inland.py'])
-    
-
+    pytest.main(['-vsx', '--lf', 'test_scenario_inland.py'])  #'--reruns=1'

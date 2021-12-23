@@ -59,7 +59,7 @@ def recharge(amount, notify_amount):
     balance_after = query_account(GlobalVar.SSOID)
     try:
         # decimal.Decimal截取4位处理，与数据库保持一致
-        assert balance_after == balance_before + amount
+        assert balance_after == balance_before + amount, '%s != %s + %s' %(balance_after, balance_before, amount)
         logger.info("可币充值成功")
     except AssertionError as e:
         logger.info("可币充值异常")

@@ -101,6 +101,7 @@ class Voucher:
     def grant_check_voucher(self, bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country="",
                                 currency='', ratio=0, maxCutAmount='0'):
         vou_info = self.grantVoucher(bizNo, couponType, couponDiscountType, conditionAmount, cutAmount, ssoid, country, currency, ratio, maxCutAmount)
+        time.sleep(0.5)
         self.checkVoucher(vou_info['batchId'])
     
     def query_voucher_by_id(self, ssoid, vou_id):

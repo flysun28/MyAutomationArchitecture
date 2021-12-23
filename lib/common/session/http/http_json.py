@@ -1,6 +1,6 @@
 #!/usr/bin/env Python3
 # -*- encoding:utf-8 *-*
-# author:xy
+# author:yanfei
 # datetime:2021/1/22 19:11
 # comment:
 import json
@@ -25,7 +25,6 @@ from lib.common_biz.file_path import encjson_rsa_public_key_path
 from lib.common.algorithm.md5 import md5
 from lib.common.utils.decorator import monitoring, singleton
 from lib.common.concurrent.threading import monitor
-
 
 @monitoring
 class HttpJsonSession(metaclass=WithLogger):

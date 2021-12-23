@@ -1,4 +1,6 @@
 # coding=utf-8
+import sys
+import traceback
 from lib.common.utils.meta import WithLogger
 
 
@@ -36,10 +38,19 @@ class IgnoreException(metaclass=WithLogger):
         self.kwargs = kwargs
     
     def __enter__(self):
-        if self.cb:
-            return self.cb(*self.args, **self.kwargs)
+        '''
+        捕获with语句异常
+        '''        
+        if self.cb:            
+            try:
+                return self.cb(*self.args, **self.kwargs)
+            except:
+                self.logger.debug(sys.exc_info()[1])
     
     def __exit__(self, exc_type, exc_val, exc_tb):
+        '''
+        捕获body的异常
+        '''
         if any([exc_type, exc_val, exc_tb]):
-            self.logger.error(exc_val)
+            self.logger.info(exc_val)
         return True # 不抛异常
