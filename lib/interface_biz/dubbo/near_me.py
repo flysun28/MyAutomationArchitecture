@@ -13,9 +13,12 @@ from lib.common.utils.meta import WithLogger
 
 class Nearme(metaclass=WithLogger):
     
-    def __init__(self, ssoid=''):
+    def __init__(self, ssoid='', in_out='inland'):
         self.ssoid = ssoid or GlobalVar.SSOID
-        server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.pay.nearme.facade.NearmeAccountOperate")
+        if in_out == 'inland':
+            server_info = GlobalVar.ZK_CLIENT_IN.get_node_info("com.oppo.pay.nearme.facade.NearmeAccountOperate")
+        else:
+            server_info = GlobalVar.ZK_CLIENT_OUT.get_node_info("com.oppo.cocoin.facade.CocoinAccountOperationFacade")
         self.conn = DubRunner(server_info['ip_port'][0], server_info['ip_port'][1])
 
     def nearme_add_subtract(self, amount, ssoid, operate_type):
@@ -41,11 +44,37 @@ class Nearme(metaclass=WithLogger):
             "timeStamp": int(round(time.time() * 1000))
         }
         result = self.conn.invoke(
-            "NearmeAccountOperate",
-            "addSubtractOperate",
+            'NearmeAccountOperate',
+            'addSubtractOperate',
             data
         )
-    
+
+    def nearme_add_subtract_oversea(self, amount, ssoid, country, operate_type):
+        """
+        可币发放扣除
+        :param amount: 元 string
+        :param ssoid:
+        :param country: 国家缩写，e.g. SG、IN、IND
+        :param operate_type: PRESENT 发放  DEDUCT 扣除
+        :return:
+        """
+        if operate_type in ("P", "PRESENT", "p", "0", 0):
+            operate_type = "PRESENT"
+        if operate_type in ("D", "DEDUCT", "d", "1", 1):
+            operate_type = "DEDUCT"
+        data = {
+            "amount": str(amount),
+            "ssoid": ssoid,
+            "country": country,
+            # "reason": 'add subtract cocoin balance by calling dubbo method'
+            "reason": 'test'
+        }
+        result = self.conn.invoke(
+            'CocoinAccountOperationFacade',
+            'income' if operate_type == "PRESENT" else 'payout',
+            data
+        )
+
     def nearme_add_subtract_wo_ssoid(self, amount, operate_type):
         self.nearme_add_subtract(amount, self.ssoid, operate_type)
     

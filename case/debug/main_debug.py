@@ -19,7 +19,7 @@ from lib.common_biz.find_database_table import SeparateDbTable
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
-from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET, redis
+from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET, redis, redis_out
 from lib.interface_biz.http.refund import Refund
 from lib.interface_biz.dubbo.refund import Refund as GrantRefund
 from lib.common.algorithm.aes import AES4J
@@ -53,8 +53,9 @@ if __name__ == '__main__':
     flag_coin = "0"
     if flag_coin == "1":
         # 发
-        Nearme().nearme_add_subtract("20", "2086780063", 0)
-        Nearme().query_balance('2086780063')
+        # Nearme().nearme_add_subtract("10000", "2000060346", 0)
+        Nearme(in_out='oversea').nearme_add_subtract_oversea("10000", "2000060346", 'SG', 0)
+        Nearme().query_balance('2000060346')
     if flag_coin == "2":
         # 扣
         Nearme().nearme_add_subtract("0.01", "2000060346", 1)
@@ -66,7 +67,7 @@ if __name__ == '__main__':
     #     ssoid = '2076064003'    #江厚军
     #     ssoid = '2000060346'    # 周正攀
     partner_id = '9809089'    #游戏 5456925, 主题 9809089
-    ssoid = '2076064003'
+    ssoid = '2086776969'
     if env_id.isdigit():
         voucher = Voucher()
         for flag in range(1, 1):
@@ -117,7 +118,7 @@ if __name__ == '__main__':
     loop_num = int(total_amount/per_amount)
     for i in range(loop_num):
         while True:
-            response = refund.httpjson_refund('', '231810428', per_amount, pay_req_id='')
+            response = refund.httpjson_refund('', '5456925', per_amount, pay_req_id='')
             if response['resMsg'] == '退款失败':
                 time.sleep(1)
             else:
@@ -154,67 +155,67 @@ if __name__ == '__main__':
     #     print(result['data']['walletPackageName'])
 
     # grant multi voucher
-    #     for i in range(1):
-    #         tps = 4
-    #         ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
-    #         case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
-    #         vouinfo = VouInfo(case_file_path)
-    #         vouinfo.create()
-    #         all_request_ids = {}
-    #         all_tasks = []
-    #         thr_num = int(tps/len(ssoids))
-    #         executor = ThreadPoolExecutor(max_workers=thr_num)
-    #         for ssoid in ssoids:
-    #             httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
-    #             [all_tasks.append(executor.submit(httpobj.post))
-    #                               for i in range(executor._max_workers)]
-    #             start = time.perf_counter()
-    #             while time.perf_counter() - start < 10:
-    #                 if len(httpobj.request_ids) == executor._max_workers:
-    #                     break
-    #                 else:
-    #                     time.sleep(0.5)
-    #             else:
-    #                 print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
-    #                 raise TimeoutError('Exceed 10s, timeout occurred!!!')
-    #             for reqid in httpobj.request_ids:
-    #                 all_request_ids.setdefault(ssoid, set()).add(reqid)
-    #         wait(all_tasks, return_when=ALL_COMPLETED)
-    #             exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
-    #             for ssoid in ssoids:
-    #                 start = time.perf_counter()
-    #                 table_id = SeparateDbTable(ssoid).get_vou_table()
-    #                 sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-    #                 while time.perf_counter() - start < 10:
-    #                     count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
-    #                     if count == exp_vou_count:
-    #                         break
-    #                     else:
-    #                         time.sleep(1)
-    #                 else:
-    #                     print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
-    #         #             raise Exception('Exceed 10s, TIMEOUT!')
-    #                 sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
-    #                 db_request_ids = set(chain(*[d.values() for d in GlobalVar.MYSQL_IN.select(sql)]))
-    #                 for reqid in all_request_ids[ssoid]:
-    #                     with IgnoreException(None) as ign:
-    #                         assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
-
-    #     # grant single voucher
-    #     tps = 1
-    # #     ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
-    #     ssoids = '2076074648',
-    #     partner_id = '5456925'
-    #     all_tasks = []
-    #     thr_num = int(tps/len(ssoids))
-    #     executor = ThreadPoolExecutor(max_workers=thr_num)
-    #     vou_types = [1, 2, 5, 7, 8]
-    #     random.shuffle(vou_types)
-    #     for ssoid, voutype in zip(*extend_to_longest([ssoids, vou_types])):
-    #         httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id=partner_id)
-    #         [all_tasks.append(executor.submit(httpobj.post))
-    #                           for i in range(executor._max_workers)]
-    #     wait(all_tasks, return_when=ALL_COMPLETED)
+    # for i in range(1):
+    #     tps = 4
+    #     ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
+    #     case_file_path = os.path.join(CASE_SRCFILE_ROOTDIR, 'http', 'inland.xlsx')
+    #     vouinfo = VouInfo(case_file_path)
+    #     vouinfo.create()
+#         all_request_ids = {}
+#         all_tasks = []
+#         thr_num = int(tps/len(ssoids))
+#         executor = ThreadPoolExecutor(max_workers=thr_num)
+#         for ssoid in ssoids:
+#             httpobj = HttpGrantMultiVous(vouinfo, ssoid, '2031')
+#             [all_tasks.append(executor.submit(httpobj.post))
+#                               for i in range(executor._max_workers)]
+#             start = time.perf_counter()
+#             while time.perf_counter() - start < 10:
+#                 if len(httpobj.request_ids) == executor._max_workers:
+#                     break
+#                 else:
+#                     time.sleep(0.5)
+#             else:
+#                 print('实际发送请求数: %d\t期望发送请求数: %d' %(len(httpobj.request_ids), executor._max_workers))
+#                 raise TimeoutError('Exceed 10s, timeout occurred!!!')
+#             for reqid in httpobj.request_ids:
+#                 all_request_ids.setdefault(ssoid, set()).add(reqid)
+#         wait(all_tasks, return_when=ALL_COMPLETED)
+#             exp_vou_count = httpobj.vouinfo_obj.count * executor._max_workers
+#             for ssoid in ssoids:
+#                 start = time.perf_counter()
+#                 table_id = SeparateDbTable(ssoid).get_vou_table()
+#                 sql = "SELECT COUNT(id) FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#                 while time.perf_counter() - start < 10:
+#                     count = GlobalVar.MYSQL_IN.select_one(sql)['COUNT(id)']
+#                     if count == exp_vou_count:
+#                         break
+#                     else:
+#                         time.sleep(1)
+#                 else:
+#                     print('The incremental number of oppopay_voucher.vou_info_%d: %d != %d' %(table_id, count, exp_vou_count), file=sys.stderr)
+#         #             raise Exception('Exceed 10s, TIMEOUT!')
+#                 sql = "SELECT partnerOrder FROM oppopay_voucher.vou_info_%d WHERE ssoid='%s' AND createTime >= CURRENT_TIMESTAMP - INTERVAL 30 SECOND ORDER BY id DESC;" %(table_id, ssoid)
+#                 db_request_ids = set(chain(*[d.values() for d in GlobalVar.MYSQL_IN.select(sql)]))
+#                 for reqid in all_request_ids[ssoid]:
+#                     with IgnoreException(None) as ign:
+#                         assert reqid in db_request_ids, 'requestId %s not in oppopay_voucher.vou_info_%d' %(reqid, table_id)
+#
+#     # grant single voucher
+#     tps = 1
+# #     ssoids = '2086100900', '2076075925', '2086628989', '2086776969'
+#     ssoids = '2076074648',
+#     partner_id = '5456925'
+#     all_tasks = []
+#     thr_num = int(tps/len(ssoids))
+#     executor = ThreadPoolExecutor(max_workers=thr_num)
+#     vou_types = [1, 2, 5, 7, 8]
+#     random.shuffle(vou_types)
+#     for ssoid, voutype in zip(*extend_to_longest([ssoids, vou_types])):
+#         httpobj = HttpGrantSingleVous(voutype, ssoid, partner_id=partner_id)
+#         [all_tasks.append(executor.submit(httpobj.post))
+#                           for i in range(executor._max_workers)]
+#     wait(all_tasks, return_when=ALL_COMPLETED)
 
     # 签约并支付，alipay签/解约回调 newAlipaySignNotify get input:
     raw_resp = '{charset=UTF-8, notify_time=2021-12-01 19:29:01, alipay_user_id=2088112990498423, sign=FMIpFjZ62eKe7Cp4XwJ7vLbQ9tlVv48ziLTAa6bTTEuQrNB7/9AaJ2nXEHohFmKxo4AadUjvs8NBJCXrKAOCDmzpKoIt7nqGtPHzJWgAD/qtySQoPdbD2j1DnBLlSvN3jkddP5JCkJPt6x8mwt7i+qc7P3d6/QHyOws8egnavZCdNjZhtZI20wMwG/R56p5ghdJdJpcRIYtbssPHiEoWzcEOuL1ykryrzSRP9DjJg3IVuNEPixO8fVZYiixsqOopxihR7OJMOospvZJlbPpibfjqcvSGP0JTXeA1Syj3dF0Dw5tFaNBGpvGqNfmcawl+eNbZYQw0zIOEYJ3NAGeDJQ==, external_agreement_no=SN202112011927277571526840720636, version=1.0, sign_time=2021-12-01 19:29:00, notify_id=2021120100222192901031311426307284, notify_type=dut_user_sign, agreement_no=20216001786418614442, invalid_time=2115-02-01 00:00:00, auth_app_id=2016120904060189, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-12-01 19:29:00, login_token=9cd75375f541c56859cb48633282957b_42, app_id=2016120904060189, sign_type=RSA2, sign_scene=INDUSTRY|GAME_CHARGE, status=NORMAL, alipay_logon_id=yan***@126.com}'

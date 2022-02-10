@@ -47,8 +47,11 @@ class Sign(metaclass=WithLogger):
         dataList = []
         for key in sorted(self.original_dict):
             if key in args or key == "sign" or self.original_dict[key] == '':
-                continue  
-            dataList.append("%s=%s" %(key, self.original_dict[key]))
+                continue
+            v = self.original_dict[key]
+            if is_sequence(v):
+                v = v.__str__().replace("'", '"')
+            dataList.append("%s=%s" %(key, v))
         return "&".join(dataList) + salt
 
     def join_fixed_param(self, section, salt=""):

@@ -3,6 +3,7 @@
 # author:xy
 # datetime:2021/3/12 14:38
 # comment: 国内海外通用
+import datetime
 from lib.common.algorithm.md5 import md5
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.globals import GlobalVar
@@ -35,6 +36,39 @@ def query_vou_by_id(vou_id, ssoid, env="inland", app_id="2031"):
         return result['data']['status']
 
 
+def query_voucher_by_ssoid(ssoid, app_id, env="inland"):
+    start_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    req = {
+        "country": "CN",
+        "currency": "CNY",
+        "ssoid": ssoid,
+        "amount": 0,
+        # "startTime": start_time,
+        "status": "0",
+        # "pkgName": "com.nearme.atlas",
+        # "appKey": "",
+        "appId": app_id,
+        "sign": "",
+        # "factor": "",
+        "appIdList": [
+            app_id
+        ],
+        # 'pageNum': 1,
+        # 'pageSize': 50
+    }
+    if is_get_key_from_db:
+        key = GetKey(req['appId']).get_key_from_voucher()
+    else:
+        key = Config(key_path).as_dict('inland_t_key')["key_" + req['appId']]
+    sign_string = Sign(req).join_asc_have_key("&key=") + key
+    print('签名原串：', sign_string)
+    req['sign'] = md5(sign_string)
+    result = GlobalVar.HTTPJSON_IN.post("/voucher/multiAppQuery", data=req)
+    assert result['data'], 'data is empty'
+    for vou_info in result['data']:
+        assert vou_info['status'] in (0, '0'), (vou_info, vou_info['status'])
+
+
 if __name__ == '__main__':
-    query_vou_by_id(102404209, "2076075925", "oversea")
-    
+    # query_vou_by_id(63115133, "2086776969", "inland", '5456925')
+    query_voucher_by_ssoid("2086776969", "2031")

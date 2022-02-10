@@ -155,7 +155,7 @@ class Voucher:
 if __name__ == '__main__':
     flag = "0"
     vou = Voucher()
-    vou.query_voucher('2086776969', '62641621')
+    # vou.query_all_useable('2086776969')
     if flag == "1":
         # 满减
         vou_info = vou.grantVoucher("2031", "KB_COUPON", "DIKOU", "10", "9.99", "2076075925")

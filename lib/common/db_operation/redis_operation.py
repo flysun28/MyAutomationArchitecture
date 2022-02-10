@@ -29,6 +29,7 @@ class RedisCluster(metaclass=WithLogger):
         连接redis集群
         :return: object
         """
+        self.logger.debug('!!!Trying to connect to redis_cluster:{}!!!'.format(self.conn_list))
         try:
             # 非密码连接redis集群
             self.redis_conn = RedisClusterCls(startup_nodes=self.conn_list, decode_responses=True)
@@ -36,9 +37,9 @@ class RedisCluster(metaclass=WithLogger):
             # 使用密码连接redis集群
             # redis_conn = StrictRedisCluster(startup_nodes=self.conn_list, password='123456')            
         except Exception as e:
-            self.logger.logger(e)
             self.logger.info("连接redis集群失败:{}".format(self.conn_list))
-        self.logger.info('redis连接:%s', self.redis_conn)
+            self.logger.info(e)
+        self.logger.info('redis连接实例:%s', self.redis_conn)
 
     def get_state(self):
         """
@@ -73,7 +74,6 @@ def connect_redis(in_out="inland"):
         # 连接集群
         redis = RedisCluster(conn_list)
         redis.connect()
-        redis.logger.info('connection list: %s', conn_list)
         return redis.redis_conn
     else:
         return None
