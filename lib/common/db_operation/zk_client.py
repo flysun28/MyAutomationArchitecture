@@ -80,6 +80,7 @@ class ZkClient(metaclass=WithLogger):
 def connect_zk(in_out='inland'):
     zk_info = get_env_config()['zk_' + in_out]
     zk_client = ZkClient(zk_info['host'], zk_info['port'])
+    print('成功连接到zk:', zk_info)
     return zk_client
 
 
