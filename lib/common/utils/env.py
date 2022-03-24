@@ -32,9 +32,10 @@ def get_env_id():
     '''
     # 默认走itest平台环境变量，若无，则读取本地环境变量
     env = dict(os.environ)
-#     print('所有环境变量:', env)
+    print('所有环境变量:', env)
     env_id = env.get('CASE_ENV')
     if env_id:
+        print('ATMS传入的CASE_ENV：', env_id)
         set_global_env_id(env_id)
         return str(env_id)
     else:
