@@ -1,5 +1,5 @@
 # coding=utf-8
-env_id = '1'
+env_id = 'product'
 from lib.common.utils.env import set_global_env_id
 set_global_env_id(env_id)
 
@@ -19,7 +19,7 @@ from lib.common_biz.find_database_table import SeparateDbTable
 from lib.interface_biz.dubbo.near_me import Nearme
 from lib.interface_biz.dubbo.vou import Voucher
 from lib.common.session.http.http_json import EncryptJson, HttpJsonSession
-from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET, redis, redis_out
+from lib.common.utils.globals import GlobalVar, CASE_SRCFILE_ROOTDIR, HTTPJSON_SCARLET, redis
 from lib.interface_biz.http.refund import Refund
 from lib.interface_biz.dubbo.refund import Refund as GrantRefund
 from lib.common.algorithm.aes import AES4J
@@ -218,7 +218,7 @@ if __name__ == '__main__':
 #     wait(all_tasks, return_when=ALL_COMPLETED)
 
     # 签约并支付，alipay签/解约回调 newAlipaySignNotify get input:
-    raw_resp = '{charset=UTF-8, notify_time=2021-12-01 19:29:01, alipay_user_id=2088112990498423, sign=FMIpFjZ62eKe7Cp4XwJ7vLbQ9tlVv48ziLTAa6bTTEuQrNB7/9AaJ2nXEHohFmKxo4AadUjvs8NBJCXrKAOCDmzpKoIt7nqGtPHzJWgAD/qtySQoPdbD2j1DnBLlSvN3jkddP5JCkJPt6x8mwt7i+qc7P3d6/QHyOws8egnavZCdNjZhtZI20wMwG/R56p5ghdJdJpcRIYtbssPHiEoWzcEOuL1ykryrzSRP9DjJg3IVuNEPixO8fVZYiixsqOopxihR7OJMOospvZJlbPpibfjqcvSGP0JTXeA1Syj3dF0Dw5tFaNBGpvGqNfmcawl+eNbZYQw0zIOEYJ3NAGeDJQ==, external_agreement_no=SN202112011927277571526840720636, version=1.0, sign_time=2021-12-01 19:29:00, notify_id=2021120100222192901031311426307284, notify_type=dut_user_sign, agreement_no=20216001786418614442, invalid_time=2115-02-01 00:00:00, auth_app_id=2016120904060189, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2021-12-01 19:29:00, login_token=9cd75375f541c56859cb48633282957b_42, app_id=2016120904060189, sign_type=RSA2, sign_scene=INDUSTRY|GAME_CHARGE, status=NORMAL, alipay_logon_id=yan***@126.com}'
+    raw_resp = '{charset=UTF-8, notify_time=2022-02-15 18:31:49, alipay_user_id=2088622606365602, sign=wbBfgwrWuebBVC+Rm2WAZfsdpCSiG35cV5aMb8o5Lwnr1kSRWjXH2R2PzFW6zNvuRdzyz6rYE4SOAi/jLRvh02mGt7FZgljrOnsVOG+ByWgRRE2b9AQUTOAI1ICoPBzFFBmR1DA4ys4nj8eWMjVKn1F1hqUBpFP4uf82LJBMnkXETfQIbmMb2qMlaMa+aSIZu25/Kc2ORVHcpBefy5BKH4zZ9AhxJnUaWBDmiqFevyaTzkTKo6L+PB0tp86mhak4RpWeiMxgaGtXrwptzA0WmP1/pqA/k52plPXPUbDk/rCgOiknwhD2WOJo+cUZdsDpkXCSt61pVero88nLIHM2Jw==, external_agreement_no=SN202202151831387827725836406722, version=1.0, sign_time=2022-02-15 18:31:49, notify_id=2022021500222183149041681455748210, notify_type=dut_user_sign, agreement_no=20225015810059007660, auth_app_id=2016120904060189, invalid_time=2115-02-01 00:00:00, personal_product_code=GENERAL_WITHHOLDING_P, valid_time=2022-02-15 18:31:49, app_id=2016120904060189, sign_type=RSA2, alipay_logon_id=hua***@163.com, status=NORMAL, sign_scene=INDUSTRY|GAME_CHARGE}'
     # ali_sign_scarlet_by_raw_resp(raw_resp)
 
     signpay = AutoRenewDebug('2086776969', '247628518', '2476285180010')
