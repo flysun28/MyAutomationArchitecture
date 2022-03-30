@@ -113,8 +113,8 @@ if __name__ == '__main__':
         session = HttpJsonSession('https://nativepay.keke.cn')  # 正式域名
     refund = Refund('2086797854', http_session=session or GlobalVar.HTTPJSON_IN)   # 14213467928
     # 根据业务订单号退款
-    per_amount = 1
-    total_amount = 0
+    per_amount = 1.00
+    total_amount = 0.00
     loop_num = int(total_amount/per_amount)
     for i in range(loop_num):
         while True:
@@ -285,3 +285,8 @@ if __name__ == '__main__':
     # private_key = GetKey('72727676').get_key_from_merchant()
     # req['sign'] = sha_256(Sign(req).join_asc_have_key("&key=") + private_key)
     # GlobalVar.HTTPJSON_GW_IN.post('/gateway/wxpay/qrcode/signAndPay', data=req)
+
+    print(time.time())
+    print(time.localtime())
+    print(time.mktime(time.localtime()))
+    print(bin(time.time_ns()), type(bin(time.time_ns())))

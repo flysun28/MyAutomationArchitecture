@@ -3,6 +3,8 @@
 # author:xy
 # datetime:2021/1/19 22:53
 # comment: 常见接口的签名拼接
+import time
+
 from lib.common.file_operation.config_operation import Config
 from lib.common.utils.meta import WithLogger
 from lib.common_biz.file_path import join_sign_path
@@ -277,4 +279,14 @@ if __name__ == '__main__':
     a = {'bill_id': 'KB202101221511052076075925464312', 'agent_id': '1715258', 'sign': '',
          'ret_msg': '-%b2%e9%d1%af%b4%a6%c0%ed', 'card_settle_amt': '0.00', 'ret_code': '0', 'bill_status': '1',
          'card_real_amt': '50', 'jnet_bill_no': '|||0577208060631965370826174135'}
-    print(Sign(a).join_fixed_param("hee_pay_scarlett", "&"))
+    # print(Sign(a).join_fixed_param("hee_pay_scarlett", "&"))
+    b = {
+        "appId": 'uc-gateway-account-esa',
+        "env": "uat",
+        "version": "1_0_0",
+        "key": "validation.properties",
+        "time": int(time.time_ns()/10**6),
+    }
+    orig_str = Sign(b).join_asc_have_key("&secret=") + 'a52f9951864f748164cf5478920245a4'
+    print(orig_str)
+    print(md5(orig_str, to_upper=False))
