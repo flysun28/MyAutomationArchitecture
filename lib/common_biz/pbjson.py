@@ -75,8 +75,11 @@ def dict2pb(cls, adict, strict=False):
                 value = dict2pb(msg_type._concrete_class, adict[field.name])
                 getattr(obj, field.name).CopyFrom(value)
             else:
-                setattr(obj, field.name, adict[field.name])
-
+                try:
+                    setattr(obj, field.name, adict[field.name])
+                except ValueError:
+                    logging.warning('integer value out of range: %d, will convert to string' %adict[field.name])
+                    setattr(obj, field.name, str(adict[field.name]))
     return obj
 
 
