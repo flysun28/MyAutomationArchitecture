@@ -123,7 +123,7 @@ class ExpendPay(metaclass=WithLogger):
             "attach": "",
             "sign": "",
             "appKey": "1234",
-            "voucherId": vouId,
+            "voucherId": str(vouId),
             "voucherType": vouType,
             # 优惠券金额，单位：分
             "voucherCount": vouCount,

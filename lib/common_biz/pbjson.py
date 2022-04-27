@@ -28,6 +28,7 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of the FreeBSD Project.
 #
+import logging
 
 import simplejson
 from google.protobuf.descriptor import FieldDescriptor as FD
@@ -75,6 +76,7 @@ def dict2pb(cls, adict, strict=False):
                 getattr(obj, field.name).CopyFrom(value)
             else:
                 setattr(obj, field.name, adict[field.name])
+
     return obj
 
 
