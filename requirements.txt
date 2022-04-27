@@ -77,7 +77,6 @@ pytest-timeout>=1.4.2
 python-dateutil>=2.8.1
 pytils>=0.3
 pytz>=2021.1
-pywin32>=303
 PyYAML>=6.0
 redis>=3.5.3
 redis-py-cluster>=2.1.0
