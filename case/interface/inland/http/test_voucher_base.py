@@ -16,7 +16,7 @@ from case.interface.conftest import partner_ids
 from lib.interface_biz.http.grant_voucher import VouInfo, HttpGrantMultiVous, HttpGrantSingleVous
 from lib.common.exception.intf_exception import IgnoreException
 from lib.common.utils.globals import CASE_SRCFILE_ROOTDIR, GlobalVar
-from lib.interface_biz.http.user_account import Account
+from lib.common_biz.user_account import Account
 
 pytestmark = pytest.mark.voucher
 
