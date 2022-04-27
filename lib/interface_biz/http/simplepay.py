@@ -44,18 +44,17 @@ class SimplePay(metaclass=WithLogger):
 
     def recharge(self):
         """
-        可币充值
+        可币充值，partnerorder=null，其余跟direct_pay相同
         :return:
         """
-        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PCRM00",
-                          "apntype": "1", "package": "com.example.pay_demo", "r_v": "", "ext": "",
-                          "sdkVer": self.sdk_ver, "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO",
-                          "mobileos": "17", "androidVersion": "29"},
+        req = {"header": {"version": self.version, "t_p": "", "imei": "", "model": "PCRM00", "apntype": "1",
+                          "package": "com.example.pay_demo", "r_v": "", "ext": "", "sdkVer": self.sdk_ver,
+                          "country": "CN", "currency": "CNY", "openId": "", "brandType": "OPPO", "mobileos": "17",
+                          "androidVersion": "29"},
                "type": self.channel, "amount": str(self.amount), "cardno": "", "cardpwd": "", "ext": "",
-               "basepay": {"channelId": "", "notifyurl": self.notify_url,
-                           "productName": "KB—RECHARGE_PAY", "productDesc": "KB—RECHARGE_PAY",
-                           "partnercode": self.partner_code,
-                           "appversion": "1.1.0", "currencyName": "可币", "rate": 1.0, "partnerorder": "null"},
+               "basepay": {"channelId": "", "notifyurl": self.notify_url, "productName": "KB—RECHARGE_PAY",
+                           "productDesc": "KB—RECHARGE_PAY", "partnercode": self.partner_code, "appversion": "1.1.0",
+                           "currencyName": "可币", "rate": 1.0, "partnerorder": "null"},
                "sign": "", "ip": "58.252.5.75", "isNeedExpend": "0", "appId": "", "payTypeRMBType": "0",
                "tradeType": "common", "screenInfo": "FULL"}
         ReplaceParams(req).replace_native("recharge")
